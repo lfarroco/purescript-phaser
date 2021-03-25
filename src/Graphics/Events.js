@@ -10,7 +10,7 @@ exports.on = function (key) {
   return function (handler) {
     return function (emitter) {
       return function () {
-        emitter.on(key, arg=>handler(arg)());
+        emitter.on(key, (arg) => handler(arg)());
       };
     };
   };
@@ -23,5 +23,11 @@ exports.emit_ = function (key) {
         emitter.emit(key, arg);
       };
     };
+  };
+};
+
+exports.destroyEmitter = function (emitter) {
+  return function () {
+    emitter.destroy();
   };
 };
