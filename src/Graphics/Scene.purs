@@ -50,6 +50,10 @@ foreign import setGameObjectEvent :: String -> (GameObject -> PhaserScene-> Effe
 
 foreign import data GameObject :: Type
 
+-- how to define arbitraty events...
+-- https://phaser.io/examples/v3/view/events/emit-scene-event
+-- make scene.events return an EventEmitter
+
 setEvent :: Partial => SceneEvent -> Effect Unit
 setEvent event = case event of
   Start fn -> setEvent_ "start" fn

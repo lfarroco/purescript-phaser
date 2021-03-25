@@ -6,6 +6,7 @@ import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser (createGame)
 import Graphics.Phaser.Container (addContainer, addToContainer)
+import Graphics.Phaser.Events (createEmitter, createListener)
 import Graphics.Phaser.Image (addImage)
 import Graphics.Phaser.Loader (loadImages)
 import Graphics.Phaser.Scene (PhaserScene, SceneManager, addScene, getSceneManager, removeScene)
@@ -22,13 +23,17 @@ main = do
 testScene1 :: SceneManager -> Effect PhaserScene
 testScene1 sceneManager = addScene "testScene"
       { init: \_ _ -> log "init!"
-      , create: \scene _ -> do
+      , create: \scene _ -> do 
+          emitter <- createEmitter unit
+          speak <- createListener "speak_event" (\n-> log $ "weee" <> show n) emitter
           img <- addImage "test" {x: 40.0, y: 10.0} scene 
           cont <- addContainer {x: 100.0, y: 100.0} scene
           addToContainer cont img
           rec <- solidColorRect {x: 100.0, y:100.0} {width: 200.0, height: 20.0} "0x00ff00" scene
           _ <- testScene2 sceneManager 
-          log "done creating"
+          speak 222
+          log "hahah"
+
       , update: \_ -> pure unit
       , preload: \scene -> loadImages [{key: "test", path: "assets/test.png"}] scene
       }
