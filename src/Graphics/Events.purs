@@ -1,13 +1,8 @@
-module Graphics.Phaser.Events
-  ( createEmitter
-  , createListener
-  , destroyEmitter
-  , PhaserEmitter
-  , Listener
-  ) where
+module Graphics.Phaser.Events where
 
 import Prelude
 import Effect (Effect)
+import Graphics.Phaser.Scene (PhaserScene)
 
 foreign import data PhaserEmitter :: Type
 
@@ -18,7 +13,9 @@ foreign import data PhaserEmitter :: Type
 data Listener arg
   = Listener PhaserEmitter String (arg -> Effect Unit)
 
--- | Creates a new scene emitter, that will keep and run its own events.
+-- | Creates a new emitter, that will keep and run its own events.
+-- | Consider using a scene emitter, as it will be removed when the scene
+-- | is destroyed.
 foreign import createEmitter :: Unit -> Effect PhaserEmitter
 
 foreign import on ::
@@ -32,8 +29,17 @@ foreign import on ::
 createListener :: forall arg. String -> (arg -> Effect Unit) -> PhaserEmitter -> Effect (arg -> Effect Unit)
 createListener key fn emitter = do
   on key fn emitter
-  pure $ \arg_ -> emit_ key arg_ emitter
+  pure $ \arg_ -> emit key arg_ emitter
 
-foreign import emit_ :: forall arg. String -> arg -> PhaserEmitter -> Effect Unit
+foreign import createSceneListener_ :: forall arg. String -> (arg -> Effect Unit) -> PhaserScene -> Effect Unit
+
+createSceneListener :: forall arg. String -> (arg -> Effect Unit) -> PhaserScene -> Effect (arg -> Effect Unit)
+createSceneListener key fn scene = do
+  createSceneListener_ key fn scene
+  pure $ \arg -> emitSceneEvent key arg scene
+
+foreign import emitSceneEvent :: forall arg. String -> arg -> PhaserScene -> Effect Unit
+
+foreign import emit :: forall arg. String -> arg -> PhaserEmitter -> Effect Unit
 
 foreign import destroyEmitter :: PhaserEmitter -> Effect Unit

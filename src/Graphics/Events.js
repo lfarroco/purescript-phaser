@@ -16,7 +16,7 @@ exports.on = function (key) {
   };
 };
 
-exports.emit_ = function (key) {
+exports.emit = function (key) {
   return function (arg) {
     return function (emitter) {
       return function () {
@@ -29,5 +29,25 @@ exports.emit_ = function (key) {
 exports.destroyEmitter = function (emitter) {
   return function () {
     emitter.destroy();
+  };
+};
+
+exports.createSceneListener_ = function (key) {
+  return function (handler) {
+    return function (scene) {
+      return function () {
+        scene.events.on(key, (arg) => handler(arg)());
+      };
+    };
+  };
+};
+
+exports.emitSceneEvent = function (key) {
+  return function (arg) {
+    return function (scene) {
+      return function () {
+        scene.events.emit(key, arg);
+      };
+    };
   };
 };
