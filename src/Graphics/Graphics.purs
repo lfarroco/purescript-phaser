@@ -9,7 +9,10 @@ foreign import data PhaserGraphic :: Type
 
 foreign import solidRectImpl :: Fn4 { x :: Number, y :: Number } { width :: Number, height :: Number } String PhaserScene (Effect PhaserGraphic)
 
-solidRect :: { x :: Number, y :: Number } -> { width :: Number, height :: Number } -> String -> PhaserScene -> Effect PhaserGraphic
+solidRect ::
+  { x :: Number, y :: Number } ->
+  { width :: Number, height :: Number } ->
+  String -> PhaserScene -> Effect PhaserGraphic
 solidRect pos size color scene = runFn4 solidRectImpl pos size color scene
 
 foreign import gradientRectImpl ::
