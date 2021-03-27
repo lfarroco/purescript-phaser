@@ -29,8 +29,8 @@ instance imageInstance :: GO.GameObject PhaserImage where
   setTint i = runFn2 GO.setTintImpl i
   getSize i = GO.getSizeImpl i
   setSize i = runFn2 GO.setSizeImpl i
-  getDisplaySize i = GO.getSizeImpl i
-  setDisplaySize i = runFn2 GO.setSizeImpl i
+  getDisplaySize i = GO.getDisplaySizeImpl i
+  setDisplaySize i = runFn2 GO.setDisplaySizeImpl i
   getScale i = GO.getScaleImpl i
   setScale i = runFn2 GO.setScaleImpl i
   getName i = GO.getNameImpl i
