@@ -1,9 +1,9 @@
 module Graphics.Phaser.GameObject where
 
 import Prelude
-import Data.Function.Uncurried (Fn2, runFn2)
+
+import Data.Function.Uncurried (Fn2)
 import Effect (Effect)
-import Graphics.Phaser.Image (PhaserImage)
 
 type Vector
   = { x :: Number, y :: Number }
@@ -43,31 +43,6 @@ class GameObject a where
   getName :: a -> Effect String
   onClick :: a -> OnClickCallback -> Effect Unit
 
-instance image :: GameObject PhaserImage where
-  destroy i = destroyImpl i
-  getPosition i = getPositionImpl i
-  setPosition i = runFn2 setPositionImpl i
-  getAngle i = getAngleImpl i
-  setAngle i = runFn2 setAngleImpl i
-  getRadians i = getRadiansImpl i
-  setRadians i = runFn2 setRadiansImpl i
-  getVisible i = getVisibleImpl i
-  setVisible i = runFn2 setVisibleImpl i
-  getAlpha i = getAlphaImpl i
-  setAlpha i = runFn2 setAlphaImpl i
-  getOrigin i = getOriginImpl i
-  setOrigin i = runFn2 setOriginImpl i
-  clearTint i = clearTintImpl i
-  setTint i = runFn2 setTintImpl i
-  getSize i = getSizeImpl i
-  setSize i = runFn2 setSizeImpl i
-  getDisplaySize i = getSizeImpl i
-  setDisplaySize i = runFn2 setSizeImpl i
-  getScale i = getScaleImpl i
-  setScale i = runFn2 setScaleImpl i
-  getName i = getNameImpl i
-  setName i = runFn2 setNameImpl i
-  onClick i = runFn2 onClickImpl i
 
 foreign import destroyImpl :: forall a. a -> Effect Unit
 
