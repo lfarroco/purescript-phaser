@@ -1,4 +1,4 @@
-module Graphics.Text where
+module Graphics.Phaser.Text where
 
 import Effect (Effect)
 import Graphics.Phaser.Scene (PhaserScene)

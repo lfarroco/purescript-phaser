@@ -9,6 +9,9 @@ module Graphics.Phaser.Scene (
   GameObject
   ) where
 
+-- Use this as example to refactor to Fn2, Fn3 
+-- https://github.com/purescript-web/purescript-canvas/blob/master/src/Graphics/Canvas.purs#L167
+
 import Prelude
 
 import Effect (Effect)

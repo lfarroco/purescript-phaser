@@ -1,4 +1,4 @@
-module Phaser.Graphics.Rect where
+module Graphics.Phaser.Rect where
 
 import Effect (Effect)
 import Graphics.Phaser.Scene (PhaserScene)
