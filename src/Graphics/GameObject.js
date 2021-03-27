@@ -7,14 +7,14 @@ exports.destroyImpl = function (obj) {
   };
 };
 
-exports.getPositionImpl = function (obj) {
+exports.getPositionImpl = function ({x,y}) {
   return function () {
-    return obj.pos;
+    return {x,y};
   };
 };
 exports.setPositionImpl = function (obj, pos) {
   return function () {
-    obj.setPos(pos);
+    obj.setPosition(pos);
     return {};
   };
 };
