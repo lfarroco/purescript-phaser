@@ -12,9 +12,9 @@ exports.getPositionImpl = function ({x,y}) {
     return {x,y};
   };
 };
-exports.setPositionImpl = function (obj, pos) {
+exports.setPositionImpl = function (obj, {x,y}) {
   return function () {
-    obj.setPosition(pos);
+    obj.setPosition(x,y);
     return {};
   };
 };
