@@ -6,32 +6,33 @@ exports.getSceneManager = function (game) {
   };
 };
 
-exports.addScene = function (name) {
-  return function ({ init, create, update, preload }) {
-    return function (autostart) {
-      return function (sceneManager) {
-        return function (data) {
-          return function () {
-            const config = {
-              init: function (data_) {
-                init(this)(data_)();
-              },
-              preload: function () {
-                preload(this)();
-              },
-              create: function (data_) {
-                create(this)(data_)();
-              },
-              update: function () {
-                update(this)();
-              },
-            };
-            sceneManager.add(name, config, autostart, data);
-            return {};
-          };
-        };
-      };
+exports.addScene = function ({
+  key,
+  init,
+  create,
+  update,
+  preload,
+  autoStart,
+  sceneManager,
+  data,
+}) {
+  return function () {
+    const config = {
+      init: function (data_) {
+        init(this)(data_)();
+      },
+      preload: function () {
+        preload(this)();
+      },
+      create: function (data_) {
+        create(this)(data_)();
+      },
+      update: function () {
+        update(this)();
+      },
     };
+    sceneManager.add(key, config, autoStart, data);
+    return {};
   };
 };
 exports.setEvent_ = function (on) {
@@ -83,12 +84,12 @@ exports.launchImpl = function (scene, data) {
 };
 exports.startImpl = function (scene, data) {
   return function () {
-    return scene.scene.start(scene,data);
+    return scene.scene.start(scene, data);
   };
 };
 exports.restartImpl = function (scene, data) {
   return function () {
-    return scene.scene.restart(scene,data);
+    return scene.scene.restart(scene, data);
   };
 };
 exports.pause = function (scene) {
@@ -118,7 +119,7 @@ exports.switch = function (scene) {
 };
 exports.run = function (scene, data) {
   return function () {
-    return scene.scene.run(scene,data);
+    return scene.scene.run(scene, data);
   };
 };
 exports.stop = function (scene) {

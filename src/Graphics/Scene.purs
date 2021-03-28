@@ -13,9 +13,7 @@ module Graphics.Phaser.Scene
   , stop
   ) where
 
-
 -- TODO: add scene.data, and support for scene.data events
-
 -- Use this as example to refactor to Fn2, Fn3 
 -- https://github.com/purescript-web/purescript-canvas/blob/master/src/Graphics/Canvas.purs#L167
 import Prelude
@@ -38,15 +36,15 @@ type Delta
 
 foreign import addScene ::
   forall a.
-  String ->
-  { create :: PhaserScene -> a -> Effect Unit
+  { key :: String
+  , create :: PhaserScene -> a -> Effect Unit
   , init :: PhaserScene -> a -> Effect Unit
   , update :: PhaserScene -> Effect Unit
   , preload :: PhaserScene -> Effect Unit
+  , autoStart :: Boolean
+  , sceneManager :: SceneManager
+  , data :: a
   } ->
-  Boolean ->
-  SceneManager ->
-  a ->
   Effect Unit
 
 foreign import getByKeyImpl :: Fn2 SceneManager String (Effect PhaserScene)
