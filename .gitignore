@@ -9,4 +9,9 @@
 /.spago
 
 .psci_modules
+
+
+# test files
+index.html
 index.js
+src/Main.purs
