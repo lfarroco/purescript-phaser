@@ -7,15 +7,15 @@ exports.destroyImpl = function (obj) {
   };
 };
 
-exports.getPositionImpl = function ({x,y}) {
+exports.getPositionImpl = function ({ x, y }) {
   return function () {
-    return {x,y};
+    return { x, y };
   };
 };
-exports.setPositionImpl = function (obj, {x,y}) {
+exports.setPositionImpl = function ({ x, y }, obj) {
   return function () {
-    obj.setPosition(x,y);
-    return {};
+    obj.setPosition(x, y);
+    return obj;
   };
 };
 exports.getAngleImpl = function (obj) {
@@ -23,10 +23,10 @@ exports.getAngleImpl = function (obj) {
     return obj.angle;
   };
 };
-exports.setAngleImpl = function (obj, degrees) {
+exports.setAngleImpl = function (degrees, obj) {
   return function () {
     obj.setAngle(degrees);
-    return {};
+    return obj;
   };
 };
 exports.getRadiansImpl = function (obj) {
@@ -34,10 +34,10 @@ exports.getRadiansImpl = function (obj) {
     return obj.radians;
   };
 };
-exports.setRadiansImpl = function (obj, radians) {
+exports.setRadiansImpl = function (radians, obj) {
   return function () {
     obj.setRadians(radians);
-    return {};
+    return obj;
   };
 };
 exports.getVisibleImpl = function (obj) {
@@ -45,10 +45,10 @@ exports.getVisibleImpl = function (obj) {
     return obj.visible;
   };
 };
-exports.setVisibleImpl = function (obj, visible) {
+exports.setVisibleImpl = function (visible, obj) {
   return function () {
     obj.setVisible(visible);
-    return {};
+    return obj;
   };
 };
 
@@ -57,23 +57,23 @@ exports.getAlphaImpl = function (obj) {
     return obj.alpha;
   };
 };
-exports.setAlphaImpl = function (obj, value) {
+exports.setAlphaImpl = function (value, obj) {
   return function () {
     obj.setAlpha(value);
-    return {};
+    return obj;
   };
 };
 
-exports.setTintImpl = function (obj, value) {
+exports.setTintImpl = function (value, obj) {
   return function () {
     obj.setTint(value);
-    return {};
+    return obj;
   };
 };
 exports.clearTintImpl = function (obj) {
   return function () {
     obj.clearTint();
-    return {};
+    return obj;
   };
 };
 
@@ -82,10 +82,10 @@ exports.getSizeImpl = function ({ width, height }) {
     return { width, height };
   };
 };
-exports.setSizeImpl = function (obj, { width, height }) {
+exports.setSizeImpl = function ({ width, height }, obj) {
   return function () {
     obj.setSize(width, height);
-    return {};
+    return obj;
   };
 };
 
@@ -94,10 +94,10 @@ exports.getDisplaySizeImpl = function ({ displayWidth, displayHeight }) {
     return { width: displayWidth, height: displayHeight };
   };
 };
-exports.setDisplaySizeImpl = function (obj, { width, height }) {
+exports.setDisplaySizeImpl = function ({ width, height }, obj) {
   return function () {
     obj.setDisplaySize(width, height);
-    return {};
+    return obj;
   };
 };
 
@@ -106,10 +106,10 @@ exports.getOriginImpl = function ({ originX, originY }) {
     return { x: originX, y: originY };
   };
 };
-exports.setOriginImpl = function (obj, { x, y }) {
+exports.setOriginImpl = function ({ x, y }, obj) {
   return function () {
     obj.setOrigin(x, y);
-    return {};
+    return obj;
   };
 };
 
@@ -118,10 +118,10 @@ exports.getScaleImpl = function ({ scaleX, scaleY }) {
     return { x: scaleX, y: scaleY };
   };
 };
-exports.setScaleImpl = function (obj, { x, y }) {
+exports.setScaleImpl = function ({ x, y }, obj) {
   return function () {
     obj.setScale(x, y);
-    return {};
+    return obj;
   };
 };
 exports.getNameImpl = function ({ name }) {
@@ -129,17 +129,18 @@ exports.getNameImpl = function ({ name }) {
     return name;
   };
 };
-exports.setNameImpl = function (obj, name) {
+exports.setNameImpl = function (name, obj) {
   return function () {
     obj.setName(name);
-    return {};
+    return obj;
   };
 };
 
-exports.onClickImpl = function (obj, handler) {
+exports.onClickImpl = function (handler, obj) {
   return function () {
     obj.setInteractive().on("pointerdown", (pointer, localX, localY, event) => {
       handler(pointer)({ x: localX, y: localY })(event)();
     });
+    return obj;
   };
 };

@@ -1,28 +1,28 @@
-'use strict';
+"use strict";
 
-exports.getSceneManager = function(game) {
-  return function() {
+exports.getSceneManager = function (game) {
+  return function () {
     return game.scene;
   };
 };
 
-exports.addScene = function(name) {
-  return function({init, create, update, preload}) {
-    return function(autostart) {
-      return function(sceneManager) {
-        return function(data) {
-          return function() {
+exports.addScene = function (name) {
+  return function ({ init, create, update, preload }) {
+    return function (autostart) {
+      return function (sceneManager) {
+        return function (data) {
+          return function () {
             const config = {
-              init: function(data_) {
+              init: function (data_) {
                 init(this)(data_)();
               },
-              preload: function() {
+              preload: function () {
                 preload(this)();
               },
-              create: function(data_) {
+              create: function (data_) {
                 create(this)(data_)();
               },
-              update: function() {
+              update: function () {
                 update(this)();
               },
             };
@@ -34,41 +34,110 @@ exports.addScene = function(name) {
     };
   };
 };
-exports.setEvent_ = function(on) {
-  return function(callback) {
-    return function(scene) {
-      return function() {
+exports.setEvent_ = function (on) {
+  return function (callback) {
+    return function (scene) {
+      return function () {
         scene.on(on, () => callback()());
       };
     };
   };
 };
 
-exports.setTimedEvent = function(on) {
-  return function(callback) {
-    return function(scene) {
-      return function() {
+exports.setTimedEvent = function (on) {
+  return function (callback) {
+    return function (scene) {
+      return function () {
         scene.on(on, (time, delta) => callback(time)(delta)());
       };
     };
   };
 };
 
-exports.setGameObjectEvent = function(on) {
-  return function(callback) {
-    return function(scene) {
-      return function() {
+exports.setGameObjectEvent = function (on) {
+  return function (callback) {
+    return function (scene) {
+      return function () {
         scene.on(on, (gameObject, scene) => callback(gameObject)(scene)());
       };
     };
   };
 };
 
-exports.removeScene = function(sceneManager) {
-  return function(key) {
-    return function() {
-      sceneManager.remove(key);
-      return {};
-    };
+exports.remove = function (scene) {
+  return function () {
+    scene.scene.remove(scene);
+    return {};
+  };
+};
+
+exports.getByKeyImpl = function (sceneManager, key) {
+  return function () {
+    return sceneManager.getScene(key);
+  };
+};
+exports.launchImpl = function (scene, data) {
+  return function () {
+    return scene.launch(data);
+  };
+};
+exports.startImpl = function (scene, data) {
+  return function () {
+    return scene.scene.start(scene,data);
+  };
+};
+exports.restartImpl = function (scene, data) {
+  return function () {
+    return scene.scene.restart(scene,data);
+  };
+};
+exports.pause = function (scene) {
+  return function () {
+    return scene.scene.pause(scene);
+  };
+};
+exports.resume = function (scene) {
+  return function () {
+    return scene.scene.resume(scene);
+  };
+};
+exports.sleep = function (scene) {
+  return function () {
+    return scene.scene.sleep(scene);
+  };
+};
+exports.wake = function (scene) {
+  return function () {
+    return scene.scene.wake(scene);
+  };
+};
+exports.switch = function (scene) {
+  return function () {
+    return scene.scene.switch(scene);
+  };
+};
+exports.run = function (scene, data) {
+  return function () {
+    return scene.scene.run(scene,data);
+  };
+};
+exports.stop = function (scene) {
+  return function () {
+    return scene.scene.stop(scene);
+  };
+};
+exports.setVisible = function (scene) {
+  return function () {
+    return scene.setVisible();
+  };
+};
+exports.bringToTop = function (sceneManager, name) {
+  return function () {
+    return sceneManager.bringToTop(name);
+  };
+};
+exports.sendToBack = function (sceneManager, name) {
+  return function () {
+    return sceneManager.sendToBack(name);
   };
 };

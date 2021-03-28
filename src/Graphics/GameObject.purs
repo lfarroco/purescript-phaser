@@ -1,7 +1,6 @@
 module Graphics.Phaser.GameObject where
 
 import Prelude
-
 import Data.Function.Uncurried (Fn2)
 import Effect (Effect)
 
@@ -16,78 +15,79 @@ type OnClickCallback
 
 foreign import data Event :: Type
 
+foreign import data PhaserGameObject :: Type
+
 -- TODO: missing functions - flipx/y, depth, scrollfactor, bounds, settintfill, multi tint, blend mode
 class GameObject a where
   destroy :: a -> Effect Unit
   getPosition :: a -> Effect Vector
-  setPosition :: a -> Vector -> Effect Unit
+  setPosition :: Vector -> a -> Effect a
   getAngle :: a -> Effect Number
-  setAngle :: a -> Number -> Effect Unit
+  setAngle :: Number -> a -> Effect a
   getRadians :: a -> Effect Number
-  setRadians :: a -> Number -> Effect Unit
+  setRadians :: Number -> a -> Effect a
   getVisible :: a -> Effect Boolean
-  setVisible :: a -> Boolean -> Effect Unit
+  setVisible :: Boolean -> a -> Effect a
   getAlpha :: a -> Effect Number
-  setAlpha :: a -> Number -> Effect Unit
+  setAlpha :: Number -> a -> Effect a
   getOrigin :: a -> Effect Vector
-  setOrigin :: a -> Vector -> Effect Unit
-  setTint :: a -> String -> Effect Unit
-  clearTint :: a -> Effect Unit
+  setOrigin :: Vector -> a -> Effect a
+  setTint :: String -> a -> Effect a
+  clearTint :: a -> Effect a
   getSize :: a -> Effect Dimensions
-  setSize :: a -> Dimensions -> Effect Unit
+  setSize :: Dimensions -> a -> Effect a
   getDisplaySize :: a -> Effect Dimensions
-  setDisplaySize :: a -> Dimensions -> Effect Unit
+  setDisplaySize :: Dimensions -> a -> Effect a
   getScale :: a -> Effect Vector
-  setScale :: a -> Vector -> Effect Unit
-  setName :: a -> String -> Effect Unit
+  setScale :: Vector -> a -> Effect a
+  setName :: String -> a -> Effect a
   getName :: a -> Effect String
-  onClick :: a -> OnClickCallback -> Effect Unit
-
+  onClick ::  OnClickCallback -> a -> Effect a
 
 foreign import destroyImpl :: forall a. a -> Effect Unit
 
 foreign import getPositionImpl :: forall a. a -> Effect Vector
 
-foreign import setPositionImpl :: forall a. Fn2 a Vector (Effect Unit)
+foreign import setPositionImpl :: forall a. Fn2 Vector a (Effect a)
 
 foreign import getAngleImpl :: forall a. a -> Effect Number
 
-foreign import setAngleImpl :: forall a. Fn2 a Number (Effect Unit)
+foreign import setAngleImpl :: forall a. Fn2 Number a (Effect a)
 
 foreign import getRadiansImpl :: forall a. a -> Effect Number
 
-foreign import setRadiansImpl :: forall a. Fn2 a Number (Effect Unit)
+foreign import setRadiansImpl :: forall a. Fn2 Number a (Effect a)
 
 foreign import getVisibleImpl :: forall a. a -> Effect Boolean
 
-foreign import setVisibleImpl :: forall a. Fn2 a Boolean (Effect Unit)
+foreign import setVisibleImpl :: forall a. Fn2 Boolean a (Effect a)
 
 foreign import getAlphaImpl :: forall a. a -> Effect Number
 
-foreign import setAlphaImpl :: forall a. Fn2 a Number (Effect Unit)
+foreign import setAlphaImpl :: forall a. Fn2 Number a (Effect a)
 
 foreign import getOriginImpl :: forall a. a -> Effect Vector
 
-foreign import setOriginImpl :: forall a. Fn2 a Vector (Effect Unit)
+foreign import setOriginImpl :: forall a. Fn2 Vector a (Effect a)
 
-foreign import setTintImpl :: forall a. Fn2 a String (Effect Unit)
+foreign import setTintImpl :: forall a. Fn2 String a (Effect a)
 
-foreign import clearTintImpl :: forall a. a -> Effect Unit
+foreign import clearTintImpl :: forall a. a -> Effect a
 
 foreign import getSizeImpl :: forall a. a -> Effect Dimensions
 
-foreign import setSizeImpl :: forall a. Fn2 a Dimensions (Effect Unit)
+foreign import setSizeImpl :: forall a. Fn2 Dimensions a (Effect a)
 
 foreign import getDisplaySizeImpl :: forall a. a -> Effect Dimensions
 
-foreign import setDisplaySizeImpl :: forall a. Fn2 a Dimensions (Effect Unit)
+foreign import setDisplaySizeImpl :: forall a. Fn2 Dimensions a (Effect a)
 
 foreign import getScaleImpl :: forall a. a -> Effect Vector
 
-foreign import setScaleImpl :: forall a. Fn2 a Vector (Effect Unit)
+foreign import setScaleImpl :: forall a. Fn2 Vector a (Effect a)
 
 foreign import getNameImpl :: forall a. a -> Effect String
 
-foreign import setNameImpl :: forall a. Fn2 a String (Effect Unit)
+foreign import setNameImpl :: forall a. Fn2 String a (Effect a)
 
-foreign import onClickImpl :: forall a. Fn2 a OnClickCallback (Effect Unit)
+foreign import onClickImpl :: forall a. Fn2 OnClickCallback a (Effect a)
