@@ -1,25 +1,11 @@
-module Graphics.Phaser.Scene
-  ( addScene
-  , getSceneManager
-  , SceneManager
-  , PhaserScene
-  , Time
-  , Delta
-  , SceneEvent(..)
-  , getByKey
-  , remove
-  , start
-  , run
-  , stop
-  ) where
+module Graphics.Phaser.Scene where
 
 -- TODO: add scene.data, and support for scene.data events
 -- Use this as example to refactor to Fn2, Fn3 
 -- https://github.com/purescript-web/purescript-canvas/blob/master/src/Graphics/Canvas.purs#L167
 import Prelude
-import Data.Function.Uncurried (Fn2, runFn2)
+import Data.Function.Uncurried (Fn2, Fn3, runFn2, runFn3)
 import Effect (Effect)
-import Graphics.Phaser (PhaserGame)
 import Graphics.Phaser.GameObject (PhaserGameObject)
 
 foreign import data PhaserScene :: Type
@@ -34,18 +20,34 @@ type Time
 type Delta
   = Number
 
-foreign import addScene ::
-  forall a.
-  { key :: String
-  , create :: PhaserScene -> a -> Effect Unit
-  , init :: PhaserScene -> a -> Effect Unit
-  , update :: PhaserScene -> Effect Unit
-  , preload :: PhaserScene -> Effect Unit
-  , autoStart :: Boolean
-  , sceneManager :: SceneManager
-  , data :: a
-  } ->
-  Effect Unit
+-- Accepting the key last allows using the same config object to multiple
+-- instances with different keys
+type SceneConfig a
+  = { create :: PhaserScene -> a -> Effect Unit
+    , init :: PhaserScene -> a -> Effect Unit
+    , update :: PhaserScene -> Effect Unit
+    , preload :: PhaserScene -> Effect Unit
+    , data :: a
+    } 
+
+data Scene a
+  = Scene (SceneConfig a) PhaserScene
+
+foreign import createImpl :: forall a. Fn2 (SceneConfig a) String (Effect PhaserScene)
+
+create :: forall a. SceneConfig a -> String -> Effect (Scene a)
+create cfg key = do
+  scn <- runFn2 createImpl cfg key
+  pure $ Scene cfg scn
+
+getPhaserScene :: forall a. Scene a -> PhaserScene
+getPhaserScene (Scene cfg scn) = scn
+
+foreign import addSceneImpl :: Fn3 SceneManager String PhaserScene (Effect Unit)
+
+-- | Registers a new scene with a given key. The scene is not started by default.
+addScene :: SceneManager -> String -> PhaserScene -> Effect Unit
+addScene = runFn3 addSceneImpl
 
 foreign import getByKeyImpl :: Fn2 SceneManager String (Effect PhaserScene)
 
@@ -53,7 +55,7 @@ foreign import remove :: PhaserScene -> (Effect Unit)
 
 foreign import launchImpl :: forall a. Fn2 PhaserScene a (Effect Unit)
 
-foreign import startImpl :: forall a. Fn2 PhaserScene a (Effect Unit)
+foreign import startImpl :: forall a. Fn2 a PhaserScene (Effect Unit)
 
 foreign import restartImpl :: forall a. Fn2 PhaserScene a (Effect Unit)
 
@@ -77,8 +79,6 @@ foreign import sendToBack :: PhaserScene -> (Effect Unit)
 
 foreign import bringToTop :: PhaserScene -> (Effect Unit)
 
-foreign import getSceneManager :: PhaserGame -> Effect SceneManager
-
 -- Comprehensive event list
 -- https://rexrainbow.github.io/phaser3-rex-notes/docs/site/scene/
 foreign import setEvent_ :: String -> (Unit -> Effect Unit) -> Effect Unit
@@ -90,11 +90,12 @@ foreign import setGameObjectEvent :: String -> (PhaserGameObject -> PhaserScene 
 getByKey :: SceneManager -> String -> Effect PhaserScene
 getByKey manager key = runFn2 getByKeyImpl manager key
 
+-- | Starts the given scene in parallel with the current one
 launch :: forall a. PhaserScene -> a -> Effect Unit
 launch scene a = runFn2 launchImpl scene a
 
-start :: forall a. PhaserScene -> a -> Effect Unit
-start scene a = runFn2 startImpl scene a
+start :: forall a. a -> PhaserScene -> Effect Unit
+start = runFn2 startImpl
 
 restart :: forall a. PhaserScene -> a -> Effect Unit
 restart scene a = runFn2 restartImpl scene a

@@ -3,6 +3,7 @@ module Graphics.Phaser.Tween where
 import Effect (Effect)
 import Graphics.Phaser.Scene (PhaserScene)
 
+
 foreign import data PhaserTween :: Type
 
 -- TODO: refactor `props` to be generic record, or create a type

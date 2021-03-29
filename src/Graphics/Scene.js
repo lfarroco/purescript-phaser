@@ -1,21 +1,8 @@
 "use strict";
 
-exports.getSceneManager = function (game) {
-  return function () {
-    return game.scene;
-  };
-};
 
-exports.addScene = function ({
-  key,
-  init,
-  create,
-  update,
-  preload,
-  autoStart,
-  sceneManager,
-  data,
-}) {
+
+exports.createImpl = function ({ init, create, update, preload }, key) {
   return function () {
     const config = {
       init: function (data_) {
@@ -31,10 +18,22 @@ exports.addScene = function ({
         update(this)();
       },
     };
-    sceneManager.add(key, config, autoStart, data);
-    return {};
+
+    let scene = new Phaser.Scene(key);
+    scene.init = config.init;
+    scene.preload = config.preload;
+    scene.create = config.create;
+    scene.update = config.update;
+    return scene;
   };
 };
+
+exports.addSceneImpl = function (sceneManager, key, scene) {
+  return function () {
+    sceneManager.add(key, scene);
+  };
+};
+
 exports.setEvent_ = function (on) {
   return function (callback) {
     return function (scene) {
@@ -82,7 +81,7 @@ exports.launchImpl = function (scene, data) {
     return scene.launch(data);
   };
 };
-exports.startImpl = function (scene, data) {
+exports.startImpl = function (data, scene) {
   return function () {
     return scene.scene.start(scene, data);
   };
