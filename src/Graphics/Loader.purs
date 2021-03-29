@@ -3,7 +3,7 @@ module Graphics.Phaser.Loader where
 import Prelude
 
 import Effect (Effect)
-import Graphics.Phaser.Scene (PhaserScene)
+import Phaser.Graphics.ForeignTypes (PhaserScene)
 
 foreign import setBaseUrl :: String -> PhaserScene -> Effect Unit
 

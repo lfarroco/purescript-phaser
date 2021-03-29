@@ -2,7 +2,7 @@ module Graphics.Phaser.Camera where
 
 import Data.Unit (Unit)
 import Effect (Effect)
-import Graphics.Phaser.Scene (PhaserScene)
+import Phaser.Graphics.ForeignTypes (PhaserScene)
 
 foreign import setMainCameraBounds ::
   { scene :: PhaserScene

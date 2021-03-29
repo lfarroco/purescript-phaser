@@ -1,10 +1,7 @@
 module Graphics.Phaser.Tween where
 
 import Effect (Effect)
-import Graphics.Phaser.Scene (PhaserScene)
-
-
-foreign import data PhaserTween :: Type
+import Phaser.Graphics.ForeignTypes (PhaserScene, PhaserTween)
 
 -- TODO: refactor `props` to be generic record, or create a type
 -- for properties that can be tweened (x, y, scale...)

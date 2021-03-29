@@ -3,14 +3,12 @@ module Graphics.Phaser.Scene where
 -- TODO: add scene.data, and support for scene.data events
 -- Use this as example to refactor to Fn2, Fn3 
 -- https://github.com/purescript-web/purescript-canvas/blob/master/src/Graphics/Canvas.purs#L167
+
 import Prelude
+
 import Data.Function.Uncurried (Fn2, Fn3, runFn2, runFn3)
 import Effect (Effect)
-import Graphics.Phaser.GameObject (PhaserGameObject)
-
-foreign import data PhaserScene :: Type
-
-foreign import data SceneManager :: Type
+import Phaser.Graphics.ForeignTypes (PhaserGameObject, PhaserScene, SceneManager)
 
 -- Current time in milliseconds
 type Time
@@ -33,8 +31,8 @@ type SceneConfig a
 data Scene a
   = Scene (SceneConfig a) PhaserScene
 
-foreign import createImpl :: forall a. Fn2 (SceneConfig a) String (Effect PhaserScene)
 
+foreign import createImpl :: forall a. Fn2 (SceneConfig a) String (Effect PhaserScene)
 create :: forall a. SceneConfig a -> String -> Effect (Scene a)
 create cfg key = do
   scn <- runFn2 createImpl cfg key
@@ -93,6 +91,11 @@ getByKey manager key = runFn2 getByKeyImpl manager key
 -- | Starts the given scene in parallel with the current one
 launch :: forall a. PhaserScene -> a -> Effect Unit
 launch scene a = runFn2 launchImpl scene a
+
+launchByKey :: forall a. String -> a -> PhaserScene -> Effect Unit
+launchByKey = runFn3 launchByKeyImpl 
+
+foreign import launchByKeyImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
 
 start :: forall a. a -> PhaserScene -> Effect Unit
 start = runFn2 startImpl

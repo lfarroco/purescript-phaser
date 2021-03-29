@@ -1,13 +1,8 @@
 module Graphics.Phaser.TileMap where
 
 import Effect (Effect)
-import Graphics.Phaser.Scene (PhaserScene)
+import Phaser.Graphics.ForeignTypes (PhaserLayer, PhaserScene, PhaserTileMap, PhaserTileSet)
 
-foreign import data PhaserTileMap :: Type
-
-foreign import data PhaserTileSet :: Type
-
-foreign import data PhaserLayer :: Type
 
 foreign import makeTileMap ::
   { scene :: PhaserScene

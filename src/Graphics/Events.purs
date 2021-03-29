@@ -1,10 +1,9 @@
 module Graphics.Phaser.Events where
 
 import Prelude
-import Effect (Effect)
-import Graphics.Phaser.Scene (PhaserScene)
 
-foreign import data PhaserEmitter :: Type
+import Effect (Effect)
+import Phaser.Graphics.ForeignTypes (PhaserEmitter, PhaserScene)
 
 -- | Phaser's API gives us lots of freedom when firing events - this is one way
 -- | to type check if the event being fired with valid arguments.
