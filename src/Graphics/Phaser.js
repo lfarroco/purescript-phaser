@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-exports.createGame = function(config) {
-  return function() {
+exports.createGame = function (config) {
+  return function () {
     return new Phaser.Game(config);
   };
 };
@@ -12,9 +12,29 @@ exports.getSceneManager = function (game) {
   };
 };
 
-exports.addSceneImpl = function (key, scene, autoStart, data, game) {
+exports.addSceneImpl = function (
+  key,
+  { init, create, update, preload },
+  autoStart,
+  data,
+  game
+) {
   return function () {
-    game.scene.add(key, scene, autoStart, data);
-    return game
+    const config = {
+      init: function (data_) {
+        init(this)(data_)();
+      },
+      preload: function () {
+        preload(this)();
+      },
+      create: function (data_) {
+        create(this)(data_)();
+      },
+      update: function () {
+        update(this)();
+      },
+    };
+    game.scene.add(key, config, autoStart, data);
+    return game;
   };
 };
