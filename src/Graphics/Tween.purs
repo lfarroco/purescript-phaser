@@ -10,7 +10,7 @@ foreign import addTween ::
   forall targets props.
   { scene :: PhaserScene
   , targets :: targets
-  , props :: props
+  , props :: props  
   , delay :: Int
   , duration :: Number
   , ease :: String

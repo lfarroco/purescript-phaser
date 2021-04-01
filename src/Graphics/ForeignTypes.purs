@@ -1,5 +1,7 @@
 module Phaser.Graphics.ForeignTypes where
 
+import Prelude
+
 -- | Foreign opaque types are grouped here to avoid cyclic dependencies 
 
 foreign import data PhaserGame :: Type
@@ -26,5 +28,4 @@ foreign import data PhaserScene :: Type
 
 foreign import data SceneManager :: Type
 
-
-
+foreign import data PhaserRegistry :: Type

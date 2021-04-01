@@ -146,3 +146,19 @@ exports.sendToBack = function (sceneManager, name) {
     return sceneManager.sendToBack(name);
   };
 };
+
+exports.getStateImpl = function (config, registry, key) {
+  return function () {
+    return registry.get('_scene_'+key)
+  };
+};
+exports.setStateImpl = function (config, registry, key, data) {
+  return function () {
+    return registry.set('_scene_'+key, data)
+  };
+};
+exports.getRegistry = function (scene) {
+  return function () {
+    return scene.registry
+  };
+};

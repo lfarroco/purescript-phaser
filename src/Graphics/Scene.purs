@@ -6,9 +6,9 @@ module Graphics.Phaser.Scene where
 
 import Prelude
 
-import Data.Function.Uncurried (Fn2, Fn3, runFn2, runFn3)
+import Data.Function.Uncurried (Fn2, Fn3, Fn4, runFn2, runFn3, runFn4)
 import Effect (Effect)
-import Phaser.Graphics.ForeignTypes (PhaserGameObject, PhaserScene, SceneManager)
+import Phaser.Graphics.ForeignTypes (PhaserGameObject, PhaserRegistry, PhaserScene, SceneManager)
 
 -- Current time in milliseconds
 type Time
@@ -23,29 +23,38 @@ type Delta
 type SceneConfig a
   = { create :: PhaserScene -> a -> Effect Unit
     , init :: PhaserScene -> a -> Effect Unit
-    , update :: PhaserScene -> Effect Unit
-    , preload :: PhaserScene -> Effect Unit
+    , update :: PhaserScene -> a -> Effect Unit
+    , preload :: PhaserScene -> a -> Effect Unit
     , data :: a
-    } 
+    }
 
 data Scene a
   = Scene (SceneConfig a) PhaserScene
 
-
 foreign import createImpl :: forall a. Fn2 (SceneConfig a) String (Effect PhaserScene)
+
 create :: forall a. SceneConfig a -> String -> Effect (Scene a)
 create cfg key = do
   scn <- runFn2 createImpl cfg key
   pure $ Scene cfg scn
 
-getPhaserScene :: forall a. Scene a -> PhaserScene
-getPhaserScene (Scene cfg scn) = scn
+foreign import getRegistry :: PhaserScene -> Effect PhaserRegistry
 
 foreign import addSceneImpl :: Fn3 SceneManager String PhaserScene (Effect Unit)
 
 -- | Registers a new scene with a given key. The scene is not started by default.
 addScene :: SceneManager -> String -> PhaserScene -> Effect Unit
 addScene = runFn3 addSceneImpl
+
+foreign import getStateImpl :: forall a. Fn3 (SceneConfig a) PhaserRegistry String (Effect a)
+
+getState :: forall a. SceneConfig a -> PhaserRegistry -> String -> Effect a
+getState = runFn3 getStateImpl
+
+foreign import setStateImpl :: forall a. Fn4 (SceneConfig a) PhaserRegistry String a (Effect a)
+
+setState :: forall a. SceneConfig a -> PhaserRegistry -> String -> a -> Effect a
+setState = runFn4 setStateImpl
 
 foreign import getByKeyImpl :: Fn2 SceneManager String (Effect PhaserScene)
 
@@ -93,7 +102,7 @@ launch :: forall a. PhaserScene -> a -> Effect Unit
 launch scene a = runFn2 launchImpl scene a
 
 launchByKey :: forall a. String -> a -> PhaserScene -> Effect Unit
-launchByKey = runFn3 launchByKeyImpl 
+launchByKey = runFn3 launchByKeyImpl
 
 foreign import launchByKeyImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
 

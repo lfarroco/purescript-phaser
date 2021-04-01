@@ -16,25 +16,28 @@ exports.addSceneImpl = function (
   key,
   { init, create, update, preload },
   autoStart,
-  data,
+  model,
   game
 ) {
   return function () {
+
+    let dataKey = "_scene_" + key
     const config = {
       init: function (data_) {
         init(this)(data_)();
       },
       preload: function () {
-        preload(this)();
+        preload(this)(model)();
       },
       create: function (data_) {
         create(this)(data_)();
       },
       update: function () {
-        update(this)();
+        update(this)(game.registry.get(dataKey))();
       },
     };
-    game.scene.add(key, config, autoStart, data);
+    game.scene.add(key, config, autoStart, model);
+    game.registry.set(dataKey, model);
     return game;
   };
 };
