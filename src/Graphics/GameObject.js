@@ -139,7 +139,7 @@ exports.setNameImpl = function (name, obj) {
 exports.onClickImpl = function (handler, obj) {
   return function () {
     obj.setInteractive().on("pointerdown", (pointer, localX, localY, event) => {
-      handler(pointer)({ x: localX, y: localY })(event)(obj.scene)();
+      handler(pointer)({ x: localX, y: localY })(event)(obj)();
     });
     return obj;
   };
