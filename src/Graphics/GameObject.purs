@@ -12,8 +12,8 @@ type Vector
 type Dimensions
   = { width :: Number, height :: Number }
 
-type OnClickCallback
-  = Vector -> Vector -> Event -> PhaserScene -> Effect Unit
+type OnClickCallback a
+  = Vector -> Vector -> Event -> a -> Effect Unit
 
 
 -- TODO: missing functions - flipx/y, depth, scrollfactor, bounds, settintfill, multi tint, blend mode
@@ -41,7 +41,8 @@ class GameObject a where
   setScale :: Vector -> a -> Effect a
   setName :: String -> a -> Effect a
   getName :: a -> Effect String
-  onClick :: OnClickCallback -> a -> Effect a
+  onClick :: OnClickCallback a -> a -> Effect a
+  getScene :: a -> Effect PhaserScene
 
 foreign import destroyImpl :: forall a. a -> Effect Unit
 
@@ -89,7 +90,9 @@ foreign import getNameImpl :: forall a. a -> Effect String
 
 foreign import setNameImpl :: forall a. Fn2 String a (Effect a)
 
-foreign import onClickImpl :: forall a. Fn2 OnClickCallback a (Effect a)
+foreign import onClickImpl :: forall a. Fn2 (OnClickCallback a) a (Effect a)
+
+foreign import getSceneImpl :: forall a. a -> Effect PhaserScene
 
 instance containerInstance :: GameObject PhaserContainer where
   destroy i = destroyImpl i
@@ -116,6 +119,7 @@ instance containerInstance :: GameObject PhaserContainer where
   getName i = getNameImpl i
   setName i = runFn2 setNameImpl i
   onClick i = runFn2 onClickImpl i
+  getScene i = getSceneImpl i
 
 instance graphicsInstance :: GameObject PhaserGraphic where
   destroy i = destroyImpl i
@@ -142,6 +146,7 @@ instance graphicsInstance :: GameObject PhaserGraphic where
   getName i = getNameImpl i
   setName i = runFn2 setNameImpl i
   onClick i = runFn2 onClickImpl i
+  getScene i = getSceneImpl i
 
 instance imageInstance :: GameObject PhaserImage where
   destroy i = destroyImpl i
@@ -168,6 +173,7 @@ instance imageInstance :: GameObject PhaserImage where
   getName i = getNameImpl i
   setName i = runFn2 setNameImpl i
   onClick i = runFn2 onClickImpl i
+  getScene i = getSceneImpl i
 
 instance textInstance :: GameObject PhaserText where
   destroy i = destroyImpl i
@@ -194,5 +200,6 @@ instance textInstance :: GameObject PhaserText where
   getName i = getNameImpl i
   setName i = runFn2 setNameImpl i
   onClick i = runFn2 onClickImpl i
+  getScene i = getSceneImpl i
 
 

@@ -144,3 +144,9 @@ exports.onClickImpl = function (handler, obj) {
     return obj;
   };
 };
+
+exports.getSceneImpl = function (obj) {
+  return function () {
+    return obj.scene;
+  };
+};
