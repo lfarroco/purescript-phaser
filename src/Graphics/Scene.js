@@ -1,40 +1,6 @@
 "use strict";
 
-
-
-exports.createImpl = function ({ init, create, update, preload }, key) {
-  return function () {
-    const config = {
-      init: function (data_) {
-        init(this)(data_)();
-      },
-      preload: function () {
-        preload(this)();
-      },
-      create: function (data_) {
-        create(this)(data_)();
-      },
-      update: function () {
-        update(this)();
-      },
-    };
-
-    let scene = new Phaser.Scene(key);
-    scene.init = config.init;
-    scene.preload = config.preload;
-    scene.create = config.create;
-    scene.update = config.update;
-    return scene;
-  };
-};
-
-exports.addSceneImpl = function (sceneManager, key, scene) {
-  return function () {
-    sceneManager.add(key, scene);
-  };
-};
-
-exports.setEvent_ = function (on) {
+exports.setEventImpl = function (on) {
   return function (callback) {
     return function (scene) {
       return function () {
@@ -147,14 +113,14 @@ exports.sendToBack = function (sceneManager, name) {
   };
 };
 
-exports.getStateImpl = function (config, registry, key) {
+exports.getStateImpl = function (registry, key) {
   return function () {
-    return registry.get('_scene_'+key)
+    return registry.get(key)
   };
 };
-exports.setStateImpl = function (config, registry, key, data) {
+exports.setStateImpl = function (registry, key, data) {
   return function () {
-    return registry.set('_scene_'+key, data)
+    return registry.set(key, data)
   };
 };
 exports.getRegistry = function (scene) {

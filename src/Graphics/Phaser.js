@@ -1,6 +1,6 @@
 "use strict";
 
-exports.createGame = function (config) {
+exports.create = function (config) {
   return function () {
     return new Phaser.Game(config);
   };
@@ -13,31 +13,26 @@ exports.getSceneManager = function (game) {
 };
 
 exports.addSceneImpl = function (
-  key,
-  { init, create, update, preload },
+  { key, init, create, update, preload, state },
   autoStart,
-  model,
   game
 ) {
   return function () {
-
-    let dataKey = "_scene_" + key
     const config = {
       init: function (data_) {
         init(this)(data_)();
       },
       preload: function () {
-        preload(this)(model)();
+        preload(this)();
       },
       create: function (data_) {
         create(this)(data_)();
       },
       update: function () {
-        update(this)(game.registry.get(dataKey))();
+        update(this)();
       },
     };
-    game.scene.add(key, config, autoStart, model);
-    game.registry.set(dataKey, model);
+    game.scene.add(key, config, autoStart, state);
     return game;
   };
 };

@@ -1,16 +1,13 @@
-module Graphics.Phaser where
+module Graphics.Phaser (create, getSceneManager, addScene) where
 
-import Data.Function.Uncurried (Fn5, runFn5)
+import Data.Function.Uncurried (Fn3, runFn3)
 import Effect (Effect)
 import Graphics.Phaser.Scene (SceneConfig)
 import Phaser.Graphics.ForeignTypes (PhaserGame, SceneManager)
 
-foreign import createGame :: { width :: Int, height :: Int } -> Effect PhaserGame
+foreign import create :: { width :: Int, height :: Int } -> Effect PhaserGame
 
 foreign import getSceneManager :: PhaserGame -> Effect SceneManager
-
-foreign import addSceneImpl :: forall a. Fn5 String (SceneConfig a) Boolean a PhaserGame (Effect PhaserGame)
-
 
 -- Phaser provides two ways to add scenes:
 -- - adding them in the `scene` parameter when creating a game
@@ -19,6 +16,14 @@ foreign import addSceneImpl :: forall a. Fn5 String (SceneConfig a) Boolean a Ph
 -- adding them *after* the game has been created, and using the scene
 -- manager that the game contains seems to be the most flexible approach
 -- as this decouples the scenes from the of the game logic
+foreign import addSceneImpl :: forall a. Fn3 (SceneConfig a) Boolean PhaserGame (Effect PhaserGame)
 
-addScene :: forall a. String -> SceneConfig a -> Boolean -> a -> PhaserGame -> Effect PhaserGame
-addScene key sceneConfig autoStart initialState game = runFn5 addSceneImpl key sceneConfig autoStart initialState game
+-- | Raw Phaser FFI
+-- | Consider using `addWithState` for a safer approach.
+-- | ==== Parameters ====
+-- | Sceneconfig a   - Scene configuration, bound to a initial state type
+-- | Boolean         - If the scene should start in parallel right now
+addScene :: forall a. SceneConfig a -> Boolean -> PhaserGame -> Effect PhaserGame
+addScene = runFn3 addSceneImpl
+
+
