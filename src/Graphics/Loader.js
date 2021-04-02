@@ -16,12 +16,10 @@ exports.setPath = function(path) {
   };
 };
 
-exports.loadImages = function(images) {
-  return function(scene) {
+exports.loadImagesImpl = function(images, scene) {
     return function() {
       images.forEach(({key, path}) => {
         scene.load.image(key, path);
       });
-    };
   };
 };

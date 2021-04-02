@@ -4,7 +4,7 @@ import Effect (Effect)
 import Phaser.Graphics.ForeignTypes (PhaserScene, PhaserText)
 
 
-foreign import text ::
+foreign import create ::
   { scene :: PhaserScene
   , pos :: { x :: Number, y :: Number }
   , text :: String

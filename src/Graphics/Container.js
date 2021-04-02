@@ -9,13 +9,13 @@ exports.createImpl = function ({ x, y }, scene) {
 exports.addChildImpl = function (container, element) {
   return function () {
     container.add(element);
-    return {};
+    return container
   };
 };
 
 exports.removeChildren = function (container) {
   return function () {
     container.removeAll(true);
-    return {};
+    return container
   };
 };

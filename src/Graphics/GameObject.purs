@@ -4,7 +4,7 @@ import Prelude
 
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
-import Phaser.Graphics.ForeignTypes (Event, PhaserContainer, PhaserGraphic, PhaserImage, PhaserScene, PhaserText)
+import Phaser.Graphics.ForeignTypes (Event, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, SceneManager)
 
 type Vector
   = { x :: Number, y :: Number }
@@ -14,7 +14,6 @@ type Dimensions
 
 type OnClickCallback a
   = Vector -> Vector -> Event -> a -> Effect Unit
-
 
 -- TODO: missing functions - flipx/y, depth, scrollfactor, bounds, settintfill, multi tint, blend mode
 class GameObject a where

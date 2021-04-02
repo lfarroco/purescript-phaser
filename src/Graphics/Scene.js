@@ -20,6 +20,12 @@ exports.setTimedEvent = function (on) {
   };
 };
 
+exports.getSceneManagerImpl = function (obj) {
+  return function () {
+    return obj.sceneManager;
+  };
+};
+
 exports.setGameObjectEvent = function (on) {
   return function (callback) {
     return function (scene) {
@@ -115,16 +121,26 @@ exports.sendToBack = function (sceneManager, name) {
 
 exports.getStateImpl = function (registry, key) {
   return function () {
-    return registry.get(key)
+    return registry.get(key);
   };
 };
 exports.setStateImpl = function (registry, key, data) {
   return function () {
-    return registry.set(key, data)
+    return registry.set(key, data);
   };
 };
-exports.getRegistry = function (scene) {
+exports.getRegistryImpl = function (obj) {
   return function () {
-    return scene.registry
+    return obj.registry;
+  };
+};
+exports.getDataImpl = function (key, obj) {
+  return function () {
+    return obj.data.get(key);
+  };
+};
+exports.setDataImpl = function (key, data, obj) {
+  return function () {
+    return obj.data.set(key, data);
   };
 };
