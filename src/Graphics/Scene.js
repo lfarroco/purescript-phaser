@@ -144,3 +144,9 @@ exports.setDataImpl = function (key, data, obj) {
     return obj.data.set(key, data);
   };
 };
+
+exports.getPluginInstanceImpl = function (scene, key) {
+  return function () {
+    return scene[key];
+  };
+};

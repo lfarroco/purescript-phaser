@@ -13,3 +13,4 @@ foreign import loadImagesImpl :: Fn2 (Array { key :: String, path :: String }) P
 
 loadImages :: Array { key :: String , path :: String } -> PhaserScene -> Effect Unit
 loadImages = runFn2 loadImagesImpl
+

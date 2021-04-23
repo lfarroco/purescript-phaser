@@ -1,6 +1,6 @@
 "use strict";
 
-exports.create = function ({ scene, pos, text, config }) {
+exports.createImpl = function ({ pos, text, config }, scene) {
   return function () {
     return scene.add.text(pos.x, pos.y, text, config);
   };

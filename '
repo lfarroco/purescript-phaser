@@ -1,0 +1,35 @@
+module Graphics.Phaser.Tween where
+
+import Effect (Effect)
+import Graphics.Phaser.GameObject (class GameObject)
+import Phaser.Graphics.ForeignTypes (PhaserScene, PhaserTween)
+
+-- TODO: refactor `props` to be generic record, or create a type
+-- for properties that can be tweened (x, y, scale...)
+-- `targets` can become an array of GameObject
+addTween ::
+  forall target props.
+  GameObject target =>
+  { scene :: PhaserScene
+  , targets :: Array target
+  , props :: props
+  , delay :: Int
+  , duration :: Number
+  , ease :: String
+  , repeat :: Int
+  , yoyo :: Boolean
+  } ->
+  Effect PhaserTween
+
+addTween = addTweenImpl
+
+foreign import addTweenImpl :: forall target props.  { scene :: PhaserScene
+  , targets :: Array target
+  , props :: props
+  , delay :: Int
+  , duration :: Number
+  , ease :: String
+  , repeat :: Int
+  , yoyo :: Boolean
+  } ->
+  Effect PhaserTween

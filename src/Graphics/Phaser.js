@@ -1,10 +1,14 @@
 "use strict";
 
-exports.create = function (config) {
+function create(config) {
   return function () {
     return new Phaser.Game(config);
   };
-};
+}
+
+exports.create = create;
+
+exports.createWithPlugins = create;
 
 exports.getSceneManager = function (game) {
   return function () {

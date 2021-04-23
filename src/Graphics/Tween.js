@@ -1,29 +1,15 @@
 "use strict";
 
-exports.addTween = function ({
-  scene,
-  targets,
-  props,
-  delay,
-  duration,
-  ease,
-  repeat,
-  yoyo,
-}) {
+exports.addTweenImpl = function (config) {
   return function () {
-    // use tween.setCallBack to define callback
-    let config = {
-      targets,
-      delay,
-      duration,
-      ease,
-      repeat,
-      yoyo,
-    };
 
-    // spread props into the config object
-    Object.assign(config, props);
+    // spread passed prop into the config object
+    Object.assign(config, config.prop);
 
-    return scene.add.tween(config);
+    config.onComplete = function (){
+      config.callback(config.scene)()
+    }
+
+    return config.scene.add.tween(config);
   };
 };

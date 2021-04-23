@@ -129,6 +129,11 @@ launchByKey = runFn3 launchByKeyImpl
 
 foreign import launchByKeyImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
 
+foreign import getPluginInstanceImpl :: forall a. Fn2 PhaserScene String (Effect a)
+
+getPluginInstance :: forall a. PhaserScene -> String -> Effect a
+getPluginInstance = runFn2 getPluginInstanceImpl 
+
 start :: forall a. a -> PhaserScene -> Effect Unit
 start = runFn2 startImpl
 

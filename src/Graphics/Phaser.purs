@@ -5,7 +5,33 @@ import Effect (Effect)
 import Graphics.Phaser.Scene (SceneConfig)
 import Phaser.Graphics.ForeignTypes (PhaserGame, SceneManager)
 
-foreign import create :: { width :: Int, height :: Int } -> Effect PhaserGame
+-- | A Phaser game config object can be written in multiple different ways
+-- | and there  are over 30 optional properties that can be provided.  
+foreign import create ::
+  { width :: Int
+  , height :: Int
+  } ->
+  Effect PhaserGame
+
+-- | Here are included parameters that are may be hard to implement after
+-- | initialization, such as specific plugins. 
+foreign import createWithPlugins :: { width :: Int
+  , height :: Int
+  , plugins ::
+      { scene ::
+          Array
+            { key :: String
+            , url :: String
+            , mapping :: String
+            }
+      , global ::
+          Array
+            { key :: String
+            , url :: String
+            , mapping :: String
+            }
+      }
+  }
 
 foreign import getSceneManager :: PhaserGame -> Effect SceneManager
 
@@ -25,5 +51,3 @@ foreign import addSceneImpl :: forall a. Fn3 (SceneConfig a) Boolean PhaserGame 
 -- | Boolean         - If the scene should start in parallel right now
 addScene :: forall a. SceneConfig a -> Boolean -> PhaserGame -> Effect PhaserGame
 addScene = runFn3 addSceneImpl
-
-
