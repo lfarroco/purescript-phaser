@@ -63,6 +63,11 @@ exports.startByKeyImpl = function (key, data, scene) {
     return scene.scene.start(key, data);
   };
 };
+exports.removeByKeyImpl = function (key, scene) {
+  return function () {
+    return scene.scene.start(key);
+  };
+};
 exports.startImpl = function (data, scene) {
   return function () {
     return scene.scene.start(scene, data);
