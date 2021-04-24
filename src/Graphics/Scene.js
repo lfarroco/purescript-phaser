@@ -58,6 +58,11 @@ exports.launchByKeyImpl = function (key, data, scene) {
     return scene.scene.launch(key, data);
   };
 };
+exports.startByKeyImpl = function (key, data, scene) {
+  return function () {
+    return scene.scene.start(key, data);
+  };
+};
 exports.startImpl = function (data, scene) {
   return function () {
     return scene.scene.start(scene, data);

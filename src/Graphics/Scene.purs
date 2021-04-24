@@ -83,11 +83,11 @@ foreign import getByKeyImpl :: Fn2 SceneManager String (Effect PhaserScene)
 
 foreign import remove :: PhaserScene -> (Effect Unit)
 
-foreign import launchImpl :: forall a. Fn2 PhaserScene a (Effect Unit)
+foreign import launchImpl :: forall model. Fn2 PhaserScene model (Effect Unit)
 
-foreign import startImpl :: forall a. Fn2 a PhaserScene (Effect Unit)
+foreign import startImpl :: forall model. Fn2 model PhaserScene (Effect Unit)
 
-foreign import restartImpl :: forall a. Fn2 PhaserScene a (Effect Unit)
+foreign import restartImpl :: forall model. Fn2 PhaserScene model (Effect Unit)
 
 foreign import pause :: PhaserScene -> (Effect Unit)
 
@@ -127,7 +127,12 @@ launch scene a = runFn2 launchImpl scene a
 launchByKey :: forall a. String -> a -> PhaserScene -> Effect Unit
 launchByKey = runFn3 launchByKeyImpl
 
+startByKey :: forall a. String -> a -> PhaserScene -> Effect Unit
+startByKey = runFn3 startByKeyImpl
+
 foreign import launchByKeyImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
+
+foreign import startByKeyImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
 
 foreign import getPluginInstanceImpl :: forall a. Fn2 PhaserScene String (Effect a)
 
