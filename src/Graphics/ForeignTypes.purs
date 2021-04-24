@@ -1,6 +1,5 @@
 module Phaser.Graphics.ForeignTypes where
 
--- | Foreign opaque types are grouped here to avoid cyclic dependencies 
 foreign import data PhaserGame :: Type
 
 foreign import data PhaserGameObject :: Type
