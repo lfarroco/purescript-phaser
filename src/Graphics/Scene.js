@@ -129,12 +129,12 @@ exports.sendToBack = function (sceneManager, name) {
   };
 };
 
-exports.getStateImpl = function (registry, key) {
+exports.getRegistryDataImpl = function (registry, key) {
   return function () {
     return registry.get(key);
   };
 };
-exports.setStateImpl = function (registry, key, data) {
+exports.setRegistryDataImpl = function (registry, key, data) {
   return function () {
     return registry.set(key, data);
   };

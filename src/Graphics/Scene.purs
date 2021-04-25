@@ -50,34 +50,25 @@ instance gameRegistryConnection :: RegistryConnected PhaserGame where
 -- TODO: add this in typeclass accepting scene and game
 foreign import getRegistryImpl :: forall a. a-> Effect PhaserRegistry
 
-foreign import getStateImpl :: forall a. Fn2 PhaserRegistry String (Effect a)
+foreign import getRegistryDataImpl :: forall a. Fn2 PhaserRegistry String (Effect a)
 
-getState :: forall a. SceneConfig a -> PhaserRegistry -> String -> Effect a
-getState config registry key = runFn2 getStateImpl registry key
+getRegistryData :: forall a. PhaserRegistry -> String -> Effect a
+getRegistryData = runFn2 getRegistryDataImpl
 
--- | Same as getState, but not bound to a specific scene config
-unsafeGetState :: forall a. PhaserRegistry -> String -> Effect a
-unsafeGetState = runFn2 getStateImpl
+foreign import setRegistryDataImpl :: forall a. Fn3 PhaserRegistry String a (Effect a)
 
-foreign import setStateImpl :: forall a. Fn3 PhaserRegistry String a (Effect a)
-
-setState :: forall st. SceneConfig st -> PhaserRegistry -> String -> st -> Effect st
-setState config registry key state = runFn3 setStateImpl registry key state
-
--- | Same as setState, but not bound to a specific scene config
-unsafeSetState :: forall st. PhaserRegistry -> String -> st -> Effect st
-unsafeSetState = runFn3 setStateImpl
-
+setRegistryData :: forall st. PhaserRegistry -> String -> st -> Effect st
+setRegistryData = runFn3 setRegistryDataImpl
 
 -- | Local data storage
 foreign import getDataImpl :: forall a. Fn2 String PhaserScene (Effect a)
-foreign import setDataImpl :: forall a. Fn3 String a PhaserScene (Effect a)
+foreign import setDataImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
 
-getData :: forall st. SceneConfig st -> String -> PhaserScene -> Effect st
-getData conf key scene = runFn2 getDataImpl key scene
+getData :: forall a. String -> PhaserScene -> Effect a
+getData key scene = runFn2 getDataImpl key scene
 
-setData :: forall st. SceneConfig st -> String -> st -> PhaserScene -> Effect st
-setData conf key data_ scene = runFn3 setDataImpl key data_ scene
+setData :: forall a. String -> a -> PhaserScene -> Effect Unit
+setData key data_ scene = runFn3 setDataImpl key data_ scene
 
 foreign import getByKeyImpl :: Fn2 SceneManager String (Effect PhaserScene)
 
