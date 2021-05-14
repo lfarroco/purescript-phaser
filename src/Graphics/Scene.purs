@@ -47,6 +47,8 @@ instance sceneRegistryConnection :: RegistryConnected PhaserScene where
 instance gameRegistryConnection :: RegistryConnected PhaserGame where
   getRegistry = getRegistryImpl
 
+foreign import addSceneImpl :: forall a. String -> SceneConfig a -> SceneManager -> Effect PhaserRegistry
+
 -- TODO: add this in typeclass accepting scene and game
 foreign import getRegistryImpl :: forall a. a-> Effect PhaserRegistry
 
@@ -102,9 +104,9 @@ foreign import bringToTop :: PhaserScene -> (Effect Unit)
 
 -- Comprehensive event list
 -- https://rexrainbow.github.io/phaser3-rex-notes/docs/site/scene/
-foreign import setEventImpl :: String -> (Unit -> Effect Unit) -> Effect Unit
+foreign import setEventImpl :: String -> (Unit -> Effect Unit) -> PhaserScene -> Effect Unit
 
-foreign import setTimedEvent :: String -> (Time -> Delta -> Effect Unit) -> Effect Unit
+foreign import setTimedEvent :: String -> (Time -> Delta -> Effect Unit) -> PhaserScene -> Effect Unit
 
 foreign import setGameObjectEvent :: String -> (PhaserGameObject -> PhaserScene -> Effect Unit) -> Effect Unit
 
@@ -141,22 +143,23 @@ start = runFn2 startImpl
 restart :: forall a. PhaserScene -> a -> Effect Unit
 restart scene a = runFn2 restartImpl scene a
 
-setEvent :: Partial => SceneEvent -> Effect Unit
+setEvent :: SceneEvent -> PhaserScene -> Effect Unit
 setEvent event = case event of
-  Start fn -> setEventImpl "start" fn
-  PreUpdate fn -> setTimedEvent "preupdate" fn
-  Update fn -> setTimedEvent "update" fn
-  PostUpdate fn -> setTimedEvent "postupdate" fn
-  Render fn -> setEventImpl "render" fn
-  Pause fn -> setEventImpl "pause" fn
-  Resume fn -> setEventImpl "resume" fn
-  Sleep fn -> setEventImpl "sleep" fn
-  Wake fn -> setEventImpl "wake" fn
-  Destroy fn -> setEventImpl "destroy" fn
-  Resize fn -> setEventImpl "resize" fn
-  Boot fn -> setEventImpl "boot" fn
-  AddedToScene fn -> setGameObjectEvent "addedtoscene" fn
-  RemovedFromScene fn -> setGameObjectEvent "removedfromscene" fn
+  Start fn -> setEventImpl "start" fn 
+  PreUpdate fn -> setTimedEvent "preupdate" fn 
+  Update fn -> setTimedEvent "update" fn 
+  PostUpdate fn -> setTimedEvent "postupdate" fn 
+  Render fn -> setEventImpl "render" fn 
+  Pause fn -> setEventImpl "pause" fn 
+  Resume fn -> setEventImpl "resume" fn 
+  Sleep fn -> setEventImpl "sleep" fn 
+  Wake fn -> setEventImpl "wake" fn 
+  ShutDown fn ->  setEventImpl "shutdown" fn
+  Destroy fn -> setEventImpl "destroy" fn 
+  Resize fn -> setEventImpl "resize" fn 
+  Boot fn -> setEventImpl "boot" fn 
+  -- AddedToScene fn -> setGameObjectEvent "addedtoscene" fn 
+  -- RemovedFromScene fn -> setGameObjectEvent "removedfromscene" fn 
 
 data SceneEvent
   = Start (Unit -> Effect Unit)
@@ -176,5 +179,5 @@ data SceneEvent
   | Resize (Unit -> Effect Unit)
   | Boot (Unit -> Effect Unit)
   -- Game Object added to scene
-  | AddedToScene (PhaserGameObject -> PhaserScene -> Effect Unit)
-  | RemovedFromScene (PhaserGameObject -> PhaserScene -> Effect Unit)
+  -- | AddedToScene (PhaserGameObject -> PhaserScene -> Effect Unit)
+  -- | RemovedFromScene (PhaserGameObject -> PhaserScene -> Effect Unit)

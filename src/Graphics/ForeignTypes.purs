@@ -29,3 +29,7 @@ foreign import data PhaserScene :: Type
 foreign import data SceneManager :: Type
 
 foreign import data PhaserRegistry :: Type
+
+foreign import data PhaserCamera :: Type
+
+foreign import data PhaserCameraController :: Type

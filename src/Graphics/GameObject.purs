@@ -17,6 +17,7 @@ type OnClickCallback a
 
 -- TODO: missing functions - flipx/y, depth, scrollfactor, bounds, settintfill, multi tint, blend mode
 class GameObject a where
+  getScene :: a -> Effect PhaserScene
   destroy :: a -> Effect Unit
   getPosition :: a -> Effect Vector
   setPosition :: Vector -> a -> Effect a

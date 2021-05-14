@@ -1,10 +1,18 @@
 "use strict";
 
+exports.addSceneImpl = function (sceneManager, key, config) {
+  return function () {
+    sceneManager.add(key, config);
+    return sceneManager
+  };
+};
+
 exports.setEventImpl = function (on) {
   return function (callback) {
     return function (scene) {
       return function () {
-        scene.on(on, () => callback()());
+        scene.events.on(on, () => callback()());
+        return scene
       };
     };
   };
@@ -14,7 +22,8 @@ exports.setTimedEvent = function (on) {
   return function (callback) {
     return function (scene) {
       return function () {
-        scene.on(on, (time, delta) => callback(time)(delta)());
+        scene.events.on(on, (time, delta) => callback(time)(delta)());
+        return scene
       };
     };
   };
@@ -22,7 +31,7 @@ exports.setTimedEvent = function (on) {
 
 exports.getSceneManagerImpl = function (obj) {
   return function () {
-    return obj.sceneManager;
+    return obj.scene;
   };
 };
 
@@ -43,9 +52,10 @@ exports.remove = function (scene) {
   };
 };
 
+// TODO: return maybe
 exports.getByKeyImpl = function (sceneManager, key) {
   return function () {
-    return sceneManager.getScene(key);
+    return sceneManager.get(key);
   };
 };
 exports.launchImpl = function (scene, data) {
