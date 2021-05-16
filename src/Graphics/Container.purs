@@ -1,6 +1,7 @@
 module Graphics.Phaser.Container (create, addChild, removeChildren) where
 
 import Prelude
+
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
 import Graphics.Phaser.GameObject (class GameObject)
@@ -20,3 +21,8 @@ addChild container obj = runFn2 addChildImpl obj container
 
 -- | Removes all children from a container
 foreign import removeChildren :: PhaserContainer -> Effect PhaserContainer
+
+foreign import listImpl :: forall a. PhaserContainer -> Array a 
+
+list:: forall a. GameObject a => PhaserContainer -> Array a 
+list = listImpl
