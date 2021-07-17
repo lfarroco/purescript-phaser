@@ -10,39 +10,49 @@ type Vector
   = { x :: Number, y :: Number }
 
 type Dimensions
-  = { width :: Number, height :: Number }
+  = { width :: Int, height :: Int }
 
 type OnClickCallback a
   = Vector -> Vector -> Event -> a -> Effect Unit
 
 -- TODO: missing functions - flipx/y, depth, scrollfactor, bounds, settintfill, multi tint, blend mode
 class GameObject a where
-  getScene :: a -> Effect PhaserScene
   destroy :: a -> Effect Unit
-  getPosition :: a -> Effect Vector
-  setPosition :: Vector -> a -> Effect a
-  getAngle :: a -> Effect Number
-  setAngle :: Number -> a -> Effect a
-  getRadians :: a -> Effect Number
-  setRadians :: Number -> a -> Effect a
-  getVisible :: a -> Effect Boolean
-  setVisible :: Boolean -> a -> Effect a
-  getAlpha :: a -> Effect Number
-  setAlpha :: Number -> a -> Effect a
-  getOrigin :: a -> Effect Vector
-  setOrigin :: Vector -> a -> Effect a
-  setTint :: String -> a -> Effect a
-  clearTint :: a -> Effect a
-  getSize :: a -> Effect Dimensions
-  setSize :: Dimensions -> a -> Effect a
-  getDisplaySize :: a -> Effect Dimensions
-  setDisplaySize :: Dimensions -> a -> Effect a
-  getScale :: a -> Effect Vector
-  setScale :: Vector -> a -> Effect a
-  setName :: String -> a -> Effect a
-  getName :: a -> Effect String
   onClick :: OnClickCallback a -> a -> Effect a
   getScene :: a -> Effect PhaserScene
+
+  getPosition :: a -> Effect Vector
+  setPosition :: Vector -> a -> Effect a
+
+  getAngle :: a -> Effect Number
+  setAngle :: Number -> a -> Effect a
+
+  getRadians :: a -> Effect Number
+  setRadians :: Number -> a -> Effect a
+
+  getVisible :: a -> Effect Boolean
+  setVisible :: Boolean -> a -> Effect a
+
+  getAlpha :: a -> Effect Number
+  setAlpha :: Number -> a -> Effect a
+
+  getOrigin :: a -> Effect Vector
+  setOrigin :: Vector -> a -> Effect a
+
+  setTint :: String -> a -> Effect a
+  clearTint :: a -> Effect a
+
+  getSize :: a -> Effect Dimensions
+  setSize :: Dimensions -> a -> Effect a
+
+  getDisplaySize :: a -> Effect Dimensions
+  setDisplaySize :: Dimensions -> a -> Effect a
+
+  getScale :: a -> Effect Vector
+  setScale :: Vector -> a -> Effect a
+  
+  setName :: String -> a -> Effect a
+  getName :: a -> Effect String
 
 foreign import destroyImpl :: forall a. a -> Effect Unit
 

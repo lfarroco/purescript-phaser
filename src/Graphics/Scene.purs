@@ -18,14 +18,26 @@ type Time
 type Delta
   = Number
 
-type SceneConfig a
-  = { key :: String
-    , create :: PhaserScene -> a -> Effect Unit
-    , init :: PhaserScene -> a -> Effect Unit
-    , update :: PhaserScene -> Effect Unit
-    , preload :: PhaserScene -> Effect Unit
-    , state :: a
-    }
+type SceneConfig a =
+  { key :: String
+  , create :: PhaserScene -> a -> Effect Unit
+  , init :: PhaserScene -> a -> Effect Unit
+  , update :: PhaserScene -> Effect Unit
+  , preload :: PhaserScene -> Effect Unit
+  , state :: a
+  }
+
+-- | A scene where create, init, update and preload are noops.
+-- | The string argument must be a unique key.
+defaultSceneConfig :: String -> SceneConfig {}
+defaultSceneConfig key =
+  { key
+  , create: \_scene _state -> pure unit
+  , init: \_scene _state -> pure unit
+  , update: \_scene -> pure unit
+  , preload: \_scene -> pure unit
+  , state: {}
+  }
 
 class SceneManagerConnected a where
   getSceneManager :: a -> Effect SceneManager
@@ -50,7 +62,7 @@ instance gameRegistryConnection :: RegistryConnected PhaserGame where
 foreign import addSceneImpl :: forall a. String -> SceneConfig a -> SceneManager -> Effect PhaserRegistry
 
 -- TODO: add this in typeclass accepting scene and game
-foreign import getRegistryImpl :: forall a. a-> Effect PhaserRegistry
+foreign import getRegistryImpl :: forall a. a -> Effect PhaserRegistry
 
 foreign import getRegistryDataImpl :: forall a. Fn2 PhaserRegistry String (Effect a)
 
