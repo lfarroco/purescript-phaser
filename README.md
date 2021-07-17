@@ -17,13 +17,11 @@ import Prelude
 import Effect (Effect)
 import Graphics.Phaser (addScene)
 import Graphics.Phaser as Phaser
-import Graphics.Phaser.GameObject (OnClickCallback, Vector, Dimensions, onClick, setAngle, setDisplaySize)
+import Graphics.Phaser.GameObject (Dimensions, setDisplaySize)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
 import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
-import Graphics.Phaser.Scene as Scene
-import Phaser.Graphics.ForeignTypes (Event, PhaserGame, PhaserImage, PhaserScene)
-
+import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserScene)
 runGame :: Dimensions -> Effect PhaserGame
 runGame = Phaser.create
   >=> addScene mainScene true
