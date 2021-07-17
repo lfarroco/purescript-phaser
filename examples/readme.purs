@@ -1,15 +1,3 @@
-# purescript-phaser
-
-Bindingins for common PhaserJs 3 operations. As Phaser has a
-very large API, not everything is implemented.
-Feel free to open an PR or ask for a new binding!
-
-Some bindings allow a more FP-friendly way of handling operations,
-like passing a `Scene` as a argument for the `create` function, as we
-are not accesing use `this`.
-
-Here's an example running two scenes at once:
-```
 module Main where
 
 import Prelude
@@ -88,4 +76,3 @@ createLogo =
   Image.create "logo" { x: 200.0, y: 200.0 }
     >=> setAngle 30.0
     >=> setDisplaySize { width: 50, height: 50 }
-```
