@@ -28,10 +28,9 @@ type SceneConfig a =
   }
 
 -- | A scene where create, init, update and preload are noops.
--- | The string argument must be a unique key.
-defaultSceneConfig :: String -> SceneConfig {}
-defaultSceneConfig key =
-  { key
+defaultSceneConfig :: SceneConfig {}
+defaultSceneConfig =
+  { key: ""
   , create: \_scene _state -> pure unit
   , init: \_scene _state -> pure unit
   , update: \_scene -> pure unit
