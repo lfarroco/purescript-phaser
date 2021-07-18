@@ -3,9 +3,10 @@ module Main where
 import Prelude
 
 import Effect (Effect)
+import Effect.Console (log)
 import Graphics.Phaser (addScene)
 import Graphics.Phaser as Phaser
-import Graphics.Phaser.GameObject (Dimensions, setAngle, setDisplaySize)
+import Graphics.Phaser.GameObject (Dimensions, OnClickCallback, getScene, onClick, setAngle, setDisplaySize)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
 import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
@@ -35,11 +36,19 @@ mainScene = defaultSceneConfig
   where
   startButton :: PhaserScene -> Effect PhaserScene
   startButton scene = do
-    _ <- Image.create "logo" { x: 100.0, y: 100.0 } scene
-        >>= setDisplaySize { width: 50, height: 50 }
-    Scene.launchByKey "snd" {} scene
+    image <- Image.create "logo" { x: 100.0, y: 100.0 } scene
+      >>= setDisplaySize { width: 50, height: 50 }
+    -- Register callback on the image game object
+    _ <- onClick callback image
     pure scene
-
+    where
+      callback :: OnClickCallback PhaserImage
+      callback _vec1 _vec2 _event image = do
+        log "clicked"
+        -- Don't do anything with the image, just launch a new scene.
+        Scene.launchByKey "snd" {} scene
+        pure unit
+        
 logoPath :: String
 logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
 
