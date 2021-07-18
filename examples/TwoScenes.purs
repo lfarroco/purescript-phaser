@@ -37,7 +37,7 @@ mainScene = defaultSceneConfig
   startButton scene = do
     _ <- Image.create "logo" { x: 100.0, y: 100.0 } scene
         >>= setDisplaySize { width: 50, height: 50 }
-    Scene.launchByKey "snd" "" scene
+    Scene.launchByKey "snd" {} scene
     pure scene
 
 logoPath :: String
