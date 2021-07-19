@@ -17,64 +17,37 @@ import Prelude
 import Effect (Effect)
 import Graphics.Phaser (addScene)
 import Graphics.Phaser as Phaser
-import Graphics.Phaser.GameObject (onClick, setAngle, setDisplaySize)
+import Graphics.Phaser.GameObject (Dimensions, setDisplaySize)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
-import Graphics.Phaser.Scene (SceneConfig)
-import Graphics.Phaser.Scene as Scene
-import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserImage, PhaserScene)
-
-runGame :: { height :: Int , width :: Int } -> Effect PhaserGame
-runGame =
-  Phaser.createGame
-    >=> addScene "main" mainScene true {}
-    >=> addScene "snd" secondScene false {}
+import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
+import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserScene)
+runGame :: Dimensions -> Effect PhaserGame
+runGame = Phaser.create
+  >=> addScene mainScene true
 
 main :: Effect Unit
 main = do
   _ <- runGame { width: 800, height: 600 }
   pure unit
 
-startButton :: PhaserScene -> Effect PhaserImage
-startButton =
-  Image.create "logo" { x: 100.0, y: 100.0 }
-    >=> setDisplaySize { width: 50.0, height: 50.0 }
-    >=> onClick (\_ _ _ scene -> Scene.launchByKey "snd" {} scene)
+startButton :: PhaserScene -> Effect PhaserScene
+startButton scene = do
+  _ <- Image.create "logo" { x: 100.0, y: 100.0 } scene
+    >>= setDisplaySize { width: 50, height: 50 }
+  pure scene
 
 mainScene :: SceneConfig {}
-mainScene =
-  { preload:
-      \scene ->
-        loadImages [ { key: "logo", path: logoPath } ] scene
-  , init: \_ _ -> pure unit
-  , create:
-      \scene _ -> do
-        _ <- startButton scene
-        pure unit
-  , update: \_ -> pure unit
-  , data: {}
+mainScene = defaultSceneConfig
+  { key = "main"
+  , create = \scene _state -> do
+      _ <- startButton scene
+      pure unit
+  , preload = \scene ->
+      loadImages [ { key: "logo", path: logoPath } ] scene
   }
 
 logoPath :: String
 logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
 
-secondScene :: SceneConfig {}
-secondScene =
-  { preload:
-      \scene ->
-        loadImages [ { key: "logo", path: logoPath } ] scene
-  , init: \_ _ -> pure unit
-  , create:
-      \scene _ -> do
-        logo <- createLogo scene
-        pure unit
-  , update: \_ -> pure unit
-  , data: {}
-  }
-
-createLogo :: PhaserScene -> Effect PhaserImage
-createLogo =
-  Image.create "logo" { x: 200.0, y: 200.0 }
-    >=> setAngle 3.0
-    >=> setDisplaySize { width: 50.0, height: 50.0 }
 ```
