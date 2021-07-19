@@ -1,14 +1,14 @@
 # purescript-phaser
 
-Bindingins for common PhaserJs 3 operations. As Phaser has a
-very large API, not everything is implemented.
-Feel free to open an PR or ask for a new binding!
+Bindings for common Phaser 3 operations. As Phaser has a large API, not everything is implemented.
+Feel free to open a PR or ask for a new binding!
 
 Some bindings allow a more FP-friendly way of handling operations,
-like passing a `Scene` as a argument for the `create` function, as we
-are not accesing use `this`.
+like passing a `Scene` as an argument for the `create` function, as we
+are not accessing use `this`.
 
-Here's an example running two scenes at once:
+Here's a simple example:
+
 ```
 module Main where
 
@@ -22,6 +22,7 @@ import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
 import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
 import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserScene)
+
 runGame :: Dimensions -> Effect PhaserGame
 runGame = Phaser.create
   >=> addScene mainScene true
