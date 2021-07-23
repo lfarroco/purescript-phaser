@@ -5,11 +5,14 @@ Feel free to open a PR or ask for a new binding!
 
 Some bindings allow a more FP-friendly way of handling operations,
 like passing a `Scene` as an argument for the `create` function, as we
-are not accessing use `this`.
+are not accessing using `this`.
 
+---
+
+## Examples
 Here's a simple example:
 
-```
+```purescript
 module Main where
 
 import Prelude
@@ -50,5 +53,30 @@ mainScene = defaultSceneConfig
 
 logoPath :: String
 logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-
 ```
+
+---
+
+## Compiling
+### Building
+This library is not on pursuit yet. To build, clone the repo and add
+```dhall
+in  upstream
+  with phaser =
+      /some/path/to/purescript-phaser/spago.dhall as Location
+```
+to your packages.dhall. Add 'phaser' to the dependencies in spago.dhall and run
+```bash
+spago build
+```
+### Output JS
+For a js file you can interact with in a browser, run
+```bash
+spago bundle-app --to dist/index.js --watch
+```
+Create an html file with
+```html
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.53.1/dist/phaser.js"></script>
+    <script src="index.js"></script>
+```
+in `<head>`, and place it in `dist/` with the `index.js`.
