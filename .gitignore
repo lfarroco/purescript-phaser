@@ -1,12 +1,12 @@
-/node_modules/
+node_modules
 /.pulp-cache/
-/output/
+output
 /generated-docs/
 /.psc-package/
 /.psc*
-/.purs*
+.purs*
 /.psa*
-/.spago
+.spago
 
 .psci_modules
 
