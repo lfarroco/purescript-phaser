@@ -23,17 +23,15 @@ runGame =
     >=> addScene secondScene false
 
 mainScene :: SceneConfig {}
-mainScene =
-  defaultSceneConfig
-    { key = "main"
-    , create =
-      \scene _state -> do
-        _ <- startButton scene
-        pure unit
-    , preload =
-      \scene ->
-        loadImages [ { key: "logo", path: logoPath } ] scene
-    }
+mainScene = defaultSceneConfig
+  -- Use record update syntax to change relevant defaults
+  { key = "main"
+  , create = \scene _state -> do
+      _ <- startButton scene
+      pure unit
+  , preload = \scene ->
+      loadImages [ { key: "logo", path: logoPath } ] scene
+  }
   where
   startButton :: PhaserScene -> Effect PhaserScene
   startButton scene = do
