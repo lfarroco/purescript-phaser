@@ -1,6 +1,6 @@
 module Graphics.Phaser.TileMap where
 
-import Data.Function.Uncurried (Fn2, runFn2)
+-- import Data.Maybe (Maybe)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserLayer, PhaserScene, PhaserTileMap, PhaserTileSet)
 
@@ -14,9 +14,10 @@ foreign import makeTileMap ::
 
 foreign import addTilesetImage ::
   { tileMap :: PhaserTileMap
-  , key :: String
-  , tileWidth :: Int
-  , tileHeight :: Int
+  , name :: String
+  -- , key :: String -- Maybe
+  , tileWidth :: Int -- Maybe
+  , tileHeight :: Int -- Maybe
   } ->
   Effect PhaserTileSet
 
@@ -26,7 +27,8 @@ foreign import createLayer ::
   } ->
   Effect PhaserLayer
 
-foreign import loadTilemapTileJSONImpl :: Fn2 String String (Effect PhaserScene)
+foreign import loadTilemapTileJSONImpl ::
+  EffectFn3 String String PhaserScene PhaserScene
 
-loadTilemapTileJSON :: String -> String -> Effect PhaserScene
-loadTilemapTileJSON = runFn2 loadTilemapTileJSONImpl
+loadTilemapTileJSON :: String -> String -> PhaserScene -> Effect PhaserScene
+loadTilemapTileJSON = runEffectFn3 loadTilemapTileJSONImpl
