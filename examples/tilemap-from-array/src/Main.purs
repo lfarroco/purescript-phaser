@@ -48,13 +48,13 @@ create :: PhaserScene -> State -> Effect Unit
 create scene _state = do
   -- When loading from an array, make sure to specify the
   -- tileWidth and tileHeight
-  map <- makeTileMap
+  map <- makeTileMap scene level
     -- Create a new record instead of updating a default one.
-    { data: level
-    , scene: scene
-    , tileHeight: 16
-    , tileWidth: 16
-    }
+    -- { scene: scene
+    -- , data: level
+    -- , tileHeight: 16
+    -- , tileWidth: 16
+    -- }
     -- Note about purescript: Accidentally using record update syntax here
     -- ('=' instead of ':') gives a weird error "Could not match Record
     -- with Function"

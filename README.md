@@ -84,7 +84,11 @@ spago build
 For each directory on `./examples`, run:
 
 ```bash
+<<<<<<< HEAD
 spago bundle-app
+=======
+spago bundle-app --to ../dist/index.js --watch
+>>>>>>> 9540186 (refactor using EffectFn and runEffectFn)
 ```
 
 After that creating an `.html` file in the directory with this content

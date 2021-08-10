@@ -1,24 +1,15 @@
 'use strict';
 
-exports.makeTileMap = function ({ scene, data, tileWidth, tileHeight }) {
-  return () => {
-    return scene.make.tilemap({ data, tileWidth, tileHeight });
-  };
-};
+exports.makeTileMapImpl = (scene, data, { tileWidth, tileHeight }) =>
+  scene.make.tilemap({ data, tileWidth, tileHeight });
 
-exports.addTilesetImage = function ({ tileMap, name, tileWidth, tileHeight }) {
-  return () => {
-    return tileMap.addTilesetImage(key, null, tileWidth, tileHeight);
-  };
-};
+exports.addTilesetImageImpl = (tileMap, tilesetName, { key, tileWidth, tileHeight, tileMargin, tileSpacing, gid }) =>
+  tileMap.addTilesetImage(tilesetName, key, tileWidth, tileHeight, tileMargin, tileSpacing, gid);
 
-exports.createLayer = function ({ tileMap, tileset }) {
-  return () => {
-    return tileMap.createLayer(0, tileset, 0, 0);
-  };
-};
+exports.createLayerImpl = (tileMap, layerID, tileset, { x, y }) =>
+  tileMap.createLayer(layerID, tileset, x, y);
 
-exports.loadTilemapTileJSONImpl = function (key, path, scene) {
+exports.loadTilemapTileJSONImpl = (key, path, scene) => {
   scene.load.tilemapTileJSON(key, path);
   return scene;
 };
