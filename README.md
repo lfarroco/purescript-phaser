@@ -10,6 +10,7 @@ are not accessing using `this`.
 <br>
 
 ## Examples
+
 Here's a simple example:
 
 ```purescript
@@ -56,39 +57,28 @@ logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.
 ```
 
 Build it with:
+
 ```bash
 cd examples/read-me/
 spago build
 ```
-<br>
 
 ---
-<br>
 
-## Compiling
-<br>
+### Building the examples JS
 
-### Building
-This library is not on pursuit yet. To build it with spago as a local library, clone the repo and add
-```dhall
-in  upstream
-  with phaser =
-      /some/path/to/purescript-phaser/spago.dhall as Location
-```
-to your packages.dhall. Add 'phaser' to the dependencies in `spago.dhall` and run
+For each directory on `./examples`, run:
+
 ```bash
-spago build
+spago bundle-app
 ```
-<br>
 
-### Output JS
-For a js file you can interact with in a browser, run
-```bash
-spago bundle-app --to dist/index.js --watch
-```
-Add this to `<head>` in an html file
+After that creating an `.html` file in the directory with this content
+in its `<head>` tag:
+
 ```html
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.53.1/dist/phaser.js"></script>
-    <script src="index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.53.1/dist/phaser.js"></script>
+<script src="index.js"></script>
 ```
-and place it in `dist/` with the `index.js`.
+
+After that, opening the `.html` file should display the expected results.
