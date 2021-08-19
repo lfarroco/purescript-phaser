@@ -1,9 +1,7 @@
 module Main where
 
 import Prelude
-
 import Effect (Effect)
-import Effect.Console (log)
 import Graphics.Phaser (addScene)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.GameObject (Dimensions, OnClickCallback, getScene, onClick, setAngle, setDisplaySize)
@@ -25,45 +23,52 @@ runGame =
     >=> addScene secondScene false
 
 mainScene :: SceneConfig {}
-mainScene = defaultSceneConfig
-  { key = "main"
-  , create = \scene _state -> do
-      _ <- startButton scene
-      pure unit
-  , preload = \scene ->
-      loadImages [ { key: "logo", path: logoPath } ] scene
-  }
+mainScene =
+  defaultSceneConfig
+    { key = "main"
+    , create =
+      \scene _state -> do
+        _ <- startButton scene
+        pure unit
+    , preload =
+      \scene ->
+        loadImages [ { key: "logo", path: logoPath } ] scene
+    }
   where
   startButton :: PhaserScene -> Effect PhaserScene
   startButton scene = do
-    image <- Image.create "logo" { x: 100.0, y: 100.0 } scene
-      >>= setDisplaySize { width: 50, height: 50 }
+    image <-
+      Image.create "logo" { x: 100.0, y: 100.0 } scene
+        >>= setDisplaySize { width: 50, height: 50 }
     -- Register callback on the image game object
     _ <- onClick callback image
     pure scene
     where
-      callback :: OnClickCallback PhaserImage
-      callback _vec1 _vec2 _event image = do
-        log "clicked"
-        -- Don't do anything with the image, just launch a new scene.
-        Scene.launchByKey "snd" {} scene
-        pure unit
-        
+    callback :: OnClickCallback PhaserImage
+    callback _vec1 _vec2 _event image = do
+      log "clicked"
+      -- Don't do anything with the image, just launch a new scene.
+      Scene.launchByKey "snd" {} scene
+      pure unit
+
 logoPath :: String
 logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
 
 secondScene :: SceneConfig {}
-secondScene = defaultSceneConfig
-  { key = "snd"
-  , create =
+secondScene =
+  defaultSceneConfig
+    { key = "snd"
+    , create =
       \scene _ -> do
         _ <- createLogo scene
         pure unit
-  , preload = \scene ->
+    , preload =
+      \scene ->
         loadImages [ { key: "logo", path: logoPath } ] scene
-  }
+    }
   where
   createLogo :: PhaserScene -> Effect PhaserImage
-  createLogo = Image.create "logo" { x: 200.0, y: 200.0 }
-    >=> setAngle 30.0
-    >=> setDisplaySize { width: 50, height: 50 }
+  createLogo =
+    Image.create "logo" { x: 200.0, y: 200.0 }
+      >=> setAngle 30.0
+      >=> setDisplaySize { width: 50, height: 50 }

@@ -1,7 +1,6 @@
 module Graphics.Phaser.GameObject where
 
 import Prelude
-
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
 import Phaser.Graphics.ForeignTypes (Event, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, SceneManager, PhaserSprite)
@@ -20,37 +19,26 @@ class GameObject a where
   destroy :: a -> Effect Unit
   onClick :: OnClickCallback a -> a -> Effect a
   getScene :: a -> Effect PhaserScene
-
   getPosition :: a -> Effect Vector
   setPosition :: Vector -> a -> Effect a
-
   getAngle :: a -> Effect Number
   setAngle :: Number -> a -> Effect a
-
   getRadians :: a -> Effect Number
   setRadians :: Number -> a -> Effect a
-
   getVisible :: a -> Effect Boolean
   setVisible :: Boolean -> a -> Effect a
-
   getAlpha :: a -> Effect Number
   setAlpha :: Number -> a -> Effect a
-
   getOrigin :: a -> Effect Vector
   setOrigin :: Vector -> a -> Effect a
-
   setTint :: String -> a -> Effect a
   clearTint :: a -> Effect a
-
   getSize :: a -> Effect Dimensions
   setSize :: Dimensions -> a -> Effect a
-
   getDisplaySize :: a -> Effect Dimensions
   setDisplaySize :: Dimensions -> a -> Effect a
-
   getScale :: a -> Effect Vector
   setScale :: Vector -> a -> Effect a
-  
   setName :: String -> a -> Effect a
   getName :: a -> Effect String
 
@@ -238,5 +226,3 @@ instance spriteInstance :: GameObject PhaserSprite where
   setName i = runFn2 setNameImpl i
   onClick i = runFn2 onClickImpl i
   getScene i = getSceneImpl i
-
-

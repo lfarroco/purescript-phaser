@@ -1,7 +1,6 @@
 module Graphics.Phaser.Events where
 
 import Prelude
-
 import Effect (Effect)
 import Phaser.Graphics.ForeignTypes (PhaserEmitter, PhaserScene)
 

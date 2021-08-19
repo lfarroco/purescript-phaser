@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 exports.makeTileMap = function ({ scene, data, tileWidth, tileHeight }) {
   return () => {
@@ -8,7 +8,6 @@ exports.makeTileMap = function ({ scene, data, tileWidth, tileHeight }) {
 
 exports.addTilesetImage = function ({ tileMap, key, tileWidth, tileHeight }) {
   return () => {
-    console.log(`....`, key);
     return tileMap.addTilesetImage(key, null, tileWidth, tileHeight);
   };
 };

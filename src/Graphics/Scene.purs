@@ -3,9 +3,7 @@ module Graphics.Phaser.Scene where
 -- TODO: add scene.data, and support for scene.data events
 -- Use this as example to refactor to Fn2, Fn3 
 -- https://github.com/purescript-web/purescript-canvas/blob/master/src/Graphics/Canvas.purs#L167
-
 import Prelude
-
 import Data.Function.Uncurried (Fn2, Fn3, runFn2, runFn3)
 import Effect (Effect)
 import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserGameObject, PhaserRegistry, PhaserScene, SceneManager)
@@ -18,14 +16,14 @@ type Time
 type Delta
   = Number
 
-type SceneConfig a =
-  { key :: String
-  , create :: PhaserScene -> a -> Effect Unit
-  , init :: PhaserScene -> a -> Effect Unit
-  , update :: PhaserScene -> Effect Unit
-  , preload :: PhaserScene -> Effect Unit
-  , state :: a
-  }
+type SceneConfig a
+  = { key :: String
+    , create :: PhaserScene -> a -> Effect Unit
+    , init :: PhaserScene -> a -> Effect Unit
+    , update :: PhaserScene -> Effect Unit
+    , preload :: PhaserScene -> Effect Unit
+    , state :: a
+    }
 
 -- | A scene where create, init, update and preload are noops.
 defaultSceneConfig :: SceneConfig {}
@@ -75,6 +73,7 @@ setRegistryData = runFn3 setRegistryDataImpl
 
 -- | Local data storage
 foreign import getDataImpl :: forall a. Fn2 String PhaserScene (Effect a)
+
 foreign import setDataImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
 
 getData :: forall a. String -> PhaserScene -> Effect a
@@ -146,7 +145,7 @@ foreign import removeByKeyImpl :: Fn2 String PhaserScene (Effect Unit)
 foreign import getPluginInstanceImpl :: forall a. Fn2 PhaserScene String (Effect a)
 
 getPluginInstance :: forall a. PhaserScene -> String -> Effect a
-getPluginInstance = runFn2 getPluginInstanceImpl 
+getPluginInstance = runFn2 getPluginInstanceImpl
 
 start :: forall a. a -> PhaserScene -> Effect Unit
 start = runFn2 startImpl
@@ -156,22 +155,22 @@ restart scene a = runFn2 restartImpl scene a
 
 setEvent :: SceneEvent -> PhaserScene -> Effect Unit
 setEvent event = case event of
-  Start fn -> setEventImpl "start" fn 
-  PreUpdate fn -> setTimedEvent "preupdate" fn 
-  Update fn -> setTimedEvent "update" fn 
-  PostUpdate fn -> setTimedEvent "postupdate" fn 
-  Render fn -> setEventImpl "render" fn 
-  Pause fn -> setEventImpl "pause" fn 
-  Resume fn -> setEventImpl "resume" fn 
-  Sleep fn -> setEventImpl "sleep" fn 
-  Wake fn -> setEventImpl "wake" fn 
-  ShutDown fn ->  setEventImpl "shutdown" fn
-  Destroy fn -> setEventImpl "destroy" fn 
-  Resize fn -> setEventImpl "resize" fn 
-  Boot fn -> setEventImpl "boot" fn 
-  -- AddedToScene fn -> setGameObjectEvent "addedtoscene" fn 
-  -- RemovedFromScene fn -> setGameObjectEvent "removedfromscene" fn 
+  Start fn -> setEventImpl "start" fn
+  PreUpdate fn -> setTimedEvent "preupdate" fn
+  Update fn -> setTimedEvent "update" fn
+  PostUpdate fn -> setTimedEvent "postupdate" fn
+  Render fn -> setEventImpl "render" fn
+  Pause fn -> setEventImpl "pause" fn
+  Resume fn -> setEventImpl "resume" fn
+  Sleep fn -> setEventImpl "sleep" fn
+  Wake fn -> setEventImpl "wake" fn
+  ShutDown fn -> setEventImpl "shutdown" fn
+  Destroy fn -> setEventImpl "destroy" fn
+  Resize fn -> setEventImpl "resize" fn
+  Boot fn -> setEventImpl "boot" fn
 
+-- AddedToScene fn -> setGameObjectEvent "addedtoscene" fn 
+-- RemovedFromScene fn -> setGameObjectEvent "removedfromscene" fn 
 data SceneEvent
   = Start (Unit -> Effect Unit)
   -- Every tick
@@ -189,6 +188,7 @@ data SceneEvent
   | Destroy (Unit -> Effect Unit)
   | Resize (Unit -> Effect Unit)
   | Boot (Unit -> Effect Unit)
-  -- Game Object added to scene
-  -- | AddedToScene (PhaserGameObject -> PhaserScene -> Effect Unit)
-  -- | RemovedFromScene (PhaserGameObject -> PhaserScene -> Effect Unit)
+
+-- Game Object added to scene
+-- | AddedToScene (PhaserGameObject -> PhaserScene -> Effect Unit)
+-- | RemovedFromScene (PhaserGameObject -> PhaserScene -> Effect Unit)

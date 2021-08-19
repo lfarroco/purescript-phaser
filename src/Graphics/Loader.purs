@@ -34,8 +34,10 @@ foreign import loadScenePluginImpl :: Fn4 String String String PhaserScene (Effe
 loadScene :: String -> String -> String -> PhaserScene -> Effect PhaserScene
 loadScene = runFn4 loadScenePluginImpl
 
-type LoadSpritesheetConfig = { frameWidth :: Number, frameHeight :: Number, startFrame :: Int, endFrame :: Int, margin :: Int, spacing :: Int }
+type LoadSpritesheetConfig
+  = { frameWidth :: Number, frameHeight :: Number, startFrame :: Int, endFrame :: Int, margin :: Int, spacing :: Int }
 
 foreign import loadSpritesheetImpl :: Fn4 String String LoadSpritesheetConfig PhaserScene (Effect PhaserScene)
+
 loadSpritesheet :: String -> String -> LoadSpritesheetConfig -> PhaserScene -> (Effect PhaserScene)
 loadSpritesheet = runFn4 loadSpritesheetImpl

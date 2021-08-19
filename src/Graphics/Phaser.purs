@@ -15,7 +15,8 @@ foreign import create ::
 
 -- | Here are included parameters that are may be hard to implement after
 -- | initialization, such as specific plugins. 
-foreign import createWithPlugins :: { width :: Int
+foreign import createWithPlugins ::
+  { width :: Int
   , height :: Int
   , plugins ::
       { scene ::

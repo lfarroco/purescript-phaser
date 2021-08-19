@@ -8,7 +8,6 @@ You can edit this file as you like.
     "aff",
     "effect",
     "functions",
-    "console",
 ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]

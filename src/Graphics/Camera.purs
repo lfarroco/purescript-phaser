@@ -15,22 +15,20 @@ foreign import setMainCameraBounds ::
 
 foreign import getMainCamera :: PhaserScene -> Effect PhaserCamera
 
-type KeyControlConfig =  {
-  camera:: PhaserCamera,
-  left:: String,
-  right:: String,
-  up::String,
-  down:: String,
-  acceleration:: Number,
-  drag:: Number,
-  maxSpeed:: Number
-}
+type KeyControlConfig
+  = { camera :: PhaserCamera
+    , left :: String
+    , right :: String
+    , up :: String
+    , down :: String
+    , acceleration :: Number
+    , drag :: Number
+    , maxSpeed :: Number
+    }
 
 foreign import createSmoothedKeyControlImpl :: KeyControlConfig -> Effect PhaserCameraController
 
 foreign import updateCameraControlDeltaImpl :: Fn3 Number Number PhaserCameraController (Effect PhaserCameraController)
 
 updateCameraControlDelta :: Number -> Number -> PhaserCameraController -> Effect PhaserCameraController
-updateCameraControlDelta = runFn3 updateCameraControlDeltaImpl 
-
-
+updateCameraControlDelta = runFn3 updateCameraControlDeltaImpl
