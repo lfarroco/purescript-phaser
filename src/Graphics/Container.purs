@@ -1,6 +1,4 @@
-module Graphics.Phaser.Container (create, addChild, removeChildren) where
-
-import Prelude
+module Graphics.Phaser.Container (create, addChild, removeChildren, list) where
 
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)

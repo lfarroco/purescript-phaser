@@ -1,25 +1,25 @@
-"use strict";
+'use strict';
 
-exports.add = function (scene, x, y, key) {
+exports.addImpl = function (key, { x, y }, scene) {
   return function () {
     return scene.add.sprite(x, y, key);
   };
 };
 
-exports.createAnimation = function (sprite) {
+exports.createAnimationImpl = function (key, frames, frameRate, repeat, scene) {
   return function () {
-    sprite.anims.create({
+    scene.anims.create({
       key,
       frames,
       frameRate,
       repeat,
     });
 
-    return sprite;
+    return scene;
   };
 };
 
-exports.playAnimation = function (sprite, key) {
+exports.playAnimationImpl = function (key, sprite) {
   return function () {
     sprite.play(key);
 
@@ -27,7 +27,7 @@ exports.playAnimation = function (sprite, key) {
   };
 };
 
-exports.removeAnimation = function (scene, key) {
+exports.removeAnimationImpl = function (key, scene) {
   return function () {
     scene.anims.remove(key);
 
@@ -42,34 +42,38 @@ exports.stopAnimation = function (sprite) {
     return sprite;
   };
 };
-exports.stopAfterDelay = function (sprite, ms) {
+
+exports.stopAfterDelayImpl = function (ms, sprite) {
   return function () {
     sprite.stopAfterDelay(ms);
 
     return sprite;
   };
 };
-/** https://photonstorm.github.io/phaser3-docs/Phaser.Animations.AnimationManager.html#generateFrameNumbers */
-exports.generateFrameNumbers = function (scene, key, start, end) {
-  return function () {
-    scene.anims.generateFrameNumbers(key, { start, end });
 
-    return scene;
+/** https://photonstorm.github.io/phaser3-docs/Phaser.Animations.AnimationManager.html#generateFrameNumbers */
+exports.generateFrameNumbersImpl = function (key, start, end, scene) {
+  return function () {
+    return scene.anims.generateFrameNumbers(key, { start, end });
   };
 };
 
 /** https://photonstorm.github.io/phaser3-docs/Phaser.Animations.AnimationManager.html#generateFrameNames */
-exports.generateFrameNames = function (
-  scene,
+exports.generateFrameNamesImpl = function (
   key,
   prefix,
   start,
   end,
-  zeroPad
+  zeroPad,
+  scene
 ) {
   return function () {
-    scene.anims.generateFrameNames(key, { start, end, prefix, zeroPad });
+    return scene.anims.generateFrameNames(key, { start, end, prefix, zeroPad });
+  };
+};
 
-    return scene;
+exports.setFrameImpl = function (frame, sprite) {
+  return function () {
+    return sprite.setFrame(frame);
   };
 };

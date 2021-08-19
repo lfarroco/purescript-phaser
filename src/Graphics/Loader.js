@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 exports.setBaseUrl = function (url) {
   return function (scene) {
@@ -35,7 +35,7 @@ exports.loadAtlasImpl = function (key, textureURL, atlasURL, scene) {
 
 exports.loadSpritesheetImpl = function (key, textureURL, config, scene) {
   return function () {
-    scene.load.atlas(key, textureURL, config);
+    scene.load.spritesheet(key, textureURL, config);
 
     return scene;
   };
@@ -47,6 +47,7 @@ exports.loadPluginImpl = function (key, url, scene) {
     return scene;
   };
 };
+
 exports.loadScenePluginImpl = function (key, url, sceneKey, scene) {
   return function () {
     scene.load.scenePlugin({
@@ -60,7 +61,7 @@ exports.loadScenePluginImpl = function (key, url, sceneKey, scene) {
 
 exports.onceLoadCompleteImpl = function (scene, callback) {
   return function () {
-    scene.load.once("complete", function () {
+    scene.load.once('complete', function () {
       callback(scene)();
     });
 

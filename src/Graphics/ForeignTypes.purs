@@ -33,3 +33,7 @@ foreign import data PhaserRegistry :: Type
 foreign import data PhaserCamera :: Type
 
 foreign import data PhaserCameraController :: Type
+
+foreign import data PhaserSprite :: Type
+
+foreign import data PhaserAnimation :: Type
