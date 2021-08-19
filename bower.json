@@ -1,0 +1,22 @@
+{
+    "name": "purescript-purescript-phaser",
+    "license": [
+        "MIT"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/lfarroco/purescript-phaser"
+    },
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "output"
+    ],
+    "dependencies": {
+        "purescript-aff": "^v6.0.0",
+        "purescript-effect": "^v3.0.0",
+        "purescript-functions": "^v5.0.0",
+        "purescript-prelude": "^v5.0.1"
+    }
+}

@@ -1,4 +1,5 @@
 node_modules
+bower_components
 /.pulp-cache/
 output
 /generated-docs/
@@ -7,10 +8,10 @@ output
 .purs*
 /.psa*
 .spago
+./bower_components/
 .DS_Store
 
 .psci_modules
-
 
 # test files
 index.html
