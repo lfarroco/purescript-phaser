@@ -2,7 +2,7 @@ module Graphics.Phaser.Text where
 
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
-import Phaser.Graphics.ForeignTypes (PhaserScene, PhaserText)
+import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)
 
 foreign import createImpl ::
   Fn2

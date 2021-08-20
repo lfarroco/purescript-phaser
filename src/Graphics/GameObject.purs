@@ -3,7 +3,7 @@ module Graphics.Phaser.GameObject where
 import Prelude
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
-import Phaser.Graphics.ForeignTypes (Event, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, SceneManager, PhaserSprite)
+import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, SceneManager, PhaserSprite)
 
 type Vector
   = { x :: Number, y :: Number }

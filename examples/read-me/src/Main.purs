@@ -8,7 +8,7 @@ import Graphics.Phaser.GameObject (Dimensions, OnClickCallback, getScene, onClic
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
 import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
-import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserImage, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserImage, PhaserScene)
 
 main :: Effect Unit
 main = do

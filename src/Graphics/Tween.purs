@@ -3,7 +3,7 @@ module Graphics.Phaser.Tween (addTween, TweenProperty(..)) where
 import Prelude
 import Effect (Effect)
 import Graphics.Phaser.GameObject (class GameObject)
-import Phaser.Graphics.ForeignTypes (PhaserScene, PhaserTween)
+import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserTween)
 
 data TweenProperty
   = TweenVector { x :: Number, y :: Number }

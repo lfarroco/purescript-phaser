@@ -3,7 +3,7 @@ module Graphics.Phaser (create, getSceneManager, addScene) where
 import Data.Function.Uncurried (Fn3, runFn3)
 import Effect (Effect)
 import Graphics.Phaser.Scene (SceneConfig)
-import Phaser.Graphics.ForeignTypes (PhaserGame, SceneManager)
+import Graphics.Phaser.ForeignTypes (PhaserGame, SceneManager)
 
 -- | A Phaser game config object can be written in multiple different ways
 -- | and there  are over 30 optional properties that can be provided.  
@@ -46,7 +46,6 @@ foreign import getSceneManager :: PhaserGame -> Effect SceneManager
 foreign import addSceneImpl :: forall a. Fn3 (SceneConfig a) Boolean PhaserGame (Effect PhaserGame)
 
 -- | Raw Phaser FFI
--- | Consider using `addWithState` for a safer approach.
 -- | ==== Parameters ====
 -- | Sceneconfig a   - Scene configuration, bound to a initial state type
 -- | Boolean         - If the scene should start in parallel right now

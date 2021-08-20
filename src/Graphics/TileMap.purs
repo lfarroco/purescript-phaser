@@ -2,7 +2,7 @@ module Graphics.Phaser.TileMap where
 
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
-import Phaser.Graphics.ForeignTypes (PhaserLayer, PhaserScene, PhaserTileMap, PhaserTileSet)
+import Graphics.Phaser.ForeignTypes (PhaserLayer, PhaserScene, PhaserTileMap, PhaserTileSet)
 
 foreign import makeTileMap ::
   { scene :: PhaserScene

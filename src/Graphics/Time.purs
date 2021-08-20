@@ -3,7 +3,7 @@ module Graphics.Phaser.Time where
 import Prelude
 import Effect.Aff (Aff)
 import Effect.Aff.Compat (EffectFnAff, fromEffectFnAff)
-import Phaser.Graphics.ForeignTypes (PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserScene)
 
 foreign import delay_ :: PhaserScene -> Int -> EffectFnAff Unit
 

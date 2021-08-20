@@ -3,7 +3,7 @@ module Graphics.Phaser.Container (create, addChild, removeChildren, list) where
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
 import Graphics.Phaser.GameObject (class GameObject)
-import Phaser.Graphics.ForeignTypes (PhaserContainer, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserContainer, PhaserScene)
 
 foreign import createImpl :: Fn2 { x :: Number, y :: Number } PhaserScene (Effect PhaserContainer)
 

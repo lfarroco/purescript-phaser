@@ -1,4 +1,4 @@
-module Phaser.Graphics.ForeignTypes where
+module Graphics.Phaser.ForeignTypes where
 
 foreign import data PhaserGame :: Type
 

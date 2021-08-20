@@ -8,7 +8,7 @@ import Graphics.Phaser.GameObject (Dimensions)
 import Graphics.Phaser.Loader (loadSpritesheet)
 import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
 import Graphics.Phaser.Sprite as Sprite
-import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
 
 -- | Adapted from https://phaser.io/examples/v3/view/loader/sprite-sheet/load-sprite-sheet
 ghRoot = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/sprites/"

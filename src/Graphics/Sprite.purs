@@ -2,7 +2,7 @@ module Graphics.Phaser.Sprite where
 
 import Data.Function.Uncurried (Fn2, runFn2, Fn3, runFn3, Fn4, runFn4, Fn5, runFn5)
 import Effect (Effect)
-import Phaser.Graphics.ForeignTypes (PhaserAnimation, PhaserScene, PhaserSprite)
+import Graphics.Phaser.ForeignTypes (PhaserAnimation, PhaserScene, PhaserSprite)
 
 type FrameNumber
   = Array { key :: String, frame :: Int }

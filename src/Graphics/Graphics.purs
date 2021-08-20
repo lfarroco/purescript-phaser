@@ -2,7 +2,7 @@ module Graphics.Phaser.Graphics (solidRect, gradientRect) where
 
 import Data.Function.Uncurried (Fn4, runFn4)
 import Effect (Effect)
-import Phaser.Graphics.ForeignTypes (PhaserGraphic, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserGraphic, PhaserScene)
 
 foreign import solidRectImpl :: Fn4 { x :: Number, y :: Number } { width :: Number, height :: Number } String PhaserScene (Effect PhaserGraphic)
 

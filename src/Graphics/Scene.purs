@@ -6,7 +6,7 @@ module Graphics.Phaser.Scene where
 import Prelude
 import Data.Function.Uncurried (Fn2, Fn3, runFn2, runFn3)
 import Effect (Effect)
-import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserGameObject, PhaserRegistry, PhaserScene, SceneManager)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserGameObject, PhaserRegistry, PhaserScene, SceneManager)
 
 -- Current time in milliseconds
 type Time
