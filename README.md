@@ -25,7 +25,7 @@ import Graphics.Phaser.GameObject (Dimensions, setDisplaySize)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
 import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
-import Phaser.Graphics.ForeignTypes (PhaserGame, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
 
 runGame :: Dimensions -> Effect PhaserGame
 runGame = Phaser.create
