@@ -1,0 +1,6 @@
+{
+  "name": "purescript-phaser",
+  "set": "main",
+  "source": "https://github.com/lfarroco/purescript-phaser.git",
+  "depends": ["aff", "effect", "prelude", "functions"]
+}
