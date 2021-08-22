@@ -65,7 +65,21 @@ spago build
 
 ---
 
-### Building the examples JS
+### Installing
+This library should be available on pursuit shortly, in the meantime you can clone the repo
+and add:
+```dhall
+in  upstream
+  with phaser =
+      /some/path/to/purescript-phaser/spago.dhall as Location
+```
+to your packages.dhall. Add 'phaser' to the dependencies in `spago.dhall` and run
+```bash
+spago build
+```
+<br>
+
+### Building the examples' JS
 
 For each directory on `./examples`, run:
 
