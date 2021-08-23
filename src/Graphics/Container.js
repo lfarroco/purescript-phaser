@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 exports.createImpl = function ({ x, y }, scene) {
   return function () {
@@ -6,7 +6,7 @@ exports.createImpl = function ({ x, y }, scene) {
   };
 };
 
-exports.addChildImpl = function (container, element) {
+exports.addChildImpl = function (element, container) {
   return function () {
     container.add(element);
     return container;
