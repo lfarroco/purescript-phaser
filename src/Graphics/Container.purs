@@ -5,11 +5,8 @@ import Effect (Effect)
 import Graphics.Phaser.GameObject (class GameObject)
 import Graphics.Phaser.ForeignTypes (PhaserContainer, PhaserScene)
 
-foreign import createImpl :: Fn2 { x :: Number, y :: Number } PhaserScene (Effect PhaserContainer)
-
 -- | Creates a new container that belongs to the given scene
-create :: { x :: Number, y :: Number } -> PhaserScene -> Effect PhaserContainer
-create = runFn2 createImpl
+foreign import create :: PhaserScene (Effect PhaserContainer)
 
 foreign import addChildImpl :: forall a. Fn2 a PhaserContainer (Effect PhaserContainer)
 
@@ -22,5 +19,6 @@ foreign import removeChildren :: PhaserContainer -> Effect PhaserContainer
 
 foreign import listImpl :: forall a. PhaserContainer -> Array a
 
+-- | Returns an array of the container's game objects.
 list :: forall a. GameObject a => PhaserContainer -> Array a
 list = listImpl
