@@ -1,26 +1,15 @@
-module Graphics.Phaser.Text where
+module Graphics.Phaser.Text (create, TextConfig) where
 
 import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)
 
-foreign import createImpl ::
-  Fn2
-    { pos :: { x :: Number, y :: Number }
-    , text :: String
-    , config :: { color :: String, fontSize :: Int, fontFamily :: String }
-    }
-    PhaserScene
-    (Effect PhaserText)
+type TextConfig = { pos :: { x :: Number, y :: Number }
+                  , text :: String
+                  , config :: { color :: String, fontSize :: Int, fontFamily :: String }
+                  }
 
-create ::
-  { config ::
-      { color :: String
-      , fontFamily :: String
-      , fontSize :: Int
-      }
-  , pos :: { x :: Number, y :: Number }
-  , text :: String
-  } ->
-  PhaserScene -> Effect PhaserText
+foreign import createImpl :: Fn2 TextConfig PhaserScene (Effect PhaserText)
+
+create :: TextConfig -> PhaserScene -> Effect PhaserText
 create = runFn2 createImpl
