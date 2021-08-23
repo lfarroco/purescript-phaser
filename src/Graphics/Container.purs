@@ -11,7 +11,7 @@ foreign import createImpl :: Fn2 { x :: Number, y :: Number } PhaserScene (Effec
 create :: { x :: Number, y :: Number } -> PhaserScene -> Effect PhaserContainer
 create = runFn2 createImpl
 
-foreign import addChildImpl :: forall a. Fn2 PhaserContainer a (Effect PhaserContainer)
+foreign import addChildImpl :: forall a. Fn2 a PhaserContainer (Effect PhaserContainer)
 
 -- | Inserts a game object as a child of the given container
 addChild :: forall a. GameObject a => a -> PhaserContainer -> Effect PhaserContainer
