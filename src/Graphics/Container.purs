@@ -6,7 +6,7 @@ import Graphics.Phaser.GameObject (class GameObject)
 import Graphics.Phaser.ForeignTypes (PhaserContainer, PhaserScene)
 
 -- | Creates a new container that belongs to the given scene
-foreign import create :: PhaserScene (Effect PhaserContainer)
+foreign import create :: PhaserScene -> (Effect PhaserContainer)
 
 foreign import addChildImpl :: forall a. Fn2 a PhaserContainer (Effect PhaserContainer)
 

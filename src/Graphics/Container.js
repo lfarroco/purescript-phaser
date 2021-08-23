@@ -1,6 +1,6 @@
 'use strict';
 
-exports.createImpl = function (scene) {
+exports.create = function (scene) {
   return function () {
     return scene.add.container();
   };
