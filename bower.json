@@ -1,5 +1,5 @@
 {
-  "name": "phaser",
+  "name": "purescript-phaser",
   "license": ["MIT"],
   "repository": {
     "type": "git",
