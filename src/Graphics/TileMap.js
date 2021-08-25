@@ -1,15 +1,40 @@
 'use strict';
 
-exports.makeTileMapImpl = (scene, data, { tileWidth, tileHeight }) =>
-  scene.make.tilemap({ data, tileWidth, tileHeight });
+exports.makeTileMapImpl = (
+  scene,
+  {
+    key,
+    data,
+    tileWidth,
+    tileHeight,
+  }) =>
+  scene.make.tilemap(({
+    key,
+    data,
+    tileWidth,
+    tileHeight,
+  }));
 
-exports.addTilesetImageImpl = (tileMap, tilesetName, { key, tileWidth, tileHeight, tileMargin, tileSpacing, gid }) =>
-  tileMap.addTilesetImage(tilesetName, key, tileWidth, tileHeight, tileMargin, tileSpacing, gid);
+exports.addTilesetImageImpl = function (
+  tileMap,
+  tilesetName,
+  { key, tileWidth, tileHeight, tileMargin, tileSpacing, gid }
+) {
+  var tsi = tileMap.addTilesetImage(
+    tilesetName,
+    key, tileWidth, tileHeight, tileMargin, tileSpacing, gid
+  );
+  console.log(tsi);
+  return tsi;
+};
 
-exports.createLayerImpl = (tileMap, layerID, tileset, { x, y }) =>
-  tileMap.createLayer(layerID, tileset, x, y);
+exports.createLayerImpl = (tileMap, layerID, tileset) =>
+  tileMap.createLayer(layerID, tileset);
 
 exports.loadTilemapTileJSONImpl = (key, path, scene) => {
   scene.load.tilemapTileJSON(key, path);
   return scene;
 };
+
+exports.tilesets = (tileMap) =>
+  tileMap.tilesets;
