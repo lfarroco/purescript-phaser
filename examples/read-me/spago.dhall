@@ -17,6 +17,8 @@ to generate this file without the comments in this block.
     , "psci-support"
     , "phaser"
     ]
+, license = "MIT"
+, repository = "https://github.com/lfarroco/purescript-phaser"
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
 }
