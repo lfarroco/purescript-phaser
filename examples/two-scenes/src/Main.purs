@@ -23,15 +23,18 @@ runGame =
     >=> addScene secondScene false
 
 mainScene :: SceneConfig {}
-mainScene = defaultSceneConfig
-  -- Use record update syntax to change relevant defaults
-  { key = "main"
-  , create = \scene _state -> do
-      _ <- startButton scene
-      pure unit
-  , preload = \scene ->
-      loadImages [ { key: "logo", path: logoPath } ] scene
-  }
+mainScene =
+  defaultSceneConfig
+    -- Use record update syntax to change relevant defaults
+    { key = "main"
+    , create =
+      \scene _state -> do
+        _ <- startButton scene
+        pure unit
+    , preload =
+      \scene ->
+        loadImages [ { key: "logo", path: logoPath } ] scene
+    }
   where
   startButton :: PhaserScene -> Effect PhaserScene
   startButton scene = do
@@ -42,13 +45,13 @@ mainScene = defaultSceneConfig
     _ <- onClick callback image
     pure scene
     where
-      callback :: OnClickCallback PhaserImage
-      callback _vec1 _vec2 _event image = do
-        log "Welcome to scene two."
-        -- Don't do anything with the image, just launch a new scene.
-        Scene.launchByKey "snd" {} scene
-        remove scene
-        
+    callback :: OnClickCallback PhaserImage
+    callback _vec1 _vec2 _event image = do
+      log "Welcome to scene two."
+      -- Don't do anything with the image, just launch a new scene.
+      Scene.launchByKey "snd" {} scene
+      remove scene
+
 logoPath :: String
 logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
 

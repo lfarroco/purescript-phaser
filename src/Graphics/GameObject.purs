@@ -1,10 +1,9 @@
 module Graphics.Phaser.GameObject where
 
 import Prelude
-
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn4, runEffectFn1, runEffectFn2)
-import Phaser.Graphics.ForeignTypes (Event, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, SceneManager)
+import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
+import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, PhaserSprite)
 
 type Vector
   = { x :: Number, y :: Number }
@@ -202,28 +201,28 @@ instance textInstance :: GameObject PhaserText where
   getScene i = runEffectFn1 getSceneImpl i
 
 instance spriteInstance :: GameObject PhaserSprite where
-  destroy i = destroyImpl i
-  getPosition i = getPositionImpl i
-  setPosition i = runFn2 setPositionImpl i
-  getAngle i = getAngleImpl i
-  setAngle i = runFn2 setAngleImpl i
-  getRadians i = getRadiansImpl i
-  setRadians i = runFn2 setRadiansImpl i
-  getVisible i = getVisibleImpl i
-  setVisible i = runFn2 setVisibleImpl i
-  getAlpha i = getAlphaImpl i
-  setAlpha i = runFn2 setAlphaImpl i
-  getOrigin i = getOriginImpl i
-  setOrigin i = runFn2 setOriginImpl i
-  clearTint i = clearTintImpl i
-  setTint i = runFn2 setTintImpl i
-  getSize i = getSizeImpl i
-  setSize i = runFn2 setSizeImpl i
-  getDisplaySize i = getDisplaySizeImpl i
-  setDisplaySize i = runFn2 setDisplaySizeImpl i
-  getScale i = getScaleImpl i
-  setScale i = runFn2 setScaleImpl i
-  getName i = getNameImpl i
-  setName i = runFn2 setNameImpl i
-  onClick i = runFn2 onClickImpl i
-  getScene i = getSceneImpl i
+  destroy i = runEffectFn1 destroyImpl i
+  getPosition i = runEffectFn1 getPositionImpl i
+  setPosition i = runEffectFn2 setPositionImpl i
+  getAngle i = runEffectFn1 getAngleImpl i
+  setAngle i = runEffectFn2 setAngleImpl i
+  getRadians i = runEffectFn1 getRadiansImpl i
+  setRadians i = runEffectFn2 setRadiansImpl i
+  getVisible i = runEffectFn1 getVisibleImpl i
+  setVisible i = runEffectFn2 setVisibleImpl i
+  getAlpha i = runEffectFn1 getAlphaImpl i
+  setAlpha i = runEffectFn2 setAlphaImpl i
+  getOrigin i = runEffectFn1 getOriginImpl i
+  setOrigin i = runEffectFn2 setOriginImpl i
+  clearTint i = runEffectFn1 clearTintImpl i
+  setTint i = runEffectFn2 setTintImpl i
+  getSize i = runEffectFn1 getSizeImpl i
+  setSize i = runEffectFn2 setSizeImpl i
+  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
+  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
+  getScale i = runEffectFn1 getScaleImpl i
+  setScale i = runEffectFn2 setScaleImpl i
+  getName i = runEffectFn1 getNameImpl i
+  setName i = runEffectFn2 setNameImpl i
+  onClick i = runEffectFn2 onClickImpl i
+  getScene i = runEffectFn1 getSceneImpl i
