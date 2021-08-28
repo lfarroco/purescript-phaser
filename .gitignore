@@ -10,10 +10,4 @@ output
 .spago
 ./bower_components/
 .DS_Store
-
 .psci_modules
-
-# test files
-index.html
-index.js
-src/Main.purs
