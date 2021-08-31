@@ -4,10 +4,10 @@ import Prelude
 import Effect (Effect)
 import Graphics.Phaser (addScene)
 import Graphics.Phaser as Phaser
-import Graphics.Phaser.GameObject (Dimensions, OnClickCallback, getScene, onClick, setAngle, setDisplaySize)
+import Graphics.Phaser.GameObject (Dimensions, OnClickCallback, destroy, getScene, onClick, setAngle, setDisplaySize)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
-import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
+import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig, getByKey, remove)
 import Graphics.Phaser.Scene as Scene
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserImage, PhaserScene)
 
@@ -25,6 +25,7 @@ runGame =
 mainScene :: SceneConfig {}
 mainScene =
   defaultSceneConfig
+    -- Use record update syntax to change relevant defaults
     { key = "main"
     , create =
       \scene _state -> do
@@ -46,10 +47,10 @@ mainScene =
     where
     callback :: OnClickCallback PhaserImage
     callback _vec1 _vec2 _event image = do
-      log "clicked"
+      log "Welcome to scene two."
       -- Don't do anything with the image, just launch a new scene.
       Scene.launchByKey "snd" {} scene
-      pure unit
+      remove scene
 
 logoPath :: String
 logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"

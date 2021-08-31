@@ -1,9 +1,9 @@
 module Graphics.Phaser.GameObject where
 
 import Prelude
-import Data.Function.Uncurried (Fn2, runFn2)
 import Effect (Effect)
-import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, SceneManager, PhaserSprite)
+import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
+import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, PhaserSprite)
 
 type Vector
   = { x :: Number, y :: Number }
@@ -42,187 +42,187 @@ class GameObject a where
   setName :: String -> a -> Effect a
   getName :: a -> Effect String
 
-foreign import destroyImpl :: forall a. a -> Effect Unit
+foreign import destroyImpl :: forall a. EffectFn1 a Unit
 
-foreign import getPositionImpl :: forall a. a -> Effect Vector
+foreign import getPositionImpl :: forall a. EffectFn1 a Vector
 
-foreign import setPositionImpl :: forall a. Fn2 Vector a (Effect a)
+foreign import setPositionImpl :: forall a. EffectFn2 Vector a a
 
-foreign import getAngleImpl :: forall a. a -> Effect Number
+foreign import getAngleImpl :: forall a. EffectFn1 a Number
 
-foreign import setAngleImpl :: forall a. Fn2 Number a (Effect a)
+foreign import setAngleImpl :: forall a. EffectFn2 Number a a
 
-foreign import getRadiansImpl :: forall a. a -> Effect Number
+foreign import getRadiansImpl :: forall a. EffectFn1 a Number
 
-foreign import setRadiansImpl :: forall a. Fn2 Number a (Effect a)
+foreign import setRadiansImpl :: forall a. EffectFn2 Number a a
 
-foreign import getVisibleImpl :: forall a. a -> Effect Boolean
+foreign import getVisibleImpl :: forall a. EffectFn1 a Boolean
 
-foreign import setVisibleImpl :: forall a. Fn2 Boolean a (Effect a)
+foreign import setVisibleImpl :: forall a. EffectFn2 Boolean a a
 
-foreign import getAlphaImpl :: forall a. a -> Effect Number
+foreign import getAlphaImpl :: forall a. EffectFn1 a Number
 
-foreign import setAlphaImpl :: forall a. Fn2 Number a (Effect a)
+foreign import setAlphaImpl :: forall a. EffectFn2 Number a a
 
-foreign import getOriginImpl :: forall a. a -> Effect Vector
+foreign import getOriginImpl :: forall a. EffectFn1 a Vector
 
-foreign import setOriginImpl :: forall a. Fn2 Vector a (Effect a)
+foreign import setOriginImpl :: forall a. EffectFn2 Vector a a
 
-foreign import setTintImpl :: forall a. Fn2 String a (Effect a)
+foreign import setTintImpl :: forall a. EffectFn2 String a a
 
-foreign import clearTintImpl :: forall a. a -> Effect a
+foreign import clearTintImpl :: forall a. EffectFn1 a a
 
-foreign import getSizeImpl :: forall a. a -> Effect Dimensions
+foreign import getSizeImpl :: forall a. EffectFn1 a Dimensions
 
-foreign import setSizeImpl :: forall a. Fn2 Dimensions a (Effect a)
+foreign import setSizeImpl :: forall a. EffectFn2 Dimensions a a
 
-foreign import getDisplaySizeImpl :: forall a. a -> Effect Dimensions
+foreign import getDisplaySizeImpl :: forall a. EffectFn1 a Dimensions
 
-foreign import setDisplaySizeImpl :: forall a. Fn2 Dimensions a (Effect a)
+foreign import setDisplaySizeImpl :: forall a. EffectFn2 Dimensions a a
 
-foreign import getScaleImpl :: forall a. a -> Effect Vector
+foreign import getScaleImpl :: forall a. EffectFn1 a Vector
 
-foreign import setScaleImpl :: forall a. Fn2 Vector a (Effect a)
+foreign import setScaleImpl :: forall a. EffectFn2 Vector a a
 
-foreign import getNameImpl :: forall a. a -> Effect String
+foreign import getNameImpl :: forall a. EffectFn1 a String
 
-foreign import setNameImpl :: forall a. Fn2 String a (Effect a)
+foreign import setNameImpl :: forall a. EffectFn2 String a a
 
-foreign import onClickImpl :: forall a. Fn2 (OnClickCallback a) a (Effect a)
+foreign import onClickImpl :: forall a. EffectFn2 (OnClickCallback a) a a
 
-foreign import getSceneImpl :: forall a. a -> Effect PhaserScene
+foreign import getSceneImpl :: forall a. EffectFn1 a PhaserScene
 
 instance containerInstance :: GameObject PhaserContainer where
-  destroy i = destroyImpl i
-  getPosition i = getPositionImpl i
-  setPosition i = runFn2 setPositionImpl i
-  getAngle i = getAngleImpl i
-  setAngle i = runFn2 setAngleImpl i
-  getRadians i = getRadiansImpl i
-  setRadians i = runFn2 setRadiansImpl i
-  getVisible i = getVisibleImpl i
-  setVisible i = runFn2 setVisibleImpl i
-  getAlpha i = getAlphaImpl i
-  setAlpha i = runFn2 setAlphaImpl i
-  getOrigin i = getOriginImpl i
-  setOrigin i = runFn2 setOriginImpl i
-  clearTint i = clearTintImpl i
-  setTint i = runFn2 setTintImpl i
-  getSize i = getSizeImpl i
-  setSize i = runFn2 setSizeImpl i
-  getDisplaySize i = getDisplaySizeImpl i
-  setDisplaySize i = runFn2 setDisplaySizeImpl i
-  getScale i = getScaleImpl i
-  setScale i = runFn2 setScaleImpl i
-  getName i = getNameImpl i
-  setName i = runFn2 setNameImpl i
-  onClick i = runFn2 onClickImpl i
-  getScene i = getSceneImpl i
+  destroy i = runEffectFn1 destroyImpl i
+  getPosition i = runEffectFn1 getPositionImpl i
+  setPosition i = runEffectFn2 setPositionImpl i
+  getAngle i = runEffectFn1 getAngleImpl i
+  setAngle i = runEffectFn2 setAngleImpl i
+  getRadians i = runEffectFn1 getRadiansImpl i
+  setRadians i = runEffectFn2 setRadiansImpl i
+  getVisible i = runEffectFn1 getVisibleImpl i
+  setVisible i = runEffectFn2 setVisibleImpl i
+  getAlpha i = runEffectFn1 getAlphaImpl i
+  setAlpha i = runEffectFn2 setAlphaImpl i
+  getOrigin i = runEffectFn1 getOriginImpl i
+  setOrigin i = runEffectFn2 setOriginImpl i
+  clearTint i = runEffectFn1 clearTintImpl i
+  setTint i = runEffectFn2 setTintImpl i
+  getSize i = runEffectFn1 getSizeImpl i
+  setSize i = runEffectFn2 setSizeImpl i
+  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
+  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
+  getScale i = runEffectFn1 getScaleImpl i
+  setScale i = runEffectFn2 setScaleImpl i
+  getName i = runEffectFn1 getNameImpl i
+  setName i = runEffectFn2 setNameImpl i
+  onClick i = runEffectFn2 onClickImpl i
+  getScene i = runEffectFn1 getSceneImpl i
 
 instance graphicsInstance :: GameObject PhaserGraphic where
-  destroy i = destroyImpl i
-  getPosition i = getPositionImpl i
-  setPosition i = runFn2 setPositionImpl i
-  getAngle i = getAngleImpl i
-  setAngle i = runFn2 setAngleImpl i
-  getRadians i = getRadiansImpl i
-  setRadians i = runFn2 setRadiansImpl i
-  getVisible i = getVisibleImpl i
-  setVisible i = runFn2 setVisibleImpl i
-  getAlpha i = getAlphaImpl i
-  setAlpha i = runFn2 setAlphaImpl i
-  getOrigin i = getOriginImpl i
-  setOrigin i = runFn2 setOriginImpl i
-  clearTint i = clearTintImpl i
-  setTint i = runFn2 setTintImpl i
-  getSize i = getSizeImpl i
-  setSize i = runFn2 setSizeImpl i
-  getDisplaySize i = getDisplaySizeImpl i
-  setDisplaySize i = runFn2 setDisplaySizeImpl i
-  getScale i = getScaleImpl i
-  setScale i = runFn2 setScaleImpl i
-  getName i = getNameImpl i
-  setName i = runFn2 setNameImpl i
-  onClick i = runFn2 onClickImpl i
-  getScene i = getSceneImpl i
+  destroy i = runEffectFn1 destroyImpl i
+  getPosition i = runEffectFn1 getPositionImpl i
+  setPosition i = runEffectFn2 setPositionImpl i
+  getAngle i = runEffectFn1 getAngleImpl i
+  setAngle i = runEffectFn2 setAngleImpl i
+  getRadians i = runEffectFn1 getRadiansImpl i
+  setRadians i = runEffectFn2 setRadiansImpl i
+  getVisible i = runEffectFn1 getVisibleImpl i
+  setVisible i = runEffectFn2 setVisibleImpl i
+  getAlpha i = runEffectFn1 getAlphaImpl i
+  setAlpha i = runEffectFn2 setAlphaImpl i
+  getOrigin i = runEffectFn1 getOriginImpl i
+  setOrigin i = runEffectFn2 setOriginImpl i
+  clearTint i = runEffectFn1 clearTintImpl i
+  setTint i = runEffectFn2 setTintImpl i
+  getSize i = runEffectFn1 getSizeImpl i
+  setSize i = runEffectFn2 setSizeImpl i
+  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
+  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
+  getScale i = runEffectFn1 getScaleImpl i
+  setScale i = runEffectFn2 setScaleImpl i
+  getName i = runEffectFn1 getNameImpl i
+  setName i = runEffectFn2 setNameImpl i
+  onClick i = runEffectFn2 onClickImpl i
+  getScene i = runEffectFn1 getSceneImpl i
 
 instance imageInstance :: GameObject PhaserImage where
-  destroy i = destroyImpl i
-  getPosition i = getPositionImpl i
-  setPosition i = runFn2 setPositionImpl i
-  getAngle i = getAngleImpl i
-  setAngle i = runFn2 setAngleImpl i
-  getRadians i = getRadiansImpl i
-  setRadians i = runFn2 setRadiansImpl i
-  getVisible i = getVisibleImpl i
-  setVisible i = runFn2 setVisibleImpl i
-  getAlpha i = getAlphaImpl i
-  setAlpha i = runFn2 setAlphaImpl i
-  getOrigin i = getOriginImpl i
-  setOrigin i = runFn2 setOriginImpl i
-  clearTint i = clearTintImpl i
-  setTint i = runFn2 setTintImpl i
-  getSize i = getSizeImpl i
-  setSize i = runFn2 setSizeImpl i
-  getDisplaySize i = getDisplaySizeImpl i
-  setDisplaySize i = runFn2 setDisplaySizeImpl i
-  getScale i = getScaleImpl i
-  setScale i = runFn2 setScaleImpl i
-  getName i = getNameImpl i
-  setName i = runFn2 setNameImpl i
-  onClick i = runFn2 onClickImpl i
-  getScene i = getSceneImpl i
+  destroy i = runEffectFn1 destroyImpl i
+  getPosition i = runEffectFn1 getPositionImpl i
+  setPosition i = runEffectFn2 setPositionImpl i
+  getAngle i = runEffectFn1 getAngleImpl i
+  setAngle i = runEffectFn2 setAngleImpl i
+  getRadians i = runEffectFn1 getRadiansImpl i
+  setRadians i = runEffectFn2 setRadiansImpl i
+  getVisible i = runEffectFn1 getVisibleImpl i
+  setVisible i = runEffectFn2 setVisibleImpl i
+  getAlpha i = runEffectFn1 getAlphaImpl i
+  setAlpha i = runEffectFn2 setAlphaImpl i
+  getOrigin i = runEffectFn1 getOriginImpl i
+  setOrigin i = runEffectFn2 setOriginImpl i
+  clearTint i = runEffectFn1 clearTintImpl i
+  setTint i = runEffectFn2 setTintImpl i
+  getSize i = runEffectFn1 getSizeImpl i
+  setSize i = runEffectFn2 setSizeImpl i
+  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
+  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
+  getScale i = runEffectFn1 getScaleImpl i
+  setScale i = runEffectFn2 setScaleImpl i
+  getName i = runEffectFn1 getNameImpl i
+  setName i = runEffectFn2 setNameImpl i
+  onClick i = runEffectFn2 onClickImpl i
+  getScene i = runEffectFn1 getSceneImpl i
 
 instance textInstance :: GameObject PhaserText where
-  destroy i = destroyImpl i
-  getPosition i = getPositionImpl i
-  setPosition i = runFn2 setPositionImpl i
-  getAngle i = getAngleImpl i
-  setAngle i = runFn2 setAngleImpl i
-  getRadians i = getRadiansImpl i
-  setRadians i = runFn2 setRadiansImpl i
-  getVisible i = getVisibleImpl i
-  setVisible i = runFn2 setVisibleImpl i
-  getAlpha i = getAlphaImpl i
-  setAlpha i = runFn2 setAlphaImpl i
-  getOrigin i = getOriginImpl i
-  setOrigin i = runFn2 setOriginImpl i
-  clearTint i = clearTintImpl i
-  setTint i = runFn2 setTintImpl i
-  getSize i = getSizeImpl i
-  setSize i = runFn2 setSizeImpl i
-  getDisplaySize i = getDisplaySizeImpl i
-  setDisplaySize i = runFn2 setDisplaySizeImpl i
-  getScale i = getScaleImpl i
-  setScale i = runFn2 setScaleImpl i
-  getName i = getNameImpl i
-  setName i = runFn2 setNameImpl i
-  onClick i = runFn2 onClickImpl i
-  getScene i = getSceneImpl i
+  destroy i = runEffectFn1 destroyImpl i
+  getPosition i = runEffectFn1 getPositionImpl i
+  setPosition i = runEffectFn2 setPositionImpl i
+  getAngle i = runEffectFn1 getAngleImpl i
+  setAngle i = runEffectFn2 setAngleImpl i
+  getRadians i = runEffectFn1 getRadiansImpl i
+  setRadians i = runEffectFn2 setRadiansImpl i
+  getVisible i = runEffectFn1 getVisibleImpl i
+  setVisible i = runEffectFn2 setVisibleImpl i
+  getAlpha i = runEffectFn1 getAlphaImpl i
+  setAlpha i = runEffectFn2 setAlphaImpl i
+  getOrigin i = runEffectFn1 getOriginImpl i
+  setOrigin i = runEffectFn2 setOriginImpl i
+  clearTint i = runEffectFn1 clearTintImpl i
+  setTint i = runEffectFn2 setTintImpl i
+  getSize i = runEffectFn1 getSizeImpl i
+  setSize i = runEffectFn2 setSizeImpl i
+  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
+  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
+  getScale i = runEffectFn1 getScaleImpl i
+  setScale i = runEffectFn2 setScaleImpl i
+  getName i = runEffectFn1 getNameImpl i
+  setName i = runEffectFn2 setNameImpl i
+  onClick i = runEffectFn2 onClickImpl i
+  getScene i = runEffectFn1 getSceneImpl i
 
 instance spriteInstance :: GameObject PhaserSprite where
-  destroy i = destroyImpl i
-  getPosition i = getPositionImpl i
-  setPosition i = runFn2 setPositionImpl i
-  getAngle i = getAngleImpl i
-  setAngle i = runFn2 setAngleImpl i
-  getRadians i = getRadiansImpl i
-  setRadians i = runFn2 setRadiansImpl i
-  getVisible i = getVisibleImpl i
-  setVisible i = runFn2 setVisibleImpl i
-  getAlpha i = getAlphaImpl i
-  setAlpha i = runFn2 setAlphaImpl i
-  getOrigin i = getOriginImpl i
-  setOrigin i = runFn2 setOriginImpl i
-  clearTint i = clearTintImpl i
-  setTint i = runFn2 setTintImpl i
-  getSize i = getSizeImpl i
-  setSize i = runFn2 setSizeImpl i
-  getDisplaySize i = getDisplaySizeImpl i
-  setDisplaySize i = runFn2 setDisplaySizeImpl i
-  getScale i = getScaleImpl i
-  setScale i = runFn2 setScaleImpl i
-  getName i = getNameImpl i
-  setName i = runFn2 setNameImpl i
-  onClick i = runFn2 onClickImpl i
-  getScene i = getSceneImpl i
+  destroy i = runEffectFn1 destroyImpl i
+  getPosition i = runEffectFn1 getPositionImpl i
+  setPosition i = runEffectFn2 setPositionImpl i
+  getAngle i = runEffectFn1 getAngleImpl i
+  setAngle i = runEffectFn2 setAngleImpl i
+  getRadians i = runEffectFn1 getRadiansImpl i
+  setRadians i = runEffectFn2 setRadiansImpl i
+  getVisible i = runEffectFn1 getVisibleImpl i
+  setVisible i = runEffectFn2 setVisibleImpl i
+  getAlpha i = runEffectFn1 getAlphaImpl i
+  setAlpha i = runEffectFn2 setAlphaImpl i
+  getOrigin i = runEffectFn1 getOriginImpl i
+  setOrigin i = runEffectFn2 setOriginImpl i
+  clearTint i = runEffectFn1 clearTintImpl i
+  setTint i = runEffectFn2 setTintImpl i
+  getSize i = runEffectFn1 getSizeImpl i
+  setSize i = runEffectFn2 setSizeImpl i
+  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
+  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
+  getScale i = runEffectFn1 getScaleImpl i
+  setScale i = runEffectFn2 setScaleImpl i
+  getName i = runEffectFn1 getNameImpl i
+  setName i = runEffectFn2 setNameImpl i
+  onClick i = runEffectFn2 onClickImpl i
+  getScene i = runEffectFn1 getSceneImpl i

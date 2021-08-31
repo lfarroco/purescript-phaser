@@ -12,13 +12,21 @@ to generate this file without the comments in this block.
 -}
 { name = "my-project"
 , dependencies =
-    [ "effect"
-    , "prelude"
-    , "psci-support"
-    , "phaser"
-    ]
+  [ "arrays"
+  , "console"
+  , "datetime"
+  , "effect"
+  , "exceptions"
+  , "integers"
+  , "maybe"
+  , "nullable"
+  , "phaser"
+  , "prelude"
+  , "psci-support"
+  , "transformers"
+  ]
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs", "test/**/*.purs" ]
+, sources = [ "src/**/*.purs" ]
 }

@@ -1,17 +1,8 @@
 "use strict";
 
-exports.create = function (textureKey) {
-  return function ({ x, y }) {
-    return function (scene) {
-      return function () {
-        return scene.add.image(x, y, textureKey);
-      };
-    };
-  };
-};
-exports.getScene = function (img) {
-  return function () {
-    return img.scene;
-  };
-};
+exports.createImpl = (textureKey, { x, y }, scene) =>
+  scene.add.image(x, y, textureKey);
+
+exports.getSceneImpl = (img) =>
+  img.scene;
 

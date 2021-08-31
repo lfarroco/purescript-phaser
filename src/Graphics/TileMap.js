@@ -1,26 +1,28 @@
-'use strict';
+"use strict";
 
-exports.makeTileMap = function ({ scene, data, tileWidth, tileHeight }) {
-  return () => {
-    return scene.make.tilemap({ data, tileWidth, tileHeight });
-  };
+exports.makeTileMapImpl = (scene, { key, data, tileWidth, tileHeight }) =>
+  scene.make.tilemap({ key, data, tileWidth, tileHeight });
+
+exports.addTilesetImageImpl = function (
+  tileMap,
+  tilesetName,
+  { key, tileWidth, tileHeight, tileMargin, tileSpacing, gid }
+) {
+  return tileMap.addTilesetImage(
+    tilesetName,
+    key,
+    tileWidth,
+    tileHeight,
+    tileMargin,
+    tileSpacing,
+    gid
+  );
 };
 
-exports.addTilesetImage = function ({ tileMap, key, tileWidth, tileHeight }) {
-  return () => {
-    return tileMap.addTilesetImage(key, null, tileWidth, tileHeight);
-  };
-};
+exports.createLayerImpl = (tileMap, layerID, tileset) =>
+  tileMap.createLayer(layerID, tileset);
 
-exports.createLayer = function ({ tileMap, tilesets }) {
-  return () => {
-    return tileMap.createLayer(0, tileset, 0, 0);
-  };
-};
+exports.loadTilemapTileJSONImpl = (key, path, scene) =>
+  scene.load.tilemapTileJSON(key, path);
 
-exports.loadTilemapTileJSONImpl = function (key, path, scene) {
-  return () => {
-    scenen.load.tilemapTileJSON(key, path);
-    return scene;
-  };
-};
+exports.tilesets = (tileMap) => tileMap.tilesets;

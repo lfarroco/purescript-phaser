@@ -1,32 +1,97 @@
 module Graphics.Phaser.TileMap where
 
-import Data.Function.Uncurried (Fn2, runFn2)
+import Data.Nullable (Nullable, null)
+import Data.Show (class Show)
 import Effect (Effect)
+import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
 import Graphics.Phaser.ForeignTypes (PhaserLayer, PhaserScene, PhaserTileMap, PhaserTileSet)
 
-foreign import makeTileMap ::
-  { scene :: PhaserScene
-  , data :: Array (Array Int)
-  , tileWidth :: Int
-  , tileHeight :: Int
-  } ->
+-- Corresponds to https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
+-- TODO: Current impl is missing quite a few fields, make default?
+-- All values are optional
+type MapDataConfig
+  = { key :: String
+    , data :: Array (Array Int)
+    , tileHeight :: Int
+    , tileWidth :: Int
+    }
+
+foreign import makeTileMapImpl ::
+  EffectFn2
+    PhaserScene
+    MapDataConfig
+    PhaserTileMap
+
+makeTileMap ::
+  PhaserScene ->
+  MapDataConfig ->
   Effect PhaserTileMap
+makeTileMap = runEffectFn2 makeTileMapImpl
 
-foreign import addTilesetImage ::
-  { tileMap :: PhaserTileMap
-  , key :: String
-  , tileWidth :: Int
-  , tileHeight :: Int
-  } ->
+type TilesetDesc
+  = { key :: Nullable String
+    , tileWidth :: Nullable Int
+    , tileHeight :: Nullable Int
+    , tileMargin :: Nullable Int
+    , tileSpacing :: Nullable Int
+    , gid :: Nullable Int
+    }
+
+defaultTilesetDesc :: TilesetDesc
+defaultTilesetDesc =
+  { key: null
+  , tileWidth: null
+  , tileHeight: null
+  , tileMargin: null
+  , tileSpacing: null
+  , gid: null
+  }
+
+foreign import addTilesetImageImpl ::
+  EffectFn3
+    PhaserTileMap
+    String
+    TilesetDesc
+    PhaserTileSet
+
+addTilesetImage ::
+  PhaserTileMap ->
+  String ->
+  TilesetDesc ->
   Effect PhaserTileSet
+addTilesetImage = runEffectFn3 addTilesetImageImpl
 
-foreign import createLayer ::
-  { tileMap :: PhaserTileMap
-  , tilesets :: Array PhaserTileSet
-  } ->
+foreign import createLayerImpl ::
+  forall a.
+  EffectFn3
+    PhaserTileMap
+    a
+    (Array PhaserTileSet)
+    PhaserLayer
+
+createLayer ::
+  forall a.
+  Show a =>
+  PhaserTileMap ->
+  a ->
+  Array PhaserTileSet ->
   Effect PhaserLayer
+createLayer = runEffectFn3 createLayerImpl
 
-foreign import loadTilemapTileJSONImpl :: Fn2 String String (Effect PhaserScene)
+foreign import loadTilemapTileJSONImpl ::
+  EffectFn3
+    String
+    String
+    PhaserScene
+    PhaserScene
 
-loadTilemapTileJSON :: String -> String -> Effect PhaserScene
-loadTilemapTileJSON = runFn2 loadTilemapTileJSONImpl
+loadTilemapTileJSON ::
+  String ->
+  String ->
+  PhaserScene ->
+  Effect PhaserScene
+loadTilemapTileJSON = runEffectFn3 loadTilemapTileJSONImpl
+
+foreign import tilesets ::
+  PhaserTileMap ->
+  Array PhaserTileSet

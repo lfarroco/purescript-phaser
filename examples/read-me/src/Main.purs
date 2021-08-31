@@ -23,6 +23,7 @@ runGame =
 mainScene :: SceneConfig {}
 mainScene =
   defaultSceneConfig
+    -- Use record update syntax to change relevant defaults
     { key = "main"
     , create =
       \scene _state -> do
