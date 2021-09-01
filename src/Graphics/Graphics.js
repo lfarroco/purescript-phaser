@@ -1,32 +1,103 @@
-"use strict";
+'use strict';
 
-exports.solidRectImpl = function ({ x, y }, { width, height }, color, scene) {
+// https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Graphics.html
+
+exports.create = function (scene) {
   return function () {
-    const btn = scene.add.graphics();
-
-    btn.fillStyle(color, 1);
-
-    //btn.lineStyle(2, 0xcdc0b7, 1);
-
-    btn.fillRect(x, y, width, height);
-    return btn;
+    return scene.add.graphics();
   };
 };
 
-// TODO: add borderedsolicolor...
+exports.rectangleImpl = function (scene) {
+  return function () {
+    return scene.add.rectangle();
+  };
+};
 
-exports.gradientRectImpl = function (
+exports.fillStyleImpl = function (color, alpha, graphic) {
+  return function () {
+    graphic.fillStyle(color, alpha);
+    return graphic;
+  };
+};
+
+exports.fillRectImpl = function ({ x, y }, { width, height }, graphic) {
+  return function () {
+    graphic.fillRect(x, y, width, height);
+    return graphic;
+  };
+};
+
+exports.strokeRectImpl = function ({ x, y }, { width, height }, graphic) {
+  return function () {
+    graphic.strokeRect(x, y, width, height);
+    return graphic;
+  };
+};
+
+exports.strokeRoundedRectImpl = function (
   { x, y },
   { width, height },
-  { topLeft, topRight, bottomLeft, bottomRight },
-  scene
+  radius,
+  graphic
 ) {
   return function () {
-    const btn = scene.add.graphics();
+    graphic.strokeRoundedRect(x, y, width, height, radius);
+    return graphic;
+  };
+};
 
-    btn.fillGradientStyle(topLeft, topRight, bottomLeft, bottomRight, 1);
+exports.lineStyleImpl = function (width, color, alpha, graphic) {
+  return function () {
+    graphic.lineStyle(width, color, alpha);
+    return graphic;
+  };
+};
 
-    btn.fillRect(x, y, width, height);
-    return btn;
+exports.beginPath = function (graphic) {
+  return function () {
+    graphic.beginPath();
+    return graphic;
+  };
+};
+
+exports.moveToImpl = function ({ x, y }, graphic) {
+  return function () {
+    graphic.moveTo(x, y);
+    return graphic;
+  };
+};
+
+exports.lineToImpl = function ({ x, y }, graphic) {
+  return function () {
+    graphic.lineTo(x, y);
+    return graphic;
+  };
+};
+
+exports.closePath = function (graphic) {
+  return function () {
+    graphic.closePath();
+    return graphic;
+  };
+};
+
+exports.strokePath = function (graphic) {
+  return function () {
+    graphic.strokePath();
+    return graphic;
+  };
+};
+
+exports.fillGradientStyleImpl = function (
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+  graphic
+) {
+  return function () {
+    graphic.fillGradientStyle(topLeft, topRight, bottomLeft, bottomRight);
+    return graphic;
   };
 };

@@ -8,7 +8,6 @@ You can edit this file as you like.
     "aff",
     "effect",
     "functions",
-    "console",
     "psci-support",
     "nullable",
   ]

@@ -1,36 +1,73 @@
-module Graphics.Phaser.Graphics (solidRect, gradientRect) where
+module Graphics.Phaser.Graphics where
 
-import Data.Function.Uncurried (Fn4, runFn4)
+import Data.Function.Uncurried (Fn2, runFn2, Fn3, runFn3, Fn4, runFn4)
 import Effect (Effect)
-import Graphics.Phaser.ForeignTypes (PhaserGraphic, PhaserScene)
+import Graphics.Phaser.ForeignTypes as Types
+import Graphics.Phaser.GameObject (Vector, Dimensions)
 
-foreign import solidRectImpl :: Fn4 { x :: Number, y :: Number } { width :: Number, height :: Number } String PhaserScene (Effect PhaserGraphic)
+foreign import create :: Types.PhaserScene -> Effect Types.PhaserGraphic
 
-solidRect ::
-  { x :: Number, y :: Number } ->
-  { width :: Number, height :: Number } ->
-  String -> PhaserScene -> Effect PhaserGraphic
-solidRect pos size color scene = runFn4 solidRectImpl pos size color scene
+foreign import rectangleImpl :: Fn3 Vector Dimensions Types.PhaserScene (Effect Types.PhaserRectangle)
 
-foreign import gradientRectImpl ::
-  Fn4
-    { x :: Number, y :: Number }
-    { width :: Number, height :: Number }
-    { topLeft :: String
-    , topRight :: String
-    , bottomLeft :: String
-    , bottomRight :: String
-    }
-    PhaserScene
-    (Effect PhaserGraphic)
+rectangle :: Vector -> Dimensions -> Types.PhaserScene -> Effect Types.PhaserRectangle
+rectangle = runFn3 rectangleImpl
 
-gradientRect ::
-  { x :: Number, y :: Number } ->
-  { height :: Number, width :: Number } ->
-  { bottomLeft :: String
-  , bottomRight :: String
-  , topLeft :: String
+foreign import fillStyleImpl :: Fn3 String Number Types.PhaserGraphic (Effect Types.PhaserGraphic)
+
+fillStyle :: String -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+fillStyle = runFn3 fillStyleImpl
+
+foreign import fillRectImpl :: Fn3 Vector Dimensions Types.PhaserGraphic (Effect Types.PhaserGraphic)
+
+fillRect :: Vector -> Dimensions -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+fillRect = runFn3 fillRectImpl
+
+foreign import strokeRectImpl :: Fn3 Vector Dimensions Types.PhaserGraphic (Effect Types.PhaserGraphic)
+
+strokeRect :: Vector -> Dimensions -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+strokeRect = runFn3 strokeRectImpl
+
+foreign import strokeRoundedRectImpl :: Fn4 Vector Dimensions Number Types.PhaserGraphic (Effect Types.PhaserGraphic)
+
+strokeRoundedRect :: Vector -> Dimensions -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+strokeRoundedRect = runFn4 strokeRoundedRectImpl
+
+type LineStyleConfig = { width:: Number, color :: String, alpha:: Number}
+
+foreign import lineStyleImpl :: Fn2 LineStyleConfig Types.PhaserGraphic (Effect Types.PhaserGraphic)
+
+lineStyle:: LineStyleConfig -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+lineStyle= runFn2 lineStyleImpl   
+
+foreign import beginPath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+
+foreign import moveToImpl :: Fn2 Vector Types.PhaserGraphic (Effect Types.PhaserGraphic)
+
+moveTo :: Vector -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+moveTo = runFn2 moveToImpl
+
+foreign import lineToImpl :: Fn2 Vector Types.PhaserGraphic (Effect Types.PhaserGraphic)
+
+lineTo :: Vector -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+lineTo = runFn2 lineToImpl
+
+foreign import closePath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+
+foreign import strokePath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+
+foreign import fillGradientStyleImpl :: Fn2
+  { topLeft :: String
   , topRight :: String
-  } ->
-  PhaserScene -> Effect PhaserGraphic
-gradientRect pos size gradients scene = runFn4 gradientRectImpl pos size gradients scene
+  , bottomLeft :: String
+  , bottomRight :: String
+  }
+    Types.PhaserGraphic 
+  (Effect Types.PhaserGraphic)
+fillGradientStyle  :: { topLeft :: String
+  , topRight :: String
+  , bottomLeft :: String
+  , bottomRight :: String
+  }->
+    Types.PhaserGraphic ->
+  Effect Types.PhaserGraphic
+fillGradientStyle = runFn2 fillGradientStyleImpl

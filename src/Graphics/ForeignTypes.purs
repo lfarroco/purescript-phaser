@@ -37,3 +37,7 @@ foreign import data PhaserCameraController :: Type
 foreign import data PhaserSprite :: Type
 
 foreign import data PhaserAnimation :: Type
+
+foreign import data PhaserRectangle :: Type
+
+foreign import data PhaserEllipse :: Type
