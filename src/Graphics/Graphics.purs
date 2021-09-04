@@ -1,6 +1,7 @@
 module Graphics.Phaser.Graphics
   ( create
   , rectangle
+  , clear
   , fillGradientStyle
   , lineTo
   , moveTo
@@ -9,14 +10,18 @@ module Graphics.Phaser.Graphics
   , fillStyle
   , fillRect
   , strokeRoundedRect
+  , beginPath
   ) where
 
 import Effect (Effect)
-import Effect.Uncurried (EffectFn2, EffectFn3, EffectFn4, runEffectFn2, runEffectFn3, runEffectFn4)
+import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4)
 import Graphics.Phaser.ForeignTypes as Types
 import Graphics.Phaser.GameObject (Vector, Dimensions)
 
-foreign import create :: Types.PhaserScene -> Effect Types.PhaserGraphic
+foreign import createImpl :: EffectFn1 Types.PhaserScene Types.PhaserGraphic
+
+create :: Types.PhaserScene -> Effect Types.PhaserGraphic
+create = runEffectFn1 createImpl
 
 foreign import rectangleImpl :: EffectFn3 Vector Dimensions Types.PhaserScene Types.PhaserRectangle
 
@@ -51,7 +56,10 @@ foreign import lineStyleImpl :: EffectFn2 LineStyleConfig Types.PhaserGraphic Ty
 lineStyle :: LineStyleConfig -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
 lineStyle = runEffectFn2 lineStyleImpl
 
-foreign import beginPath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+foreign import beginPathImpl :: EffectFn1 Types.PhaserGraphic Types.PhaserGraphic
+
+beginPath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+beginPath = runEffectFn1 beginPathImpl
 
 foreign import moveToImpl :: EffectFn2 Vector Types.PhaserGraphic Types.PhaserGraphic
 
@@ -63,9 +71,9 @@ foreign import lineToImpl :: EffectFn2 Vector Types.PhaserGraphic Types.PhaserGr
 lineTo :: Vector -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
 lineTo = runEffectFn2 lineToImpl
 
-foreign import closePath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+foreign import closePathImpl :: EffectFn1 Types.PhaserGraphic Types.PhaserGraphic
 
-foreign import strokePath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+foreign import strokePathImpl :: EffectFn1 Types.PhaserGraphic Types.PhaserGraphic
 
 type FillGradientConfig
   = { topLeft :: String
@@ -85,3 +93,8 @@ fillGradientStyle ::
   Types.PhaserGraphic ->
   Effect Types.PhaserGraphic
 fillGradientStyle = runEffectFn2 fillGradientStyleImpl
+
+foreign import clearImpl :: EffectFn1 Types.PhaserGraphic Types.PhaserGraphic
+
+clear :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+clear = runEffectFn1 clearImpl

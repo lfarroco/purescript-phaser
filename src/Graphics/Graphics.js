@@ -2,7 +2,7 @@
 
 // https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Graphics.html
 
-exports.create = function (scene) {
+exports.createImpl = function (scene) {
   return scene.add.graphics();
 };
 
@@ -39,8 +39,11 @@ exports.lineStyleImpl = function (width, color, alpha, graphic) {
   graphic.lineStyle(width, color, alpha);
   return graphic;
 };
-
-exports.beginPath = function (graphic) {
+exports.clearImpl = function (graphic) {
+  graphic.clear();
+  return graphic;
+};
+exports.beginPathImpl = function (graphic) {
   graphic.beginPath();
   return graphic;
 };
@@ -55,12 +58,12 @@ exports.lineToImpl = function ({ x, y }, graphic) {
   return graphic;
 };
 
-exports.closePath = function (graphic) {
+exports.closePathImpl = function (graphic) {
   graphic.closePath();
   return graphic;
 };
 
-exports.strokePath = function (graphic) {
+exports.strokePathImpl = function (graphic) {
   graphic.strokePath();
   return graphic;
 };
