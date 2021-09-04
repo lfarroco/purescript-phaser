@@ -1,11 +1,46 @@
-module Graphics.Phaser.Scene where
+module Graphics.Phaser.Scene
+  ( defaultSceneConfig
+  , getSceneManager
+  , getRegistry
+  , addScene
+  , getRegistryData
+  , setRegistryData
+  , getData
+  , setData
+  , getByKey
+  , remove
+  , start
+  , restart
+  , pause
+  , resume
+  , sleep
+  , wake
+  , switch
+  , run
+  , stop
+  , setVisible
+  , sendToBack
+  , bringToTop
+  , setEvent
+  , setTimedEvent
+  , setGameObjectEvent
+  , launch
+  , launchByKey
+  , startByKey
+  , removeByKey
+  , getPluginInstance
+  , SceneEvent
+  , class SceneManagerConnected
+  , class RegistryConnected
+  , Time
+  , Delta
+  , SceneConfig
+  ) where
 
 -- TODO: add scene.data, and support for scene.data events
--- Use this as example to refactor to Fn2, Fn3 
--- https://github.com/purescript-web/purescript-canvas/blob/master/src/Graphics/Canvas.purs#L167
 import Prelude
-import Data.Function.Uncurried (Fn2, Fn3, runFn2, runFn3)
 import Effect (Effect)
+import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, runEffectFn1, runEffectFn2, runEffectFn3)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserGameObject, PhaserRegistry, PhaserScene, SceneManager)
 
 -- Current time in milliseconds
@@ -39,135 +74,188 @@ defaultSceneConfig =
 class SceneManagerConnected a where
   getSceneManager :: a -> Effect SceneManager
 
-foreign import getSceneManagerImpl :: forall a. a -> Effect SceneManager
+foreign import getSceneManagerImpl :: forall a. EffectFn1 a SceneManager
 
 instance sceneSceneManagerConnection :: SceneManagerConnected PhaserScene where
-  getSceneManager = getSceneManagerImpl
+  getSceneManager = runEffectFn1 getSceneManagerImpl
 
 instance gameSceneManagerConnection :: SceneManagerConnected PhaserGame where
-  getSceneManager = getSceneManagerImpl
+  getSceneManager = runEffectFn1 getSceneManagerImpl
 
 class RegistryConnected a where
   getRegistry :: a -> Effect PhaserRegistry
 
 instance sceneRegistryConnection :: RegistryConnected PhaserScene where
-  getRegistry = getRegistryImpl
+  getRegistry = runEffectFn1 getRegistryImpl
 
 instance gameRegistryConnection :: RegistryConnected PhaserGame where
-  getRegistry = getRegistryImpl
+  getRegistry = runEffectFn1 getRegistryImpl
 
-foreign import addSceneImpl :: forall a. String -> SceneConfig a -> SceneManager -> Effect PhaserRegistry
+foreign import addSceneImpl :: forall a. EffectFn3 String (SceneConfig a) SceneManager PhaserRegistry
+
+addScene ::
+  forall state.
+  String ->
+  { create :: PhaserScene -> state -> Effect Unit
+  , init :: PhaserScene -> state -> Effect Unit
+  , key :: String
+  , preload :: PhaserScene -> Effect Unit
+  , state :: state
+  , update :: PhaserScene -> Effect Unit
+  } ->
+  SceneManager -> Effect PhaserRegistry
+addScene = runEffectFn3 addSceneImpl
 
 -- TODO: add this in typeclass accepting scene and game
-foreign import getRegistryImpl :: forall a. a -> Effect PhaserRegistry
+foreign import getRegistryImpl :: forall a. EffectFn1 a PhaserRegistry
 
-foreign import getRegistryDataImpl :: forall a. Fn2 PhaserRegistry String (Effect a)
+foreign import getRegistryDataImpl :: forall a. EffectFn2 PhaserRegistry String a
 
 getRegistryData :: forall a. PhaserRegistry -> String -> Effect a
-getRegistryData = runFn2 getRegistryDataImpl
+getRegistryData = runEffectFn2 getRegistryDataImpl
 
-foreign import setRegistryDataImpl :: forall a. Fn3 PhaserRegistry String a (Effect a)
+foreign import setRegistryDataImpl :: forall a. EffectFn3 PhaserRegistry String a a
 
 setRegistryData :: forall st. PhaserRegistry -> String -> st -> Effect st
-setRegistryData = runFn3 setRegistryDataImpl
+setRegistryData = runEffectFn3 setRegistryDataImpl
 
 -- | Local data storage
-foreign import getDataImpl :: forall a. Fn2 String PhaserScene (Effect a)
+foreign import getDataImpl :: forall a. EffectFn2 String PhaserScene a
 
-foreign import setDataImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
+foreign import setDataImpl :: forall a. EffectFn3 String a PhaserScene Unit
 
 getData :: forall a. String -> PhaserScene -> Effect a
-getData key scene = runFn2 getDataImpl key scene
+getData key scene = runEffectFn2 getDataImpl key scene
 
 setData :: forall a. String -> a -> PhaserScene -> Effect Unit
-setData key data_ scene = runFn3 setDataImpl key data_ scene
+setData key data_ scene = runEffectFn3 setDataImpl key data_ scene
 
-foreign import getByKeyImpl :: Fn2 SceneManager String (Effect PhaserScene)
+foreign import getByKeyImpl :: EffectFn2 SceneManager String PhaserScene
 
-foreign import remove :: PhaserScene -> (Effect Unit)
+-- | TODO: make these methods return the Scene itself
+foreign import removeImpl :: EffectFn1 PhaserScene Unit
 
-foreign import launchImpl :: forall model. Fn2 PhaserScene model (Effect Unit)
+remove :: PhaserScene -> Effect Unit
+remove = runEffectFn1 removeImpl
 
-foreign import startImpl :: forall model. Fn2 model PhaserScene (Effect Unit)
+foreign import launchImpl :: forall model. EffectFn2 PhaserScene model Unit
 
-foreign import restartImpl :: forall model. Fn2 PhaserScene model (Effect Unit)
+foreign import startImpl :: forall model. EffectFn2 model PhaserScene Unit
 
-foreign import pause :: PhaserScene -> (Effect Unit)
+foreign import restartImpl :: forall model. EffectFn2 PhaserScene model Unit
 
-foreign import resume :: PhaserScene -> (Effect Unit)
+foreign import pauseImpl :: EffectFn1 PhaserScene Unit
 
-foreign import sleep :: PhaserScene -> (Effect Unit)
+pause :: PhaserScene -> Effect Unit
+pause = runEffectFn1 pauseImpl
 
-foreign import wake :: PhaserScene -> (Effect Unit)
+foreign import resumeImpl :: EffectFn1 PhaserScene Unit
 
-foreign import switch :: PhaserScene -> (Effect Unit)
+resume :: PhaserScene -> Effect Unit
+resume = runEffectFn1 resumeImpl
 
-foreign import run :: PhaserScene -> (Effect Unit)
+foreign import sleepImpl :: EffectFn1 PhaserScene Unit
 
-foreign import stop :: PhaserScene -> (Effect Unit)
+sleep :: PhaserScene -> Effect Unit
+sleep = runEffectFn1 sleepImpl
 
-foreign import setVisible :: PhaserScene -> (Effect Unit)
+foreign import wakeImpl :: EffectFn1 PhaserScene Unit
 
-foreign import sendToBack :: PhaserScene -> (Effect Unit)
+wake :: PhaserScene -> Effect Unit
+wake = runEffectFn1 wakeImpl
 
-foreign import bringToTop :: PhaserScene -> (Effect Unit)
+foreign import switchImpl :: EffectFn1 PhaserScene Unit
+
+switch :: PhaserScene -> Effect Unit
+switch = runEffectFn1 switchImpl
+
+foreign import runImpl :: EffectFn1 PhaserScene Unit
+
+run :: PhaserScene -> Effect Unit
+run = runEffectFn1 runImpl
+
+foreign import stopImpl :: EffectFn1 PhaserScene Unit
+
+stop :: PhaserScene -> Effect Unit
+stop = runEffectFn1 stopImpl
+
+foreign import setVisibleImpl :: EffectFn1 PhaserScene Unit
+
+setVisible :: PhaserScene -> Effect Unit
+setVisible = runEffectFn1 setVisibleImpl
+
+foreign import sendToBackImpl :: EffectFn1 PhaserScene Unit
+
+sendToBack :: PhaserScene -> Effect Unit
+sendToBack = runEffectFn1 sendToBackImpl
+
+foreign import bringToTopImpl :: EffectFn1 PhaserScene Unit
+
+bringToTop :: PhaserScene -> Effect Unit
+bringToTop = runEffectFn1 bringToTopImpl
 
 -- Comprehensive event list
 -- https://rexrainbow.github.io/phaser3-rex-notes/docs/site/scene/
-foreign import setEventImpl :: String -> (Unit -> Effect Unit) -> PhaserScene -> Effect Unit
+foreign import setEventImpl :: EffectFn3 String (Unit -> Effect Unit) PhaserScene Unit
 
-foreign import setTimedEvent :: String -> (Time -> Delta -> Effect Unit) -> PhaserScene -> Effect Unit
+foreign import setTimedEvent :: EffectFn3 String (Time -> Delta -> Effect Unit) PhaserScene Unit
 
-foreign import setGameObjectEvent :: String -> (PhaserGameObject -> PhaserScene -> Effect Unit) -> Effect Unit
+foreign import setGameObjectEvent :: EffectFn2 String (PhaserGameObject -> PhaserScene -> Effect Unit) Unit
 
 getByKey :: SceneManager -> String -> Effect PhaserScene
-getByKey manager key = runFn2 getByKeyImpl manager key
+getByKey = runEffectFn2 getByKeyImpl
 
 -- | Starts the given scene in parallel with the current one
 launch :: forall a. PhaserScene -> a -> Effect Unit
-launch scene a = runFn2 launchImpl scene a
+launch = runEffectFn2 launchImpl
 
 launchByKey :: forall a. String -> a -> PhaserScene -> Effect Unit
-launchByKey = runFn3 launchByKeyImpl
+launchByKey = runEffectFn3 launchByKeyImpl
 
 startByKey :: forall a. String -> a -> PhaserScene -> Effect Unit
-startByKey = runFn3 startByKeyImpl
+startByKey = runEffectFn3 startByKeyImpl
 
 removeByKey :: String -> PhaserScene -> Effect Unit
-removeByKey = runFn2 removeByKeyImpl
+removeByKey = runEffectFn2 removeByKeyImpl
 
-foreign import launchByKeyImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
+foreign import launchByKeyImpl :: forall a. EffectFn3 String a PhaserScene Unit
 
-foreign import startByKeyImpl :: forall a. Fn3 String a PhaserScene (Effect Unit)
+foreign import startByKeyImpl :: forall a. EffectFn3 String a PhaserScene Unit
 
-foreign import removeByKeyImpl :: Fn2 String PhaserScene (Effect Unit)
+foreign import removeByKeyImpl :: EffectFn2 String PhaserScene Unit
 
-foreign import getPluginInstanceImpl :: forall a. Fn2 PhaserScene String (Effect a)
+foreign import getPluginInstanceImpl :: forall a. EffectFn2 PhaserScene String a
 
 getPluginInstance :: forall a. PhaserScene -> String -> Effect a
-getPluginInstance = runFn2 getPluginInstanceImpl
+getPluginInstance = runEffectFn2 getPluginInstanceImpl
 
 start :: forall a. a -> PhaserScene -> Effect Unit
-start = runFn2 startImpl
+start = runEffectFn2 startImpl
 
 restart :: forall a. PhaserScene -> a -> Effect Unit
-restart scene a = runFn2 restartImpl scene a
+restart scene a = runEffectFn2 restartImpl scene a
+
+setEvent_ :: String -> (Unit -> Effect Unit) -> PhaserScene -> Effect Unit
+setEvent_ = runEffectFn3 setEventImpl
+
+setTimedEvent_ :: String -> (Number -> Number -> Effect Unit) -> PhaserScene -> Effect Unit
+setTimedEvent_ = runEffectFn3 setTimedEvent
 
 setEvent :: SceneEvent -> PhaserScene -> Effect Unit
 setEvent event = case event of
-  Start fn -> setEventImpl "start" fn
-  PreUpdate fn -> setTimedEvent "preupdate" fn
-  Update fn -> setTimedEvent "update" fn
-  PostUpdate fn -> setTimedEvent "postupdate" fn
-  Render fn -> setEventImpl "render" fn
-  Pause fn -> setEventImpl "pause" fn
-  Resume fn -> setEventImpl "resume" fn
-  Sleep fn -> setEventImpl "sleep" fn
-  Wake fn -> setEventImpl "wake" fn
-  ShutDown fn -> setEventImpl "shutdown" fn
-  Destroy fn -> setEventImpl "destroy" fn
-  Resize fn -> setEventImpl "resize" fn
-  Boot fn -> setEventImpl "boot" fn
+  Start fn -> setEvent_ "start" fn
+  PreUpdate fn -> setTimedEvent_ "preupdate" fn
+  Update fn -> setTimedEvent_ "update" fn
+  PostUpdate fn -> setTimedEvent_ "postupdate" fn
+  Render fn -> setEvent_ "render" fn
+  Pause fn -> setEvent_ "pause" fn
+  Resume fn -> setEvent_ "resume" fn
+  Sleep fn -> setEvent_ "sleep" fn
+  Wake fn -> setEvent_ "wake" fn
+  ShutDown fn -> setEvent_ "shutdown" fn
+  Destroy fn -> setEvent_ "destroy" fn
+  Resize fn -> setEvent_ "resize" fn
+  Boot fn -> setEvent_ "boot" fn
 
 -- AddedToScene fn -> setGameObjectEvent "addedtoscene" fn 
 -- RemovedFromScene fn -> setGameObjectEvent "removedfromscene" fn 

@@ -1,10 +1,25 @@
-module Graphics.Phaser.Camera where
+module Graphics.Phaser.Camera
+  ( setMainCameraBounds
+  , getMainCamera
+  , createSmoothedKeyControl
+  , updateCameraControlDelta
+  ) where
 
-import Data.Function.Uncurried (Fn3, runFn3)
+import Effect.Uncurried (EffectFn1, EffectFn3, runEffectFn1, runEffectFn3)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserCameraController, PhaserScene)
 
-foreign import setMainCameraBounds ::
+foreign import setMainCameraBoundsImpl ::
+  EffectFn1
+    { scene :: PhaserScene
+    , x :: Number
+    , y :: Number
+    , width :: Number
+    , height :: Number
+    }
+    PhaserScene
+
+setMainCameraBounds ::
   { scene :: PhaserScene
   , x :: Number
   , y :: Number
@@ -12,8 +27,12 @@ foreign import setMainCameraBounds ::
   , height :: Number
   } ->
   Effect PhaserScene
+setMainCameraBounds = runEffectFn1 setMainCameraBoundsImpl
 
-foreign import getMainCamera :: PhaserScene -> Effect PhaserCamera
+foreign import getMainCameraImpl :: EffectFn1 PhaserScene PhaserCamera
+
+getMainCamera :: PhaserScene -> Effect PhaserCamera
+getMainCamera = runEffectFn1 getMainCameraImpl
 
 type KeyControlConfig
   = { camera :: PhaserCamera
@@ -26,9 +45,12 @@ type KeyControlConfig
     , maxSpeed :: Number
     }
 
-foreign import createSmoothedKeyControlImpl :: KeyControlConfig -> Effect PhaserCameraController
+foreign import createSmoothedKeyControlImpl :: EffectFn1 KeyControlConfig PhaserCameraController
 
-foreign import updateCameraControlDeltaImpl :: Fn3 Number Number PhaserCameraController (Effect PhaserCameraController)
+createSmoothedKeyControl :: KeyControlConfig -> Effect PhaserCameraController
+createSmoothedKeyControl = runEffectFn1 createSmoothedKeyControlImpl
+
+foreign import updateCameraControlDeltaImpl :: EffectFn3 Number Number PhaserCameraController PhaserCameraController
 
 updateCameraControlDelta :: Number -> Number -> PhaserCameraController -> Effect PhaserCameraController
-updateCameraControlDelta = runFn3 updateCameraControlDeltaImpl
+updateCameraControlDelta = runEffectFn3 updateCameraControlDeltaImpl

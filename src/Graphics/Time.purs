@@ -1,4 +1,4 @@
-module Graphics.Phaser.Time where
+module Graphics.Phaser.Time (delay) where
 
 import Prelude
 import Effect.Aff (Aff)

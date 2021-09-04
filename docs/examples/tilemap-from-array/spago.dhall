@@ -11,12 +11,17 @@ When creating a new Spago project, you can use
 to generate this file without the comments in this block.
 -}
 { name = "my-project"
-, dependencies = 
-    [ "effect"
-    , "prelude"
-    , "psci-support"
-    , "phaser"
-    ]
+, dependencies =
+  [ "arrays"
+  , "console"
+  , "effect"
+  , "nullable"
+  , "phaser"
+  , "prelude"
+  , "psci-support"
+  ]
+, license = "MIT"
+, repository = "https://github.com/lfarroco/purescript-phaser"
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs", "test/**/*.purs" ]
+, sources = [ "src/**/*.purs" ]
 }

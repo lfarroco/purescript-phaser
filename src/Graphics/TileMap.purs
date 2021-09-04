@@ -1,4 +1,11 @@
-module Graphics.Phaser.TileMap where
+module Graphics.Phaser.TileMap
+  ( makeTileMap
+  , defaultTilesetDesc
+  , createLayer
+  , loadTilemapTileJSON
+  , addTilesetImage
+  , tilesets
+  ) where
 
 import Data.Nullable (Nullable, null)
 import Data.Show (class Show)
@@ -92,6 +99,4 @@ loadTilemapTileJSON ::
   Effect PhaserScene
 loadTilemapTileJSON = runEffectFn3 loadTilemapTileJSONImpl
 
-foreign import tilesets ::
-  PhaserTileMap ->
-  Array PhaserTileSet
+foreign import tilesets :: PhaserTileMap -> Array PhaserTileSet

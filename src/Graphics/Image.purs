@@ -1,4 +1,4 @@
-module Graphics.Phaser.Image where
+module Graphics.Phaser.Image (create, getScene) where
 
 import Effect (Effect)
 import Effect.Uncurried

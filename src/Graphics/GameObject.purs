@@ -1,15 +1,55 @@
-module Graphics.Phaser.GameObject where
+module Graphics.Phaser.GameObject
+  ( Vector
+  , Dimensions
+  , OnClickCallback
+  , class GameObject
+  , destroy
+  , onClick
+  , getScene
+  , getPosition
+  , setPosition
+  , getAngle
+  , setAngle
+  , getRadians
+  , setRadians
+  , getVisible
+  , setVisible
+  , getAlpha
+  , setAlpha
+  , getOrigin
+  , setOrigin
+  , setTint
+  , clearTint
+  , getSize
+  , setSize
+  , getDisplaySize
+  , setDisplaySize
+  , getScale
+  , setScale
+  , setName
+  , getName
+  ) where
 
 import Prelude
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
-import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserText, SceneManager, PhaserSprite, PhaserRectangle, PhaserEllipse)
+import Graphics.Phaser.ForeignTypes
+  ( Event
+  , PhaserContainer
+  , PhaserEllipse
+  , PhaserGraphic
+  , PhaserImage
+  , PhaserRectangle
+  , PhaserScene
+  , PhaserSprite
+  , PhaserText
+  )
 
 type Vector
   = { x :: Number, y :: Number }
 
 type Dimensions
-  = { width :: Int, height :: Int }
+  = { width :: Number, height :: Number }
 
 type OnClickCallback a
   = Vector -> Vector -> Event -> a -> Effect Unit

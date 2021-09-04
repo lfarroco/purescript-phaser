@@ -1,6 +1,15 @@
-module Graphics.Phaser.Sprite where
+module Graphics.Phaser.Sprite
+  ( add
+  , createAnimation
+  , playAnimation
+  , removeAnimation
+  , stopAfterDelay
+  , generateFrameNumbers
+  , generateFrameNames
+  , setFrame
+  ) where
 
-import Data.Function.Uncurried (Fn2, runFn2, Fn3, runFn3, Fn4, runFn4, Fn5, runFn5)
+import Effect.Uncurried (EffectFn2, runEffectFn2, EffectFn3, runEffectFn3, EffectFn4, runEffectFn4, EffectFn5, runEffectFn5)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserAnimation, PhaserScene, PhaserSprite)
 
@@ -9,40 +18,40 @@ type FrameNumber
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Sprite.html
 -- | A PhaserSprite also implements the PhaserGameObject typeclass
-foreign import addImpl :: Fn3 String { x :: Number, y :: Number } PhaserScene (Effect PhaserSprite)
+foreign import addImpl :: EffectFn3 String { x :: Number, y :: Number } PhaserScene PhaserSprite
 
 add :: String -> { x :: Number, y :: Number } -> PhaserScene -> Effect PhaserSprite
-add = runFn3 addImpl
+add = runEffectFn3 addImpl
 
-foreign import createAnimationImpl :: Fn5 String (Array FrameNumber) Number Int PhaserScene (Effect PhaserAnimation)
+foreign import createAnimationImpl :: EffectFn5 String (Array FrameNumber) Number Int PhaserScene PhaserAnimation
 
 -- | Besides having a `PhaserScene` parameter, animations created with `createAnimation`
 -- | are in fact global and can be accessed from other scenes. Because of that you
 -- | need to create the animations only once in your application.
 createAnimation :: String -> Array FrameNumber -> Number -> Int -> PhaserScene -> Effect PhaserAnimation
-createAnimation = runFn5 createAnimationImpl
+createAnimation = runEffectFn5 createAnimationImpl
 
-foreign import playAnimationImpl :: Fn2 String PhaserSprite (Effect PhaserSprite)
+foreign import playAnimationImpl :: EffectFn2 String PhaserSprite PhaserSprite
 
 playAnimation :: String -> PhaserSprite -> Effect PhaserSprite
-playAnimation = runFn2 playAnimationImpl
+playAnimation = runEffectFn2 playAnimationImpl
 
-foreign import removeAnimationImpl :: Fn2 String PhaserSprite (Effect PhaserSprite)
+foreign import removeAnimationImpl :: EffectFn2 String PhaserSprite PhaserSprite
 
 removeAnimation :: String -> PhaserSprite -> Effect PhaserSprite
-removeAnimation = runFn2 removeAnimationImpl
+removeAnimation = runEffectFn2 removeAnimationImpl
 
 foreign import stopAnimation :: PhaserSprite -> Effect PhaserSprite
 
-foreign import stopAfterDelayImpl :: Fn2 Number PhaserSprite (Effect PhaserSprite)
+foreign import stopAfterDelayImpl :: EffectFn2 Number PhaserSprite PhaserSprite
 
 stopAfterDelay :: Number -> PhaserSprite -> Effect PhaserSprite
-stopAfterDelay = runFn2 stopAfterDelayImpl
+stopAfterDelay = runEffectFn2 stopAfterDelayImpl
 
-foreign import generateFrameNumbersImpl :: Fn4 String Int Int PhaserScene (Effect (Array FrameNumber))
+foreign import generateFrameNumbersImpl :: EffectFn4 String Int Int PhaserScene (Array FrameNumber)
 
 generateFrameNumbers :: String -> Int -> Int -> PhaserScene -> Effect (Array FrameNumber)
-generateFrameNumbers = runFn4 generateFrameNumbersImpl
+generateFrameNumbers = runEffectFn4 generateFrameNumbersImpl
 
 type FrameNamesConfig
   = { key :: String
@@ -52,12 +61,12 @@ type FrameNamesConfig
     , zeroPad :: Int
     }
 
-foreign import generateFrameNamesImpl :: Fn2 FrameNamesConfig PhaserScene (Effect PhaserAnimation)
+foreign import generateFrameNamesImpl :: EffectFn2 FrameNamesConfig PhaserScene PhaserAnimation
 
 generateFrameNames :: FrameNamesConfig -> PhaserScene -> Effect PhaserAnimation
-generateFrameNames = runFn2 generateFrameNamesImpl
+generateFrameNames = runEffectFn2 generateFrameNamesImpl
 
-foreign import setFrameImpl :: Fn2 Int PhaserSprite (Effect PhaserSprite)
+foreign import setFrameImpl :: EffectFn2 Int PhaserSprite PhaserSprite
 
 setFrame :: Int -> PhaserSprite -> Effect PhaserSprite
-setFrame = runFn2 setFrameImpl
+setFrame = runEffectFn2 setFrameImpl

@@ -1,24 +1,19 @@
-"use strict";
+'use strict';
 
-exports.setMainCameraBounds = ({ scene, x, y, width, height }) => {
+exports.setMainCameraBoundsImpl = ({ scene, x, y, width, height }) => {
   scene.cameras.main.setBounds(x, y, width, height);
   return scene;
 };
 
-exports.createSmoothedKeyControlImpl = (config) => {
-  const controls = new Phaser.Cameras.Controls.SmoothedKeyControl(config);
-  return controls;
+exports.getMainCameraImpl = (scene) => {
+  return scene.cameras.main;
 };
+
 exports.createSmoothedKeyControlImpl = (config) => {
-  const controls = new Phaser.Cameras.Controls.FixedKeyControl(config);
-  return controls;
+  return new Phaser.Cameras.Controls.FixedKeyControl(config);
 };
 
 exports.updateCameraControlDeltaImpl = (control, delta) => {
   control.update(delta);
   return control;
-};
-
-exports.getMainCamera = (scene) => {
-  return scene.cameras.main
 };

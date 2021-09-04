@@ -1,172 +1,121 @@
-"use strict";
+'use strict';
 
 exports.addSceneImpl = function (sceneManager, key, config) {
-  return function () {
-    sceneManager.add(key, config);
-    return sceneManager
-  };
+  sceneManager.add(key, config);
+  return sceneManager;
 };
 
-exports.setEventImpl = function (on) {
-  return function (callback) {
-    return function (scene) {
-      return function () {
-        scene.events.on(on, () => callback()());
-        return scene
-      };
-    };
-  };
+exports.setEventImpl = function (on, callback, scene) {
+  scene.events.on(on, () => callback()());
+  return scene;
 };
 
-exports.setTimedEvent = function (on) {
-  return function (callback) {
-    return function (scene) {
-      return function () {
-        scene.events.on(on, (time, delta) => callback(time)(delta)());
-        return scene
-      };
-    };
-  };
+exports.setTimedEvent = function (on, callback, scene) {
+  scene.events.on(on, (time, delta) => callback(time)(delta)());
+  return scene;
 };
 
 exports.getSceneManagerImpl = function (obj) {
-  return function () {
-    return obj.scene;
-  };
+  return obj.scene;
 };
 
-exports.setGameObjectEvent = function (on) {
-  return function (callback) {
-    return function (scene) {
-      return function () {
-        scene.on(on, (gameObject, scene) => callback(gameObject)(scene)());
-      };
-    };
-  };
+exports.setGameObjectEvent = function (on, callback, scene) {
+  scene.on(on, (gameObject, scene) => callback(gameObject)(scene)());
+  return scene;
 };
 
-exports.remove = function (scene) {
-  return function () {
-    scene.scene.remove(scene);
-    return {};
-  };
+exports.removeImpl = function (scene) {
+  scene.scene.remove(scene);
+  return {};
 };
 
 // TODO: return maybe
 exports.getByKeyImpl = function (sceneManager, key) {
-  return function () {
-    return sceneManager.get(key);
-  };
+  return sceneManager.get(key);
 };
 exports.launchImpl = function (scene, data) {
-  return function () {
-    return scene.launch(data);
-  };
+  return scene.launch(data);
 };
 exports.launchByKeyImpl = function (key, data, scene) {
-  return function () {
-    return scene.scene.launch(key, data);
-  };
+  return scene.scene.launch(key, data);
 };
+
 exports.startByKeyImpl = function (key, data, scene) {
-  return function () {
-    return scene.scene.start(key, data);
-  };
+  return scene.scene.start(key, data);
 };
+
 exports.removeByKeyImpl = function (key, scene) {
-  return function () {
-    return scene.scene.remove(key);
-  };
+  return scene.scene.remove(key);
 };
+
 exports.startImpl = function (data, scene) {
-  return function () {
-    return scene.scene.start(scene, data);
-  };
+  return scene.scene.start(scene, data);
 };
+
 exports.restartImpl = function (scene, data) {
-  return function () {
-    return scene.scene.restart(scene, data);
-  };
+  return scene.scene.restart(scene, data);
 };
-exports.pause = function (scene) {
-  return function () {
-    return scene.scene.pause(scene);
-  };
+
+exports.pauseImpl = function (scene) {
+  return scene.scene.pause(scene);
 };
-exports.resume = function (scene) {
-  return function () {
-    return scene.scene.resume(scene);
-  };
+
+exports.resumeImpl = function (scene) {
+  return scene.scene.resume(scene);
 };
-exports.sleep = function (scene) {
-  return function () {
-    return scene.scene.sleep(scene);
-  };
+
+exports.sleepImpl = function (scene) {
+  return scene.scene.sleep(scene);
 };
-exports.wake = function (scene) {
-  return function () {
-    return scene.scene.wake(scene);
-  };
+
+exports.wakeImpl = function (scene) {
+  return scene.scene.wake(scene);
 };
-exports.switch = function (scene) {
-  return function () {
-    return scene.scene.switch(scene);
-  };
+
+exports.switchImpl = function (scene) {
+  return scene.scene.switch(scene);
 };
-exports.run = function (scene, data) {
-  return function () {
-    return scene.scene.run(scene, data);
-  };
+
+exports.runImpl = function (scene, data) {
+  return scene.scene.run(scene, data);
 };
-exports.stop = function (scene) {
-  return function () {
-    return scene.scene.stop(scene);
-  };
+
+exports.stopImpl = function (scene) {
+  return scene.scene.stop(scene);
 };
-exports.setVisible = function (scene) {
-  return function () {
-    return scene.setVisible();
-  };
+
+exports.setVisibleImpl = function (scene) {
+  return scene.setVisible();
 };
-exports.bringToTop = function (sceneManager, name) {
-  return function () {
-    return sceneManager.bringToTop(name);
-  };
+
+exports.bringToTopImpl = function (sceneManager, name) {
+  return sceneManager.bringToTop(name);
 };
-exports.sendToBack = function (sceneManager, name) {
-  return function () {
-    return sceneManager.sendToBack(name);
-  };
+
+exports.sendToBackImpl = function (sceneManager, name) {
+  return sceneManager.sendToBack(name);
 };
 
 exports.getRegistryDataImpl = function (registry, key) {
-  return function () {
-    return registry.get(key);
-  };
+  return registry.get(key);
 };
+
 exports.setRegistryDataImpl = function (registry, key, data) {
-  return function () {
-    return registry.set(key, data);
-  };
+  return registry.set(key, data);
 };
+
 exports.getRegistryImpl = function (obj) {
-  return function () {
-    return obj.registry;
-  };
+  return obj.registry;
 };
+
 exports.getDataImpl = function (key, obj) {
-  return function () {
-    return obj.data.get(key);
-  };
+  return obj.data.get(key);
 };
+
 exports.setDataImpl = function (key, data, obj) {
-  return function () {
-    return obj.data.set(key, data);
-  };
+  return obj.data.set(key, data);
 };
 
 exports.getPluginInstanceImpl = function (scene, key) {
-  return function () {
-    return scene[key];
-  };
+  return scene[key];
 };

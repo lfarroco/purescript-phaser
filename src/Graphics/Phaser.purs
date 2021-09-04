@@ -1,24 +1,22 @@
-module Graphics.Phaser (create, getSceneManager, addScene) where
+module Graphics.Phaser (create, setGameDimensions, getSceneManager, addScene) where
 
-import Data.Function.Uncurried (Fn3, runFn3)
 import Effect (Effect)
-import Graphics.Phaser.Scene (SceneConfig)
+import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
 import Graphics.Phaser.ForeignTypes (PhaserGame, SceneManager)
+import Graphics.Phaser.GameObject (Dimensions)
+import Graphics.Phaser.Scene as Scene
 
--- | A Phaser game config object can be written in multiple different ways
--- | and there  are over 30 optional properties that can be provided.  
-foreign import create ::
-  { width :: Int
-  , height :: Int
-  } ->
-  Effect PhaserGame
+foreign import create :: Effect PhaserGame
+
+foreign import setGameDimensionsImpl :: EffectFn2 Dimensions PhaserGame PhaserGame
+
+setGameDimensions :: Dimensions -> PhaserGame -> Effect PhaserGame
+setGameDimensions = runEffectFn2 setGameDimensionsImpl
 
 -- | Here are included parameters that are may be hard to implement after
 -- | initialization, such as specific plugins. 
 foreign import createWithPlugins ::
-  { width :: Int
-  , height :: Int
-  , plugins ::
+  { plugins ::
       { scene ::
           Array
             { key :: String
@@ -43,11 +41,11 @@ foreign import getSceneManager :: PhaserGame -> Effect SceneManager
 -- adding them *after* the game has been created, and using the scene
 -- manager that the game contains seems to be the most flexible approach
 -- as this decouples the scenes from the of the game logic
-foreign import addSceneImpl :: forall a. Fn3 (SceneConfig a) Boolean PhaserGame (Effect PhaserGame)
+foreign import addSceneImpl :: forall a. EffectFn3 (Scene.SceneConfig a) Boolean PhaserGame PhaserGame
 
 -- | Raw Phaser FFI
 -- | ==== Parameters ====
 -- | Sceneconfig a   - Scene configuration, bound to a initial state type
 -- | Boolean         - If the scene should start in parallel right now
-addScene :: forall a. SceneConfig a -> Boolean -> PhaserGame -> Effect PhaserGame
-addScene = runFn3 addSceneImpl
+addScene :: forall a. Scene.SceneConfig a -> Boolean -> PhaserGame -> Effect PhaserGame
+addScene = runEffectFn3 addSceneImpl

@@ -21,7 +21,7 @@ exports.loadAtlasImpl = (key, textureURL, atlasURL, scene) => {
 };
 
 exports.loadSpritesheetImpl = (key, textureURL, config, scene) => {
-  scene.load.atlas(key, textureURL, config);
+  scene.load.spritesheet(key, textureURL, config);
   return scene;
 };
 
@@ -40,9 +40,6 @@ exports.loadScenePluginImpl = (key, url, sceneKey, scene) => {
 };
 
 exports.onceLoadCompleteImpl = (scene, callback) => {
-  scene.load.once(
-    "complete",
-    () => callback(scene)()
-  );
+  scene.load.once('complete', () => callback(scene)());
   return scene;
 };

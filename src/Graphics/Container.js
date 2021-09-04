@@ -1,27 +1,19 @@
 'use strict';
 
-exports.create = function (scene) {
-  return function () {
-    return scene.add.container();
-  };
+exports.createImpl = function (scene) {
+  return scene.add.container();
 };
 
 exports.addChildImpl = function (element, container) {
-  return function () {
-    container.add(element);
-    return container;
-  };
+  container.add(element);
+  return container;
 };
 
-exports.removeChildren = function (container) {
-  return function () {
-    container.removeAll(true);
-    return container;
-  };
+exports.removeChildrenImpl = function (container) {
+  container.removeAll(true);
+  return container;
 };
 
 exports.listImpl = function (container) {
-  return function () {
-    return container.list;
-  };
+  return container.list;
 };

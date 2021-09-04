@@ -1,4 +1,13 @@
-module Graphics.Phaser.Loader where
+module Graphics.Phaser.Loader
+  ( setBaseUrl
+  , setPath
+  , loadImages
+  , onceLoadComplete
+  , loadAtlas
+  , loadSpritesheet
+  , loadPlugin
+  , loadScene
+  ) where
 
 import Prelude
 import Effect (Effect)
@@ -23,13 +32,12 @@ foreign import setPathImpl ::
 setPath :: String -> PhaserScene -> Effect Unit
 setPath = runEffectFn2 setPathImpl
 
-foreign import loadImagesImpl ::
-  EffectFn2
-    (Array { key :: String, path :: String })
-    PhaserScene
-    Unit
+type ImagePath
+  = { key :: String, path :: String }
 
-loadImages :: Array { key :: String, path :: String } -> PhaserScene -> Effect Unit
+foreign import loadImagesImpl :: EffectFn2 (Array ImagePath) PhaserScene Unit
+
+loadImages :: Array ImagePath -> PhaserScene -> Effect Unit
 loadImages = runEffectFn2 loadImagesImpl
 
 foreign import onceLoadCompleteImpl ::
@@ -38,34 +46,15 @@ foreign import onceLoadCompleteImpl ::
     (PhaserScene -> Effect Unit)
     PhaserScene
 
-onceLoadComplete ::
-  PhaserScene ->
-  (PhaserScene -> Effect Unit) ->
-  Effect PhaserScene
+onceLoadComplete :: PhaserScene -> (PhaserScene -> Effect Unit) -> Effect PhaserScene
 onceLoadComplete = runEffectFn2 onceLoadCompleteImpl
 
-foreign import loadAtlasImpl ::
-  EffectFn4
-    String
-    String
-    String
-    PhaserScene
-    PhaserScene
+foreign import loadAtlasImpl :: EffectFn4 String String String PhaserScene PhaserScene
 
-loadAtlas ::
-  String ->
-  String ->
-  String ->
-  PhaserScene ->
-  Effect PhaserScene
+loadAtlas :: String -> String -> String -> PhaserScene -> Effect PhaserScene
 loadAtlas = runEffectFn4 loadAtlasImpl
 
-foreign import loadPluginImpl ::
-  EffectFn3
-    String
-    String
-    PhaserScene
-    PhaserScene
+foreign import loadPluginImpl :: EffectFn3 String String PhaserScene PhaserScene
 
 loadPlugin :: String -> String -> PhaserScene -> Effect PhaserScene
 loadPlugin = runEffectFn3 loadPluginImpl
@@ -81,16 +70,22 @@ foreign import loadScenePluginImpl ::
 loadScene :: String -> String -> String -> PhaserScene -> Effect PhaserScene
 loadScene = runEffectFn4 loadScenePluginImpl
 
-foreign import loadSpritesheetImpl ::
-  EffectFn4
-    String
-    String
-    { frameWidth :: Number
+type LoadSpriteSheetConfig
+  = { frameWidth :: Number
     , frameHeight :: Number
     , startFrame :: Int
     , endFrame :: Int
     , margin :: Int
     , spacing :: Int
     }
+
+foreign import loadSpritesheetImpl ::
+  EffectFn4
+    String
+    String
+    LoadSpriteSheetConfig
     PhaserScene
     PhaserScene
+
+loadSpritesheet :: String -> String -> LoadSpriteSheetConfig -> PhaserScene -> Effect PhaserScene
+loadSpritesheet = runEffectFn4 loadSpritesheetImpl

@@ -12,18 +12,10 @@ to generate this file without the comments in this block.
 -}
 { name = "my-project"
 , dependencies =
-  [ "arrays"
-  , "console"
-  , "datetime"
-  , "effect"
-  , "exceptions"
-  , "integers"
-  , "maybe"
-  , "nullable"
+  [ "effect"
   , "phaser"
   , "prelude"
   , "psci-support"
-  , "transformers"
   ]
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"

@@ -103,4 +103,4 @@ let upstream =
 
 in  upstream
   with phaser =
-    ../../spago.dhall as Location
+    ../../../spago.dhall as Location

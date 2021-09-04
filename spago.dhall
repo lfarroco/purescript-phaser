@@ -7,7 +7,6 @@ You can edit this file as you like.
     "prelude",
     "aff",
     "effect",
-    "functions",
     "psci-support",
     "nullable",
   ]
