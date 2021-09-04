@@ -604,8 +604,8 @@ var PS = {};
                                   x: 200.0,
                                   y: 200.0
                               })(scene))(Graphics_Phaser_GameObject.setDisplaySize(Graphics_Phaser_GameObject.imageInstance)({
-                                  width: 150,
-                                  height: 150
+                                  width: 150.0,
+                                  height: 150.0
                               }))();
                               return Data_Unit.unit;
                           };
@@ -618,8 +618,8 @@ var PS = {};
                   x: 100.0,
                   y: 100.0
               })(scene))(Graphics_Phaser_GameObject.setDisplaySize(Graphics_Phaser_GameObject.imageInstance)({
-                  width: 50,
-                  height: 50
+                  width: 50.0,
+                  height: 50.0
               }))();
               Graphics_Phaser_GameObject.onClick(Graphics_Phaser_GameObject.imageInstance)(callback)(image)();
               return scene;

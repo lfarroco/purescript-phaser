@@ -41,7 +41,7 @@ mainScene =
   startButton scene = do
     image <-
       Image.create "logo" { x: 100.0, y: 100.0 } scene
-        >>= setDisplaySize { width: 50, height: 50 }
+        >>= setDisplaySize { width: 50.0, height: 50.0 }
     -- Register callback on the image game object
     _ <- onClick callback image
     pure scene
@@ -50,7 +50,7 @@ mainScene =
     callback _vec1 _vec2 _event _image = do
       _ <-
         Image.create "logo" { x: 200.0, y: 200.0 } scene
-          >>= setDisplaySize { width: 150, height: 150 }
+          >>= setDisplaySize { width: 150.0, height: 150.0 }
       pure unit
 
   logoPath :: String
