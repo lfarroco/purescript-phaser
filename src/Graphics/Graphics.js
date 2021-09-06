@@ -35,7 +35,7 @@ exports.strokeRoundedRectImpl = function (
   return graphic;
 };
 
-exports.lineStyleImpl = function (width, color, alpha, graphic) {
+exports.lineStyleImpl = function ({ width, color, alpha }, graphic) {
   graphic.lineStyle(width, color, alpha);
   return graphic;
 };
