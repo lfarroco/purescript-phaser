@@ -2,6 +2,8 @@ module Graphics.Phaser.Events
   ( Listener
   , createEmitter
   , on
+  , once
+  , off
   , createListener
   , createSceneListener
   , emitSceneEvent
@@ -11,9 +13,10 @@ module Graphics.Phaser.Events
 
 import Prelude
 import Effect (Effect)
+import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, runEffectFn1, runEffectFn2, runEffectFn3)
 import Graphics.Phaser.ForeignTypes (PhaserEmitter, PhaserScene)
-import Effect.Uncurried (EffectFn1, EffectFn3, runEffectFn1, runEffectFn3)
 
+-- TODO: accept scene and gameobjects as emitters
 -- | Phaser's API gives us lots of freedom when firing events - this is one way
 -- | to type check if the event is being fired with valid arguments.
 -- | You still need to take care when choosing the event name, as it needs to
@@ -33,6 +36,16 @@ foreign import onImpl :: forall arg. EffectFn3 String (arg -> Effect Unit) Phase
 
 on :: forall arg. String -> (arg -> Effect Unit) -> PhaserEmitter -> Effect Unit
 on = runEffectFn3 onImpl
+
+foreign import onceImpl :: forall arg. EffectFn3 String (arg -> Effect Unit) PhaserEmitter Unit
+
+once :: forall arg. String -> (arg -> Effect Unit) -> PhaserEmitter -> Effect Unit
+once = runEffectFn3 onceImpl
+
+foreign import offImpl :: EffectFn2 String PhaserEmitter Unit
+
+off :: String -> PhaserEmitter -> Effect Unit
+off = runEffectFn2 offImpl
 
 -- | Receives an event id, a callback and a emitter. Returns a function that
 -- | provides its argument to the emitter.

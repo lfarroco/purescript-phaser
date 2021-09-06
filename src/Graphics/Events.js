@@ -8,6 +8,14 @@ exports.onImpl = function (key, handler, emitter) {
   emitter.on(key, (arg) => handler(arg)());
 };
 
+exports.onceImpl = function (key, handler, emitter) {
+  emitter.once(key, (arg) => handler(arg)());
+};
+
+exports.offImpl = function (key, emitter) {
+  emitter.off(key);
+};
+
 exports.emitImpl = function (key, arg, emitter) {
   emitter.emit(key, arg);
 };
