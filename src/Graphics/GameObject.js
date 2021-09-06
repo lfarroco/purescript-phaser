@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 exports.destroyImpl = function (obj) {
   obj.destroy();
@@ -65,42 +65,35 @@ exports.getDisplaySizeImpl = function ({ displayWidth, displayHeight }) {
 exports.setDisplaySizeImpl = ({ width, height }, obj) => {
   obj.setDisplaySize(width, height);
   return obj;
-}
+};
 
-
-exports.getOriginImpl = ({ originX, originY }) =>
-  ({ x: originX, y: originY });
-
+exports.getOriginImpl = ({ originX, originY }) => ({ x: originX, y: originY });
 
 exports.setOriginImpl = ({ x, y }, obj) => {
   obj.setOrigin(x, y);
   return obj;
 };
 
-exports.getScaleImpl = ({ scaleX, scaleY }) =>
-  ({ x: scaleX, y: scaleY });
+exports.getScaleImpl = ({ scaleX, scaleY }) => ({ x: scaleX, y: scaleY });
 
 exports.setScaleImpl = function ({ x, y }, obj) {
   obj.setScale(x, y);
   return obj;
 };
 
-exports.getNameImpl = ({ name }) =>
-  name;
+exports.getNameImpl = ({ name }) => name;
 exports.setNameImpl = (name, obj) => {
   obj.setName(name);
   return obj;
 };
 
 exports.onClickImpl = (handler, obj) => {
-  obj.setInteractive().on(
-    "pointerdown",
-    (pointer, localX, localY, event) =>
+  obj
+    .setInteractive()
+    .on('pointerdown', (pointer, localX, localY, event) =>
       handler(pointer)({ x: localX, y: localY })(event)(obj)()
-  );
+    );
   return obj;
 };
 
-exports.getSceneImpl = (obj) =>
-  obj.scene;
-
+exports.getSceneImpl = (obj) => obj.scene;

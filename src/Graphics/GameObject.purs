@@ -55,10 +55,12 @@ type OnClickCallback a
   = Vector -> Vector -> Event -> a -> Effect Unit
 
 -- TODO: missing functions - flipx/y, depth, scrollfactor, bounds, settintfill, multi tint, blend mode
+-- TOOD: remove Effect from getters (also check which ones can be null/undefined)
 class GameObject a where
   destroy :: a -> Effect Unit
+  -- TODO: instead of onclick we should offer onpointerup and onpointerdown (or classify standard gameobject events)
   onClick :: OnClickCallback a -> a -> Effect a
-  getScene :: a -> Effect PhaserScene
+  --on :: String -> (a -> Effect Unit) -> Effect a
   getPosition :: a -> Effect Vector
   setPosition :: Vector -> a -> Effect a
   getAngle :: a -> Effect Number
@@ -81,6 +83,7 @@ class GameObject a where
   setScale :: Vector -> a -> Effect a
   setName :: String -> a -> Effect a
   getName :: a -> Effect String
+  getScene :: a -> PhaserScene
 
 foreign import destroyImpl :: forall a. EffectFn1 a Unit
 
@@ -130,7 +133,7 @@ foreign import setNameImpl :: forall a. EffectFn2 String a a
 
 foreign import onClickImpl :: forall a. EffectFn2 (OnClickCallback a) a a
 
-foreign import getSceneImpl :: forall a. EffectFn1 a PhaserScene
+foreign import getSceneImpl :: forall a. a -> PhaserScene
 
 instance containerInstance :: GameObject PhaserContainer where
   destroy i = runEffectFn1 destroyImpl i
@@ -157,7 +160,7 @@ instance containerInstance :: GameObject PhaserContainer where
   getName i = runEffectFn1 getNameImpl i
   setName i = runEffectFn2 setNameImpl i
   onClick i = runEffectFn2 onClickImpl i
-  getScene i = runEffectFn1 getSceneImpl i
+  getScene = getSceneImpl
 
 instance graphicsInstance :: GameObject PhaserGraphic where
   destroy i = runEffectFn1 destroyImpl i
@@ -184,7 +187,7 @@ instance graphicsInstance :: GameObject PhaserGraphic where
   getName i = runEffectFn1 getNameImpl i
   setName i = runEffectFn2 setNameImpl i
   onClick i = runEffectFn2 onClickImpl i
-  getScene i = runEffectFn1 getSceneImpl i
+  getScene = getSceneImpl
 
 instance imageInstance :: GameObject PhaserImage where
   destroy i = runEffectFn1 destroyImpl i
@@ -211,7 +214,7 @@ instance imageInstance :: GameObject PhaserImage where
   getName i = runEffectFn1 getNameImpl i
   setName i = runEffectFn2 setNameImpl i
   onClick i = runEffectFn2 onClickImpl i
-  getScene i = runEffectFn1 getSceneImpl i
+  getScene = getSceneImpl
 
 instance textInstance :: GameObject PhaserText where
   destroy i = runEffectFn1 destroyImpl i
@@ -238,7 +241,7 @@ instance textInstance :: GameObject PhaserText where
   getName i = runEffectFn1 getNameImpl i
   setName i = runEffectFn2 setNameImpl i
   onClick i = runEffectFn2 onClickImpl i
-  getScene i = runEffectFn1 getSceneImpl i
+  getScene i = getSceneImpl i
 
 instance spriteInstance :: GameObject PhaserSprite where
   destroy i = runEffectFn1 destroyImpl i
@@ -265,7 +268,7 @@ instance spriteInstance :: GameObject PhaserSprite where
   getName i = runEffectFn1 getNameImpl i
   setName i = runEffectFn2 setNameImpl i
   onClick i = runEffectFn2 onClickImpl i
-  getScene i = runEffectFn1 getSceneImpl i
+  getScene i = getSceneImpl i
 
 instance rectInstance :: GameObject PhaserRectangle where
   destroy i = runEffectFn1 destroyImpl i
@@ -292,7 +295,7 @@ instance rectInstance :: GameObject PhaserRectangle where
   getName i = runEffectFn1 getNameImpl i
   setName i = runEffectFn2 setNameImpl i
   onClick i = runEffectFn2 onClickImpl i
-  getScene i = runEffectFn1 getSceneImpl i
+  getScene i = getSceneImpl i
 
 instance ellipseInstance :: GameObject PhaserEllipse where
   destroy i = runEffectFn1 destroyImpl i
@@ -319,4 +322,4 @@ instance ellipseInstance :: GameObject PhaserEllipse where
   getName i = runEffectFn1 getNameImpl i
   setName i = runEffectFn2 setNameImpl i
   onClick i = runEffectFn2 onClickImpl i
-  getScene i = runEffectFn1 getSceneImpl i
+  getScene i = getSceneImpl i
