@@ -433,7 +433,7 @@ var PS = {};
   exports["create"] = $foreign.create;
 })(PS);
 (function(exports) {
-  'use strict';
+  "use strict";
 
   exports.loadSpritesheetImpl = (key, textureURL, config, scene) => {
     scene.load.spritesheet(key, textureURL, config);
@@ -446,7 +446,7 @@ var PS = {};
   $PS["Graphics.Phaser.Loader"] = $PS["Graphics.Phaser.Loader"] || {};
   var exports = $PS["Graphics.Phaser.Loader"];
   var $foreign = $PS["Graphics.Phaser.Loader"];
-  var Effect_Uncurried = $PS["Effect.Uncurried"];                                     
+  var Effect_Uncurried = $PS["Effect.Uncurried"];                                           
   var loadSpritesheet = Effect_Uncurried.runEffectFn4($foreign.loadSpritesheetImpl);
   exports["loadSpritesheet"] = loadSpritesheet;
 })(PS);

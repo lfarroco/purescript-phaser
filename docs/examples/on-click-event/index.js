@@ -479,7 +479,7 @@ var PS = {};
   exports["create"] = create;
 })(PS);
 (function(exports) {
-  'use strict';
+  "use strict";
 
   exports.loadImagesImpl = (images, scene) => {
     images.forEach(({ key, path }) => {

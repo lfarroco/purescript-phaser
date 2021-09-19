@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 exports.setBaseUrlImpl = (url, scene) => {
   scene.load.setBaseUrl(url);
@@ -40,6 +40,16 @@ exports.loadScenePluginImpl = (key, url, sceneKey, scene) => {
 };
 
 exports.onceLoadCompleteImpl = (scene, callback) => {
-  scene.load.once('complete', () => callback(scene)());
+  scene.load.once("complete", () => callback(scene)());
+  return scene;
+};
+
+exports.loadTilemapTileJSONImpl = (key, path, scene) => {
+  scene.load.tilemapTileJSON(key, path);
+  return scene;
+};
+
+exports.loadTilemapTiledJSONImpl = (key, path, scene) => {
+  scene.load.tilemapTiledJSON(key, path);
   return scene;
 };

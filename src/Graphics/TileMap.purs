@@ -2,7 +2,6 @@ module Graphics.Phaser.TileMap
   ( makeTileMap
   , defaultTilesetDesc
   , createLayer
-  , loadTilemapTileJSON
   , addTilesetImage
   , tilesets
   ) where
@@ -85,18 +84,5 @@ createLayer ::
   Effect PhaserLayer
 createLayer = runEffectFn3 createLayerImpl
 
-foreign import loadTilemapTileJSONImpl ::
-  EffectFn3
-    String
-    String
-    PhaserScene
-    PhaserScene
-
-loadTilemapTileJSON ::
-  String ->
-  String ->
-  PhaserScene ->
-  Effect PhaserScene
-loadTilemapTileJSON = runEffectFn3 loadTilemapTileJSONImpl
 
 foreign import tilesets :: PhaserTileMap -> Array PhaserTileSet

@@ -7,11 +7,20 @@ module Graphics.Phaser.Loader
   , loadSpritesheet
   , loadPlugin
   , loadScene
+  , loadTilemapTileJSON
+  , loadTilemapTiledJSON
   ) where
 
 import Prelude
 import Effect (Effect)
-import Effect.Uncurried (EffectFn2, EffectFn3, EffectFn4, runEffectFn2, runEffectFn3, runEffectFn4)
+import Effect.Uncurried
+  ( EffectFn2
+  , EffectFn3
+  , EffectFn4
+  , runEffectFn2
+  , runEffectFn3
+  , runEffectFn4
+  )
 import Graphics.Phaser.ForeignTypes (PhaserScene)
 
 foreign import setBaseUrlImpl ::
@@ -87,5 +96,40 @@ foreign import loadSpritesheetImpl ::
     PhaserScene
     PhaserScene
 
-loadSpritesheet :: String -> String -> LoadSpriteSheetConfig -> PhaserScene -> Effect PhaserScene
+loadSpritesheet ::
+  String ->
+  String ->
+  LoadSpriteSheetConfig ->
+  PhaserScene ->
+  Effect PhaserScene
 loadSpritesheet = runEffectFn4 loadSpritesheetImpl
+
+foreign import loadTilemapTileJSONImpl ::
+  EffectFn3
+    String
+    String
+    PhaserScene
+    PhaserScene
+
+loadTilemapTileJSON ::
+  String ->
+  String ->
+  PhaserScene ->
+  Effect PhaserScene
+loadTilemapTileJSON = runEffectFn3 loadTilemapTileJSONImpl
+
+type TiledLoadConfiguration
+  = { key :: String, url :: String }
+
+foreign import loadTilemapTiledJSONImpl ::
+  EffectFn2
+    (Array TiledLoadConfiguration)
+    PhaserScene
+    PhaserScene
+
+-- | https://photonstorm.github.io/phaser3-docs/Phaser.Loader.LoaderPlugin.html#tilemapTiledJSON__anchor
+loadTilemapTiledJSON ::
+  (Array TiledLoadConfiguration) ->
+  PhaserScene ->
+  Effect PhaserScene
+loadTilemapTiledJSON = runEffectFn2 loadTilemapTiledJSONImpl

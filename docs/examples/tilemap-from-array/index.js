@@ -349,7 +349,7 @@ var PS = {};
   exports["create"] = $foreign.create;
 })(PS);
 (function(exports) {
-  'use strict';
+  "use strict";
 
   exports.loadImagesImpl = (images, scene) => {
     images.forEach(({ key, path }) => {
@@ -433,7 +433,7 @@ var PS = {};
   var $foreign = $PS["Graphics.Phaser.TileMap"];
   var Data_Nullable = $PS["Data.Nullable"];
   var Effect_Uncurried = $PS["Effect.Uncurried"];                
-  var makeTileMap = Effect_Uncurried.runEffectFn2($foreign.makeTileMapImpl);                
+  var makeTileMap = Effect_Uncurried.runEffectFn2($foreign.makeTileMapImpl);
   var defaultTilesetDesc = {
       key: Data_Nullable["null"],
       tileWidth: Data_Nullable["null"],

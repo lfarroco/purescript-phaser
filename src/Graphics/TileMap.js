@@ -22,7 +22,4 @@ exports.addTilesetImageImpl = function (
 exports.createLayerImpl = (tileMap, layerID, tileset) =>
   tileMap.createLayer(layerID, tileset);
 
-exports.loadTilemapTileJSONImpl = (key, path, scene) =>
-  scene.load.tilemapTileJSON(key, path);
-
 exports.tilesets = (tileMap) => tileMap.tilesets;
