@@ -509,22 +509,17 @@ var PS = {};
   var defaultSceneConfig = {
       key: "",
       create: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       init: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       update: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       preload: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-      },
-      state: {}
+      }
   };
   exports["defaultSceneConfig"] = defaultSceneConfig;
 })(PS);
@@ -595,20 +590,17 @@ var PS = {};
       return {
           key: "main",
           create: function (scene) {
-              return function (_state) {
-                  return Data_Functor["void"](Effect.functorEffect)(function __do() {
-                      Graphics_Phaser_Text.create("Click the logo to trigger an event")(scene)();
-                      return startButton(scene)();
-                  });
-              };
+              return Data_Functor["void"](Effect.functorEffect)(function __do() {
+                  Graphics_Phaser_Text.create("Click the logo to trigger an event")(scene)();
+                  return startButton(scene)();
+              });
           },
           init: Graphics_Phaser_Scene.defaultSceneConfig.init,
           update: Graphics_Phaser_Scene.defaultSceneConfig.update,
           preload: Graphics_Phaser_Loader.loadImages([ {
               key: "logo",
               path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-          } ]),
-          state: Graphics_Phaser_Scene.defaultSceneConfig.state
+          } ])
       };
   })();
   var main = Data_Functor["void"](Effect.functorEffect)(Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser.create)(Graphics_Phaser.setGameDimensions({

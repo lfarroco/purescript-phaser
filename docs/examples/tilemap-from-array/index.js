@@ -379,22 +379,17 @@ var PS = {};
   var defaultSceneConfig = {
       key: "",
       create: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       init: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       update: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       preload: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-      },
-      state: {}
+      }
   };
   exports["defaultSceneConfig"] = defaultSceneConfig;
 })(PS);
@@ -473,27 +468,25 @@ var PS = {};
   var tileMapKey = "tile map 1";
   var mainSceneKey = "main";
   var create = function (scene) {
-      return function (_state) {
-          var level = [ [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 1, 2, 3, 0, 0, 0, 1, 2, 3, 0 ], [ 0, 5, 6, 7, 0, 0, 0, 5, 6, 7, 0 ], [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 0, 0, 14, 13, 14, 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 0, 14, 14, 14, 14, 14, 0, 0, 0, 15 ], [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15 ], [ 35, 36, 37, 0, 0, 0, 0, 0, 15, 15, 15 ], [ 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 ] ];
-          return function __do() {
-              var tileMap = Graphics_Phaser_TileMap.makeTileMap(scene)({
-                  key: tileMapKey,
-                  data: level,
-                  tileHeight: 16,
-                  tileWidth: 16
-              })();
-              var tileset = Graphics_Phaser_TileMap.addTilesetImage(tileMap)(tileName)({
-                  key: Graphics_Phaser_TileMap.defaultTilesetDesc.key,
-                  tileWidth: Data_Nullable.notNull(16),
-                  tileHeight: Data_Nullable.notNull(16),
-                  tileMargin: Graphics_Phaser_TileMap.defaultTilesetDesc.tileMargin,
-                  tileSpacing: Graphics_Phaser_TileMap.defaultTilesetDesc.tileSpacing,
-                  gid: Graphics_Phaser_TileMap.defaultTilesetDesc.gid
-              })();
-              Effect_Console.log("Found " + (Data_Show.show(Data_Show.showInt)(Data_Array.length(Graphics_Phaser_TileMap.tilesets(tileMap))) + " tileset"))();
-              var _layer = Graphics_Phaser_TileMap.createLayer(Data_Show.showString)(tileMap)("layer")([ tileset ])();
-              return Data_Unit.unit;
-          };
+      var level = [ [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 1, 2, 3, 0, 0, 0, 1, 2, 3, 0 ], [ 0, 5, 6, 7, 0, 0, 0, 5, 6, 7, 0 ], [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 0, 0, 14, 13, 14, 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ], [ 0, 0, 14, 14, 14, 14, 14, 0, 0, 0, 15 ], [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15 ], [ 35, 36, 37, 0, 0, 0, 0, 0, 15, 15, 15 ], [ 39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39 ] ];
+      return function __do() {
+          var tileMap = Graphics_Phaser_TileMap.makeTileMap(scene)({
+              key: tileMapKey,
+              data: level,
+              tileHeight: 16,
+              tileWidth: 16
+          })();
+          var tileset = Graphics_Phaser_TileMap.addTilesetImage(tileMap)(tileName)({
+              key: Graphics_Phaser_TileMap.defaultTilesetDesc.key,
+              tileWidth: Data_Nullable.notNull(16),
+              tileHeight: Data_Nullable.notNull(16),
+              tileMargin: Graphics_Phaser_TileMap.defaultTilesetDesc.tileMargin,
+              tileSpacing: Graphics_Phaser_TileMap.defaultTilesetDesc.tileSpacing,
+              gid: Graphics_Phaser_TileMap.defaultTilesetDesc.gid
+          })();
+          Effect_Console.log("Found " + (Data_Show.show(Data_Show.showInt)(Data_Array.length(Graphics_Phaser_TileMap.tilesets(tileMap))) + " tileset"))();
+          var _layer = Graphics_Phaser_TileMap.createLayer(Data_Show.showString)(tileMap)("layer")([ tileset ])();
+          return Data_Unit.unit;
       };
   };
   var mainScene = {
@@ -504,8 +497,7 @@ var PS = {};
       preload: Graphics_Phaser_Loader.loadImages([ {
           key: tileName,
           path: "assets/super-mario.png"
-      } ]),
-      state: Graphics_Phaser_Scene.defaultSceneConfig.state
+      } ])
   };
   var main = Data_Functor["void"](Effect.functorEffect)(Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser.create)(Graphics_Phaser.setGameDimensions({
       width: 200.0,

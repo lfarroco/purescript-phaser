@@ -47,8 +47,8 @@ explodeSpriteKey = "explosion"
 explodeAnimationKey :: String
 explodeAnimationKey = "explodeAnimation"
 
-create :: forall t10. PhaserScene -> t10 -> Effect Unit
-create scene _state =
+create :: PhaserScene -> Effect Unit
+create scene =
   void do
     explosionFrames <- Sprite.generateFrameNumbers explodeSpriteKey 0 23 scene
     _ <- Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
@@ -61,7 +61,7 @@ create scene _state =
       scene
       >>= Sprite.setFrame 3
 
-mainScene :: SceneConfig {}
+mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     { key = "main"

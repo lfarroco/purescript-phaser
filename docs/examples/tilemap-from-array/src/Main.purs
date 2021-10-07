@@ -30,10 +30,7 @@ main =
       >>= Phaser.setGameDimensions { width: 200.0, height: 200.0 }
       >>= Phaser.addScene mainScene true
 
-type State
-  = {}
-
-mainScene :: SceneConfig State
+mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     -- Use record update syntax to change relevant defaults
@@ -47,8 +44,8 @@ mainScene =
         ]
     }
 
-create :: PhaserScene -> State -> Effect Unit
-create scene _state = do
+create :: PhaserScene -> Effect Unit
+create scene = do
   -- When loading from an array, make sure to specify the
   -- tileWidth and tileHeight
   tileMap <-

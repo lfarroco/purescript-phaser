@@ -41,11 +41,11 @@ foreign import getSceneManager :: PhaserGame -> Effect SceneManager
 -- adding them *after* the game has been created, and using the scene
 -- manager that the game contains seems to be the most flexible approach
 -- as this decouples the scenes from the of the game logic
-foreign import addSceneImpl :: forall a. EffectFn3 (Scene.SceneConfig a) Boolean PhaserGame PhaserGame
+foreign import addSceneImpl :: EffectFn3 Scene.SceneConfig Boolean PhaserGame PhaserGame
 
 -- | Raw Phaser FFI
 -- | ==== Parameters ====
 -- | Sceneconfig a   - Scene configuration, bound to a initial state type
 -- | Boolean         - If the scene should start in parallel right now
-addScene :: forall a. Scene.SceneConfig a -> Boolean -> PhaserGame -> Effect PhaserGame
+addScene :: Scene.SceneConfig -> Boolean -> PhaserGame -> Effect PhaserGame
 addScene = runEffectFn3 addSceneImpl

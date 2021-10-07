@@ -18,12 +18,12 @@ main =
       >>= Phaser.setGameDimensions { width: 400.0, height: 300.0 }
       >>= addScene mainScene true
 
-mainScene :: SceneConfig {}
+mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     { key = "main"
     , create =
-      \scene _state ->
+      \scene ->
         void do
           _ <- Text.create "Click the logo to trigger an event" scene
           startButton scene

@@ -19,12 +19,12 @@ main =
       >>= Phaser.addScene mainScene true
       >>= Phaser.addScene secondScene false
 
-mainScene :: SceneConfig {}
+mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     { key = "main"
     , create =
-      \scene _state -> do
+      \scene -> do
         _ <- Text.create "Click the logo to create a new scene" scene
         startButton scene
     , preload =
@@ -51,12 +51,12 @@ mainScene =
 logoPath :: String
 logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
 
-secondScene :: SceneConfig {}
+secondScene :: SceneConfig
 secondScene =
   defaultSceneConfig
     { key = "snd"
     , create =
-      \scene _ -> void do createLogo scene
+      \scene -> void do createLogo scene
     , preload =
       \scene ->
         loadImages [ { key: "logo", path: logoPath } ] scene

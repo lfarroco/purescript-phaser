@@ -461,22 +461,17 @@ var PS = {};
   var defaultSceneConfig = {
       key: "",
       create: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       init: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       update: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       preload: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-      },
-      state: {}
+      }
   };
   exports["defaultSceneConfig"] = defaultSceneConfig;
 })(PS);
@@ -567,28 +562,25 @@ var PS = {};
   var explodeSpriteKey = "explosion";
   var explodeAnimationKey = "explodeAnimation";
   var create = function (scene) {
-      return function (_state) {
-          return Data_Functor["void"](Effect.functorEffect)(function __do() {
-              var explosionFrames = Graphics_Phaser_Sprite.generateFrameNumbers(explodeSpriteKey)(0)(23)(scene)();
-              Graphics_Phaser_Sprite.createAnimation(explodeAnimationKey)(explosionFrames)(20.0)(-1 | 0)(scene)();
-              Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser_Sprite.add(explodeSpriteKey)({
-                  x: 100.0,
-                  y: 100.0
-              })(scene))(Graphics_Phaser_Sprite.playAnimation(explodeAnimationKey))();
-              return Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser_Sprite.add("balls")({
-                  x: 100.0,
-                  y: 100.0
-              })(scene))(Graphics_Phaser_Sprite.setFrame(3))();
-          });
-      };
+      return Data_Functor["void"](Effect.functorEffect)(function __do() {
+          var explosionFrames = Graphics_Phaser_Sprite.generateFrameNumbers(explodeSpriteKey)(0)(23)(scene)();
+          Graphics_Phaser_Sprite.createAnimation(explodeAnimationKey)(explosionFrames)(20.0)(-1 | 0)(scene)();
+          Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser_Sprite.add(explodeSpriteKey)({
+              x: 100.0,
+              y: 100.0
+          })(scene))(Graphics_Phaser_Sprite.playAnimation(explodeAnimationKey))();
+          return Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser_Sprite.add("balls")({
+              x: 100.0,
+              y: 100.0
+          })(scene))(Graphics_Phaser_Sprite.setFrame(3))();
+      });
   };
   var mainScene = {
       key: "main",
       create: create,
       init: Graphics_Phaser_Scene.defaultSceneConfig.init,
       update: Graphics_Phaser_Scene.defaultSceneConfig.update,
-      preload: preload,
-      state: Graphics_Phaser_Scene.defaultSceneConfig.state
+      preload: preload
   };
   var main = Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser.create)(Graphics_Phaser.setGameDimensions({
       width: 800.0,

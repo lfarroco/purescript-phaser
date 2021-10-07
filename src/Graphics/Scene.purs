@@ -51,24 +51,22 @@ type Time
 type Delta
   = Number
 
-type SceneConfig a
+type SceneConfig 
   = { key :: String
-    , create :: PhaserScene -> a -> Effect Unit
-    , init :: PhaserScene -> a -> Effect Unit
+    , create :: PhaserScene -> Effect Unit
+    , init :: PhaserScene -> Effect Unit
     , update :: PhaserScene -> Effect Unit
     , preload :: PhaserScene -> Effect Unit
-    , state :: a
     }
 
 -- | A scene where create, init, update and preload are noops.
-defaultSceneConfig :: SceneConfig {}
+defaultSceneConfig :: SceneConfig
 defaultSceneConfig =
   { key: ""
-  , create: \_scene _state -> pure unit
-  , init: \_scene _state -> pure unit
+  , create: \_scene -> pure unit
+  , init: \_scene -> pure unit
   , update: \_scene -> pure unit
   , preload: \_scene -> pure unit
-  , state: {}
   }
 
 class SceneManagerConnected a where
@@ -91,16 +89,14 @@ instance sceneRegistryConnection :: RegistryConnected PhaserScene where
 instance gameRegistryConnection :: RegistryConnected PhaserGame where
   getRegistry = runEffectFn1 getRegistryImpl
 
-foreign import addSceneImpl :: forall a. EffectFn3 String (SceneConfig a) SceneManager PhaserRegistry
+foreign import addSceneImpl :: EffectFn3 String SceneConfig SceneManager PhaserRegistry
 
 addScene ::
-  forall state.
   String ->
-  { create :: PhaserScene -> state -> Effect Unit
-  , init :: PhaserScene -> state -> Effect Unit
+  { create :: PhaserScene -> Effect Unit
+  , init :: PhaserScene -> Effect Unit
   , key :: String
   , preload :: PhaserScene -> Effect Unit
-  , state :: state
   , update :: PhaserScene -> Effect Unit
   } ->
   SceneManager -> Effect PhaserRegistry

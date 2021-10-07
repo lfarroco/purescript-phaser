@@ -305,22 +305,17 @@ var PS = {};
   var defaultSceneConfig = {
       key: "",
       create: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       init: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       update: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       preload: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-      },
-      state: {}
+      }
   };
   exports["defaultSceneConfig"] = defaultSceneConfig;
 })(PS);
@@ -350,17 +345,14 @@ var PS = {};
       height: 256.0
   }));
   var create = function (scene) {
-      return function (_state) {
-          return Data_Functor["void"](Effect.functorEffect)(Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser_Graphics.create(scene))(drawGreenRect))(drawRedRect));
-      };
+      return Data_Functor["void"](Effect.functorEffect)(Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser_Graphics.create(scene))(drawGreenRect))(drawRedRect));
   };
   var mainScene = {
       key: Graphics_Phaser_Scene.defaultSceneConfig.key,
       create: create,
       init: Graphics_Phaser_Scene.defaultSceneConfig.init,
       update: Graphics_Phaser_Scene.defaultSceneConfig.update,
-      preload: Graphics_Phaser_Scene.defaultSceneConfig.preload,
-      state: Graphics_Phaser_Scene.defaultSceneConfig.state
+      preload: Graphics_Phaser_Scene.defaultSceneConfig.preload
   };
   var main = Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser.create)(Graphics_Phaser.setGameDimensions({
       width: 800.0,

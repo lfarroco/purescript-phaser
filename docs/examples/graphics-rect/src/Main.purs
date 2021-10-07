@@ -24,22 +24,14 @@ drawRedRect =
   Graphics.fillStyle "0xff0000" 0.5
     >=> Graphics.fillRect { x: 250.0, y: 200.0 } { width: 400.0, height: 256.0 }
 
-create :: forall state. PhaserScene -> state -> Effect Unit
-create scene _state =
+create :: PhaserScene -> Effect Unit
+create scene =
   void
     $ Graphics.create scene
     >>= drawGreenRect
     >>= drawRedRect
 
--- graphics <- Graphics.create scene
--- _greenRect <-
---   Graphics.fillStyle "#00ff00" 1.0 graphics
---     >>= Graphics.fillRect { x: 100.0, y: 100.0 } { width: 256.0, height: 256.0 }
--- _redRect <-
---   Graphics.fillStyle "#ff0000" 0.5 graphics
---     >>= Graphics.fillRect { x: 250.0, y: 200.0 } { width: 400.0, height: 256.0 }
--- pure unit
-mainScene :: SceneConfig {}
+mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     { create = create

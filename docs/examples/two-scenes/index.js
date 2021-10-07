@@ -532,22 +532,17 @@ var PS = {};
   var defaultSceneConfig = {
       key: "",
       create: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       init: function (_scene) {
-          return function (_state) {
-              return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-          };
+          return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       update: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
       preload: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
-      },
-      state: {}
+      }
   };
   exports["defaultSceneConfig"] = defaultSceneConfig;
   exports["launchByKey"] = launchByKey;
@@ -609,11 +604,9 @@ var PS = {};
       return {
           key: "main",
           create: function (scene) {
-              return function (_state) {
-                  return function __do() {
-                      Graphics_Phaser_Text.create("Click the logo to create a new scene")(scene)();
-                      return startButton(scene)();
-                  };
+              return function __do() {
+                  Graphics_Phaser_Text.create("Click the logo to create a new scene")(scene)();
+                  return startButton(scene)();
               };
           },
           init: Graphics_Phaser_Scene.defaultSceneConfig.init,
@@ -623,8 +616,7 @@ var PS = {};
                   key: "logo",
                   path: logoPath
               } ])(scene);
-          },
-          state: Graphics_Phaser_Scene.defaultSceneConfig.state
+          }
       };
   })();
   var secondScene = (function () {
@@ -638,9 +630,7 @@ var PS = {};
       return {
           key: "snd",
           create: function (scene) {
-              return function (v1) {
-                  return Data_Functor["void"](Effect.functorEffect)(createLogo(scene));
-              };
+              return Data_Functor["void"](Effect.functorEffect)(createLogo(scene));
           },
           init: Graphics_Phaser_Scene.defaultSceneConfig.init,
           update: Graphics_Phaser_Scene.defaultSceneConfig.update,
@@ -649,8 +639,7 @@ var PS = {};
                   key: "logo",
                   path: logoPath
               } ])(scene);
-          },
-          state: Graphics_Phaser_Scene.defaultSceneConfig.state
+          }
       };
   })();
   var main = Data_Functor["void"](Effect.functorEffect)(Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser.create)(Graphics_Phaser.setGameDimensions({
