@@ -1,5 +1,8 @@
 # purescript-phaser
 
+[![Build](https://github.com/lfarroco/purescript-phaser/actions/workflows/node.js.yml/badge.svg)](https://github.com/lfarroco/purescript-phaser/actions/workflows/node.js.yml)
+
+
 ```sh
 spago install phaser
 ```
