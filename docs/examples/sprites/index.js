@@ -427,7 +427,7 @@ var PS = {};
   var $foreign = $PS["Graphics.Phaser"];
   var Effect_Uncurried = $PS["Effect.Uncurried"];                
   var setGameDimensions = Effect_Uncurried.runEffectFn2($foreign.setGameDimensionsImpl);
-  var addScene = Effect_Uncurried.runEffectFn3($foreign.addSceneImpl);
+  var addScene = Effect_Uncurried.runEffectFn2($foreign.addSceneImpl);
   exports["setGameDimensions"] = setGameDimensions;
   exports["addScene"] = addScene;
   exports["create"] = $foreign.create;
@@ -460,6 +460,7 @@ var PS = {};
   var Effect = $PS["Effect"];
   var defaultSceneConfig = {
       key: "",
+      autoStart: false,
       create: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
@@ -577,6 +578,7 @@ var PS = {};
   };
   var mainScene = {
       key: "main",
+      autoStart: true,
       create: create,
       init: Graphics_Phaser_Scene.defaultSceneConfig.init,
       update: Graphics_Phaser_Scene.defaultSceneConfig.update,
@@ -585,7 +587,7 @@ var PS = {};
   var main = Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser.create)(Graphics_Phaser.setGameDimensions({
       width: 800.0,
       height: 600.0
-  })))(Graphics_Phaser.addScene(mainScene)(true));
+  })))(Graphics_Phaser.addScene(mainScene));
   exports["ghRoot"] = ghRoot;
   exports["preload"] = preload;
   exports["main"] = main;

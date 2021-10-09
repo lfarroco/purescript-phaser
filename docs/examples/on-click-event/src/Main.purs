@@ -16,12 +16,13 @@ main =
   void do
     Phaser.create
       >>= Phaser.setGameDimensions { width: 400.0, height: 300.0 }
-      >>= addScene mainScene true
+      >>= addScene mainScene
 
 mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     { key = "main"
+    , autoStart = true
     , create =
       \scene ->
         void do

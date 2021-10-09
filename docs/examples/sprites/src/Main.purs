@@ -39,7 +39,7 @@ main :: Effect PhaserGame
 main =
   Phaser.create
     >>= Phaser.setGameDimensions { width: 800.0, height: 600.0 }
-    >>= Phaser.addScene mainScene true
+    >>= Phaser.addScene mainScene
 
 explodeSpriteKey :: String
 explodeSpriteKey = "explosion"
@@ -65,6 +65,7 @@ mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     { key = "main"
+    , autoStart = true
     , create = create
     , preload = preload
     }

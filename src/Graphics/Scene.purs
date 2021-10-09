@@ -53,6 +53,7 @@ type Delta
 
 type SceneConfig
   = { key :: String
+    , autoStart :: Boolean
     , create :: PhaserScene -> Effect Unit
     , init :: PhaserScene -> Effect Unit
     , update :: PhaserScene -> Effect Unit
@@ -63,6 +64,7 @@ type SceneConfig
 defaultSceneConfig :: SceneConfig
 defaultSceneConfig =
   { key: ""
+  , autoStart: false
   , create: \_scene -> pure unit
   , init: \_scene -> pure unit
   , update: \_scene -> pure unit

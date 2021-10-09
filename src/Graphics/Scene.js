@@ -1,8 +1,7 @@
 "use strict";
 
 exports.addSceneImpl = function (
-  { key, init, create, update, preload, state },
-  autoStart,
+  { key, init, create, update, preload, autoStart },
   game
 ) {
   const config = {
@@ -19,7 +18,7 @@ exports.addSceneImpl = function (
       update(this)();
     },
   };
-  game.scene.add(key, config, autoStart, state);
+  game.scene.add(key, config, autoStart);
   return game;
 };
 

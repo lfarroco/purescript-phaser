@@ -16,13 +16,14 @@ main =
   void do
     Phaser.create
       >>= Phaser.setGameDimensions { width: 400.0, height: 400.0 }
-      >>= Phaser.addScene mainScene true
-      >>= Phaser.addScene secondScene false
+      >>= Phaser.addScene mainScene
+      >>= Phaser.addScene secondScene
 
 mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     { key = "main"
+    , autoStart = true
     , create =
       \scene -> do
         _ <- Text.create "Click the logo to create a new scene" scene
@@ -55,6 +56,7 @@ secondScene :: SceneConfig
 secondScene =
   defaultSceneConfig
     { key = "snd"
+    , autoStart = false
     , create =
       \scene -> void do createLogo scene
     , preload =

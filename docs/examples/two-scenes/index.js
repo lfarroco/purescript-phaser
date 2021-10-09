@@ -247,7 +247,7 @@ var PS = {};
   var $foreign = $PS["Graphics.Phaser"];
   var Effect_Uncurried = $PS["Effect.Uncurried"];                
   var setGameDimensions = Effect_Uncurried.runEffectFn2($foreign.setGameDimensionsImpl);
-  var addScene = Effect_Uncurried.runEffectFn3($foreign.addSceneImpl);
+  var addScene = Effect_Uncurried.runEffectFn2($foreign.addSceneImpl);
   exports["setGameDimensions"] = setGameDimensions;
   exports["addScene"] = addScene;
   exports["create"] = $foreign.create;
@@ -513,7 +513,7 @@ var PS = {};
   exports["loadImages"] = loadImages;
 })(PS);
 (function(exports) {
-  'use strict';
+  "use strict";
   exports.launchByKeyImpl = function (key, data, scene) {
     return scene.scene.launch(key, data);
   };
@@ -531,6 +531,7 @@ var PS = {};
   var launchByKey = Effect_Uncurried.runEffectFn3($foreign.launchByKeyImpl);
   var defaultSceneConfig = {
       key: "",
+      autoStart: false,
       create: function (_scene) {
           return Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit);
       },
@@ -603,6 +604,7 @@ var PS = {};
       };
       return {
           key: "main",
+          autoStart: true,
           create: function (scene) {
               return function __do() {
                   Graphics_Phaser_Text.create("Click the logo to create a new scene")(scene)();
@@ -629,6 +631,7 @@ var PS = {};
       }))));
       return {
           key: "snd",
+          autoStart: false,
           create: function (scene) {
               return Data_Functor["void"](Effect.functorEffect)(createLogo(scene));
           },
@@ -645,7 +648,7 @@ var PS = {};
   var main = Data_Functor["void"](Effect.functorEffect)(Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser.create)(Graphics_Phaser.setGameDimensions({
       width: 400.0,
       height: 400.0
-  })))(Graphics_Phaser.addScene(mainScene)(true)))(Graphics_Phaser.addScene(secondScene)(false)));
+  })))(Graphics_Phaser.addScene(mainScene)))(Graphics_Phaser.addScene(secondScene)));
   exports["main"] = main;
   exports["mainScene"] = mainScene;
   exports["logoPath"] = logoPath;

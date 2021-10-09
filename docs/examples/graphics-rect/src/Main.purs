@@ -12,7 +12,7 @@ main :: Effect PhaserGame
 main =
   Phaser.create
     >>= Phaser.setGameDimensions { width: 800.0, height: 600.0 }
-    >>= Phaser.addScene mainScene true
+    >>= Phaser.addScene mainScene
 
 drawGreenRect :: PhaserGraphic -> Effect PhaserGraphic
 drawGreenRect =
@@ -35,4 +35,5 @@ mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     { create = create
+    , autoStart = true
     }

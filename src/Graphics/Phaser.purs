@@ -9,7 +9,7 @@ module Graphics.Phaser
 import Prelude
 import Effect (Effect)
 import Effect.Aff.Compat (EffectFn1, runEffectFn1)
-import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
+import Effect.Uncurried (EffectFn2, runEffectFn2)
 import Graphics.Phaser.ForeignTypes (PhaserGame)
 import Graphics.Phaser.GameObject (Dimensions)
 import Graphics.Phaser.Scene as Scene
@@ -121,7 +121,7 @@ foreign import setGameDimensionsImpl :: EffectFn2 Dimensions PhaserGame PhaserGa
 setGameDimensions :: Dimensions -> PhaserGame -> Effect PhaserGame
 setGameDimensions = runEffectFn2 setGameDimensionsImpl
 
-foreign import addSceneImpl :: EffectFn3 Scene.SceneConfig Boolean PhaserGame PhaserGame
+foreign import addSceneImpl :: EffectFn2 Scene.SceneConfig PhaserGame PhaserGame
 
-addScene :: Scene.SceneConfig -> Boolean -> PhaserGame -> Effect PhaserGame
-addScene = runEffectFn3 addSceneImpl
+addScene :: Scene.SceneConfig -> PhaserGame -> Effect PhaserGame
+addScene = runEffectFn2 addSceneImpl

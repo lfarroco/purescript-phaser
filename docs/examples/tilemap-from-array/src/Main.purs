@@ -28,13 +28,14 @@ main =
   void do
     Phaser.create
       >>= Phaser.setGameDimensions { width: 200.0, height: 200.0 }
-      >>= Phaser.addScene mainScene true
+      >>= Phaser.addScene mainScene
 
 mainScene :: SceneConfig
 mainScene =
   defaultSceneConfig
     -- Use record update syntax to change relevant defaults
     { key = mainSceneKey
+    , autoStart = true
     , create = create
     , preload =
       loadImages
