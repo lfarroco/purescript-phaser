@@ -51,7 +51,7 @@ type Time
 type Delta
   = Number
 
-type SceneConfig 
+type SceneConfig
   = { key :: String
     , create :: PhaserScene -> Effect Unit
     , init :: PhaserScene -> Effect Unit
@@ -69,16 +69,25 @@ defaultSceneConfig =
   , preload: \_scene -> pure unit
   }
 
-class SceneManagerConnected a where
-  getSceneManager :: a -> Effect SceneManager
+foreign import addSceneImpl :: EffectFn3 SceneConfig Boolean PhaserGame PhaserGame
 
-foreign import getSceneManagerImpl :: forall a. EffectFn1 a SceneManager
+-- | Raw Phaser FFI
+-- | ==== Parameters ====
+-- | Sceneconfig     - Scene configuration
+-- | Boolean         - If the scene should start in parallel right now
+addScene :: SceneConfig -> Boolean -> PhaserGame -> Effect PhaserGame
+addScene = runEffectFn3 addSceneImpl
+
+class SceneManagerConnected a where
+  getSceneManager :: a -> SceneManager
+
+foreign import getSceneManagerImpl :: forall a. a -> SceneManager
 
 instance sceneSceneManagerConnection :: SceneManagerConnected PhaserScene where
-  getSceneManager = runEffectFn1 getSceneManagerImpl
+  getSceneManager = getSceneManagerImpl
 
 instance gameSceneManagerConnection :: SceneManagerConnected PhaserGame where
-  getSceneManager = runEffectFn1 getSceneManagerImpl
+  getSceneManager = getSceneManagerImpl
 
 class RegistryConnected a where
   getRegistry :: a -> Effect PhaserRegistry
@@ -88,19 +97,6 @@ instance sceneRegistryConnection :: RegistryConnected PhaserScene where
 
 instance gameRegistryConnection :: RegistryConnected PhaserGame where
   getRegistry = runEffectFn1 getRegistryImpl
-
-foreign import addSceneImpl :: EffectFn3 String SceneConfig SceneManager PhaserRegistry
-
-addScene ::
-  String ->
-  { create :: PhaserScene -> Effect Unit
-  , init :: PhaserScene -> Effect Unit
-  , key :: String
-  , preload :: PhaserScene -> Effect Unit
-  , update :: PhaserScene -> Effect Unit
-  } ->
-  SceneManager -> Effect PhaserRegistry
-addScene = runEffectFn3 addSceneImpl
 
 -- TODO: add this in typeclass accepting scene and game
 foreign import getRegistryImpl :: forall a. EffectFn1 a PhaserRegistry

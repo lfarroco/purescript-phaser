@@ -6,16 +6,14 @@ function create() {
 
 exports.create = create;
 
+exports.createWithConfigImpl = function (config) {
+  return create(config);
+};
+
 exports.setGameDimensionsImpl = function ({ width, height }, game) {
   game.config.width = width;
   game.config.height = height;
   return game;
-};
-
-exports.createWithPlugins = create;
-
-exports.getSceneManager = function (game) {
-  return game.scene;
 };
 
 exports.addSceneImpl = function (

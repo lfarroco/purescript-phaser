@@ -1,8 +1,26 @@
-'use strict';
+"use strict";
 
-exports.addSceneImpl = function (sceneManager, key, config) {
-  sceneManager.add(key, config);
-  return sceneManager;
+exports.addSceneImpl = function (
+  { key, init, create, update, preload, state },
+  autoStart,
+  game
+) {
+  const config = {
+    init: function (data_) {
+      init(this)(data_)();
+    },
+    preload: function () {
+      preload(this)();
+    },
+    create: function (data_) {
+      create(this)(data_)();
+    },
+    update: function () {
+      update(this)();
+    },
+  };
+  game.scene.add(key, config, autoStart, state);
+  return game;
 };
 
 exports.setEventImpl = function (on, callback, scene) {
