@@ -5,7 +5,6 @@ module Main where
 
 import Prelude
 import Data.Array (length)
-import Data.Nullable (notNull)
 import Effect (Effect)
 import Effect.Console (log)
 import Graphics.Phaser as Phaser
@@ -62,10 +61,9 @@ create scene = do
   -- with Function"
   tileset <-
     addTilesetImage tileMap tileName
-      defaultTilesetDesc
-        { tileWidth = notNull 16 -- PS-Phaser doesn't wrap as Maybe yet
-        , tileHeight = notNull 16
-        }
+      { tileWidth: 16
+      , tileHeight: 16
+      }
   -- Another note: Forgetting to give a record as an argument to an effectful
   -- function also gives a weird error "Could not match Effect with Function"
   -- Currently defaulting layerID, x, and y to zeros.
