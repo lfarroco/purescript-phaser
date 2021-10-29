@@ -1,6 +1,5 @@
 module Graphics.Phaser.TileMap
   ( makeTileMap
-  , defaultTilesetDesc
   , createLayer
   , addTilesetImage
   , tilesets
@@ -77,6 +76,5 @@ createLayer ::
   Array PhaserTileSet ->
   Effect PhaserLayer
 createLayer = runEffectFn3 createLayerImpl
-
 
 foreign import tilesets :: PhaserTileMap -> Array PhaserTileSet
