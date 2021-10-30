@@ -1,16 +1,15 @@
 module Graphics.Phaser.TileMap
   ( makeTileMap
-  , defaultTilesetDesc
   , createLayer
   , addTilesetImage
   , tilesets
   ) where
 
-import Data.Nullable (Nullable, null)
-import Data.Show (class Show)
+import Prelude
 import Effect (Effect)
 import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
 import Graphics.Phaser.ForeignTypes (PhaserLayer, PhaserScene, PhaserTileMap, PhaserTileSet)
+import Option (class FromRecord, Option, fromRecord)
 
 -- Corresponds to https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
 -- TODO: Current impl is missing quite a few fields, make default?
@@ -28,44 +27,38 @@ foreign import makeTileMapImpl ::
     MapDataConfig
     PhaserTileMap
 
-makeTileMap ::
-  PhaserScene ->
-  MapDataConfig ->
-  Effect PhaserTileMap
+makeTileMap :: PhaserScene -> MapDataConfig -> Effect PhaserTileMap
 makeTileMap = runEffectFn2 makeTileMapImpl
-
-type TilesetDesc
-  = { key :: Nullable String
-    , tileWidth :: Nullable Int
-    , tileHeight :: Nullable Int
-    , tileMargin :: Nullable Int
-    , tileSpacing :: Nullable Int
-    , gid :: Nullable Int
-    }
-
-defaultTilesetDesc :: TilesetDesc
-defaultTilesetDesc =
-  { key: null
-  , tileWidth: null
-  , tileHeight: null
-  , tileMargin: null
-  , tileSpacing: null
-  , gid: null
-  }
 
 foreign import addTilesetImageImpl ::
   EffectFn3
     PhaserTileMap
     String
-    TilesetDesc
+    (Option TilesetDesc)
     PhaserTileSet
 
+-- | The argument of type `given` must be any record which is a subset of
+-- | `TilesetDesc`
 addTilesetImage ::
-  PhaserTileMap ->
-  String ->
-  TilesetDesc ->
-  Effect PhaserTileSet
-addTilesetImage = runEffectFn3 addTilesetImageImpl
+  forall given.
+  FromRecord given () TilesetDesc =>
+  PhaserTileMap -> String -> Record given -> Effect PhaserTileSet
+addTilesetImage tileMap tilesetName given =
+  runEffectFn3
+    addTilesetImageImpl
+    tileMap
+    tilesetName
+    -- Pass the given record to js, which expects an option type
+    (fromRecord given)
+
+type TilesetDesc
+  = ( key :: String
+    , tileWidth :: Int
+    , tileHeight :: Int
+    , tileMargin :: Int
+    , tileSpacing :: Int
+    , gid :: Int
+    )
 
 foreign import createLayerImpl ::
   forall a.
@@ -83,6 +76,5 @@ createLayer ::
   Array PhaserTileSet ->
   Effect PhaserLayer
 createLayer = runEffectFn3 createLayerImpl
-
 
 foreign import tilesets :: PhaserTileMap -> Array PhaserTileSet
