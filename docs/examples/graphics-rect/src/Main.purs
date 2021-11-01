@@ -5,14 +5,14 @@ import Effect (Effect)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene, PhaserGraphic)
 import Graphics.Phaser.Graphics as Graphics
-import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
+import Graphics.Phaser.Scene (addScene, SceneConfig, defaultSceneConfig)
 
 -- Adapted from https://phaser.io/examples/v3/view/game-objects/graphics/primitives/rectangle-filled
 main :: Effect PhaserGame
 main =
   Phaser.create
     >>= Phaser.setGameDimensions { width: 800.0, height: 600.0 }
-    >>= Phaser.addScene mainScene
+    >>= addScene mainScene
 
 drawGreenRect :: PhaserGraphic -> Effect PhaserGraphic
 drawGreenRect =

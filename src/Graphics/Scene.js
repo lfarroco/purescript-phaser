@@ -5,14 +5,14 @@ exports.addSceneImpl = function (
   game
 ) {
   const config = {
-    init: function (data_) {
-      init(this)(data_)();
+    init: function () {
+      init(this)();
     },
     preload: function () {
       preload(this)();
     },
-    create: function (data_) {
-      create(this)(data_)();
+    create: function () {
+      create(this)();
     },
     update: function () {
       update(this)();

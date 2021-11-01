@@ -2,7 +2,6 @@ module Graphics.Phaser
   ( create
   , createWithConfig
   , setGameDimensions
-  , addScene
   , defaultGameConfig
   ) where
 
@@ -12,7 +11,6 @@ import Effect.Aff.Compat (EffectFn1, runEffectFn1)
 import Effect.Uncurried (EffectFn2, runEffectFn2)
 import Graphics.Phaser.ForeignTypes (PhaserGame)
 import Graphics.Phaser.GameObject (Dimensions)
-import Graphics.Phaser.Scene as Scene
 
 type GameConfig
   = { type :: Int
@@ -121,7 +119,3 @@ foreign import setGameDimensionsImpl :: EffectFn2 Dimensions PhaserGame PhaserGa
 setGameDimensions :: Dimensions -> PhaserGame -> Effect PhaserGame
 setGameDimensions = runEffectFn2 setGameDimensionsImpl
 
-foreign import addSceneImpl :: EffectFn2 Scene.SceneConfig PhaserGame PhaserGame
-
-addScene :: Scene.SceneConfig -> PhaserGame -> Effect PhaserGame
-addScene = runEffectFn2 addSceneImpl

@@ -2,13 +2,12 @@ module Main where
 
 import Prelude
 import Effect (Effect)
-import Graphics.Phaser (addScene)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject (OnClickCallback, onClick, setDisplaySize, setPosition)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
-import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
+import Graphics.Phaser.Scene (addScene, SceneConfig, defaultSceneConfig)
 import Graphics.Phaser.Text as Text
 
 main :: Effect Unit

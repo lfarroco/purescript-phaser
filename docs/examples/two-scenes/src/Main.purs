@@ -16,8 +16,8 @@ main =
   void do
     Phaser.create
       >>= Phaser.setGameDimensions { width: 400.0, height: 400.0 }
-      >>= Phaser.addScene mainScene
-      >>= Phaser.addScene secondScene
+      >>= Scene.addScene mainScene
+      >>= Scene.addScene secondScene
 
 mainScene :: SceneConfig
 mainScene =

@@ -71,14 +71,14 @@ defaultSceneConfig =
   , preload: \_scene -> pure unit
   }
 
-foreign import addSceneImpl :: EffectFn3 SceneConfig Boolean PhaserGame PhaserGame
+foreign import addSceneImpl :: EffectFn2 SceneConfig PhaserGame PhaserGame
 
 -- | Raw Phaser FFI
 -- | ==== Parameters ====
 -- | Sceneconfig     - Scene configuration
 -- | Boolean         - If the scene should start in parallel right now
-addScene :: SceneConfig -> Boolean -> PhaserGame -> Effect PhaserGame
-addScene = runEffectFn3 addSceneImpl
+addScene :: SceneConfig -> PhaserGame -> Effect PhaserGame
+addScene = runEffectFn2 addSceneImpl
 
 class SceneManagerConnected a where
   getSceneManager :: a -> SceneManager

@@ -6,7 +6,7 @@ import Effect (Effect)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
 import Graphics.Phaser.Loader (loadSpritesheet)
-import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
+import Graphics.Phaser.Scene (addScene, SceneConfig, defaultSceneConfig)
 import Graphics.Phaser.Sprite as Sprite
 
 -- | Adapted from https://phaser.io/examples/v3/view/loader/sprite-sheet/load-sprite-sheet
@@ -39,7 +39,7 @@ main :: Effect PhaserGame
 main =
   Phaser.create
     >>= Phaser.setGameDimensions { width: 800.0, height: 600.0 }
-    >>= Phaser.addScene mainScene
+    >>= addScene mainScene
 
 explodeSpriteKey :: String
 explodeSpriteKey = "explosion"

@@ -10,8 +10,8 @@ import Effect.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserScene)
 import Graphics.Phaser.Loader (loadImages)
-import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
-import Graphics.Phaser.TileMap (addTilesetImage, createLayer, defaultTilesetDesc, makeTileMap, tilesets)
+import Graphics.Phaser.Scene (addScene, SceneConfig, defaultSceneConfig)
+import Graphics.Phaser.TileMap (addTilesetImage, createLayer, makeTileMap, tilesets)
 
 tileName :: String
 tileName = "mario-tiles"
@@ -27,7 +27,7 @@ main =
   void do
     Phaser.create
       >>= Phaser.setGameDimensions { width: 200.0, height: 200.0 }
-      >>= Phaser.addScene mainScene
+      >>= addScene mainScene
 
 mainScene :: SceneConfig
 mainScene =
