@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 exports.createEmitterImpl = function () {
   return new Phaser.Events.EventEmitter();

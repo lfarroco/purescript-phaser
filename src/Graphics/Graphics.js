@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Graphics.html
 

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 exports.createImpl = function (text, scene) {
   return scene.add.text(0, 0, text);

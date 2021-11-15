@@ -8,27 +8,59 @@ module Graphics.Phaser.TileMap
 import Prelude
 import Effect (Effect)
 import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
-import Graphics.Phaser.ForeignTypes (PhaserLayer, PhaserScene, PhaserTileMap, PhaserTileSet)
+import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserLayer, PhaserLayerData, PhaserMapData, PhaserScene, PhaserTile, PhaserTileMap, PhaserTileSet)
 import Option (class FromRecord, Option, fromRecord)
 
--- Corresponds to https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
--- TODO: Current impl is missing quite a few fields, make default?
--- All values are optional
-type MapDataConfig
-  = { key :: String
+-- Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
+type TilemapConfig
+  = ( key :: String
     , data :: Array (Array Int)
-    , tileHeight :: Int
     , tileWidth :: Int
-    }
+    , tileHeight :: Int
+    , width :: Int
+    , height :: Int
+    , insertNull :: Boolean
+    )
 
+-- | Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.MapDataConfig
+type MapDataConfig
+  = ( name :: String
+    , width :: Number
+    , height :: Number
+    , tileWidth :: Number
+    , tileHeight :: Number
+    , widthInPixels :: Int
+    , heightInPixels :: Int
+    , format :: Number
+    , orientation :: String
+    , renderOrder :: String
+    , version :: Number
+    , properties :: Number
+    , layers :: Array PhaserLayerData
+    , images :: Array PhaserMapData
+    -- TODO, objects :: Array TileImageLayer
+    -- TODO, collision :: Object TileImageLayer
+    , tilesets :: Array PhaserTileSet
+    , imageCollections :: Array PhaserImage
+    , tiles :: Array PhaserTile
+    )
+
+-- | Docs: https://newdocs.phaser.io/docs/3.54.0/Phaser.GameObjects.GameObjectCreator#tilemap
 foreign import makeTileMapImpl ::
   EffectFn2
     PhaserScene
-    MapDataConfig
+    (Option TilemapConfig)
     PhaserTileMap
 
-makeTileMap :: PhaserScene -> MapDataConfig -> Effect PhaserTileMap
-makeTileMap = runEffectFn2 makeTileMapImpl
+makeTileMap ::
+  forall mapConfig.
+  FromRecord mapConfig () TilemapConfig =>
+  PhaserScene -> Record mapConfig -> Effect PhaserTileMap
+makeTileMap scene mapConfig =
+  runEffectFn2
+    makeTileMapImpl
+    scene
+    (fromRecord mapConfig)
 
 foreign import addTilesetImageImpl ::
   EffectFn3
@@ -40,16 +72,16 @@ foreign import addTilesetImageImpl ::
 -- | The argument of type `given` must be any record which is a subset of
 -- | `TilesetDesc`
 addTilesetImage ::
-  forall given.
-  FromRecord given () TilesetDesc =>
-  PhaserTileMap -> String -> Record given -> Effect PhaserTileSet
-addTilesetImage tileMap tilesetName given =
+  forall tilesetDesc.
+  FromRecord tilesetDesc () TilesetDesc =>
+  PhaserTileMap -> String -> Record tilesetDesc -> Effect PhaserTileSet
+addTilesetImage tileMap tilesetName tilesetDesc =
   runEffectFn3
     addTilesetImageImpl
     tileMap
     tilesetName
     -- Pass the given record to js, which expects an option type
-    (fromRecord given)
+    (fromRecord tilesetDesc)
 
 type TilesetDesc
   = ( key :: String
