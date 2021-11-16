@@ -1,13 +1,9 @@
 module Graphics.Phaser.Scene
-  ( defaultSceneConfig
-  , getSceneManager
-  , getRegistry
-  , addScene
+  ( getRegistry
   , getRegistryData
   , setRegistryData
   , getData
   , setData
-  , getByKey
   , remove
   , start
   , restart
@@ -19,8 +15,6 @@ module Graphics.Phaser.Scene
   , run
   , stop
   , setVisible
-  , sendToBack
-  , bringToTop
   , setEvent
   , setTimedEvent
   , setGameObjectEvent
@@ -30,18 +24,16 @@ module Graphics.Phaser.Scene
   , removeByKey
   , getPluginInstance
   , SceneEvent
-  , class SceneManagerConnected
   , class RegistryConnected
   , Time
   , Delta
-  , SceneConfig
   ) where
 
 -- TODO: add scene.data, and support for scene.data events
 import Prelude
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, runEffectFn1, runEffectFn2, runEffectFn3)
-import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserGameObject, PhaserRegistry, PhaserScene, SceneManager)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserGameObject, PhaserRegistry, PhaserScene)
 
 -- Current time in milliseconds
 type Time
@@ -50,46 +42,6 @@ type Time
 -- Milliseconds since the last frame
 type Delta
   = Number
-
-type SceneConfig
-  = { key :: String
-    , autoStart :: Boolean
-    , create :: PhaserScene -> Effect Unit
-    , init :: PhaserScene -> Effect Unit
-    , update :: PhaserScene -> Effect Unit
-    , preload :: PhaserScene -> Effect Unit
-    }
-
--- | A scene where create, init, update and preload are noops.
-defaultSceneConfig :: SceneConfig
-defaultSceneConfig =
-  { key: ""
-  , autoStart: false
-  , create: \_scene -> pure unit
-  , init: \_scene -> pure unit
-  , update: \_scene -> pure unit
-  , preload: \_scene -> pure unit
-  }
-
-foreign import addSceneImpl :: EffectFn2 SceneConfig PhaserGame PhaserGame
-
--- | Raw Phaser FFI
--- | ==== Parameters ====
--- | Sceneconfig     - Scene configuration
--- | Boolean         - If the scene should start in parallel right now
-addScene :: SceneConfig -> PhaserGame -> Effect PhaserGame
-addScene = runEffectFn2 addSceneImpl
-
-class SceneManagerConnected a where
-  getSceneManager :: a -> SceneManager
-
-foreign import getSceneManagerImpl :: forall a. a -> SceneManager
-
-instance sceneSceneManagerConnection :: SceneManagerConnected PhaserScene where
-  getSceneManager = getSceneManagerImpl
-
-instance gameSceneManagerConnection :: SceneManagerConnected PhaserGame where
-  getSceneManager = getSceneManagerImpl
 
 class RegistryConnected a where
   getRegistry :: a -> Effect PhaserRegistry
@@ -123,8 +75,6 @@ getData key scene = runEffectFn2 getDataImpl key scene
 
 setData :: forall a. String -> a -> PhaserScene -> Effect Unit
 setData key data_ scene = runEffectFn3 setDataImpl key data_ scene
-
-foreign import getByKeyImpl :: EffectFn2 SceneManager String PhaserScene
 
 -- | TODO: make these methods return the Scene itself
 foreign import removeImpl :: EffectFn1 PhaserScene Unit
@@ -178,16 +128,6 @@ foreign import setVisibleImpl :: EffectFn1 PhaserScene Unit
 setVisible :: PhaserScene -> Effect Unit
 setVisible = runEffectFn1 setVisibleImpl
 
-foreign import sendToBackImpl :: EffectFn1 PhaserScene Unit
-
-sendToBack :: PhaserScene -> Effect Unit
-sendToBack = runEffectFn1 sendToBackImpl
-
-foreign import bringToTopImpl :: EffectFn1 PhaserScene Unit
-
-bringToTop :: PhaserScene -> Effect Unit
-bringToTop = runEffectFn1 bringToTopImpl
-
 -- Comprehensive event list
 -- https://rexrainbow.github.io/phaser3-rex-notes/docs/site/scene/
 foreign import setEventImpl :: EffectFn3 String (Unit -> Effect Unit) PhaserScene Unit
@@ -195,9 +135,6 @@ foreign import setEventImpl :: EffectFn3 String (Unit -> Effect Unit) PhaserScen
 foreign import setTimedEvent :: EffectFn3 String (Time -> Delta -> Effect Unit) PhaserScene Unit
 
 foreign import setGameObjectEvent :: EffectFn2 String (PhaserGameObject -> PhaserScene -> Effect Unit) Unit
-
-getByKey :: SceneManager -> String -> Effect PhaserScene
-getByKey = runEffectFn2 getByKeyImpl
 
 -- | Starts the given scene in parallel with the current one
 launch :: forall a. PhaserScene -> a -> Effect Unit

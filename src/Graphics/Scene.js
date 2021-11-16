@@ -1,27 +1,5 @@
 "use strict";
 
-exports.addSceneImpl = function (
-  { key, init, create, update, preload, autoStart },
-  game
-) {
-  const config = {
-    init: function () {
-      init(this)();
-    },
-    preload: function () {
-      preload(this)();
-    },
-    create: function () {
-      create(this)();
-    },
-    update: function () {
-      update(this)();
-    },
-  };
-  game.scene.add(key, config, autoStart);
-  return game;
-};
-
 exports.setEventImpl = function (on, callback, scene) {
   scene.events.on(on, () => callback()());
   return scene;
@@ -30,10 +8,6 @@ exports.setEventImpl = function (on, callback, scene) {
 exports.setTimedEvent = function (on, callback, scene) {
   scene.events.on(on, (time, delta) => callback(time)(delta)());
   return scene;
-};
-
-exports.getSceneManagerImpl = function (obj) {
-  return obj.scene;
 };
 
 exports.setGameObjectEvent = function (on, callback, scene) {
@@ -46,10 +20,6 @@ exports.removeImpl = function (scene) {
   return {};
 };
 
-// TODO: return maybe
-exports.getByKeyImpl = function (sceneManager, key) {
-  return sceneManager.get(key);
-};
 exports.launchImpl = function (scene, data) {
   return scene.launch(data);
 };
@@ -103,14 +73,6 @@ exports.stopImpl = function (scene) {
 
 exports.setVisibleImpl = function (scene) {
   return scene.setVisible();
-};
-
-exports.bringToTopImpl = function (sceneManager, name) {
-  return sceneManager.bringToTop(name);
-};
-
-exports.sendToBackImpl = function (sceneManager, name) {
-  return sceneManager.sendToBack(name);
 };
 
 exports.getRegistryDataImpl = function (registry, key) {

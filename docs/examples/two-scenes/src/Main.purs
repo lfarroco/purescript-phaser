@@ -7,31 +7,30 @@ import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject (OnClickCallback, onClick, setAngle, setDisplaySize, setPosition)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
-import Graphics.Phaser.Scene (SceneConfig, defaultSceneConfig)
-import Graphics.Phaser.Scene as Scene
+import Graphics.Phaser.Scene (launchByKey)
+import Graphics.Phaser.SceneManager (Start(..), addScene)
 import Graphics.Phaser.Text as Text
 
 main :: Effect Unit
-main =
-  void do
-    Phaser.create
-      >>= Phaser.setGameDimensions { width: 400.0, height: 400.0 }
-      >>= Scene.addScene mainScene
-      >>= Scene.addScene secondScene
+main = do
+  game <- Phaser.create { width: 400.0, height: 400.0 }
+  _mScene <- addScene "main" mainScene Start game
+  _sScene <- addScene "snd" secondScene NoStart game -- autostart is false by default
+  pure unit
 
-mainScene :: SceneConfig
+mainScene ::
+  { create :: PhaserScene -> Effect Unit
+  , preload :: PhaserScene -> Effect Unit
+  }
 mainScene =
-  defaultSceneConfig
-    { key = "main"
-    , autoStart = true
-    , create =
+  { create:
       \scene -> do
         _ <- Text.create "Click the logo to create a new scene" scene
         startButton scene
-    , preload =
+  , preload:
       \scene ->
         loadImages [ { key: "logo", path: logoPath } ] scene
-    }
+  }
   where
   startButton :: PhaserScene -> Effect Unit
   startButton scene =
@@ -47,22 +46,22 @@ mainScene =
     callback _vec1 _vec2 _event _image =
       void do
         -- Don't do anything with the image, just launch a new scene.
-        Scene.launchByKey "snd" {} scene
+        launchByKey "snd" {} scene
 
 logoPath :: String
 logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
 
-secondScene :: SceneConfig
+secondScene ::
+  { create :: PhaserScene -> Effect Unit
+  , preload :: PhaserScene -> Effect Unit
+  }
 secondScene =
-  defaultSceneConfig
-    { key = "snd"
-    , autoStart = false
-    , create =
+  { create:
       \scene -> void do createLogo scene
-    , preload =
+  , preload:
       \scene ->
         loadImages [ { key: "logo", path: logoPath } ] scene
-    }
+  }
   where
   createLogo :: PhaserScene -> Effect PhaserImage
   createLogo =

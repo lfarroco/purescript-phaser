@@ -2,11 +2,12 @@ module Main where
 
 import Prelude
 import Data.Foldable (for_)
+import Data.Maybe (Maybe)
 import Effect (Effect)
 import Graphics.Phaser as Phaser
-import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserScene)
 import Graphics.Phaser.Loader (loadSpritesheet)
-import Graphics.Phaser.Scene (addScene, SceneConfig, defaultSceneConfig)
+import Graphics.Phaser.SceneManager (Start(..), addScene)
 import Graphics.Phaser.Sprite as Sprite
 
 -- | Adapted from https://phaser.io/examples/v3/view/loader/sprite-sheet/load-sprite-sheet
@@ -35,11 +36,10 @@ preload scene =
           }
       ] \fn -> fn scene
 
-main :: Effect PhaserGame
+main :: Effect (Maybe PhaserScene)
 main =
-  Phaser.create
-    >>= Phaser.setGameDimensions { width: 800.0, height: 600.0 }
-    >>= addScene mainScene
+  Phaser.create { width: 800.0, height: 600.0 }
+    >>= addScene "main" { create, preload } Start
 
 explodeSpriteKey :: String
 explodeSpriteKey = "explosion"
@@ -60,12 +60,3 @@ create scene =
       { x: 100.0, y: 100.0 }
       scene
       >>= Sprite.setFrame 3
-
-mainScene :: SceneConfig
-mainScene =
-  defaultSceneConfig
-    { key = "main"
-    , autoStart = true
-    , create = create
-    , preload = preload
-    }

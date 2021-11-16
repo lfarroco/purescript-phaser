@@ -2,33 +2,34 @@ module Main where
 
 import Prelude
 import Effect (Effect)
+import Effect.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject (OnClickCallback, onClick, setDisplaySize, setPosition)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImages)
-import Graphics.Phaser.Scene (addScene, SceneConfig, defaultSceneConfig)
+import Graphics.Phaser.SceneManager (Start(..), addScene)
 import Graphics.Phaser.Text as Text
 
 main :: Effect Unit
 main =
   void do
-    Phaser.create
-      >>= Phaser.setGameDimensions { width: 400.0, height: 300.0 }
-      >>= addScene mainScene
+    game <- Phaser.create { width: 400.0, height: 300.0 }
+    addScene "main" mainScene Start game
 
-mainScene :: SceneConfig
+mainScene ::
+  { create :: PhaserScene -> Effect Unit
+  , preload :: PhaserScene -> Effect Unit
+  }
 mainScene =
-  defaultSceneConfig
-    { key = "main"
-    , autoStart = true
-    , create =
+  { create:
       \scene ->
         void do
           _ <- Text.create "Click the logo to trigger an event" scene
           startButton scene
-    , preload = loadImages [ { key: "logo", path: logoPath } ]
-    }
+  , preload:
+      loadImages [ { key: "logo", path: logoPath } ]
+  }
   where
   startButton :: PhaserScene -> Effect PhaserScene
   startButton scene = do
@@ -42,6 +43,7 @@ mainScene =
     where
     callback :: OnClickCallback PhaserImage
     callback _vec1 _vec2 _event _image = do
+      log "Clicked!"
       _ <-
         Image.create "logo" scene
           >>= setPosition { x: 200.0, y: 200.0 }

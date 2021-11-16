@@ -10,8 +10,8 @@ import Effect.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserScene)
 import Graphics.Phaser.Loader (loadImages)
-import Graphics.Phaser.Scene (addScene, SceneConfig, defaultSceneConfig)
 import Graphics.Phaser.TileMap (addTilesetImage, createLayer, makeTileMap, tilesets)
+import Option (fromRecord)
 
 tileName :: String
 tileName = "mario-tiles"
@@ -20,32 +20,29 @@ tileMapKey :: String
 tileMapKey = "tile map 1"
 
 mainSceneKey :: String
-mainSceneKey = "main"
+mainSceneKey = "main key"
 
 main :: Effect Unit
 main =
   void do
     Phaser.create
-      >>= Phaser.setGameDimensions { width: 200.0, height: 200.0 }
-      >>= addScene mainScene
-
-mainScene :: SceneConfig
-mainScene =
-  defaultSceneConfig
-    -- Use record update syntax to change relevant defaults
-    { key = mainSceneKey
-    , autoStart = true
-    , create = create
-    , preload =
-      loadImages
-        [ { key: tileName
-          , path: "assets/super-mario.png"
-          }
-        ]
-    }
+      { height: 200.0
+      , width: 200.0
+      , scene:
+          fromRecord
+            { create
+            , preload:
+                loadImages
+                  [ { key: tileName
+                    , path: "assets/super-mario.png"
+                    }
+                  ]
+            }
+      }
 
 create :: PhaserScene -> Effect Unit
 create scene = do
+  log $ "create"
   -- When loading from an array, make sure to specify the
   -- tileWidth and tileHeight
   tileMap <-

@@ -4,10 +4,12 @@ bower_components
 output
 /generated-docs/
 /.psc-package/
-/.psc*
+.psc*
 .purs*
 /.psa*
 .spago
 ./bower_components/
 .DS_Store
 .psci_modules
+.vscode
+index.js
