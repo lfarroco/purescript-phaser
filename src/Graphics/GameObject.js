@@ -87,13 +87,4 @@ exports.setNameImpl = (name, obj) => {
   return obj;
 };
 
-exports.onClickImpl = (handler, obj) => {
-  obj
-    .setInteractive()
-    .on('pointerdown', (pointer, localX, localY, event) =>
-      handler(pointer)({ x: localX, y: localY })(event)(obj)()
-    );
-  return obj;
-};
-
 exports.getSceneImpl = (obj) => obj.scene;
