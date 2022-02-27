@@ -17,9 +17,7 @@ foreign import data PhaserTween :: Type
 foreign import data PhaserEmitter :: Type
 
 foreign import data Event :: Type
-
-foreign import data PhaserTileMap :: Type
-
+foreign import data PhaserTileMap :: Type 
 foreign import data PhaserTile :: Type
 
 foreign import data PhaserTileSet :: Type
@@ -59,3 +57,5 @@ foreign import data WebGLPipeline :: Type
 foreign import data JSONCamera :: Type
 
 foreign import data PackFileSection :: Type
+
+foreign import data PhysicsImage :: Type

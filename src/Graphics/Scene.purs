@@ -24,7 +24,7 @@ module Graphics.Phaser.Scene
   , removeByKey
   , getPluginInstance
   , SceneEvent
-  , class RegistryConnected
+  , class Scene
   , Time
   , Delta
   ) where
@@ -34,6 +34,7 @@ import Prelude
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, runEffectFn1, runEffectFn2, runEffectFn3)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserGameObject, PhaserRegistry, PhaserScene)
+import Graphics.Phaser.FFI
 
 -- Current time in milliseconds
 type Time
@@ -43,14 +44,18 @@ type Time
 type Delta
   = Number
 
-class RegistryConnected a where
-  getRegistry :: a -> Effect PhaserRegistry
+class Scene a
 
-instance sceneRegistryConnection :: RegistryConnected PhaserScene where
-  getRegistry = runEffectFn1 getRegistryImpl
+-- class RegistryConnected a where
+--   getRegistry :: a -> Effect PhaserRegistry
 
-instance gameRegistryConnection :: RegistryConnected PhaserGame where
-  getRegistry = runEffectFn1 getRegistryImpl
+getRegistry =  FFI.getProperty "registry"
+
+-- instance sceneRegistryConnection :: RegistryConnected PhaserScene where
+--   getRegistry = runEffectFn1 getRegistryImpl
+
+-- instance gameRegistryConnection :: RegistryConnected PhaserGame where
+--   getRegistry = runEffectFn1 getRegistryImpl
 
 -- TODO: add this in typeclass accepting scene and game
 foreign import getRegistryImpl :: forall a. EffectFn1 a PhaserRegistry

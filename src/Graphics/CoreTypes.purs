@@ -1,7 +1,15 @@
 module Graphics.Phaser.CoreTypes where
 
 import Graphics.Phaser.ForeignTypes
-import Prelude
+  ( AudioContext
+  , BootCallback
+  , JSONCamera
+  , PackFileSection
+  , PhaserScene
+  , PluginObjectItem
+  , WebGLPipeline
+  )
+import Prelude (Unit)
 import Effect (Effect)
 import Graphics.Canvas (CanvasElement, Context2D)
 import Option (Option)

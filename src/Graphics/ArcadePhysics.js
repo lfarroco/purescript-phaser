@@ -4,3 +4,6 @@ exports.createStaticGroupImpl = (scene) => {
 
   return group;
 };
+
+exports.createArcadeImageImpl = (scene, { x, y }, texture) =>
+  scene.physics.add.image(x, y, texture);
