@@ -1,16 +1,8 @@
 module Graphics.Phaser.Image (create) where
 
+import Data.Foreign.EasyFFI as FFI
 import Effect (Effect)
-import Effect.Uncurried (EffectFn2, runEffectFn2)
-import Type.Row (type (+))
+import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 
-
--- | Create a new image in the given scene
---foreign import createImpl :: EffectFn2 String Scene Image
-
-create :: Scene a => String -> a -> Effect Image b
-create = runEffectFn2 createImpl
-
-
-
-
+create :: String -> PhaserScene -> Effect PhaserImage
+create = FFI.unsafeForeignFunction [ "textureKey", "scene", "" ] "scene.add.image(0, 0, textureKey)"

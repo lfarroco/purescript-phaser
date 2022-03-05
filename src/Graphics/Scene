@@ -75,26 +75,26 @@ exports.setVisibleImpl = function (scene) {
   return scene.setVisible();
 };
 
-exports.getRegistryDataImpl = function (registry, key) {
-  return registry.get(key);
-};
+// exports.getRegistryDataImpl = function (registry, key) {
+//   return registry.get(key);
+// };
 
-exports.setRegistryDataImpl = function (registry, key, data) {
-  return registry.set(key, data);
-};
+// exports.setRegistryDataImpl = function (registry, key, data) {
+//   return registry.set(key, data);
+// };
 
-exports.getRegistryImpl = function (obj) {
-  return obj.registry;
-};
+// exports.getRegistryImpl = function (obj) {
+//   return obj.registry;
+// };
 
-exports.getDataImpl = function (key, obj) {
-  return obj.data.get(key);
-};
+// exports.getDataImpl = function (key, obj) {
+//   return obj.data.get(key);
+// };
 
-exports.setDataImpl = function (key, data, obj) {
-  return obj.data.set(key, data);
-};
+// exports.setDataImpl = function (key, data, obj) {
+//   return obj.data.set(key, data);
+// };
 
-exports.getPluginInstanceImpl = function (scene, key) {
-  return scene[key];
-};
+// exports.getPluginInstanceImpl = function (scene, key) {
+//   return scene[key];
+// };
