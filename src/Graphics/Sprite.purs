@@ -43,7 +43,7 @@ stopAfterDelay = method1 "stopAfterDelay(v1)"
 
 generateFrameNumbers :: String -> Int -> Int -> PhaserScene -> Effect (Array FrameNumber)
 generateFrameNumbers =
-  return3 "anims.generateFrameNumbers({ key: v1, {start: v2, end: v3} })"
+  return3 "anims.generateFrameNumbers(v1, {start: v2, end: v3})"
 
 type FrameNamesConfig
   = { key :: String
