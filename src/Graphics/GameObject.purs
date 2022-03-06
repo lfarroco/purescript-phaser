@@ -3,7 +3,6 @@ module Graphics.Phaser.GameObject
   , Dimensions
   , OnClickCallback
   , class GameObject
-  , class Container
   , destroy
   , getScene
   , getPosition
@@ -34,11 +33,11 @@ module Graphics.Phaser.GameObject
   , getName
   ) where
 
-import Prelude
+import Prelude (Unit, bind, pure)
 
-import Data.Foreign.EasyFFI as FFI
+import Utils.FFI
 import Effect (Effect)
-import Graphics.Phaser.ForeignTypes (Event, PhaserImage, PhaserScene)
+import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGraphic, PhaserImage, PhaserScene, PhaserSprite)
 
 type Vector
   = { x :: Number, y :: Number }
@@ -54,28 +53,9 @@ class GameObject :: forall k. k -> Constraint
 class GameObject a
 
 instance GameObject PhaserImage
-
-class Container :: forall k. k -> Constraint
-class GameObject a <= Container a
-
-class Graphics :: forall k. k -> Constraint
-class GameObject a <= Graphics a
-
-class Sprite :: forall k. k -> Constraint
-class GameObject a <= Sprite a
-
--- FFI Helprs
-
-objMethod  :: forall a value. GameObject a => Array String -> String -> value -> a -> Effect a
-objMethod args expr value a  = do
-  _ <- FFI.unsafeForeignFunction (args <> [""]) expr value a
-  pure a
-
-returnMethod  :: forall a value returned. GameObject a => Array String -> String -> value -> a -> Effect returned
-returnMethod = FFI.unsafeForeignFunction 
-
-get :: forall a returnValue. GameObject a => String -> a -> Effect returnValue
-get name = FFI.unsafeForeignFunction ["obj", ""] ("obj." <> name)
+instance GameObject PhaserContainer
+instance GameObject PhaserGraphic
+instance GameObject PhaserSprite
 
 -- Phaser Bindings
 
@@ -83,7 +63,7 @@ getScene :: forall a. GameObject a => a -> Effect PhaserScene
 getScene = get "scene"
 
 destroy :: forall a. GameObject a => a -> Effect Unit
-destroy = FFI.unsafeForeignFunction ["obj", ""] "obj.destroy()"
+destroy = return0 "destroy()"
 
 getX :: forall a. GameObject a => a -> Effect Number
 getX = get "x"
@@ -98,40 +78,40 @@ getPosition a = do
   pure { x, y }
 
 setPosition :: forall a. GameObject a => Vector -> a -> Effect a
-setPosition  = objMethod ["vec", "obj"] "obj.setPosition(vec.x,vec.y)"
+setPosition  = method1 "setPosition(v1.x,v1.y)"
 
 getAngle :: forall a. GameObject a => a -> Effect Number
 getAngle = get "angle"
 
 setAngle :: forall a. GameObject a => Number -> a -> Effect a
-setAngle =  objMethod ["value", "obj"] "obj.setAngle(value)"
+setAngle =  method1 "setAngle(v1)"
 
 getRadians :: forall a. GameObject a => a -> Effect Number
 getRadians = get "radians"
 
 setRadians :: forall a. GameObject a => Number -> a -> Effect a
-setRadians  =  objMethod  ["value", "obj"] "obj.setRadians(value)"
+setRadians  =  method1  "setRadians(v1)"
 
 getVisible :: forall a. GameObject a => a -> Effect Boolean
 getVisible = get "visible"
 
 setVisible :: forall a. GameObject a => Boolean -> a -> Effect a
-setVisible   =  objMethod  ["value", "obj"] "obj.setVisible(value)"
+setVisible   =  method1 "setVisible(v1)"
 
 getAlpha :: forall a. GameObject a => a -> Effect Number
 getAlpha = get "alpha"
 
 setAlpha :: forall a. GameObject a => Number -> a -> Effect a
-setAlpha =  objMethod  ["value", "obj"] "obj.setAlpha(value)"
+setAlpha =  method1 "setAlpha(v1)"
 
 getOrigin :: forall a. GameObject a => a -> Effect Number
 getOrigin = get "origin"
 
 setOrigin :: forall a. GameObject a => Vector -> a -> Effect a
-setOrigin = objMethod ["vec", "obj"] "obj.setOrigin(vec.x,vec.y)" 
+setOrigin = method1 "setOrigin(v1.x,v1.y)" 
 
 setTint :: forall a. GameObject a => Number -> a -> Effect a
-setTint = objMethod  ["value", "obj"] "obj.setTint(value)"
+setTint = method1 "setTint(v1)"
 
 getTint :: forall a. GameObject a => a -> Effect { tintBottomLeft :: Number, tintBottomRight :: Number, tintTopLeft :: Number, tintTopRight :: Number }
 getTint a = do
@@ -147,7 +127,7 @@ getTint a = do
     }
 
 clearTint :: forall a. GameObject a => a -> Effect a
-clearTint = objMethod ["obj"] "obj.clearTint()" {}
+clearTint = method0 "clearTint()"
 
 isTinted :: forall a. GameObject a => a -> Effect Boolean
 isTinted = get "isTinted"
@@ -159,7 +139,7 @@ getSize a = do
   pure { width, height }
 
 setSize :: forall a. GameObject a => Dimensions -> a -> Effect a
-setSize =  objMethod ["size", "obj"] "obj.setSize(size.width,size.height)" 
+setSize =  method1 "setSize(v1.width,v1.height)" 
 
 getWidth :: forall a. GameObject a => a -> Effect Number
 getWidth = get "width"
@@ -168,10 +148,10 @@ getHeight :: forall a. GameObject a => a -> Effect Number
 getHeight = get "height"
 
 getDisplaySize :: forall a. GameObject a => a -> Effect Dimensions
-getDisplaySize = returnMethod ["_unit", "obj"] "obj.getDisplaySize()" {}
+getDisplaySize = return0 "getDisplaySize()"
 
 setDisplaySize :: forall a. GameObject a => Dimensions -> a -> Effect a
-setDisplaySize = objMethod ["size", "obj"] "obj.setDisplaySize(size.width, size.height)"
+setDisplaySize = method1 "setDisplaySize(v1.width, v1.height)"
 
 getScale :: forall a. GameObject a => a -> Effect Vector
 getScale a = do
@@ -180,10 +160,10 @@ getScale a = do
   pure { x, y }
 
 setScale :: forall a. GameObject a => Vector -> a -> Effect a
-setScale = objMethod ["vec", "obj"] "obj.setScale(vec.x,vec.y)"
+setScale = method1 "setScale(v1.x,v1.y)"
 
 setName :: forall a. GameObject a => String -> a -> Effect a
-setName = objMethod ["name", "obj"] "obj.setName(name)"
+setName = method1 "setName(v1)"
 
 getName :: forall a. GameObject a => a -> Effect String
 getName = get "name"

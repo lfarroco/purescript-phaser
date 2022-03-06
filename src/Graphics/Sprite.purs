@@ -4,12 +4,13 @@ module Graphics.Phaser.Sprite
   , playAnimation
   , removeAnimation
   , stopAfterDelay
+  , stopAnimation
   , generateFrameNumbers
   , generateFrameNames
   , setFrame
   ) where
 
-import Effect.Uncurried (EffectFn2, runEffectFn2, EffectFn3, runEffectFn3, EffectFn4, runEffectFn4, EffectFn5, runEffectFn5)
+import Utils.FFI
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserAnimation, PhaserScene, PhaserSprite)
 
@@ -18,40 +19,31 @@ type FrameNumber
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Sprite.html
 -- | A PhaserSprite also implements the PhaserGameObject typeclass
-foreign import addImpl :: EffectFn3 String { x :: Number, y :: Number } PhaserScene PhaserSprite
-
 add :: String -> { x :: Number, y :: Number } -> PhaserScene -> Effect PhaserSprite
-add = runEffectFn3 addImpl
-
-foreign import createAnimationImpl :: EffectFn5 String (Array FrameNumber) Number Int PhaserScene PhaserAnimation
+add = return2 "add.sprite(v2.x, v2.y, v1)"
 
 -- | Besides having a `PhaserScene` parameter, animations created with `createAnimation`
 -- | are in fact global and can be accessed from other scenes. Because of that you
 -- | need to create the animations only once in your application.
 createAnimation :: String -> Array FrameNumber -> Number -> Int -> PhaserScene -> Effect PhaserAnimation
-createAnimation = runEffectFn5 createAnimationImpl
-
-foreign import playAnimationImpl :: EffectFn2 String PhaserSprite PhaserSprite
+createAnimation =
+  return4 "anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })"
 
 playAnimation :: String -> PhaserSprite -> Effect PhaserSprite
-playAnimation = runEffectFn2 playAnimationImpl
-
-foreign import removeAnimationImpl :: EffectFn2 String PhaserSprite PhaserSprite
+playAnimation = method1 "play(v1)"
 
 removeAnimation :: String -> PhaserSprite -> Effect PhaserSprite
-removeAnimation = runEffectFn2 removeAnimationImpl
+removeAnimation = method1 "anims.remove(v1)"
 
-foreign import stopAnimation :: PhaserSprite -> Effect PhaserSprite
-
-foreign import stopAfterDelayImpl :: EffectFn2 Number PhaserSprite PhaserSprite
+stopAnimation :: PhaserSprite -> Effect PhaserSprite
+stopAnimation = method0 "stop()"
 
 stopAfterDelay :: Number -> PhaserSprite -> Effect PhaserSprite
-stopAfterDelay = runEffectFn2 stopAfterDelayImpl
-
-foreign import generateFrameNumbersImpl :: EffectFn4 String Int Int PhaserScene (Array FrameNumber)
+stopAfterDelay = method1 "stopAfterDelay(v1)"
 
 generateFrameNumbers :: String -> Int -> Int -> PhaserScene -> Effect (Array FrameNumber)
-generateFrameNumbers = runEffectFn4 generateFrameNumbersImpl
+generateFrameNumbers =
+  return3 "anims.generateFrameNumbers({ key: v1, {start: v2, end: v3} })"
 
 type FrameNamesConfig
   = { key :: String
@@ -61,12 +53,9 @@ type FrameNamesConfig
     , zeroPad :: Int
     }
 
-foreign import generateFrameNamesImpl :: EffectFn2 FrameNamesConfig PhaserScene PhaserAnimation
-
 generateFrameNames :: FrameNamesConfig -> PhaserScene -> Effect PhaserAnimation
-generateFrameNames = runEffectFn2 generateFrameNamesImpl
-
-foreign import setFrameImpl :: EffectFn2 Int PhaserSprite PhaserSprite
+generateFrameNames =
+  return1 "anims.generateFrameNames(v1.key, v1)"
 
 setFrame :: Int -> PhaserSprite -> Effect PhaserSprite
-setFrame = runEffectFn2 setFrameImpl
+setFrame = method1 "setFrame(v1)"
