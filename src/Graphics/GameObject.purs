@@ -49,6 +49,8 @@ type Dimensions
 type OnClickCallback a
   = Vector -> Vector -> Event -> a -> Effect Unit
 
+
+
 class GameObject :: forall k. k -> Constraint
 class GameObject a
 

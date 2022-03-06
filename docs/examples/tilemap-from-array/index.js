@@ -769,7 +769,9 @@ var PS = {};
       };
   };
   var get = function (name) {
-      return Data_Foreign_EasyFFI.unsafeForeignFunction([ "obj", "" ])("obj." + name);
+      return function (obj) {
+          return Data_Foreign_EasyFFI.unsafeForeignFunction([ "obj", "" ])("obj." + name)(obj);
+      };
   };
   exports["return1"] = return1;
   exports["return2"] = return2;
@@ -863,7 +865,8 @@ var PS = {};
               tileWidth: 16,
               tileHeight: 16
           })(tileMap)();
-          Effect_Console.log("Found " + (Data_Show.show(Data_Show.showInt)(Data_Array.length(Graphics_Phaser_TileMap.tilesets(tileMap))) + " tileset"))();
+          var tilesetsList = Graphics_Phaser_TileMap.tilesets(tileMap)();
+          Effect_Console.log("Found " + (Data_Show.show(Data_Show.showInt)(Data_Array.length(tilesetsList)) + " tileset"))();
           var _layer = Graphics_Phaser_TileMap.createLayer("layer")([ tileset ])(tileMap)();
           return Data_Unit.unit;
       };

@@ -92,6 +92,5 @@ createLayer ::
   Effect PhaserLayer
 createLayer = return2 "createLayer(v1,v2)"
 
-
-tilesets :: PhaserTileMap -> Array PhaserTileSet
+tilesets :: PhaserTileMap -> Effect (Array PhaserTileSet)
 tilesets= get "tilesets"

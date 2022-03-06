@@ -8,7 +8,7 @@ import Data.Foreign.EasyFFI as FFI
 
 return0 :: forall obj returnValue. String -> obj -> Effect returnValue
 return0 expr obj  = do
-  FFI.unsafeForeignFunction ["obj", ""] ("obj." <> expr) obj
+  FFI.unsafeForeignFunction ["obj", ""] ("obj." <> expr ) obj
 
 method0  :: forall obj.  String -> obj -> Effect obj
 method0 expr obj  = do
@@ -51,6 +51,7 @@ method4 expr v1 v2 v3 v4 obj  = do
   _ <- return4 expr v1 v2 v3 v4 obj
   pure obj
 
-get :: forall a returnValue. String -> a -> returnValue
-get name = FFI.unsafeForeignFunction ["obj", ""] ("obj." <> name)
+-- | Get a property directly (as in `variable["name"]`)
+get :: forall obj returnValue. String -> obj -> Effect returnValue
+get name obj = FFI.unsafeForeignFunction ["obj", ""] ("obj." <> name) obj
 
