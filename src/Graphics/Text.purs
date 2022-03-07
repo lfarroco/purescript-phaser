@@ -1,128 +1,73 @@
-module Graphics.Phaser.Text
-  ( create
-  , setText
-  , setColor
-  , setFontFamily
-  , setFont
-  , setFontSize
-  , setFontStyle
-  , setLineSpacing
-  , setMaxLines
-  , setPadding
-  , setShadowBlur
-  , setShadowColor
-  , setShadowFill
-  , setShadow
-  , setShadowOffset
-  , setShadowStroke
-  , setStroke
-  , setStyle
-  , updateText
-  ) where
+module Graphics.Phaser.Text where
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Text.html
-import Prelude
+
 import Effect (Effect)
-import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)
 import Graphics.Phaser.GameObject (Vector)
-
-type SingleValueEffect a
-  = EffectFn2 a PhaserText PhaserText
-
-foreign import createImpl :: EffectFn2 String PhaserScene PhaserText
+import Utils.FFI (method0, method1, method2, method5, return0, return1)
 
 create :: String -> PhaserScene -> Effect PhaserText
-create = runEffectFn2 createImpl
-
-foreign import setTextImpl :: SingleValueEffect String
+create = return1 "add.text(0,0,v1)"
 
 setText :: String -> PhaserText -> Effect PhaserText
-setText = runEffectFn2 setTextImpl
+setText = method1 "setText(v1)"
 
 type PhaserTextMetrics
   = { ascent :: Number, descent :: Number, fontSize :: Number }
 
-foreign import getTextMetrics :: PhaserText -> PhaserTextMetrics
-
-foreign import setColorImpl :: SingleValueEffect String
+getTextMetrics :: PhaserText -> Effect PhaserTextMetrics
+getTextMetrics = return0 "getTextMetrics()"
 
 setColor :: String -> PhaserText -> Effect PhaserText
-setColor = runEffectFn2 setColorImpl
-
-foreign import setFontFamilyImpl :: SingleValueEffect String
+setColor = method1 "setColor(v1)"
 
 setFontFamily :: String -> PhaserText -> Effect PhaserText
-setFontFamily = runEffectFn2 setFontFamilyImpl
-
-foreign import setFontImpl :: SingleValueEffect String
+setFontFamily = method1 "setFontFamily(v1)"
 
 setFont :: String -> PhaserText -> Effect PhaserText
-setFont = runEffectFn2 setFontImpl
-
-foreign import setFontSizeImpl :: SingleValueEffect Number
+setFont = method1 "setFont(v1)"
 
 setFontSize :: Number -> PhaserText -> Effect PhaserText
-setFontSize = runEffectFn2 setFontSizeImpl
-
-foreign import setFontStyleImpl :: SingleValueEffect String
+setFontSize = method1 "setFontSize(v1)"
 
 setFontStyle :: String -> PhaserText -> Effect PhaserText
-setFontStyle = runEffectFn2 setFontStyleImpl
-
-foreign import setLineSpacingImpl :: SingleValueEffect Number
+setFontStyle = method1 "setFontStyle(v1)"
 
 setLineSpacing :: Number -> PhaserText -> Effect PhaserText
-setLineSpacing = runEffectFn2 setLineSpacingImpl
-
-foreign import setMaxLinesImpl :: SingleValueEffect Number
+setLineSpacing = method1 "setLineSpacing(v1)"
 
 setMaxLines :: Number -> PhaserText -> Effect PhaserText
-setMaxLines = runEffectFn2 setMaxLinesImpl
+setMaxLines = method1 "setMaxLines(v1)"
 
 type SetPaddingConfig
   = { left :: Number, top :: Number, right :: Number, bottom :: Number }
 
-foreign import setPaddingImpl :: SingleValueEffect SetPaddingConfig
-
 setPadding :: SetPaddingConfig -> PhaserText -> Effect PhaserText
-setPadding = runEffectFn2 setPaddingImpl
-
-foreign import setShadowBlurImpl :: SingleValueEffect Number
+setPadding = method1 "setPadding(v1.left,v1.top,v1.right,v1.bottom)"
 
 setShadowBlur :: Number -> PhaserText -> Effect PhaserText
-setShadowBlur = runEffectFn2 setShadowBlurImpl
-
-foreign import setShadowColorImpl :: SingleValueEffect String
+setShadowBlur = method1 "setShadowBlur(v1)"
 
 setShadowColor :: String -> PhaserText -> Effect PhaserText
-setShadowColor = runEffectFn2 setShadowColorImpl
-
-foreign import setShadowFillImpl :: SingleValueEffect String
+setShadowColor = method1 "setShadowColor(v1)"
 
 setShadowFill :: String -> PhaserText -> Effect PhaserText
-setShadowFill = runEffectFn2 setShadowFillImpl
+setShadowFill = method1 "setShadowFill(v1)"
 
-foreign import setShadowImpl :: SingleValueEffect Unit
-
-setShadow :: Unit -> PhaserText -> Effect PhaserText
-setShadow = runEffectFn2 setShadowImpl
-
-foreign import setShadowOffsetImpl :: SingleValueEffect Vector
+-- | Position, Color, Blur, shadowStroke, shadowFill
+setShadow :: Vector -> String -> Number -> Boolean -> Boolean -> PhaserText -> Effect PhaserText
+setShadow = method5 "setShadow(v1.x,v1.y,v2,v3,v4)"
 
 setShadowOffset :: Vector -> PhaserText -> Effect PhaserText
-setShadowOffset = runEffectFn2 setShadowOffsetImpl
-
-foreign import setShadowStrokeImpl :: SingleValueEffect Boolean
+setShadowOffset = method1 "setShadowOffset(v1.x,v1.y)"
 
 setShadowStroke :: Boolean -> PhaserText -> Effect PhaserText
-setShadowStroke = runEffectFn2 setShadowStrokeImpl
+setShadowStroke = method1 "setShadowStroke(v1)"
 
-foreign import setStrokeImpl :: EffectFn3 String Number PhaserText PhaserText
-
--- | Color, thickness, text object
+-- | Color, Thickness
 setStroke :: String -> Number -> PhaserText -> Effect PhaserText
-setStroke = runEffectFn3 setStrokeImpl
+setStroke = method2 "setStroke(v1,v2)"
 
 type SetStyleConfig
   = { fontSize :: String
@@ -132,12 +77,8 @@ type SetStyleConfig
     , backgroundColor :: String
     }
 
-foreign import setStyleImpl :: SingleValueEffect SetStyleConfig
-
 setStyle :: SetStyleConfig -> PhaserText -> Effect PhaserText
-setStyle = runEffectFn2 setStyleImpl
+setStyle = method1 "setStyle(v1)"
 
-foreign import updateTextImpl :: SingleValueEffect Unit
-
-updateText :: Unit -> PhaserText -> Effect PhaserText
-updateText = runEffectFn2 updateTextImpl
+updateText :: PhaserText -> Effect PhaserText
+updateText = method0 "updateText()"
