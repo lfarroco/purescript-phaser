@@ -20,6 +20,8 @@ foreign import data Event :: Type
 foreign import data PhaserTileMap :: Type 
 foreign import data PhaserTile :: Type
 
+foreign import data EventEmitter :: Type
+
 foreign import data PhaserTileSet :: Type
 
 foreign import data PhaserLayer :: Type
@@ -31,6 +33,8 @@ foreign import data PhaserMapData :: Type
 foreign import data PhaserScene :: Type
 
 foreign import data SceneManager :: Type
+
+foreign import data NodeEventEmitter :: Type
 
 foreign import data PhaserRegistry :: Type
 

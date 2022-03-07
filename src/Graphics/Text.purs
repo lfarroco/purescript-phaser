@@ -3,8 +3,8 @@ module Graphics.Phaser.Text where
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Text.html
 
 import Effect (Effect)
+import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)
-import Graphics.Phaser.GameObject (Vector)
 import Utils.FFI (method0, method1, method2, method5, return0, return1)
 
 create :: String -> PhaserScene -> Effect PhaserText

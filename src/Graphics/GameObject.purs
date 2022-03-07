@@ -1,71 +1,43 @@
-module Graphics.Phaser.GameObject
-  ( Vector
-  , Dimensions
-  , OnClickCallback
-  , class GameObject
-  , destroy
-  , getScene
-  , getPosition
-  , setPosition
-  , getAngle
-  , setAngle
-  , getRadians
-  , setRadians
-  , getVisible
-  , setVisible
-  , getAlpha
-  , setAlpha
-  , getOrigin
-  , setOrigin
-  , getTint
-  , setTint
-  , clearTint
-  , isTinted
-  , getSize
-  , setSize
-  , getWidth
-  , getHeight
-  , getDisplaySize
-  , setDisplaySize
-  , getScale
-  , setScale
-  , setName
-  , getName
-  ) where
+module Graphics.Phaser.GameObject where
 
-import Prelude (Unit, bind, pure)
+import Prelude
 
-import Utils.FFI
 import Effect (Effect)
+import Graphics.Phaser.CoreTypes (Dimensions, Vector)
+import Graphics.Phaser.Events (class EventEmitter)
 import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGraphic, PhaserImage, PhaserScene, PhaserSprite)
+import Phaser.Graphics.ArcadePhysics (ArcadeImage)
+import Utils.FFI (get, method0, method1, return0)
 
-type Vector
-  = { x :: Number, y :: Number }
+-- check  https://github.com/purescript-web/purescript-web-events/blob/master/src/Web/Event/Event.purs
+-- and    https://github.com/purescript-web/purescript-web-events/blob/master/src/Web/Event/Event.js
+-- if it is wrapped in a function, then it is an effect 
 
-type Dimensions
-  = { width :: Number, height :: Number }
+-- reference on listener creation
+-- https://github.com/purescript-web/purescript-web-events/blob/c8a50893f04f54e2a59be7f885d25caef3589c57/src/Web/Event/EventTarget.js#L3
+-- https://github.com/purescript-web/purescript-web-events/blob/c8a50893f04f54e2a59be7f885d25caef3589c57/src/Web/Event/EventTarget.purs#L21
 
 -- should also include other fns for oher GO events
 type OnClickCallback a
   = Vector -> Vector -> Event -> a -> Effect Unit
 
-
-
 class GameObject :: forall k. k -> Constraint
-class GameObject a
+class (EventEmitter a, Renderable a) <= GameObject a
+
+instance Renderable PhaserImage
+instance Renderable PhaserContainer
+instance Renderable PhaserGraphic
+instance Renderable PhaserSprite
+instance Renderable ArcadeImage
 
 instance GameObject PhaserImage
 instance GameObject PhaserContainer
 instance GameObject PhaserGraphic
 instance GameObject PhaserSprite
+instance GameObject ArcadeImage
 
--- Phaser Bindings
-
-getScene :: forall a. GameObject a => a -> Effect PhaserScene
-getScene = get "scene"
-
-destroy :: forall a. GameObject a => a -> Effect Unit
-destroy = return0 "destroy()"
+class Renderable :: forall k. k -> Constraint
+class Renderable a
 
 getX :: forall a. GameObject a => a -> Effect Number
 getX = get "x"
@@ -81,6 +53,14 @@ getPosition a = do
 
 setPosition :: forall a. GameObject a => Vector -> a -> Effect a
 setPosition  = method1 "setPosition(v1.x,v1.y)"
+
+-- Phaser Bindings
+
+getScene :: forall a. GameObject a => a -> Effect PhaserScene
+getScene = get "scene"
+
+destroy :: forall a. GameObject a => a -> Effect Unit
+destroy = return0 "destroy()"
 
 getAngle :: forall a. GameObject a => a -> Effect Number
 getAngle = get "angle"
@@ -154,6 +134,9 @@ getDisplaySize = return0 "getDisplaySize()"
 
 setDisplaySize :: forall a. GameObject a => Dimensions -> a -> Effect a
 setDisplaySize = method1 "setDisplaySize(v1.width, v1.height)"
+
+setInteractive :: forall a. GameObject a => a -> Effect a
+setInteractive = method0 "setInteractive()"
 
 getScale :: forall a. GameObject a => a -> Effect Vector
 getScale a = do

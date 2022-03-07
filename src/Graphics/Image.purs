@@ -2,7 +2,6 @@ module Graphics.Phaser.Image (create) where
 
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
-import Graphics.Phaser.GameObject (class GameObject)
 import Utils.FFI (return1)
 
 

@@ -8,7 +8,7 @@ module Graphics.Phaser.Camera
 import Data.Foreign.EasyFFI as FFI
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserCameraController, PhaserScene)
-import Graphics.Phaser.GameObject (Vector, Dimensions)
+import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Utils.FFI (method1, method2, return0)
 
 setMainCameraBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene

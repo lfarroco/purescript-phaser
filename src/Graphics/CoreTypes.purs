@@ -15,6 +15,12 @@ import Graphics.Canvas (CanvasElement, Context2D)
 import Option (Option)
 import Web.HTML.HTMLElement (HTMLElement)
 
+type Vector
+  = { x :: Number, y :: Number }
+
+type Dimensions
+  = { width :: Number, height :: Number }
+
 -- TODO: Change to Boolean | *InputConfig
 type InputConfig
   = ( keyboard :: Boolean

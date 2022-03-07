@@ -1,23 +1,8 @@
-module Graphics.Phaser.Graphics
-  ( create
-  , rectangle
-  , clear
-  , fillGradientStyle
-  , lineTo
-  , moveTo
-  , lineStyle
-  , strokeRect
-  , fillStyle
-  , fillRect
-  , strokeRoundedRect
-  , beginPath
-  , closePath
-  , strokePath
-  ) where
+module Graphics.Phaser.Graphics where
 
 import Effect (Effect)
+import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Graphics.Phaser.ForeignTypes as Types
-import Graphics.Phaser.GameObject (Vector, Dimensions)
 import Utils.FFI (method0, method1, method2, method3, return0)
 
 create :: Types.PhaserScene -> Effect Types.PhaserGraphic
