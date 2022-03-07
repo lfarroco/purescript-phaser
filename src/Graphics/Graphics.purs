@@ -11,69 +11,53 @@ module Graphics.Phaser.Graphics
   , fillRect
   , strokeRoundedRect
   , beginPath
+  , closePath
+  , strokePath
   ) where
 
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4)
 import Graphics.Phaser.ForeignTypes as Types
 import Graphics.Phaser.GameObject (Vector, Dimensions)
-
-foreign import createImpl :: EffectFn1 Types.PhaserScene Types.PhaserGraphic
+import Utils.FFI (method0, method1, method2, method3, return0)
 
 create :: Types.PhaserScene -> Effect Types.PhaserGraphic
-create = runEffectFn1 createImpl
+create = return0 "add.graphics()"
 
-foreign import rectangleImpl :: EffectFn3 Vector Dimensions Types.PhaserScene Types.PhaserRectangle
-
-rectangle :: Vector -> Dimensions -> Types.PhaserScene -> Effect Types.PhaserRectangle
-rectangle = runEffectFn3 rectangleImpl
-
-foreign import fillStyleImpl :: EffectFn3 String Number Types.PhaserGraphic Types.PhaserGraphic
+rectangle :: Types.PhaserScene -> Effect Types.PhaserRectangle
+rectangle = return0 "add.rectangle()"
 
 fillStyle :: String -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-fillStyle = runEffectFn3 fillStyleImpl
-
-foreign import fillRectImpl :: EffectFn3 Vector Dimensions Types.PhaserGraphic Types.PhaserGraphic
+fillStyle = method2 "fillStyle(v1,v2)"
 
 fillRect :: Vector -> Dimensions -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-fillRect = runEffectFn3 fillRectImpl
-
-foreign import strokeRectImpl :: EffectFn3 Vector Dimensions Types.PhaserGraphic Types.PhaserGraphic
+fillRect =  method2 "fillRect(v1.x, v1.y, v2.width, v2.height)"
 
 strokeRect :: Vector -> Dimensions -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-strokeRect = runEffectFn3 strokeRectImpl
-
-foreign import strokeRoundedRectImpl :: EffectFn4 Vector Dimensions Number Types.PhaserGraphic Types.PhaserGraphic
+strokeRect  =  method2 "strokeRect (v1.x, v1.y, v2.width, v2.height)"
 
 strokeRoundedRect :: Vector -> Dimensions -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-strokeRoundedRect = runEffectFn4 strokeRoundedRectImpl
+strokeRoundedRect   =  method3 "strokeRoundedRect(v1.x, v1.y, v2.width, v2.height, v3)"
 
 type LineStyleConfig
   = { width :: Number, color :: String, alpha :: Number }
 
-foreign import lineStyleImpl :: EffectFn2 LineStyleConfig Types.PhaserGraphic Types.PhaserGraphic
-
 lineStyle :: LineStyleConfig -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-lineStyle = runEffectFn2 lineStyleImpl
-
-foreign import beginPathImpl :: EffectFn1 Types.PhaserGraphic Types.PhaserGraphic
+lineStyle = method1 "lineStyle(v1.width, v1.color, v1.alpha)"
 
 beginPath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
-beginPath = runEffectFn1 beginPathImpl
-
-foreign import moveToImpl :: EffectFn2 Vector Types.PhaserGraphic Types.PhaserGraphic
+beginPath = method0 "beginPath()"
 
 moveTo :: Vector -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-moveTo = runEffectFn2 moveToImpl
-
-foreign import lineToImpl :: EffectFn2 Vector Types.PhaserGraphic Types.PhaserGraphic
+moveTo = method1 "moveTo(v1.x,v1.y)"
 
 lineTo :: Vector -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-lineTo = runEffectFn2 lineToImpl
+lineTo  = method1 "lineTo (v1.x,v1.y)"
 
-foreign import closePathImpl :: EffectFn1 Types.PhaserGraphic Types.PhaserGraphic
+closePath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+closePath = method0 "closePath()"
 
-foreign import strokePathImpl :: EffectFn1 Types.PhaserGraphic Types.PhaserGraphic
+strokePath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
+strokePath = method0 "strokePath()"
 
 type FillGradientConfig
   = { topLeft :: String
@@ -82,19 +66,8 @@ type FillGradientConfig
     , bottomRight :: String
     }
 
-foreign import fillGradientStyleImpl ::
-  EffectFn2
-    FillGradientConfig
-    Types.PhaserGraphic
-    Types.PhaserGraphic
-
-fillGradientStyle ::
-  FillGradientConfig ->
-  Types.PhaserGraphic ->
-  Effect Types.PhaserGraphic
-fillGradientStyle = runEffectFn2 fillGradientStyleImpl
-
-foreign import clearImpl :: EffectFn1 Types.PhaserGraphic Types.PhaserGraphic
+fillGradientStyle :: FillGradientConfig -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+fillGradientStyle = method1 "fillGradientStyle(v1.topLeft,v1.topRight,v1.bottomLeft,v1.bottomRight)"
 
 clear :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
-clear = runEffectFn1 clearImpl
+clear = method0 "clear()"

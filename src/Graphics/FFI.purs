@@ -51,6 +51,15 @@ method4 expr v1 v2 v3 v4 obj  = do
   _ <- return4 expr v1 v2 v3 v4 obj
   pure obj
 
+return5 :: forall obj v1 v2 v3 v4 v5 returnValue. String -> v1 -> v2 -> v3 -> v4 -> v5 -> obj -> Effect returnValue
+return5 expr v1 v2 v3 v4 v5 obj  = do
+  FFI.unsafeForeignFunction ["v1", "v2", "v3", "v4", "v5", "obj", ""] ("obj." <> expr) v1 v2 v3 v4 v5 obj
+
+method5  :: forall obj v1 v2 v3 v4 v5.  String -> v1 -> v2 -> v3 -> v4 -> v5 -> obj -> Effect obj
+method5 expr v1 v2 v3 v4 v5 obj  = do
+  _ <- return5 expr v1 v2 v3 v4 v5 obj
+  pure obj
+
 -- | Get a property directly (as in `variable["name"]`)
 get :: forall obj returnValue. String -> obj -> Effect returnValue
 get name obj = FFI.unsafeForeignFunction ["obj", ""] ("obj." <> name) obj
