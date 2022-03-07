@@ -5,34 +5,17 @@ module Graphics.Phaser.Camera
   , updateCameraControlDelta
   ) where
 
-import Effect.Uncurried (EffectFn1, EffectFn3, runEffectFn1, runEffectFn3)
+import Data.Foreign.EasyFFI as FFI
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserCameraController, PhaserScene)
+import Graphics.Phaser.GameObject (Vector, Dimensions)
+import Utils.FFI (method1, method2, return0)
 
-foreign import setMainCameraBoundsImpl ::
-  EffectFn1
-    { scene :: PhaserScene
-    , x :: Number
-    , y :: Number
-    , width :: Number
-    , height :: Number
-    }
-    PhaserScene
-
-setMainCameraBounds ::
-  { scene :: PhaserScene
-  , x :: Number
-  , y :: Number
-  , width :: Number
-  , height :: Number
-  } ->
-  Effect PhaserScene
-setMainCameraBounds = runEffectFn1 setMainCameraBoundsImpl
-
-foreign import getMainCameraImpl :: EffectFn1 PhaserScene PhaserCamera
+setMainCameraBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
+setMainCameraBounds = method2 "cameras.main.setBounds(v1.x,v1.y,v2.width,v2.height)"
 
 getMainCamera :: PhaserScene -> Effect PhaserCamera
-getMainCamera = runEffectFn1 getMainCameraImpl
+getMainCamera = return0 "cameras.main"
 
 type KeyControlConfig
   = { camera :: PhaserCamera
@@ -45,12 +28,8 @@ type KeyControlConfig
     , maxSpeed :: Number
     }
 
-foreign import createSmoothedKeyControlImpl :: EffectFn1 KeyControlConfig PhaserCameraController
-
 createSmoothedKeyControl :: KeyControlConfig -> Effect PhaserCameraController
-createSmoothedKeyControl = runEffectFn1 createSmoothedKeyControlImpl
+createSmoothedKeyControl = FFI.unsafeForeignFunction ["config", ""] "new Phaser.Cameras.Controls.FixedKeyControl(config)"
 
-foreign import updateCameraControlDeltaImpl :: EffectFn3 Number Number PhaserCameraController PhaserCameraController
-
-updateCameraControlDelta :: Number -> Number -> PhaserCameraController -> Effect PhaserCameraController
-updateCameraControlDelta = runEffectFn3 updateCameraControlDeltaImpl
+updateCameraControlDelta :: Number -> PhaserCameraController -> Effect PhaserCameraController
+updateCameraControlDelta = method1 "update(delta)"

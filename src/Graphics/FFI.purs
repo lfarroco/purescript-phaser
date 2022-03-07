@@ -4,12 +4,20 @@ import Prelude
 import Effect (Effect)
 import Data.Foreign.EasyFFI as FFI
 
--- FFI Helprs
+-- | FFI Helpers
 
+
+-- | returnN functions receive a given object and run one of its methods,
+-- | providing N arguments to it, and return the value to the caller, wrapped
+-- | in an Effect.
+-- | eg. a call like"method1 "setName(v1)" is compiled to a function like
+-- | "name=>obj=>()=>obj.setName(v1)"
 return0 :: forall obj returnValue. String -> obj -> Effect returnValue
 return0 expr obj  = do
   FFI.unsafeForeignFunction ["obj", ""] ("obj." <> expr ) obj
 
+-- | methodN function are called in the same way as returnN, but it returns the
+-- | provided object back.
 method0  :: forall obj.  String -> obj -> Effect obj
 method0 expr obj  = do
   _ <- return0 expr obj
