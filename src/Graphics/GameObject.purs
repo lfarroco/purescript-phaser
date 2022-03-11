@@ -9,14 +9,6 @@ import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGraphic, Phas
 import Phaser.Graphics.ArcadePhysics (ArcadeImage)
 import Utils.FFI (get, method0, method1, return0)
 
--- check  https://github.com/purescript-web/purescript-web-events/blob/master/src/Web/Event/Event.purs
--- and    https://github.com/purescript-web/purescript-web-events/blob/master/src/Web/Event/Event.js
--- if it is wrapped in a function, then it is an effect 
-
--- reference on listener creation
--- https://github.com/purescript-web/purescript-web-events/blob/c8a50893f04f54e2a59be7f885d25caef3589c57/src/Web/Event/EventTarget.js#L3
--- https://github.com/purescript-web/purescript-web-events/blob/c8a50893f04f54e2a59be7f885d25caef3589c57/src/Web/Event/EventTarget.purs#L21
-
 -- should also include other fns for oher GO events
 type OnClickCallback a
   = Vector -> Vector -> Event -> a -> Effect Unit

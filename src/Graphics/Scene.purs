@@ -1,9 +1,11 @@
 module Graphics.Phaser.Scene where
 
 
+import Data.Maybe (Maybe)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (NodeEventEmitter, PhaserScene)
-import Utils.FFI (get, method0, method1, method2, return1)
+import Graphics.Phaser.GameObject (class GameObject)
+import Utils.FFI (get, method0, method1, method2, return1, safeGet)
 
 -- Current time in milliseconds
 type Time
@@ -13,6 +15,11 @@ type Time
 type Delta
   = Number
 
+children :: forall a. GameObject a => PhaserScene -> Array a
+children = get "children.list"
+
+getChildByName :: forall a. GameObject a => String -> PhaserScene -> Effect (Maybe a)
+getChildByName  = safeGet
 
 getEventEmitter :: PhaserScene -> Effect NodeEventEmitter
 getEventEmitter = get "events"
@@ -29,8 +36,8 @@ getPluginInstance = get
 launch :: forall data'. String -> data' -> PhaserScene -> Effect PhaserScene
 launch = method2 "scene.launch(v1,v2)"
 
-start  :: forall data'. String -> data' -> PhaserScene -> Effect PhaserScene
-start  = method2 "scene.start(v1, v2)"
+start :: forall data'. String -> data' -> PhaserScene -> Effect PhaserScene
+start = method2 "scene.start(v1, v2)"
 
 restart :: forall data'. data' -> PhaserScene -> Effect PhaserScene
 restart = method1 "scene.restart(v1)"

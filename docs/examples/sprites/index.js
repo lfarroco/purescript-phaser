@@ -822,7 +822,7 @@ var PS = {};
   "use strict";
   $PS["Utils.FFI"] = $PS["Utils.FFI"] || {};
   var exports = $PS["Utils.FFI"];
-  var Data_Foreign_EasyFFI = $PS["Data.Foreign.EasyFFI"];                
+  var Data_Foreign_EasyFFI = $PS["Data.Foreign.EasyFFI"];
   var return4 = function (expr) {
       return function (v1) {
           return function (v2) {
