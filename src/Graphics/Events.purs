@@ -18,10 +18,8 @@ instance EventEmitter PhaserGraphic
 instance EventEmitter PhaserSprite
 instance EventEmitter ArcadeImage
 
-
 -- same approach as
 -- https://github.com/purescript-web/purescript-web-events/blob/c8a50893f04f54e2a59be7f885d25caef3589c57/src/Web/Event/EventTarget.js#L3
-
 foreign import data EventListener :: Type
 
 createEventListener0 :: Effect Unit -> EventListener 

@@ -9,7 +9,7 @@ import Effect (Effect)
 import Effect.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Graphics.Phaser.Loader (loadImages)
+import Graphics.Phaser.Loader (loadImage)
 import Graphics.Phaser.TileMap (addTilesetImage, createLayer, makeTileMap, tilesets)
 import Option (fromRecord)
 
@@ -32,11 +32,13 @@ main =
           fromRecord
             { create
             , preload:
-                loadImages
-                  [ { key: tileName
-                    , path: "assets/super-mario.png"
-                    }
-                  ]
+                \scene ->
+                  void do
+                    loadImage
+                      { key: tileName
+                      , path: "assets/super-mario.png"
+                      }
+                      scene
             }
       }
 

@@ -14,6 +14,7 @@ You can edit this file as you like.
   , "prelude"
   , "psci-support"
   , "web-html"
+  , "arrays"
   ]
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"

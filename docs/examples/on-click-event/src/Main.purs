@@ -11,7 +11,7 @@ import Graphics.Phaser.Events (EventListener, createEventListener3, off, onListe
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
-import Graphics.Phaser.Loader (loadImages)
+import Graphics.Phaser.Loader (loadImage)
 import Graphics.Phaser.Scene (getChildByName)
 import Graphics.Phaser.SceneManager (Start(..), addScene)
 import Graphics.Phaser.Text as Text
@@ -35,8 +35,7 @@ mainScene =
         void do
           title scene
           startButton scene
-  , preload:
-      loadImages [ { key: "logo", path: logoPath } ]
+          , preload: loadImage { key: "logo", path: logoPath } >=> const (pure unit)
   }
   where
   title scene = void do Text.create "Click the logo to trigger an event." scene
