@@ -953,13 +953,15 @@ var PS = {};
           };
       };
   };
-  var getNullable = function (obj) {
-      return return1("children.getByName(v1)")(obj);
+  var getNullable = function (expr) {
+      return function (obj) {
+          return return1(expr)(obj);
+      };
   };
   var safeGet = function (k) {
-      return function (s) {
+      return function (obj) {
           return function __do() {
-              var v = getNullable(k)(s)();
+              var v = getNullable("children.getByName(v1)")(k)(obj)();
               return Data_Nullable.toMaybe(v);
           };
       };
@@ -1074,6 +1076,7 @@ var PS = {};
 
   // TODO: put this in a `util` module
   function mapThis(obj) {
+    console.log(obj);
     var newObj = {};
     for (const key in obj) {
       if (obj.hasOwnProperty(key)) {
@@ -1101,7 +1104,7 @@ var PS = {};
   var Data_Functor = $PS["Data.Functor"];
   var Data_Nullable = $PS["Data.Nullable"];
   var Effect = $PS["Effect"];
-  var Option = $PS["Option"];                
+  var Option = $PS["Option"];                      
   var Start = (function () {
       function Start() {
 
@@ -1115,7 +1118,7 @@ var PS = {};
       };
       NoStart.value = new NoStart();
       return NoStart;
-  })();                                                                   
+  })();                                              
   var addScene = function (dictFromRecord) {
       return function (key) {
           return function (sceneConfig) {
@@ -1128,7 +1131,7 @@ var PS = {};
                           if (autoStart instanceof NoStart) {
                               return false;
                           };
-                          throw new Error("Failed pattern match at Graphics.Phaser.SceneManager (line 100, column 15 - line 102, column 25): " + [ autoStart.constructor.name ]);
+                          throw new Error("Failed pattern match at Graphics.Phaser.SceneManager (line 102, column 15 - line 104, column 25): " + [ autoStart.constructor.name ]);
                       })();
                       return Data_Functor.map(Effect.functorEffect)(Data_Nullable.toMaybe)(function () {
                           return $foreign.addSceneImpl(key, Option.fromRecord(dictFromRecord)(sceneConfig), start, game);
