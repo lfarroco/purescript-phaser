@@ -2,19 +2,48 @@ module Phaser.Graphics.ArcadePhysics where
 
 -- A port of
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.StaticGroup.html
-
 import Effect (Effect)
-import Graphics.Phaser.CoreTypes (Vector)
+import Graphics.Canvas (Dimensions)
+import Graphics.Phaser.CoreTypes (class GameObject, class PhysicsEnabled, ArcadeImage, ArcadeSprite, StaticGroup, Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Utils.FFI (return0, return2)
+import Utils.FFI (method0, method1, method2, return0, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
-foreign import data StaticGroup :: Type
-
-foreign import data ArcadeImage :: Type
-
 createStaticGroup :: PhaserScene -> Effect StaticGroup
 createStaticGroup = return0 "physics.add.staticGroup()"
 
-createArcadeImage :: Vector -> String ->  PhaserScene -> Effect ArcadeImage
+addChild :: forall a. GameObject a => a -> StaticGroup -> Effect StaticGroup
+addChild = method1 "add(v1)"
+
+createArcadeImage :: Vector -> String -> PhaserScene -> Effect ArcadeImage
 createArcadeImage = return2 "physics.add.image(v1.x,v1.y,v2)"
+
+createArcadeSprite :: Vector -> String -> PhaserScene -> Effect ArcadeSprite
+createArcadeSprite = return2 "physics.add.sprite(v1.x,v1.y,v2)"
+
+setWorldBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
+setWorldBounds = method2 "physics.world.setWorldBounds(v1.x,v1.y,v2.width,v2.height)"
+
+refreshBody :: forall a. PhysicsEnabled a => a -> Effect a
+refreshBody = method0 "refreshBody()"
+
+setImmovable :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
+setImmovable = method1 "setImmovable(v1)"
+
+allowGravity :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
+allowGravity = method1 "body.allowGravity(v1)"
+
+setVelocityX :: forall a. PhysicsEnabled a => Number -> a -> Effect a
+setVelocityX = method1 "body.setVelocityX(v1)"
+
+setVelocityY :: forall a. PhysicsEnabled a => Number -> a -> Effect a
+setVelocityY = method1 "body.setVelocityY(v1)"
+
+setVelocity :: forall a. PhysicsEnabled a => Vector -> a -> Effect a
+setVelocity = method1 "body.setVelocity(v1.x,v1.y)"
+
+setBounce :: forall a. PhysicsEnabled a => Number -> a -> Effect a
+setBounce = method1 "body.setVelocityY(v1)"
+
+setCollideWorldBounds :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
+setCollideWorldBounds = method1 "setCollideWorldBounds(v1)"

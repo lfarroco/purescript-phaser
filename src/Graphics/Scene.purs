@@ -3,8 +3,8 @@ module Graphics.Phaser.Scene where
 
 import Data.Maybe (Maybe)
 import Effect (Effect)
+import Graphics.Phaser.CoreTypes (class GameObject)
 import Graphics.Phaser.ForeignTypes (NodeEventEmitter, PhaserScene)
-import Graphics.Phaser.GameObject (class GameObject)
 import Utils.FFI (get, method0, method1, method2, return1, safeGet)
 
 -- Current time in milliseconds
@@ -15,7 +15,7 @@ type Time
 type Delta
   = Number
 
-children :: forall a. GameObject a => PhaserScene -> Array a
+children :: forall a. GameObject a => PhaserScene -> Effect (Array a)
 children = get "children.list"
 
 getChildByName :: forall a. GameObject a => String -> PhaserScene -> Effect (Maybe a)

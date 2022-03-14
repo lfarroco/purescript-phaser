@@ -5,7 +5,9 @@ You can edit this file as you like.
 { name = "phaser"
 , dependencies =
   [ "aff"
+  , "arrays"
   , "canvas"
+  , "console"
   , "easy-ffi"
   , "effect"
   , "maybe"
@@ -13,8 +15,8 @@ You can edit this file as you like.
   , "option"
   , "prelude"
   , "psci-support"
+  , "unsafe-coerce"
   , "web-html"
-  , "arrays"
   ]
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"

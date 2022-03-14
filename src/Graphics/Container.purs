@@ -1,8 +1,8 @@
 module Graphics.Phaser.Container where
 
 import Effect (Effect)
+import Graphics.Phaser.CoreTypes (class GameObject)
 import Graphics.Phaser.ForeignTypes (PhaserContainer, PhaserScene)
-import Graphics.Phaser.GameObject (class GameObject)
 import Utils.FFI (get, method1, return0)
 
 -- | Creates a new container that belongs to the given scene

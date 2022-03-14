@@ -1,52 +1,10 @@
 module Graphics.Phaser.GameObject where
 
 import Prelude
-
 import Effect (Effect)
-import Graphics.Phaser.CoreTypes (Dimensions, Vector)
-import Graphics.Phaser.Events (class EventEmitter)
-import Graphics.Phaser.ForeignTypes (Event, PhaserContainer, PhaserGraphic, PhaserImage, PhaserScene, PhaserSprite)
-import Phaser.Graphics.ArcadePhysics (ArcadeImage)
+import Graphics.Phaser.CoreTypes (class GameObject, class Tint, class Transform, Dimensions, Vector)
+import Graphics.Phaser.ForeignTypes (PhaserScene)
 import Utils.FFI (get, method0, method1, return0)
-
--- should also include other fns for oher GO events
-type OnClickCallback a
-  = Vector -> Vector -> Event -> a -> Effect Unit
-
-class GameObject :: forall k. k -> Constraint
-class (EventEmitter a, Renderable a) <= GameObject a
-
-instance Renderable PhaserImage
-instance Renderable PhaserContainer
-instance Renderable PhaserGraphic
-instance Renderable PhaserSprite
-instance Renderable ArcadeImage
-
-instance GameObject PhaserImage
-instance GameObject PhaserContainer
-instance GameObject PhaserGraphic
-instance GameObject PhaserSprite
-instance GameObject ArcadeImage
-
-class Renderable :: forall k. k -> Constraint
-class Renderable a
-
-getX :: forall a. GameObject a => a -> Effect Number
-getX = get "x"
-
-getY :: forall a. GameObject a => a -> Effect Number
-getY = get "y"
-
-getPosition :: forall a. GameObject a => a -> Effect Vector
-getPosition a = do
-  x <- getX a
-  y <- getY a
-  pure { x, y }
-
-setPosition :: forall a. GameObject a => Vector -> a -> Effect a
-setPosition  = method1 "setPosition(v1.x,v1.y)"
-
--- Phaser Bindings
 
 getScene :: forall a. GameObject a => a -> Effect PhaserScene
 getScene = get "scene"
@@ -54,66 +12,106 @@ getScene = get "scene"
 destroy :: forall a. GameObject a => a -> Effect Unit
 destroy = return0 "destroy()"
 
-getAngle :: forall a. GameObject a => a -> Effect Number
+-- Transform Class
+getX :: forall a. Transform a => a -> Effect Number
+getX = get "x"
+
+getY :: forall a. Transform a => a -> Effect Number
+getY = get "y"
+
+getPosition :: forall a. Transform a => a -> Effect Vector
+getPosition a =
+  do
+    x <- getX a
+    y <- getY a
+    pure { x, y }
+
+setPosition :: forall a. Transform a => Vector -> a -> Effect a
+setPosition = method1 "setPosition(v1.x,v1.y)"
+
+setX :: forall a. Transform a => Number -> a -> Effect a
+setX = method1 "setX(v1)"
+
+setY :: forall a. Transform a => Number -> a -> Effect a
+setY = method1 "setY(v1)"
+
+getAngle :: forall a. Transform a => a -> Effect Number
 getAngle = get "angle"
 
-setAngle :: forall a. GameObject a => Number -> a -> Effect a
-setAngle =  method1 "setAngle(v1)"
+setAngle :: forall a. Transform a => Number -> a -> Effect a
+setAngle = method1 "setAngle(v1)"
 
-getRadians :: forall a. GameObject a => a -> Effect Number
+getRadians :: forall a. Transform a => a -> Effect Number
 getRadians = get "radians"
 
-setRadians :: forall a. GameObject a => Number -> a -> Effect a
-setRadians  =  method1  "setRadians(v1)"
+setRadians :: forall a. Transform a => Number -> a -> Effect a
+setRadians = method1 "setRadians(v1)"
 
-getVisible :: forall a. GameObject a => a -> Effect Boolean
-getVisible = get "visible"
+-- The angle in radians.
+getRotation :: forall a. Transform a => a -> Effect Number
+getRotation = get "rotation"
 
-setVisible :: forall a. GameObject a => Boolean -> a -> Effect a
-setVisible   =  method1 "setVisible(v1)"
+setRotation :: forall a. Transform a => Number -> a -> Effect a
+setRotation = method1 "setRotation(v1)"
 
-getAlpha :: forall a. GameObject a => a -> Effect Number
-getAlpha = get "alpha"
-
-setAlpha :: forall a. GameObject a => Number -> a -> Effect a
-setAlpha =  method1 "setAlpha(v1)"
-
-getOrigin :: forall a. GameObject a => a -> Effect Number
-getOrigin = get "origin"
-
-setOrigin :: forall a. GameObject a => Vector -> a -> Effect a
-setOrigin = method1 "setOrigin(v1.x,v1.y)" 
-
-setTint :: forall a. GameObject a => Number -> a -> Effect a
-setTint = method1 "setTint(v1)"
-
-getTint :: forall a. GameObject a => a -> Effect { tintBottomLeft :: Number, tintBottomRight :: Number, tintTopLeft :: Number, tintTopRight :: Number }
+-- Tint class
+getTint ::
+  forall a.
+  Tint a =>
+  a ->
+  Effect
+    { tintBottomLeft :: Number
+    , tintBottomRight :: Number
+    , tintTopLeft :: Number
+    , tintTopRight :: Number
+    }
 getTint a = do
   tintTopLeft <- get "tintTopLeft" a
   tintTopRight <- get "tintTopRight" a
   tintBottomLeft <- get "tintBottomLeft" a
   tintBottomRight <- get "tintBottomRight" a
-  pure
-    { tintTopLeft
+  pure { tintTopLeft
     , tintTopRight
     , tintBottomLeft
     , tintBottomRight
     }
 
-clearTint :: forall a. GameObject a => a -> Effect a
+clearTint :: forall a. Tint a => a -> Effect a
 clearTint = method0 "clearTint()"
 
-isTinted :: forall a. GameObject a => a -> Effect Boolean
+isTinted :: forall a. Tint a => a -> Effect Boolean
 isTinted = get "isTinted"
 
+getVisible :: forall a. GameObject a => a -> Effect Boolean
+getVisible = get "visible"
+
+setVisible :: forall a. GameObject a => Boolean -> a -> Effect a
+setVisible = method1 "setVisible(v1)"
+
+getAlpha :: forall a. GameObject a => a -> Effect Number
+getAlpha = get "alpha"
+
+setAlpha :: forall a. GameObject a => Number -> a -> Effect a
+setAlpha = method1 "setAlpha(v1)"
+
+getOrigin :: forall a. GameObject a => a -> Effect Number
+getOrigin = get "origin"
+
+setOrigin :: forall a. GameObject a => Vector -> a -> Effect a
+setOrigin = method1 "setOrigin(v1.x,v1.y)"
+
+setTint :: forall a. Tint a => Number -> a -> Effect a
+setTint = method1 "setTint(v1)"
+
 getSize :: forall a. GameObject a => a -> Effect Dimensions
-getSize a = do
-  width <- get "width" a
-  height <- get "height" a
-  pure { width, height }
+getSize a =
+  do
+    width <- get "width" a
+    height <- get "height" a
+    pure { width, height }
 
 setSize :: forall a. GameObject a => Dimensions -> a -> Effect a
-setSize =  method1 "setSize(v1.width,v1.height)" 
+setSize = method1 "setSize(v1.width,v1.height)"
 
 getWidth :: forall a. GameObject a => a -> Effect Number
 getWidth = get "width"
@@ -130,13 +128,14 @@ setDisplaySize = method1 "setDisplaySize(v1.width, v1.height)"
 setInteractive :: forall a. GameObject a => a -> Effect a
 setInteractive = method0 "setInteractive()"
 
-getScale :: forall a. GameObject a => a -> Effect Vector
-getScale a = do
-  x <- get "scaleX" a
-  y <- get "scaleY" a
-  pure { x, y }
+getScale :: forall a. Transform a => a -> Effect Vector
+getScale a =
+  do
+    x <- get "scaleX" a
+    y <- get "scaleY" a
+    pure { x, y }
 
-setScale :: forall a. GameObject a => Vector -> a -> Effect a
+setScale :: forall a. Transform a => Vector -> a -> Effect a
 setScale = method1 "setScale(v1.x,v1.y)"
 
 setName :: forall a. GameObject a => String -> a -> Effect a

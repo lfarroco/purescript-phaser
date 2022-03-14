@@ -1,6 +1,7 @@
 "use strict";
 
-// TODO: put this in a `util` module
+// This function transforms the functions in the "create" and "preload"
+// namespaces into functions that receive "themselves"(this) when executed.
 function mapThis(obj) {
   var newObj = {};
   for (const key in obj) {

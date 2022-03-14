@@ -1,7 +1,10 @@
 module Graphics.Phaser.ForeignTypes where
 
+import Data.Show (class Show)
+
 foreign import data PhaserGame :: Type
 
+-- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.GameObject.html
 foreign import data PhaserGameObject :: Type
 
 foreign import data PhaserContainer :: Type
@@ -18,7 +21,7 @@ foreign import data PhaserEmitter :: Type
 
 foreign import data Event :: Type
 
-foreign import data PhaserTileMap :: Type 
+foreign import data PhaserTileMap :: Type
 
 foreign import data PhaserTile :: Type
 
@@ -65,3 +68,13 @@ foreign import data JSONCamera :: Type
 foreign import data PackFileSection :: Type
 
 foreign import data PhysicsImage :: Type
+
+foreign import data KeyboardPlugin :: Type
+
+foreign import data KeyCode :: Type
+
+foreign import data Key :: Type
+
+foreign import data KeyBoardEvent :: Type
+
+foreign import data KeyBoardPlugin :: Type

@@ -7,7 +7,7 @@ import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.CoreTypes (Vector)
-import Graphics.Phaser.Events (EventListener, createEventListener3, off, onListener)
+import Graphics.Phaser.Events (EventListener, createEventListener3, off, on)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
@@ -35,35 +35,39 @@ mainScene =
         void do
           title scene
           startButton scene
-          , preload: loadImage { key: "logo", path: logoPath } >=> const (pure unit)
+  , preload: loadImage { key: "logo", path: logoPath } >=> const (pure unit)
   }
   where
   title scene = void do Text.create "Click the logo to trigger an event." scene
+
   startButton :: PhaserScene -> Effect Unit
-  startButton scene = void do
-    image <-
-      Image.create "logo" scene
-        >>= GO.setPosition { x: 100.0, y: 100.0 }
-        >>= GO.setDisplaySize { width: 50.0, height: 50.0 }
-        >>= GO.setInteractive
-        >>= GO.setName "clickable_image"
-    onListener "pointerdown" listener image
+  startButton scene =
+    void do
+      image <-
+        Image.create "logo" scene
+          >>= GO.setPosition { x: 100.0, y: 100.0 }
+          >>= GO.setDisplaySize { width: 50.0, height: 50.0 }
+          >>= GO.setInteractive
+          >>= GO.setName "clickable_image"
+      on "pointerdown" listener image
     where
     listener :: EventListener
     listener = createEventListener3 callback
+
     callback :: Vector -> String -> String -> Effect Unit
-    callback pointer localX localY= do
+    callback pointer localX localY = do
       log $ show pointer
       log localX
       log localY
-      _ <- Image.create "logo" scene
+      _ <-
+        Image.create "logo" scene
           >>= GO.setPosition { x: 200.0, y: 200.0 }
           >>= GO.setDisplaySize { width: 150.0, height: 150.0 }
       clickable <- getImageByName "clickable_image" scene
       case clickable of
-            Just img -> void do off "pointerdown" img
-            Nothing -> log "Clickable image not found"
+        Just img -> void do off "pointerdown" img
+        Nothing -> log "Clickable image not found"
       pure unit
 
 getImageByName :: String -> PhaserScene -> Effect (Maybe PhaserImage)
-getImageByName = getChildByName 
+getImageByName = getChildByName
