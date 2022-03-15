@@ -3,20 +3,24 @@ module Graphics.Phaser.ArcadePhysics where
 -- A port of
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.StaticGroup.html
 -- TODO: create Groups as parent of static and dynamic groups
+import Prelude
 import Effect (Effect)
 import Graphics.Canvas (Dimensions)
-import Graphics.Phaser.CoreTypes (class Collidable, class GameObject, class PhysicsEnabled, ArcadeImage, ArcadeSprite, StaticGroup, Vector)
+import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, ArcadeImage, ArcadeSprite, EventListener, Group, StaticGroup, Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Utils.FFI (get, method0, method1, method2, return0, return2)
+import Utils.FFI (get, method0, method1, method2, method3, return0, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserScene -> Effect StaticGroup
 createStaticGroup = return0 "physics.add.staticGroup()"
 
-createChild :: Vector -> String -> StaticGroup -> Effect ArcadeSprite
+createGroup :: PhaserScene -> Effect Group
+createGroup = return0 "physics.add.group()"
+
+createChild :: forall g. ArcadeGroup g => Vector -> String -> g -> Effect ArcadeSprite
 createChild = return2 "create(v1.x,v1.y,v2)"
 
-addChild :: forall a. GameObject a => a -> StaticGroup -> Effect StaticGroup
+addChild :: forall a g. GameObject a => ArcadeGroup g => a -> g -> Effect g
 addChild = method1 "add(v1)"
 
 createArcadeImage :: Vector -> String -> PhaserScene -> Effect ArcadeImage
@@ -68,3 +72,9 @@ type ArcadeBodyCollision
 
 getTouching :: forall a. PhysicsEnabled a => a -> Effect ArcadeBodyCollision
 getTouching = get "body.touching"
+
+addOverlap :: forall a b c d. Collidable a => Collidable b => Collidable c =>  Collidable d =>  a -> b -> (c -> d -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+addOverlap = method3 "physics.add.overlap(v1,v2,(a,b)=>v3(a)(b)())"
+
+disableBody :: forall a. PhysicsEnabled a => a -> Effect a
+disableBody = method0 "disableBody(true,true)"

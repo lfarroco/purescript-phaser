@@ -268,6 +268,7 @@ instance EventEmitter ArcadeSprite
 instance EventEmitter KeyboardPlugin
 instance EventEmitter Key
 
+foreign import data Group :: Type
 foreign import data StaticGroup :: Type
 foreign import data ArcadeImage :: Type
 foreign import data ArcadeSprite :: Type
@@ -275,21 +276,30 @@ foreign import data ArcadeSprite :: Type
 instance PhysicsEnabled ArcadeImage
 instance PhysicsEnabled ArcadeSprite
 
+class ArcadeGroup :: forall k. k -> Constraint
+class ArcadeGroup a
+
+instance ArcadeGroup Group
+instance ArcadeGroup StaticGroup
+
 -- same approach as
 -- https://github.com/purescript-web/purescript-web-events/blob/c8a50893f04f54e2a59be7f885d25caef3589c57/src/Web/Event/EventTarget.js#L3
 -- When when you remove a listener, on js-side, you need to pass a reference
 -- to the exact same function that you provided when the listener was created.
 -- The createEventListenerN functions below allow converting ps functions into
 -- concrete event listeners that you can pass on creation and removal.
+-- TODO: maybe replace this with the DOM type, for more portability
 foreign import data EventListener :: Type
 
 class Collidable :: forall k. k -> Constraint
 class Collidable a
 
+instance Collidable Group 
 instance Collidable StaticGroup 
 instance Collidable ArcadeImage 
 instance Collidable ArcadeSprite 
 
+instance Collidable (Array Group)
 instance Collidable (Array StaticGroup)
 instance Collidable (Array ArcadeImage)
 instance Collidable (Array ArcadeSprite)

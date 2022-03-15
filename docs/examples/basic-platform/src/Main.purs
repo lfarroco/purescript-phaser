@@ -1,13 +1,15 @@
 module Main where
 
 import Prelude
+import Data.Array ((..))
 import Data.Foldable (for_)
+import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ArcadePhysics as P
-import Graphics.Phaser.CoreTypes (class PhysicsEnabled, ArcadeImage, ArcadeSprite, StaticGroup)
+import Graphics.Phaser.CoreTypes (class PhysicsEnabled, ArcadeImage, ArcadeSprite, Group, StaticGroup)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
@@ -56,18 +58,18 @@ preload scene =
 
 create :: PhaserScene -> Effect Unit
 create scene = do
-  _bg <- createBg scene
-  --
+  void $ createBg scene
   platforms <- P.createStaticGroup scene
   _ground <- createGround platforms
-  --
   movingPlatform <- createPlatform scene
-  --
   player <- createPlayer scene
   createAnimations scene
+  stars <- createStars scene
   void $ P.addCollider player platforms scene
-  void
-    $ P.addCollider player movingPlatform scene
+  void $ P.addCollider player movingPlatform scene
+  void $ P.addCollider stars movingPlatform scene
+  void $ P.addCollider stars platforms scene
+  void $ P.addOverlap player stars collectStar scene
   pure unit
 
 createAnimations :: PhaserScene -> Effect Unit
@@ -95,13 +97,26 @@ createPlatform scene =
     >>= P.setImmovable true
     >>= P.setAllowGravity false
     >>= P.setVelocityX 50.0
+    >>= GO.setName "moving_platform"
 
 createPlayer :: PhaserScene -> Effect ArcadeSprite
 createPlayer scene =
   P.createArcadeSprite { x: 50.0, y: 500.0 } "dude" scene
-    >>= P.setBounce 0.2
+    >>= P.setBounce 0.4
     >>= P.setCollideWorldBounds true
     >>= GO.setName "player"
+
+createStars :: PhaserScene -> Effect Group
+createStars scene = do
+  group <- P.createGroup scene
+  for_ (1 .. 15)
+    ( \n -> do
+        P.createChild { x: 50.0 + (toNumber n * 40.0), y: 100.0 } "star" group
+          >>= P.setBounce 0.4
+          >>= P.setCollideWorldBounds true
+    -- >>= flip P.addChild group
+    )
+  pure group
 
 update :: PhaserScene -> Effect Unit
 update scene = do
@@ -120,6 +135,20 @@ update scene = do
         else
           pure sprite
     Nothing -> log "Sprite not found!"
+  platform <- getPlatform scene
+  case platform of
+    Just img -> do
+      x <- GO.getX img
+      if x >= 500.0 then
+        void $ P.setVelocityX (-50.0) img
+      else
+        pure unit
+      if x <= 300.0 then
+        void $ P.setVelocityX (50.0) img
+      else
+        pure unit
+    Nothing -> log "Platform image not found!"
+  pure unit
 
 move :: forall a. PhysicsEnabled a => Sprite a => CursorKeys -> a -> Effect a
 move cursors sprite = do
@@ -133,16 +162,22 @@ move cursors sprite = do
     stop sprite
 
 moveRight :: forall a. PhysicsEnabled a => Sprite a => a -> Effect a
-moveRight = P.setVelocityX (150.0) >=> Sprite.playAnimation {key: "right", ignoreIfPlaying: true}
+moveRight = P.setVelocityX (150.0) >=> Sprite.playAnimation { key: "right", ignoreIfPlaying: true }
 
 moveLeft :: forall a. PhysicsEnabled a => Sprite a => a -> Effect a
-moveLeft = P.setVelocityX (-150.0) >=> Sprite.playAnimation {key: "left", ignoreIfPlaying: true}
+moveLeft = P.setVelocityX (-150.0) >=> Sprite.playAnimation { key: "left", ignoreIfPlaying: true }
 
 jump :: forall a. PhysicsEnabled a => Sprite a => a -> Effect a
 jump = P.setVelocityY (-350.0)
 
 stop :: forall a. PhysicsEnabled a => Sprite a => a -> Effect a
-stop = P.setVelocityX 0.0 >=> Sprite.playAnimation {key: "turn", ignoreIfPlaying: false}
+stop = P.setVelocityX 0.0 >=> Sprite.playAnimation { key: "turn", ignoreIfPlaying: false }
 
 getPlayer :: PhaserScene -> Effect (Maybe ArcadeSprite)
 getPlayer scene = getChildByName "player" scene
+
+getPlatform :: PhaserScene -> Effect (Maybe ArcadeImage)
+getPlatform scene = getChildByName "moving_platform" scene
+
+collectStar :: ArcadeSprite -> ArcadeImage -> Effect Unit
+collectStar _a b = P.disableBody b >>= const (pure unit)
