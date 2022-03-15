@@ -1,13 +1,12 @@
 module Main where
 
 import Prelude
-
 import Data.Foldable (for_)
 import Data.Maybe (Maybe)
 import Effect (Effect)
 import Graphics.Phaser as Phaser
+import Graphics.Phaser.CoreTypes (class GameObject)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Graphics.Phaser.GameObject (class GameObject)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Loader (loadSpritesheet)
 import Graphics.Phaser.SceneManager (Start(..), addScene)
@@ -57,10 +56,10 @@ create :: PhaserScene -> Effect Unit
 create scene =
   void do
     explosionFrames <- Sprite.generateFrameNumbers explodeSpriteKey 0 23 scene
-    _ <- Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
+    void $ Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
     _ <-
       Sprite.add explodeSpriteKey { x: 100.0, y: 100.0 } scene
-        >>= Sprite.playAnimation explodeAnimationKey
+      >>= Sprite.playAnimation {key: explodeAnimationKey, ignoreIfPlaying: true}
         >>= scale
     Sprite.add
       "balls"

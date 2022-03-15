@@ -12,7 +12,6 @@ import Graphics.Phaser.Events (createEventListener2, on)
 import Graphics.Phaser.ForeignTypes (Key, KeyBoardEvent, KeyBoardPlugin, KeyCode, PhaserScene)
 import Utils.FFI (get, method0, method1, return0, return1)
 
-
 type CursorKeys
   = { up :: Key
     , down :: Key
@@ -22,6 +21,8 @@ type CursorKeys
     , shift :: Key
     }
 
+-- TODO: create typeclass for the Input Plugin
+-- so that keys can be created outside of scenes
 createCursorKeys :: PhaserScene -> Effect CursorKeys
 createCursorKeys = return0 "input.keyboard.createCursorKeys()"
 

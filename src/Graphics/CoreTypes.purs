@@ -105,7 +105,7 @@ type ImagesConfig
     , white :: String
     )
 
--- | Arcade / Matter Configs aren't implemented yet
+-- | Arcade / Matter Configs aren't fully implemented yet
 type PhysicsConfig
   = ( default :: String
     , arcade :: Option ArcadeWorldConfig
@@ -132,13 +132,14 @@ type PipelineConfig
 
 -- TODO: Fill out and move to proper file
 type ArcadeWorldConfig
-  = ( fps :: Int
+  = ( gravity:: Option (x:: Number, y:: Number),
+      debug:: Boolean
     )
 
 -- TODO: Fill out and move to proper file
+type MatterWorldConfig :: forall k. Row k
 type MatterWorldConfig
-  = ( fps :: Int
-    )
+  = ()
 
 type SettingsConfig
   = ( key :: String
@@ -281,3 +282,14 @@ instance PhysicsEnabled ArcadeSprite
 -- The createEventListenerN functions below allow converting ps functions into
 -- concrete event listeners that you can pass on creation and removal.
 foreign import data EventListener :: Type
+
+class Collidable :: forall k. k -> Constraint
+class Collidable a
+
+instance Collidable StaticGroup 
+instance Collidable ArcadeImage 
+instance Collidable ArcadeSprite 
+
+instance Collidable (Array StaticGroup)
+instance Collidable (Array ArcadeImage)
+instance Collidable (Array ArcadeSprite)

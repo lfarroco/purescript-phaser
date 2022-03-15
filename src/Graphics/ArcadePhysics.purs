@@ -1,16 +1,20 @@
-module Phaser.Graphics.ArcadePhysics where
+module Graphics.Phaser.ArcadePhysics where
 
 -- A port of
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.StaticGroup.html
+-- TODO: create Groups as parent of static and dynamic groups
 import Effect (Effect)
 import Graphics.Canvas (Dimensions)
-import Graphics.Phaser.CoreTypes (class GameObject, class PhysicsEnabled, ArcadeImage, ArcadeSprite, StaticGroup, Vector)
+import Graphics.Phaser.CoreTypes (class Collidable, class GameObject, class PhysicsEnabled, ArcadeImage, ArcadeSprite, StaticGroup, Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Utils.FFI (method0, method1, method2, return0, return2)
+import Utils.FFI (get, method0, method1, method2, return0, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserScene -> Effect StaticGroup
 createStaticGroup = return0 "physics.add.staticGroup()"
+
+createChild :: Vector -> String -> StaticGroup -> Effect ArcadeSprite
+createChild = return2 "create(v1.x,v1.y,v2)"
 
 addChild :: forall a. GameObject a => a -> StaticGroup -> Effect StaticGroup
 addChild = method1 "add(v1)"
@@ -30,8 +34,11 @@ refreshBody = method0 "refreshBody()"
 setImmovable :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setImmovable = method1 "setImmovable(v1)"
 
-allowGravity :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
-allowGravity = method1 "body.allowGravity(v1)"
+allowGravity :: forall a. PhysicsEnabled a => a -> Effect Boolean
+allowGravity = get "body.allowGravity"
+
+setAllowGravity :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
+setAllowGravity = method1 "body.setAllowGravity(v1)"
 
 setVelocityX :: forall a. PhysicsEnabled a => Number -> a -> Effect a
 setVelocityX = method1 "body.setVelocityX(v1)"
@@ -47,3 +54,17 @@ setBounce = method1 "body.setVelocityY(v1)"
 
 setCollideWorldBounds :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setCollideWorldBounds = method1 "setCollideWorldBounds(v1)"
+
+addCollider :: forall a b. Collidable a => Collidable b => a -> b -> PhaserScene -> Effect PhaserScene
+addCollider = method2 "physics.add.collider(v1,v2)"
+
+type ArcadeBodyCollision
+  = { none :: Boolean
+    , up :: Boolean
+    , down :: Boolean
+    , left :: Boolean
+    , right :: Boolean
+    }
+
+getTouching :: forall a. PhysicsEnabled a => a -> Effect ArcadeBodyCollision
+getTouching = get "body.touching"

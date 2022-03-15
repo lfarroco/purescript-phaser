@@ -8,14 +8,17 @@ module Graphics.Phaser.Sprite
   , generateFrameNumbers
   , generateFrameNames
   , setFrame
+  , class Sprite
   ) where
 
 import Utils.FFI
+
 import Effect (Effect)
+import Graphics.Phaser.CoreTypes (ArcadeSprite)
 import Graphics.Phaser.ForeignTypes (PhaserAnimation, PhaserScene, PhaserSprite)
 
 type FrameNumber
-  = Array { key :: String, frame :: Int }
+  = { key :: String, frame :: Int }
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Sprite.html
 -- | A PhaserSprite also implements the PhaserGameObject typeclass
@@ -29,8 +32,14 @@ createAnimation :: String -> Array FrameNumber -> Number -> Int -> PhaserScene -
 createAnimation =
   return4 "anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })"
 
-playAnimation :: String -> PhaserSprite -> Effect PhaserSprite
-playAnimation = method1 "play(v1)"
+class Sprite :: forall k. k -> Constraint
+class Sprite a
+
+instance Sprite  ArcadeSprite
+instance Sprite  PhaserSprite
+
+playAnimation :: forall a. Sprite a=> {key:: String, ignoreIfPlaying:: Boolean} -> a -> Effect a
+playAnimation = method1 "anims.play(v1.key,v1.ignoreIfPlaying)"
 
 removeAnimation :: String -> PhaserSprite -> Effect PhaserSprite
 removeAnimation = method1 "anims.remove(v1)"
