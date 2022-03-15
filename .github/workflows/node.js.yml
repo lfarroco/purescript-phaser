@@ -19,4 +19,5 @@ jobs:
     - run: npm install purescript -g
     - run: npm install spago -g
     - run: spago build
+    - run: spago test
     - run: make compile-examples
