@@ -1,325 +1,145 @@
-module Graphics.Phaser.GameObject
-  ( Vector
-  , Dimensions
-  , OnClickCallback
-  , class GameObject
-  , destroy
-  , onClick
-  , getScene
-  , getPosition
-  , setPosition
-  , getAngle
-  , setAngle
-  , getRadians
-  , setRadians
-  , getVisible
-  , setVisible
-  , getAlpha
-  , setAlpha
-  , getOrigin
-  , setOrigin
-  , setTint
-  , clearTint
-  , getSize
-  , setSize
-  , getDisplaySize
-  , setDisplaySize
-  , getScale
-  , setScale
-  , setName
-  , getName
-  ) where
+module Graphics.Phaser.GameObject where
 
 import Prelude
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
-import Graphics.Phaser.ForeignTypes
-  ( Event
-  , PhaserContainer
-  , PhaserEllipse
-  , PhaserGraphic
-  , PhaserImage
-  , PhaserRectangle
-  , PhaserScene
-  , PhaserSprite
-  , PhaserText
-  )
+import Graphics.Phaser.CoreTypes (class GameObject, class Tint, class Transform, Dimensions, Vector)
+import Graphics.Phaser.ForeignTypes (PhaserScene)
+import Utils.FFI (get, method0, method1, return0)
 
-type Vector
-  = { x :: Number, y :: Number }
+getScene :: forall a. GameObject a => a -> Effect PhaserScene
+getScene = get "scene"
 
-type Dimensions
-  = { width :: Number, height :: Number }
+destroy :: forall a. GameObject a => a -> Effect Unit
+destroy = return0 "destroy()"
 
-type OnClickCallback a
-  = Vector -> Vector -> Event -> a -> Effect Unit
+-- Transform Class
+getX :: forall a. Transform a => a -> Effect Number
+getX = get "x"
 
--- TODO: missing functions - flipx/y, depth, scrollfactor, bounds, settintfill, multi tint, blend mode
--- TOOD: remove Effect from getters (also check which ones can be null/undefined)
-class GameObject a where
-  destroy :: a -> Effect Unit
-  -- TODO: instead of onclick we should offer onpointerup and onpointerdown (or classify standard gameobject events)
-  onClick :: OnClickCallback a -> a -> Effect a
-  --on :: String -> (a -> Effect Unit) -> Effect a
-  getPosition :: a -> Effect Vector
-  setPosition :: Vector -> a -> Effect a
-  getAngle :: a -> Effect Number
-  setAngle :: Number -> a -> Effect a
-  getRadians :: a -> Effect Number
-  setRadians :: Number -> a -> Effect a
-  getVisible :: a -> Effect Boolean
-  setVisible :: Boolean -> a -> Effect a
-  getAlpha :: a -> Effect Number
-  setAlpha :: Number -> a -> Effect a
-  getOrigin :: a -> Effect Vector
-  setOrigin :: Vector -> a -> Effect a
-  setTint :: String -> a -> Effect a
-  clearTint :: a -> Effect a
-  getSize :: a -> Effect Dimensions
-  setSize :: Dimensions -> a -> Effect a
-  getDisplaySize :: a -> Effect Dimensions
-  setDisplaySize :: Dimensions -> a -> Effect a
-  getScale :: a -> Effect Vector
-  setScale :: Vector -> a -> Effect a
-  setName :: String -> a -> Effect a
-  getName :: a -> Effect String
-  getScene :: a -> PhaserScene
+getY :: forall a. Transform a => a -> Effect Number
+getY = get "y"
 
-foreign import destroyImpl :: forall a. EffectFn1 a Unit
+getPosition :: forall a. Transform a => a -> Effect Vector
+getPosition a =
+  do
+    x <- getX a
+    y <- getY a
+    pure { x, y }
 
-foreign import getPositionImpl :: forall a. EffectFn1 a Vector
+setPosition :: forall a. Transform a => Vector -> a -> Effect a
+setPosition = method1 "setPosition(v1.x,v1.y)"
 
-foreign import setPositionImpl :: forall a. EffectFn2 Vector a a
+setX :: forall a. Transform a => Number -> a -> Effect a
+setX = method1 "setX(v1)"
 
-foreign import getAngleImpl :: forall a. EffectFn1 a Number
+setY :: forall a. Transform a => Number -> a -> Effect a
+setY = method1 "setY(v1)"
 
-foreign import setAngleImpl :: forall a. EffectFn2 Number a a
+getAngle :: forall a. Transform a => a -> Effect Number
+getAngle = get "angle"
 
-foreign import getRadiansImpl :: forall a. EffectFn1 a Number
+setAngle :: forall a. Transform a => Number -> a -> Effect a
+setAngle = method1 "setAngle(v1)"
 
-foreign import setRadiansImpl :: forall a. EffectFn2 Number a a
+getRadians :: forall a. Transform a => a -> Effect Number
+getRadians = get "radians"
 
-foreign import getVisibleImpl :: forall a. EffectFn1 a Boolean
+setRadians :: forall a. Transform a => Number -> a -> Effect a
+setRadians = method1 "setRadians(v1)"
 
-foreign import setVisibleImpl :: forall a. EffectFn2 Boolean a a
+-- The angle in radians.
+getRotation :: forall a. Transform a => a -> Effect Number
+getRotation = get "rotation"
 
-foreign import getAlphaImpl :: forall a. EffectFn1 a Number
+setRotation :: forall a. Transform a => Number -> a -> Effect a
+setRotation = method1 "setRotation(v1)"
 
-foreign import setAlphaImpl :: forall a. EffectFn2 Number a a
+-- Tint class
+getTint ::
+  forall a.
+  Tint a =>
+  a ->
+  Effect
+    { tintBottomLeft :: Number
+    , tintBottomRight :: Number
+    , tintTopLeft :: Number
+    , tintTopRight :: Number
+    }
+getTint a = do
+  tintTopLeft <- get "tintTopLeft" a
+  tintTopRight <- get "tintTopRight" a
+  tintBottomLeft <- get "tintBottomLeft" a
+  tintBottomRight <- get "tintBottomRight" a
+  pure { tintTopLeft
+    , tintTopRight
+    , tintBottomLeft
+    , tintBottomRight
+    }
 
-foreign import getOriginImpl :: forall a. EffectFn1 a Vector
+clearTint :: forall a. Tint a => a -> Effect a
+clearTint = method0 "clearTint()"
 
-foreign import setOriginImpl :: forall a. EffectFn2 Vector a a
+isTinted :: forall a. Tint a => a -> Effect Boolean
+isTinted = get "isTinted"
 
-foreign import setTintImpl :: forall a. EffectFn2 String a a
+getVisible :: forall a. GameObject a => a -> Effect Boolean
+getVisible = get "visible"
 
-foreign import clearTintImpl :: forall a. EffectFn1 a a
+setVisible :: forall a. GameObject a => Boolean -> a -> Effect a
+setVisible = method1 "setVisible(v1)"
 
-foreign import getSizeImpl :: forall a. EffectFn1 a Dimensions
+getAlpha :: forall a. GameObject a => a -> Effect Number
+getAlpha = get "alpha"
 
-foreign import setSizeImpl :: forall a. EffectFn2 Dimensions a a
+setAlpha :: forall a. GameObject a => Number -> a -> Effect a
+setAlpha = method1 "setAlpha(v1)"
 
-foreign import getDisplaySizeImpl :: forall a. EffectFn1 a Dimensions
+getOrigin :: forall a. GameObject a => a -> Effect Number
+getOrigin = get "origin"
 
-foreign import setDisplaySizeImpl :: forall a. EffectFn2 Dimensions a a
+setOrigin :: forall a. GameObject a => Vector -> a -> Effect a
+setOrigin = method1 "setOrigin(v1.x,v1.y)"
 
-foreign import getScaleImpl :: forall a. EffectFn1 a Vector
+setTint :: forall a. Tint a => Number -> a -> Effect a
+setTint = method1 "setTint(v1)"
 
-foreign import setScaleImpl :: forall a. EffectFn2 Vector a a
+getSize :: forall a. GameObject a => a -> Effect Dimensions
+getSize a =
+  do
+    width <- get "width" a
+    height <- get "height" a
+    pure { width, height }
 
-foreign import getNameImpl :: forall a. EffectFn1 a String
+setSize :: forall a. GameObject a => Dimensions -> a -> Effect a
+setSize = method1 "setSize(v1.width,v1.height)"
 
-foreign import setNameImpl :: forall a. EffectFn2 String a a
+getWidth :: forall a. GameObject a => a -> Effect Number
+getWidth = get "width"
 
-foreign import onClickImpl :: forall a. EffectFn2 (OnClickCallback a) a a
+getHeight :: forall a. GameObject a => a -> Effect Number
+getHeight = get "height"
 
-foreign import getSceneImpl :: forall a. a -> PhaserScene
+getDisplaySize :: forall a. GameObject a => a -> Effect Dimensions
+getDisplaySize = return0 "getDisplaySize()"
 
-instance containerInstance :: GameObject PhaserContainer where
-  destroy i = runEffectFn1 destroyImpl i
-  getPosition i = runEffectFn1 getPositionImpl i
-  setPosition i = runEffectFn2 setPositionImpl i
-  getAngle i = runEffectFn1 getAngleImpl i
-  setAngle i = runEffectFn2 setAngleImpl i
-  getRadians i = runEffectFn1 getRadiansImpl i
-  setRadians i = runEffectFn2 setRadiansImpl i
-  getVisible i = runEffectFn1 getVisibleImpl i
-  setVisible i = runEffectFn2 setVisibleImpl i
-  getAlpha i = runEffectFn1 getAlphaImpl i
-  setAlpha i = runEffectFn2 setAlphaImpl i
-  getOrigin i = runEffectFn1 getOriginImpl i
-  setOrigin i = runEffectFn2 setOriginImpl i
-  clearTint i = runEffectFn1 clearTintImpl i
-  setTint i = runEffectFn2 setTintImpl i
-  getSize i = runEffectFn1 getSizeImpl i
-  setSize i = runEffectFn2 setSizeImpl i
-  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
-  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
-  getScale i = runEffectFn1 getScaleImpl i
-  setScale i = runEffectFn2 setScaleImpl i
-  getName i = runEffectFn1 getNameImpl i
-  setName i = runEffectFn2 setNameImpl i
-  onClick i = runEffectFn2 onClickImpl i
-  getScene = getSceneImpl
+setDisplaySize :: forall a. GameObject a => Dimensions -> a -> Effect a
+setDisplaySize = method1 "setDisplaySize(v1.width, v1.height)"
 
-instance graphicsInstance :: GameObject PhaserGraphic where
-  destroy i = runEffectFn1 destroyImpl i
-  getPosition i = runEffectFn1 getPositionImpl i
-  setPosition i = runEffectFn2 setPositionImpl i
-  getAngle i = runEffectFn1 getAngleImpl i
-  setAngle i = runEffectFn2 setAngleImpl i
-  getRadians i = runEffectFn1 getRadiansImpl i
-  setRadians i = runEffectFn2 setRadiansImpl i
-  getVisible i = runEffectFn1 getVisibleImpl i
-  setVisible i = runEffectFn2 setVisibleImpl i
-  getAlpha i = runEffectFn1 getAlphaImpl i
-  setAlpha i = runEffectFn2 setAlphaImpl i
-  getOrigin i = runEffectFn1 getOriginImpl i
-  setOrigin i = runEffectFn2 setOriginImpl i
-  clearTint i = runEffectFn1 clearTintImpl i
-  setTint i = runEffectFn2 setTintImpl i
-  getSize i = runEffectFn1 getSizeImpl i
-  setSize i = runEffectFn2 setSizeImpl i
-  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
-  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
-  getScale i = runEffectFn1 getScaleImpl i
-  setScale i = runEffectFn2 setScaleImpl i
-  getName i = runEffectFn1 getNameImpl i
-  setName i = runEffectFn2 setNameImpl i
-  onClick i = runEffectFn2 onClickImpl i
-  getScene = getSceneImpl
+setInteractive :: forall a. GameObject a => a -> Effect a
+setInteractive = method0 "setInteractive()"
 
-instance imageInstance :: GameObject PhaserImage where
-  destroy i = runEffectFn1 destroyImpl i
-  getPosition i = runEffectFn1 getPositionImpl i
-  setPosition i = runEffectFn2 setPositionImpl i
-  getAngle i = runEffectFn1 getAngleImpl i
-  setAngle i = runEffectFn2 setAngleImpl i
-  getRadians i = runEffectFn1 getRadiansImpl i
-  setRadians i = runEffectFn2 setRadiansImpl i
-  getVisible i = runEffectFn1 getVisibleImpl i
-  setVisible i = runEffectFn2 setVisibleImpl i
-  getAlpha i = runEffectFn1 getAlphaImpl i
-  setAlpha i = runEffectFn2 setAlphaImpl i
-  getOrigin i = runEffectFn1 getOriginImpl i
-  setOrigin i = runEffectFn2 setOriginImpl i
-  clearTint i = runEffectFn1 clearTintImpl i
-  setTint i = runEffectFn2 setTintImpl i
-  getSize i = runEffectFn1 getSizeImpl i
-  setSize i = runEffectFn2 setSizeImpl i
-  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
-  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
-  getScale i = runEffectFn1 getScaleImpl i
-  setScale i = runEffectFn2 setScaleImpl i
-  getName i = runEffectFn1 getNameImpl i
-  setName i = runEffectFn2 setNameImpl i
-  onClick i = runEffectFn2 onClickImpl i
-  getScene = getSceneImpl
+getScale :: forall a. Transform a => a -> Effect Vector
+getScale a =
+  do
+    x <- get "scaleX" a
+    y <- get "scaleY" a
+    pure { x, y }
 
-instance textInstance :: GameObject PhaserText where
-  destroy i = runEffectFn1 destroyImpl i
-  getPosition i = runEffectFn1 getPositionImpl i
-  setPosition i = runEffectFn2 setPositionImpl i
-  getAngle i = runEffectFn1 getAngleImpl i
-  setAngle i = runEffectFn2 setAngleImpl i
-  getRadians i = runEffectFn1 getRadiansImpl i
-  setRadians i = runEffectFn2 setRadiansImpl i
-  getVisible i = runEffectFn1 getVisibleImpl i
-  setVisible i = runEffectFn2 setVisibleImpl i
-  getAlpha i = runEffectFn1 getAlphaImpl i
-  setAlpha i = runEffectFn2 setAlphaImpl i
-  getOrigin i = runEffectFn1 getOriginImpl i
-  setOrigin i = runEffectFn2 setOriginImpl i
-  clearTint i = runEffectFn1 clearTintImpl i
-  setTint i = runEffectFn2 setTintImpl i
-  getSize i = runEffectFn1 getSizeImpl i
-  setSize i = runEffectFn2 setSizeImpl i
-  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
-  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
-  getScale i = runEffectFn1 getScaleImpl i
-  setScale i = runEffectFn2 setScaleImpl i
-  getName i = runEffectFn1 getNameImpl i
-  setName i = runEffectFn2 setNameImpl i
-  onClick i = runEffectFn2 onClickImpl i
-  getScene i = getSceneImpl i
+setScale :: forall a. Transform a => Vector -> a -> Effect a
+setScale = method1 "setScale(v1.x,v1.y)"
 
-instance spriteInstance :: GameObject PhaserSprite where
-  destroy i = runEffectFn1 destroyImpl i
-  getPosition i = runEffectFn1 getPositionImpl i
-  setPosition i = runEffectFn2 setPositionImpl i
-  getAngle i = runEffectFn1 getAngleImpl i
-  setAngle i = runEffectFn2 setAngleImpl i
-  getRadians i = runEffectFn1 getRadiansImpl i
-  setRadians i = runEffectFn2 setRadiansImpl i
-  getVisible i = runEffectFn1 getVisibleImpl i
-  setVisible i = runEffectFn2 setVisibleImpl i
-  getAlpha i = runEffectFn1 getAlphaImpl i
-  setAlpha i = runEffectFn2 setAlphaImpl i
-  getOrigin i = runEffectFn1 getOriginImpl i
-  setOrigin i = runEffectFn2 setOriginImpl i
-  clearTint i = runEffectFn1 clearTintImpl i
-  setTint i = runEffectFn2 setTintImpl i
-  getSize i = runEffectFn1 getSizeImpl i
-  setSize i = runEffectFn2 setSizeImpl i
-  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
-  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
-  getScale i = runEffectFn1 getScaleImpl i
-  setScale i = runEffectFn2 setScaleImpl i
-  getName i = runEffectFn1 getNameImpl i
-  setName i = runEffectFn2 setNameImpl i
-  onClick i = runEffectFn2 onClickImpl i
-  getScene i = getSceneImpl i
+setName :: forall a. GameObject a => String -> a -> Effect a
+setName = method1 "setName(v1)"
 
-instance rectInstance :: GameObject PhaserRectangle where
-  destroy i = runEffectFn1 destroyImpl i
-  getPosition i = runEffectFn1 getPositionImpl i
-  setPosition i = runEffectFn2 setPositionImpl i
-  getAngle i = runEffectFn1 getAngleImpl i
-  setAngle i = runEffectFn2 setAngleImpl i
-  getRadians i = runEffectFn1 getRadiansImpl i
-  setRadians i = runEffectFn2 setRadiansImpl i
-  getVisible i = runEffectFn1 getVisibleImpl i
-  setVisible i = runEffectFn2 setVisibleImpl i
-  getAlpha i = runEffectFn1 getAlphaImpl i
-  setAlpha i = runEffectFn2 setAlphaImpl i
-  getOrigin i = runEffectFn1 getOriginImpl i
-  setOrigin i = runEffectFn2 setOriginImpl i
-  clearTint i = runEffectFn1 clearTintImpl i
-  setTint i = runEffectFn2 setTintImpl i
-  getSize i = runEffectFn1 getSizeImpl i
-  setSize i = runEffectFn2 setSizeImpl i
-  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
-  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
-  getScale i = runEffectFn1 getScaleImpl i
-  setScale i = runEffectFn2 setScaleImpl i
-  getName i = runEffectFn1 getNameImpl i
-  setName i = runEffectFn2 setNameImpl i
-  onClick i = runEffectFn2 onClickImpl i
-  getScene i = getSceneImpl i
-
-instance ellipseInstance :: GameObject PhaserEllipse where
-  destroy i = runEffectFn1 destroyImpl i
-  getPosition i = runEffectFn1 getPositionImpl i
-  setPosition i = runEffectFn2 setPositionImpl i
-  getAngle i = runEffectFn1 getAngleImpl i
-  setAngle i = runEffectFn2 setAngleImpl i
-  getRadians i = runEffectFn1 getRadiansImpl i
-  setRadians i = runEffectFn2 setRadiansImpl i
-  getVisible i = runEffectFn1 getVisibleImpl i
-  setVisible i = runEffectFn2 setVisibleImpl i
-  getAlpha i = runEffectFn1 getAlphaImpl i
-  setAlpha i = runEffectFn2 setAlphaImpl i
-  getOrigin i = runEffectFn1 getOriginImpl i
-  setOrigin i = runEffectFn2 setOriginImpl i
-  clearTint i = runEffectFn1 clearTintImpl i
-  setTint i = runEffectFn2 setTintImpl i
-  getSize i = runEffectFn1 getSizeImpl i
-  setSize i = runEffectFn2 setSizeImpl i
-  getDisplaySize i = runEffectFn1 getDisplaySizeImpl i
-  setDisplaySize i = runEffectFn2 setDisplaySizeImpl i
-  getScale i = runEffectFn1 getScaleImpl i
-  setScale i = runEffectFn2 setScaleImpl i
-  getName i = runEffectFn1 getNameImpl i
-  setName i = runEffectFn2 setNameImpl i
-  onClick i = runEffectFn2 onClickImpl i
-  getScene i = getSceneImpl i
+getName :: forall a. GameObject a => a -> Effect String
+getName = get "name"

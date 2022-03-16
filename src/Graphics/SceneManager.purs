@@ -13,10 +13,11 @@ import Prelude
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn4, runEffectFn1, runEffectFn2, runEffectFn4)
+import Effect.Uncurried (EffectFn4, runEffectFn4)
 import Graphics.Phaser.CoreTypes (CreateSceneFromObjectConfig)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene, SceneManager)
 import Option (class FromRecord, Option, fromRecord)
+import Utils.FFI (getNullable, method0)
 
 {-
 Im leaving this as a comment for now but it seems unnecessary.
@@ -100,8 +101,7 @@ addScene key sceneConfig autoStart game = toMaybe <$> runEffectFn4
       start = case autoStart of
         Start -> true
         NoStart -> false
-        
-
+ 
 class HasSceneManager a where
   getSceneManager :: a -> SceneManager
 
@@ -113,17 +113,12 @@ instance HasSceneManager PhaserScene where
 instance HasSceneManager PhaserGame where
   getSceneManager = getSceneManagerImpl
 
-foreign import getByKeyImpl :: EffectFn2 SceneManager String PhaserScene
+getByKey :: String -> SceneManager -> Effect (Maybe PhaserScene)
+getByKey key mngr = do
+  getNullable "get(v1)" key mngr  >>= (pure  <<< toMaybe )
 
-getByKey :: SceneManager -> String -> Effect PhaserScene
-getByKey = runEffectFn2 getByKeyImpl
+sendToBack :: PhaserScene -> Effect PhaserScene
+sendToBack = method0 "sendToBack()"
 
-foreign import sendToBackImpl :: EffectFn1 PhaserScene Unit
-
-sendToBack :: PhaserScene -> Effect Unit
-sendToBack = runEffectFn1 sendToBackImpl
-
-foreign import bringToTopImpl :: EffectFn1 PhaserScene Unit
-
-bringToTop :: PhaserScene -> Effect Unit
-bringToTop = runEffectFn1 bringToTopImpl
+bringToTop ::  PhaserScene -> Effect PhaserScene
+bringToTop = method0 "beingToTop()"

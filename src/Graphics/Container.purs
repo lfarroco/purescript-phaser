@@ -1,30 +1,23 @@
-module Graphics.Phaser.Container (create, addChild, removeChildren, list) where
+module Graphics.Phaser.Container where
 
-import Effect.Uncurried (EffectFn1, EffectFn2, runEffectFn1, runEffectFn2)
 import Effect (Effect)
-import Graphics.Phaser.GameObject (class GameObject)
+import Graphics.Phaser.CoreTypes (class GameObject)
 import Graphics.Phaser.ForeignTypes (PhaserContainer, PhaserScene)
-
-foreign import createImpl :: EffectFn1 PhaserScene PhaserContainer
+import Utils.FFI (get, method1, return0)
 
 -- | Creates a new container that belongs to the given scene
 create :: PhaserScene -> Effect PhaserContainer
-create = runEffectFn1 createImpl
-
-foreign import addChildImpl :: forall a. EffectFn2 a PhaserContainer PhaserContainer
+create =  return0 "add.container()"
 
 -- | Inserts a game object as a child of the given container
 addChild :: forall a. GameObject a => a -> PhaserContainer -> Effect PhaserContainer
-addChild = runEffectFn2 addChildImpl
+addChild = method1 "add(v1)"
 
-foreign import removeChildrenImpl :: EffectFn1 PhaserContainer PhaserContainer
-
--- | Removes all children from a container
-removeChildren :: PhaserContainer -> Effect PhaserContainer
-removeChildren = runEffectFn1 removeChildrenImpl
-
-foreign import listImpl :: forall a. EffectFn1 PhaserContainer (Array a)
+-- | Removes all children from a container - the argument controls if they
+-- | are destroyed as well
+removeAll :: Boolean -> PhaserContainer -> Effect PhaserContainer
+removeAll = method1 "removeAll(v1)"
 
 -- | Returns an array of the container's game objects.
 list :: forall a. GameObject a => PhaserContainer -> Effect (Array a)
-list = runEffectFn1 listImpl
+list = get "list"

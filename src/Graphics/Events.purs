@@ -1,77 +1,40 @@
-module Graphics.Phaser.Events
-  ( Listener
-  , createEmitter
-  , on
-  , once
-  , off
-  , createListener
-  , createSceneListener
-  , emitSceneEvent
-  , emit
-  , destroyEmitter
-  ) where
+module Graphics.Phaser.Events where
 
 import Prelude
+import Data.Foreign.EasyFFI (unsafeForeignFunction)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, runEffectFn1, runEffectFn2, runEffectFn3)
-import Graphics.Phaser.ForeignTypes (PhaserEmitter, PhaserScene)
+import Graphics.Phaser.CoreTypes (class EventEmitter, EventListener)
+import Utils.FFI (method0, method1, method2)
 
--- TODO: accept scene and gameobjects as emitters
--- | Phaser's API gives us lots of freedom when firing events - this is one way
--- | to type check if the event is being fired with valid arguments.
--- | You still need to take care when choosing the event name, as it needs to
--- | be unique.
-data Listener arg
-  = Listener PhaserEmitter String (arg -> Effect Unit)
+createEventListener0 :: Effect Unit -> EventListener
+createEventListener0 = unsafeForeignFunction [ "fn" ] "arg=>fn()"
 
-foreign import createEmitterImpl :: EffectFn1 Unit PhaserEmitter
+createEventListener1 :: forall a. (a -> Effect Unit) -> EventListener
+createEventListener1 = unsafeForeignFunction [ "fn" ] "arg=>fn(arg)()"
 
--- | Creates a new emitter, that will keep and run its own events.
--- | Consider using a scene emitter, as it will be removed when the scene
--- | is destroyed.
-createEmitter :: Unit -> Effect PhaserEmitter
-createEmitter = runEffectFn1 createEmitterImpl
+createEventListener2 :: forall a b. (a -> b -> Effect Unit) -> EventListener
+createEventListener2 = unsafeForeignFunction [ "fn" ] "(arg1,arg2)=>fn(arg1)(arg2)()"
 
-foreign import onImpl :: forall arg. EffectFn3 String (arg -> Effect Unit) PhaserEmitter Unit
+createEventListener3 :: forall a b c. (a -> b -> c -> Effect Unit) -> EventListener
+createEventListener3 = unsafeForeignFunction [ "fn" ] "(arg1,arg2,arg3)=>{console.log(arg1,arg2,arg3); fn(arg1)(arg2)(arg3)()}"
 
-on :: forall arg. String -> (arg -> Effect Unit) -> PhaserEmitter -> Effect Unit
-on = runEffectFn3 onImpl
+on :: forall emitter. EventEmitter emitter => String -> EventListener -> emitter -> Effect emitter
+on = method2 "on(v1,v2)"
 
-foreign import onceImpl :: forall arg. EffectFn3 String (arg -> Effect Unit) PhaserEmitter Unit
+once :: forall emitter args. String -> (args -> Effect Unit) -> emitter -> Effect emitter
+once = method2 "once(v1,v2)"
 
-once :: forall arg. String -> (arg -> Effect Unit) -> PhaserEmitter -> Effect Unit
-once = runEffectFn3 onceImpl
+emit :: forall emitter args. EventEmitter emitter => String -> args -> emitter -> Effect emitter
+emit = method2 "emit(v1,v2)"
 
-foreign import offImpl :: EffectFn2 String PhaserEmitter Unit
+off :: forall emitter. String -> emitter -> Effect emitter
+off = method1 "off(v1)"
 
-off :: String -> PhaserEmitter -> Effect Unit
-off = runEffectFn2 offImpl
+removeListener :: forall emitter. EventEmitter emitter => String -> EventListener -> emitter -> Effect emitter
+removeListener = method2 "removeListener(v1,v2)"
 
--- | Receives an event id, a callback and a emitter. Returns a function that
--- | provides its argument to the emitter.
-createListener :: forall arg. String -> (arg -> Effect Unit) -> PhaserEmitter -> Effect (arg -> Effect Unit)
-createListener key fn emitter = do
-  on key fn emitter
-  pure $ \arg_ -> emit key arg_ emitter
+removeAllListeners :: forall emitter. EventEmitter emitter => emitter -> Effect emitter
+removeAllListeners = method0 "removeAllListeners()"
 
-foreign import createSceneListenerImpl :: forall arg. EffectFn3 String (arg -> Effect Unit) PhaserScene Unit
-
--- createSceneListenerImpl key fn scene
--- pure $ \arg -> emitSceneEvent key arg scene
-createSceneListener :: forall args. String -> (args -> Effect Unit) -> PhaserScene -> Effect Unit
-createSceneListener = runEffectFn3 createSceneListenerImpl
-
-foreign import emitSceneEventImpl :: forall arg. EffectFn3 String arg PhaserScene Unit
-
-emitSceneEvent :: forall args. String -> args -> PhaserScene -> Effect Unit
-emitSceneEvent = runEffectFn3 emitSceneEventImpl
-
-foreign import emitImpl :: forall arg. EffectFn3 String arg PhaserEmitter Unit
-
-emit :: forall args. String -> args -> PhaserEmitter -> Effect Unit
-emit = runEffectFn3 emitImpl
-
-foreign import destroyEmitterImpl :: EffectFn1 PhaserEmitter Unit
-
-destroyEmitter :: PhaserEmitter -> Effect Unit
-destroyEmitter = runEffectFn1 destroyEmitterImpl
+shutdown :: forall emitter. EventEmitter emitter => emitter -> Effect emitter
+shutdown = method0 "shutdown()"

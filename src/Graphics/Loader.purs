@@ -1,8 +1,7 @@
 module Graphics.Phaser.Loader
   ( setBaseUrl
   , setPath
-  , loadImages
-  , onceLoadComplete
+  , loadImage
   , loadAtlas
   , loadSpritesheet
   , loadPlugin
@@ -11,73 +10,31 @@ module Graphics.Phaser.Loader
   , loadTilemapTiledJSON
   ) where
 
-import Prelude
+
 import Effect (Effect)
-import Effect.Uncurried
-  ( EffectFn2
-  , EffectFn3
-  , EffectFn4
-  , runEffectFn2
-  , runEffectFn3
-  , runEffectFn4
-  )
 import Graphics.Phaser.ForeignTypes (PhaserScene)
+import Utils.FFI (method1, method2, method3)
 
-foreign import setBaseUrlImpl ::
-  EffectFn2
-    String
-    PhaserScene
-    Unit
+setBaseUrl :: String -> PhaserScene -> Effect PhaserScene
+setBaseUrl = method1 "load.setBaseUrl(v1)"
 
-setBaseUrl :: String -> PhaserScene -> Effect Unit
-setBaseUrl = runEffectFn2 setBaseUrlImpl
-
-foreign import setPathImpl ::
-  EffectFn2
-    String
-    PhaserScene
-    Unit
-
-setPath :: String -> PhaserScene -> Effect Unit
-setPath = runEffectFn2 setPathImpl
+setPath :: String -> PhaserScene -> Effect PhaserScene
+setPath = method1 "load.setPath(v1)"
 
 type ImagePath
   = { key :: String, path :: String }
 
-foreign import loadImagesImpl :: EffectFn2 (Array ImagePath) PhaserScene Unit
-
-loadImages :: Array ImagePath -> PhaserScene -> Effect Unit
-loadImages = runEffectFn2 loadImagesImpl
-
-foreign import onceLoadCompleteImpl ::
-  EffectFn2
-    PhaserScene
-    (PhaserScene -> Effect Unit)
-    PhaserScene
-
-onceLoadComplete :: PhaserScene -> (PhaserScene -> Effect Unit) -> Effect PhaserScene
-onceLoadComplete = runEffectFn2 onceLoadCompleteImpl
-
-foreign import loadAtlasImpl :: EffectFn4 String String String PhaserScene PhaserScene
+loadImage :: ImagePath -> PhaserScene -> Effect PhaserScene
+loadImage = method1 "load.image(v1.key,v1.path)"
 
 loadAtlas :: String -> String -> String -> PhaserScene -> Effect PhaserScene
-loadAtlas = runEffectFn4 loadAtlasImpl
-
-foreign import loadPluginImpl :: EffectFn3 String String PhaserScene PhaserScene
+loadAtlas = method3 "load.atlas(v1, v2, v3)"
 
 loadPlugin :: String -> String -> PhaserScene -> Effect PhaserScene
-loadPlugin = runEffectFn3 loadPluginImpl
-
-foreign import loadScenePluginImpl ::
-  EffectFn4
-    String
-    String
-    String
-    PhaserScene
-    PhaserScene
+loadPlugin = method2 "load.plugin(v1, v2)"
 
 loadScene :: String -> String -> String -> PhaserScene -> Effect PhaserScene
-loadScene = runEffectFn4 loadScenePluginImpl
+loadScene = method3 "load.scenePlugin({ key: v1, url: v2, sceneKey: v3})"
 
 type LoadSpriteSheetConfig
   = { frameWidth :: Number
@@ -88,48 +45,30 @@ type LoadSpriteSheetConfig
     , spacing :: Int
     }
 
-foreign import loadSpritesheetImpl ::
-  EffectFn4
-    String
-    String
-    LoadSpriteSheetConfig
-    PhaserScene
-    PhaserScene
-
+-- | Key, Texture, Config
 loadSpritesheet ::
   String ->
   String ->
   LoadSpriteSheetConfig ->
   PhaserScene ->
   Effect PhaserScene
-loadSpritesheet = runEffectFn4 loadSpritesheetImpl
-
-foreign import loadTilemapTileJSONImpl ::
-  EffectFn3
-    String
-    String
-    PhaserScene
-    PhaserScene
+loadSpritesheet = method3 "load.spritesheet(v1,v2,v3)"
 
 loadTilemapTileJSON ::
   String ->
   String ->
   PhaserScene ->
   Effect PhaserScene
-loadTilemapTileJSON = runEffectFn3 loadTilemapTileJSONImpl
+loadTilemapTileJSON = 
+  method2 "load.tilemapTileJSON(v1, v2)"
+
 
 type TiledLoadConfiguration
   = { key :: String, url :: String }
-
-foreign import loadTilemapTiledJSONImpl ::
-  EffectFn2
-    (Array TiledLoadConfiguration)
-    PhaserScene
-    PhaserScene
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.Loader.LoaderPlugin.html#tilemapTiledJSON__anchor
 loadTilemapTiledJSON ::
   (Array TiledLoadConfiguration) ->
   PhaserScene ->
   Effect PhaserScene
-loadTilemapTiledJSON = runEffectFn2 loadTilemapTiledJSONImpl
+loadTilemapTiledJSON = method1 "load.tilemapTiledJSON(v1, v2)"

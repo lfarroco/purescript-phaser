@@ -1,11 +1,17 @@
 module Graphics.Phaser.CoreTypes where
 
-import Graphics.Phaser.ForeignTypes
-import Prelude
 import Effect (Effect)
 import Graphics.Canvas (CanvasElement, Context2D)
+import Graphics.Phaser.ForeignTypes (AudioContext, BootCallback, JSONCamera, Key, KeyboardPlugin, NodeEventEmitter, PackFileSection, PhaserContainer, PhaserGraphic, PhaserImage, PhaserScene, PhaserSprite, PhaserText, PluginObjectItem, WebGLPipeline)
 import Option (Option)
+import Prelude (Unit)
 import Web.HTML.HTMLElement (HTMLElement)
+
+type Vector
+  = { x :: Number, y :: Number }
+
+type Dimensions
+  = { width :: Number, height :: Number }
 
 -- TODO: Change to Boolean | *InputConfig
 type InputConfig
@@ -99,7 +105,7 @@ type ImagesConfig
     , white :: String
     )
 
--- | Arcade / Matter Configs aren't implemented yet
+-- | Arcade / Matter Configs aren't fully implemented yet
 type PhysicsConfig
   = ( default :: String
     , arcade :: Option ArcadeWorldConfig
@@ -126,13 +132,14 @@ type PipelineConfig
 
 -- TODO: Fill out and move to proper file
 type ArcadeWorldConfig
-  = ( fps :: Int
+  = ( gravity:: Option (x:: Number, y:: Number),
+      debug:: Boolean
     )
 
 -- TODO: Fill out and move to proper file
+type MatterWorldConfig :: forall k. Row k
 type MatterWorldConfig
-  = ( fps :: Int
-    )
+  = ()
 
 type SettingsConfig
   = ( key :: String
@@ -206,3 +213,93 @@ type GameConfig
     , maxTextures :: Number
     , mipmapFilter :: String
     )
+
+class GameObject :: forall k. k -> Constraint
+class (EventEmitter a, Transform a, Tint a) <= GameObject a
+
+instance GameObject PhaserImage
+instance GameObject PhaserContainer
+instance GameObject PhaserGraphic
+instance GameObject PhaserSprite
+instance GameObject PhaserText
+instance GameObject ArcadeImage
+instance GameObject ArcadeSprite
+
+-- Transform
+-- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Transform.html
+class Transform :: forall k. k -> Constraint
+class Transform a
+
+instance Transform PhaserImage
+instance Transform PhaserContainer
+instance Transform PhaserGraphic
+instance Transform PhaserSprite
+instance Transform PhaserText
+instance Transform ArcadeImage
+instance Transform ArcadeSprite
+
+-- Tint
+-- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Tint.html
+class Tint :: forall k. k -> Constraint
+class Tint a
+
+instance Tint PhaserImage
+instance Tint PhaserContainer
+instance Tint PhaserGraphic
+instance Tint PhaserSprite
+instance Tint PhaserText
+instance Tint ArcadeImage
+instance Tint ArcadeSprite
+
+class EventEmitter :: forall k. k -> Constraint
+class EventEmitter a
+
+class PhysicsEnabled :: forall k. k -> Constraint
+class PhysicsEnabled a
+
+instance EventEmitter NodeEventEmitter
+instance EventEmitter PhaserImage
+instance EventEmitter PhaserContainer
+instance EventEmitter PhaserGraphic
+instance EventEmitter PhaserSprite
+instance EventEmitter PhaserText
+instance EventEmitter ArcadeImage
+instance EventEmitter ArcadeSprite
+instance EventEmitter KeyboardPlugin
+instance EventEmitter Key
+
+foreign import data Group :: Type
+foreign import data StaticGroup :: Type
+foreign import data ArcadeImage :: Type
+foreign import data ArcadeSprite :: Type
+
+instance PhysicsEnabled ArcadeImage
+instance PhysicsEnabled ArcadeSprite
+
+class ArcadeGroup :: forall k. k -> Constraint
+class ArcadeGroup a
+
+instance ArcadeGroup Group
+instance ArcadeGroup StaticGroup
+
+-- same approach as
+-- https://github.com/purescript-web/purescript-web-events/blob/c8a50893f04f54e2a59be7f885d25caef3589c57/src/Web/Event/EventTarget.js#L3
+-- When when you remove a listener, on js-side, you need to pass a reference
+-- to the exact same function that you provided when the listener was created.
+-- The createEventListenerN functions below allow converting ps functions into
+-- concrete event listeners that you can pass on creation and removal.
+-- TODO: maybe replace this with the DOM type, for more portability
+foreign import data EventListener :: Type
+
+class Collidable :: forall k. k -> Constraint
+class Collidable a
+
+instance Collidable Group 
+instance Collidable StaticGroup 
+instance Collidable ArcadeImage 
+instance Collidable ArcadeSprite 
+
+instance Collidable (Array Group)
+instance Collidable (Array StaticGroup)
+instance Collidable (Array ArcadeImage)
+instance Collidable (Array ArcadeSprite)

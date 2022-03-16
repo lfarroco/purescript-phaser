@@ -20,18 +20,6 @@ exports.addSceneImpl = function (key, sceneConfig, autoStart, game) {
   return game.scene.add(key, mapThis(sceneConfig), autoStart);
 };
 
-// TODO: return maybe
-exports.getByKeyImpl = function (sceneManager, key) {
-  return sceneManager.get(key);
-};
-
-exports.bringToTopImpl = function (sceneManager, name) {
-  return sceneManager.bringToTop(name);
-};
-
-exports.sendToBackImpl = function (sceneManager, name) {
-  return sceneManager.sendToBack(name);
-};
 
 exports.getSceneManagerImpl = function (obj) {
   return obj.scene;

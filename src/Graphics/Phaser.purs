@@ -7,9 +7,8 @@ module Graphics.Phaser
 import Prelude
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, runEffectFn1, EffectFn2, runEffectFn2)
-import Graphics.Phaser.CoreTypes (GameConfig)
+import Graphics.Phaser.CoreTypes (GameConfig, Dimensions)
 import Graphics.Phaser.ForeignTypes (PhaserGame)
-import Graphics.Phaser.GameObject (Dimensions)
 import Option (class FromRecord, Option, fromRecord)
 
 -- Leaving this as it might still be useful even after converting GameConfig
