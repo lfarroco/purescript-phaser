@@ -1,9 +1,10 @@
 module Main where
 
 import Prelude
+
 import Effect (Effect)
 import Graphics.Phaser as Phaser
-import Graphics.Phaser.Events (createEventListener0, onListener)
+import Graphics.Phaser.Events (createEventListener0, on)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject (setAngle, setDisplaySize, setPosition)
 import Graphics.Phaser.Image as Image
@@ -38,7 +39,7 @@ mainScene =
       Image.create "logo" scene
         >>= setPosition { x: 100.0, y: 100.0 }
         >>= setDisplaySize { width: 50.0, height: 50.0 }
-        >>= onListener "pointerdown" listener
+        >>= on "pointerdown" listener
     where
     callback :: Effect Unit
     callback =

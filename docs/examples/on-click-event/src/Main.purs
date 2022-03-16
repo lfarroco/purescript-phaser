@@ -6,8 +6,8 @@ import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
-import Graphics.Phaser.CoreTypes (Vector)
-import Graphics.Phaser.Events (EventListener, createEventListener3, off, on)
+import Graphics.Phaser.CoreTypes (EventListener, Vector)
+import Graphics.Phaser.Events (createEventListener3, off, on)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image

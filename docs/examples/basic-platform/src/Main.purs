@@ -114,9 +114,23 @@ createStars scene = do
         P.createChild { x: 50.0 + (toNumber n * 40.0), y: 100.0 } "star" group
           >>= P.setBounce 0.4
           >>= P.setCollideWorldBounds true
-    -- >>= flip P.addChild group
     )
   pure group
+
+-- Another way of creating the required sprites - the result array can be fed
+-- into addChild
+-- stars :: PhaserScene -> Effect (Array ArcadeSprite)
+-- stars scene =
+--   foldl
+--     ( \xs n -> do
+--         img <-
+--           P.createArcadeSprite { x: 50.0 + (toNumber n * 40.0), y: 100.0 } "star" scene
+--             >>= P.setBounce 0.4
+--             >>= P.setCollideWorldBounds true
+--         xs <> (pure [ img ])
+--     )
+--     (pure [])
+--     (1 .. 15)
 
 update :: PhaserScene -> Effect Unit
 update scene = do

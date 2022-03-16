@@ -6,7 +6,7 @@ module Graphics.Phaser.ArcadePhysics where
 import Prelude
 import Effect (Effect)
 import Graphics.Canvas (Dimensions)
-import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, ArcadeImage, ArcadeSprite, EventListener, Group, StaticGroup, Vector)
+import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, ArcadeImage, ArcadeSprite, Group, StaticGroup, Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
 import Utils.FFI (get, method0, method1, method2, method3, return0, return2)
 
@@ -73,7 +73,7 @@ type ArcadeBodyCollision
 getTouching :: forall a. PhysicsEnabled a => a -> Effect ArcadeBodyCollision
 getTouching = get "body.touching"
 
-addOverlap :: forall a b c d. Collidable a => Collidable b => Collidable c =>  Collidable d =>  a -> b -> (c -> d -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+addOverlap :: forall a b c d. Collidable a => Collidable b => Collidable c => Collidable d => a -> b -> (c -> d -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 addOverlap = method3 "physics.add.overlap(v1,v2,(a,b)=>v3(a)(b)())"
 
 disableBody :: forall a. PhysicsEnabled a => a -> Effect a
