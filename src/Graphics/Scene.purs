@@ -33,13 +33,13 @@ setData = do method2 "data.set(v1,v2)"
 getPluginInstance :: forall a. String -> PhaserScene -> Effect a
 getPluginInstance = get
 
-launch :: forall data'. String -> data' -> PhaserScene -> Effect PhaserScene
+launch :: forall sceneData. String -> sceneData -> PhaserScene -> Effect PhaserScene
 launch = method2 "scene.launch(v1,v2)"
 
-start :: forall data'. String -> data' -> PhaserScene -> Effect PhaserScene
+start :: forall sceneData. String -> sceneData -> PhaserScene -> Effect PhaserScene
 start = method2 "scene.start(v1, v2)"
 
-restart :: forall data'. data' -> PhaserScene -> Effect PhaserScene
+restart :: forall sceneData. sceneData -> PhaserScene -> Effect PhaserScene
 restart = method1 "scene.restart(v1)"
 
 pause :: PhaserScene -> Effect PhaserScene

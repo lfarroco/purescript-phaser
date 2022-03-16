@@ -7,7 +7,7 @@ import Graphics.Phaser.CoreTypes (class EventEmitter, EventListener)
 import Utils.FFI (method0, method1, method2)
 
 createEventListener0 :: Effect Unit -> EventListener
-createEventListener0 = unsafeForeignFunction [ "fn" ] "arg=>fn()()"
+createEventListener0 = unsafeForeignFunction [ "fn" ] "arg=>fn()"
 
 createEventListener1 :: forall a. (a -> Effect Unit) -> EventListener
 createEventListener1 = unsafeForeignFunction [ "fn" ] "arg=>fn(arg)()"
