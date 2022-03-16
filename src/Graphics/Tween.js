@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 exports.addTweenImpl = function (config) {
   // spread passed prop into the config object

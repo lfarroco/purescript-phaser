@@ -1,8 +1,9 @@
 module Graphics.Phaser.Tween (addTween, TweenProperty(..)) where
 
 import Prelude
+
 import Effect (Effect)
-import Graphics.Phaser.GameObject (class GameObject)
+import Graphics.Phaser.CoreTypes (class GameObject)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserTween)
 
 data TweenProperty

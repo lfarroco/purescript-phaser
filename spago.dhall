@@ -5,7 +5,10 @@ You can edit this file as you like.
 { name = "phaser"
 , dependencies =
   [ "aff"
+  , "arrays"
   , "canvas"
+  , "console"
+  , "easy-ffi"
   , "effect"
   , "maybe"
   , "nullable"
@@ -18,5 +21,5 @@ You can edit this file as you like.
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs" ]
+, sources = [ "src/**/*.purs", "test/**/*.purs" ]
 }

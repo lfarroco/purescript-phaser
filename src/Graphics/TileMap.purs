@@ -5,11 +5,10 @@ module Graphics.Phaser.TileMap
   , tilesets
   ) where
 
-import Prelude
 import Effect (Effect)
-import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserLayer, PhaserLayerData, PhaserMapData, PhaserScene, PhaserTile, PhaserTileMap, PhaserTileSet)
 import Option (class FromRecord, Option, fromRecord)
+import Utils.FFI (return1, return2, get)
 
 -- Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
 type TilemapConfig
@@ -45,43 +44,37 @@ type MapDataConfig
     , tiles :: Array PhaserTile
     )
 
--- | Docs: https://newdocs.phaser.io/docs/3.54.0/Phaser.GameObjects.GameObjectCreator#tilemap
-foreign import makeTileMapImpl ::
-  EffectFn2
-    PhaserScene
-    (Option TilemapConfig)
-    PhaserTileMap
-
 makeTileMap ::
   forall mapConfig.
   FromRecord mapConfig () TilemapConfig =>
-  PhaserScene -> Record mapConfig -> Effect PhaserTileMap
-makeTileMap scene mapConfig =
-  runEffectFn2
-    makeTileMapImpl
-    scene
-    (fromRecord mapConfig)
-
-foreign import addTilesetImageImpl ::
-  EffectFn3
-    PhaserTileMap
-    String
-    (Option TilesetDesc)
-    PhaserTileSet
+  Record mapConfig -> PhaserScene -> Effect PhaserTileMap
+makeTileMap mapConfig scene =
+  let
+    config :: Option TilemapConfig
+    config = (fromRecord mapConfig)
+  in
+    return1 "make.tilemap(v1)" config scene
 
 -- | The argument of type `given` must be any record which is a subset of
 -- | `TilesetDesc`
 addTilesetImage ::
   forall tilesetDesc.
-  FromRecord tilesetDesc () TilesetDesc =>
-  PhaserTileMap -> String -> Record tilesetDesc -> Effect PhaserTileSet
-addTilesetImage tileMap tilesetName tilesetDesc =
-  runEffectFn3
-    addTilesetImageImpl
-    tileMap
-    tilesetName
-    -- Pass the given record to js, which expects an option type
-    (fromRecord tilesetDesc)
+  FromRecord tilesetDesc () TilesetDesc => String -> Record tilesetDesc -> PhaserTileMap  -> Effect PhaserTileSet
+addTilesetImage tilesetName tilesetDesc tileMap  =
+  let
+      config :: Option TilesetDesc
+      config = fromRecord tilesetDesc
+   in
+    return2 """
+      addTilesetImage(
+        v1,
+        v2.key,
+        v2.tileWidth,
+        v2.tileHeight,
+        v2.tileMargin,
+        v2.tileSpacing,
+        v2.gid
+      )""" tilesetName config tileMap
 
 type TilesetDesc
   = ( key :: String
@@ -92,21 +85,12 @@ type TilesetDesc
     , gid :: Int
     )
 
-foreign import createLayerImpl ::
-  forall a.
-  EffectFn3
-    PhaserTileMap
-    a
-    (Array PhaserTileSet)
-    PhaserLayer
-
-createLayer ::
-  forall a.
-  Show a =>
-  PhaserTileMap ->
-  a ->
+createLayer :: 
+  String ->
   Array PhaserTileSet ->
+  PhaserTileMap ->
   Effect PhaserLayer
-createLayer = runEffectFn3 createLayerImpl
+createLayer = return2 "createLayer(v1,v2)"
 
-foreign import tilesets :: PhaserTileMap -> Array PhaserTileSet
+tilesets :: PhaserTileMap -> Effect (Array PhaserTileSet)
+tilesets= get "tilesets"
