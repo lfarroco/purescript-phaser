@@ -15,7 +15,7 @@ You can edit this file as you like.
   , "option"
   , "prelude"
   , "psci-support"
-  , "typelevel-prelude"
+  , "unsafe-coerce"
   , "web-html"
   ]
 , license = "MIT"
