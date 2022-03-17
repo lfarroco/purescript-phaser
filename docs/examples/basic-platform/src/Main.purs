@@ -39,7 +39,7 @@ main =
     addScene "scene 1" { create, preload, update } Start game
 
 basePath :: String
-basePath = "https://labs.phaser.io/src/games/firstgame/assets/"
+basePath = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/"
 
 preload :: PhaserScene -> Effect Unit
 preload scene =

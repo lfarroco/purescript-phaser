@@ -1521,7 +1521,7 @@ var PS = {};
           return Data_Unit.unit;
       };
   };
-  var basePath = "http://labs.phaser.io/src/games/firstgame/assets/";
+  var basePath = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/";
   var preload = function (scene) {
       return Data_Foldable.for_(Effect.applicativeEffect)(Data_Foldable.foldableArray)([ "sky", "platform", "star" ])(function (key) {
           return function __do() {
