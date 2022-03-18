@@ -1,10 +1,9 @@
 module Graphics.Phaser.Scene where
 
-
 import Data.Maybe (Maybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject)
-import Graphics.Phaser.ForeignTypes (NodeEventEmitter, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserScene)
 import Utils.FFI (get, method0, method1, method2, return1, safeGet)
 
 -- Current time in milliseconds
@@ -19,10 +18,7 @@ children :: forall a. GameObject a => PhaserScene -> Effect (Array a)
 children = get "children.list"
 
 getChildByName :: forall a. GameObject a => String -> PhaserScene -> Effect (Maybe a)
-getChildByName  = safeGet
-
-getEventEmitter :: PhaserScene -> Effect NodeEventEmitter
-getEventEmitter = get "events"
+getChildByName = safeGet
 
 getData :: forall a. String -> PhaserScene -> Effect a
 getData = return1 "getData(v1)"
@@ -60,7 +56,7 @@ switch = method1 "scene.switch(v1)"
 stop :: PhaserScene -> Effect PhaserScene
 stop = method0 "scene.stop(obj)"
 
-run :: forall a. PhaserScene -> a -> PhaserScene -> Effect PhaserScene
+run :: forall sceneData. PhaserScene -> sceneData -> PhaserScene -> Effect PhaserScene
 run = method2 "scene.run(v1, v2)"
 
 remove :: String -> PhaserScene -> Effect PhaserScene

@@ -1,7 +1,5 @@
 module Graphics.Phaser.ForeignTypes where
 
-import Data.Show (class Show)
-
 foreign import data PhaserGame :: Type
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.GameObject.html
@@ -78,3 +76,29 @@ foreign import data Key :: Type
 foreign import data KeyBoardEvent :: Type
 
 foreign import data KeyBoardPlugin :: Type
+
+foreign import data PhaserEvents :: Type
+
+foreign import data PhaserDataManager :: Type
+
+foreign import data Group :: Type
+
+foreign import data StaticGroup :: Type
+
+foreign import data ArcadeImage :: Type
+
+foreign import data ArcadeSprite :: Type
+
+foreign import data PhaserGameObjectCreator :: Type
+
+foreign import data PhaserGameObjectFactory :: Type
+
+foreign import data PhaserGamePad :: Type
+
+foreign import data PhaserGamePadButton :: Type
+
+foreign import data PhaserDisplayList :: Type
+
+foreign import data PhaserSystems :: Type
+
+foreign import data PhaserCache :: Type

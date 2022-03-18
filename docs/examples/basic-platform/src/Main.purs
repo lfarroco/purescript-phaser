@@ -1,6 +1,7 @@
 module Main where
 
 import Prelude
+
 import Data.Array ((..))
 import Data.Foldable (for_)
 import Data.Int (toNumber)
@@ -9,8 +10,8 @@ import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ArcadePhysics as P
-import Graphics.Phaser.CoreTypes (class PhysicsEnabled, ArcadeImage, ArcadeSprite, Group, StaticGroup)
-import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
+import Graphics.Phaser.CoreTypes (class PhysicsEnabled)
+import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserImage, PhaserScene, StaticGroup)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Input (CursorKeys, createCursorKeys, isDown)

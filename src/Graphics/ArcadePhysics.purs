@@ -3,11 +3,13 @@ module Graphics.Phaser.ArcadePhysics where
 -- A port of
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.StaticGroup.html
 -- TODO: create Groups as parent of static and dynamic groups
+
 import Prelude
+
 import Effect (Effect)
 import Graphics.Canvas (Dimensions)
-import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, ArcadeImage, ArcadeSprite, Group, StaticGroup, Vector)
-import Graphics.Phaser.ForeignTypes (PhaserScene)
+import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
+import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserScene, StaticGroup)
 import Utils.FFI (get, method0, method1, method2, method3, return0, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.

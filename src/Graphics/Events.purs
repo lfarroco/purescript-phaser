@@ -1,10 +1,12 @@
 module Graphics.Phaser.Events where
 
 import Prelude
+
 import Data.Foreign.EasyFFI (unsafeForeignFunction)
 import Effect (Effect)
-import Graphics.Phaser.CoreTypes (class EventEmitter, EventListener)
-import Utils.FFI (method0, method1, method2)
+import Graphics.Phaser.CoreTypes (class EventEmitter, class HasNodeEventEmitter, EventListener)
+import Graphics.Phaser.ForeignTypes (NodeEventEmitter)
+import Utils.FFI (get, method0, method1, method2)
 
 createEventListener0 :: Effect Unit -> EventListener
 createEventListener0 = unsafeForeignFunction [ "fn" ] "arg=>fn()"
@@ -38,3 +40,6 @@ removeAllListeners = method0 "removeAllListeners()"
 
 shutdown :: forall emitter. EventEmitter emitter => emitter -> Effect emitter
 shutdown = method0 "shutdown()"
+
+getEventEmitter :: forall a. HasNodeEventEmitter a => a -> Effect NodeEventEmitter
+getEventEmitter = get "events"

@@ -3,109 +3,119 @@ module Test.Main where
 import Prelude
 import Effect (Effect)
 import Effect.Class.Console (log)
-import Graphics.Phaser.CoreTypes (ArcadeImage, ArcadeSprite, EventListener)
-import Graphics.Phaser.Events (on)
-import Graphics.Phaser.ForeignTypes (Key, PhaserContainer, PhaserGraphic, PhaserImage, PhaserSprite, PhaserText)
-import Graphics.Phaser.GameObject (getPosition, setName)
-import Unsafe.Coerce (unsafeCoerce)
+import Graphics.Phaser.CoreTypes (class EventEmitter, class GameObject, class HasNodeEventEmitter, class Transform, EventListener)
+import Graphics.Phaser.Events (getEventEmitter, on)
+import Graphics.Phaser.ForeignTypes as FT
+import Graphics.Phaser.GameObject (setName, setPosition)
 
-fakeImage :: PhaserImage
-fakeImage = unsafeCoerce {}
-
-fakeContainer :: PhaserContainer
-fakeContainer = unsafeCoerce {}
-
-fakeText :: PhaserText
-fakeText = unsafeCoerce {}
-
-fakeGraphic :: PhaserGraphic
-fakeGraphic = unsafeCoerce {}
-
-fakeSprite :: PhaserSprite
-fakeSprite = unsafeCoerce {}
-
-fakeArcadeImage :: ArcadeImage
-fakeArcadeImage = unsafeCoerce {}
-
-fakeArcadeSprite :: ArcadeSprite
-fakeArcadeSprite = unsafeCoerce {}
-
-fakeKey :: Key
-fakeKey = unsafeCoerce {}
-
--- Functions that ask for a "GameObject" should accept:
--- PhaserImage
--- PhaserContainer
--- PhaserText 
--- PhaserGraphic 
--- PhaserSprite 
--- ArcadeImage 
--- ArcadeSprite 
-gameObjectTest :: Effect Unit
-gameObjectTest =
+gameObjectSpec ::
+  FT.PhaserImage ->
+  FT.PhaserContainer ->
+  FT.PhaserGraphic ->
+  FT.PhaserSprite ->
+  FT.PhaserImage ->
+  FT.ArcadeImage ->
+  FT.ArcadeSprite ->
+  FT.PhaserText ->
+  Effect Unit
+gameObjectSpec img container graphic sprite image arcadeImage arcadeSprite text =
   let
-    _img = setName "" fakeImage
-
-    _container = setName "" fakeContainer
-
-    _text = setName "" fakeText
-
-    _graphic = setName "" fakeGraphic
-
-    _sprite = setName "" fakeSprite
-
-    _arcadeImage = setName "" fakeArcadeImage
-
-    _arcadeSprite = setName "" fakeArcadeSprite
+    isGameObject :: forall gameObject. GameObject gameObject => gameObject -> Effect Unit
+    isGameObject = setName "" >=> const (pure unit)
   in
-    log "GameObjects ok"
+    do
+      isGameObject img
+      isGameObject container
+      isGameObject graphic
+      isGameObject sprite
+      isGameObject image
+      isGameObject arcadeImage
+      isGameObject arcadeSprite
+      isGameObject text
 
--- GameObjects should be accepted by functions that ask for "Transform a"
-transformTest :: Effect Unit
-transformTest =
+transformSpec ::
+  FT.PhaserImage ->
+  FT.PhaserContainer ->
+  FT.PhaserGraphic ->
+  FT.PhaserSprite ->
+  FT.PhaserImage ->
+  FT.ArcadeImage ->
+  FT.ArcadeSprite ->
+  FT.PhaserText ->
+  Effect Unit
+transformSpec img container graphic sprite image arcadeImage arcadeSprite text =
   let
-    _img = getPosition fakeImage
-
-    _container = getPosition fakeContainer
-
-    _text = getPosition fakeText
-
-    _graphic = getPosition fakeGraphic
-
-    _sprite = getPosition fakeSprite
-
-    _arcadeImage = getPosition fakeArcadeImage
-
-    _arcadeSprite = getPosition fakeArcadeSprite
+    isTransform :: forall transform. Transform transform => transform -> Effect Unit
+    isTransform = setPosition { x: 0.0, y: 0.0 } >=> const (pure unit)
   in
-    log "Renderable ok"
+    do
+      isTransform img
+      isTransform container
+      isTransform graphic
+      isTransform sprite
+      isTransform image
+      isTransform arcadeImage
+      isTransform arcadeSprite
+      isTransform text
 
--- GameObjects should be event emmiters
-fakeListener :: EventListener
-fakeListener = unsafeCoerce {}
-
-eventsTest :: Effect Unit
-eventsTest =
+extendsEventEmitterSpec ::
+  EventListener ->
+  FT.PhaserImage ->
+  FT.PhaserContainer ->
+  FT.PhaserGraphic ->
+  FT.PhaserSprite ->
+  FT.PhaserImage ->
+  FT.ArcadeImage ->
+  FT.ArcadeSprite ->
+  FT.PhaserText ->
+  FT.Key ->
+  Effect Unit
+extendsEventEmitterSpec listener img container graphic sprite image arcadeImage arcadeSprite text key =
   let
-    _img = on "" fakeListener fakeImage
-
-    _container = on "" fakeListener fakeContainer
-
-    _text = on "" fakeListener fakeText
-
-    _graphic = on "" fakeListener fakeGraphic
-
-    _arcadeImage = on "" fakeListener fakeArcadeImage
-
-    _arcadeSprite = on "" fakeListener fakeArcadeSprite
-
-    _key = on "" fakeListener fakeKey
+    extendsEE :: forall ee. EventEmitter ee => ee -> Effect Unit
+    extendsEE = on "" listener >=> const (pure unit)
   in
-    log "Events ok"
+    do
+      extendsEE img
+      extendsEE container
+      extendsEE graphic
+      extendsEE sprite
+      extendsEE image
+      extendsEE arcadeImage
+      extendsEE arcadeSprite
+      extendsEE text
+      extendsEE key
 
+hasEventEmitterSpec ::
+  FT.PhaserScene ->
+  FT.PhaserGame ->
+  FT.PhaserDisplayList ->
+  FT.PhaserGameObjectCreator ->
+  FT.PhaserGameObjectFactory ->
+  FT.PhaserLayer ->
+  FT.PhaserGamePad ->
+  FT.PhaserGamePadButton ->
+  FT.PhaserSystems ->
+  FT.PhaserCache ->
+  Effect Unit
+hasEventEmitterSpec scene game displayList gameObjectCreator gameObjectFactory layer gamepad gamepadButton systems cache =
+  let
+    hasEE :: forall a. HasNodeEventEmitter a => a -> Effect Unit
+    hasEE = getEventEmitter >=> const (pure unit)
+  in
+    do
+      hasEE scene
+      hasEE game
+      hasEE displayList
+      hasEE gameObjectCreator
+      hasEE gameObjectFactory
+      hasEE layer
+      hasEE gamepad
+      hasEE gamepadButton
+      hasEE systems
+      hasEE cache
+
+-- | If the functions defined above are wrong, then the test will fail
 main :: Effect Unit
 main = do
-  gameObjectTest
-  transformTest
-  eventsTest
-  log "All declarations above should compile"
+  log "If you can read this, implementation follows spec 😌"

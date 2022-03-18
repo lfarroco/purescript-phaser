@@ -14,8 +14,7 @@ module Graphics.Phaser.Sprite
 import Utils.FFI
 
 import Effect (Effect)
-import Graphics.Phaser.CoreTypes (ArcadeSprite)
-import Graphics.Phaser.ForeignTypes (PhaserAnimation, PhaserScene, PhaserSprite)
+import Graphics.Phaser.ForeignTypes (ArcadeSprite, PhaserAnimation, PhaserScene, PhaserSprite)
 
 type FrameNumber
   = { key :: String, frame :: Int }
@@ -35,8 +34,8 @@ createAnimation =
 class Sprite :: forall k. k -> Constraint
 class Sprite a
 
-instance Sprite  ArcadeSprite
-instance Sprite  PhaserSprite
+instance Sprite ArcadeSprite
+instance Sprite PhaserSprite
 
 playAnimation :: forall a. Sprite a=> {key:: String, ignoreIfPlaying:: Boolean} -> a -> Effect a
 playAnimation = method1 "anims.play(v1.key,v1.ignoreIfPlaying)"

@@ -2,7 +2,8 @@ module Graphics.Phaser.CoreTypes where
 
 import Effect (Effect)
 import Graphics.Canvas (CanvasElement, Context2D)
-import Graphics.Phaser.ForeignTypes (AudioContext, BootCallback, JSONCamera, Key, KeyboardPlugin, NodeEventEmitter, PackFileSection, PhaserContainer, PhaserGraphic, PhaserImage, PhaserScene, PhaserSprite, PhaserText, PluginObjectItem, WebGLPipeline)
+import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, AudioContext, BootCallback, Group, JSONCamera, Key, KeyboardPlugin, NodeEventEmitter, PackFileSection, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserSprite, PhaserText, PluginObjectItem, StaticGroup, WebGLPipeline)
+import Graphics.Phaser.ForeignTypes as FT
 import Option (Option)
 import Prelude (Unit)
 import Web.HTML.HTMLElement (HTMLElement)
@@ -268,10 +269,26 @@ instance EventEmitter ArcadeSprite
 instance EventEmitter KeyboardPlugin
 instance EventEmitter Key
 
-foreign import data Group :: Type
-foreign import data StaticGroup :: Type
-foreign import data ArcadeImage :: Type
-foreign import data ArcadeSprite :: Type
+-- | This is somewhat confusing.
+-- | Some phaser objects inherit direct from Event Emitter
+-- | Because of that you can do `img.on` or `img.emit`
+-- | These objects are classified under `EventEmitter`. 
+-- | But other objects have a property `.events` that is
+-- | an instance of event emitter (`scene.events.on`, `game.events.emit`, etc.)
+-- | This typeclass identifies objects that have the `.events` property.
+class HasNodeEventEmitter :: forall k. k -> Constraint
+class HasNodeEventEmitter a
+
+instance HasNodeEventEmitter PhaserScene
+instance HasNodeEventEmitter PhaserGame
+instance HasNodeEventEmitter FT.PhaserDisplayList 
+instance HasNodeEventEmitter FT.PhaserGameObjectCreator
+instance HasNodeEventEmitter FT.PhaserGameObjectFactory
+instance HasNodeEventEmitter FT.PhaserLayer
+instance HasNodeEventEmitter FT.PhaserGamePad
+instance HasNodeEventEmitter FT.PhaserGamePadButton
+instance HasNodeEventEmitter FT.PhaserSystems
+instance HasNodeEventEmitter FT.PhaserCache
 
 instance PhysicsEnabled ArcadeImage
 instance PhysicsEnabled ArcadeSprite
