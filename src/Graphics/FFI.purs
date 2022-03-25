@@ -84,11 +84,11 @@ method5 expr v1 v2 v3 v4 v5 obj = do
   void $ return5 expr v1 v2 v3 v4 v5 obj
   pure obj
 
-get :: forall obj returnValue. String -> obj -> Effect returnValue
-get name obj = FFI.unsafeForeignFunction [ "obj", "" ] ("obj." <> name) obj
+getProperty :: forall obj returnValue. String -> obj -> Effect returnValue
+getProperty name obj = FFI.unsafeForeignFunction [ "obj", "" ] ("obj." <> name) obj
 
-set :: forall obj value returnValue. String -> value ->  obj -> Effect returnValue
-set name value obj = FFI.unsafeForeignFunction [ "v1", "obj", "" ] ("obj." <> name <>" = v1") value obj
+set :: forall obj value returnValue. String -> value -> obj -> Effect returnValue
+set name value obj = FFI.unsafeForeignFunction [ "v1", "obj", "" ] ("obj." <> name <> " = v1") value obj
 
 getNullable :: forall a obj. String -> String -> obj -> Effect (Nullable a)
 getNullable expr obj = return1 expr obj
@@ -97,3 +97,18 @@ safeGet :: forall obj a. String -> obj -> Effect (Maybe a)
 safeGet k obj = do
   v <- getNullable "children.getByName(v1)" k obj
   pure $ toMaybe v
+
+-- | Makes all properties in a scene config object be replaced with a function
+-- | that accepts the phaser scene that will run
+injectThis :: forall a b. a -> Effect b
+injectThis =
+  FFI.unsafeForeignProcedure [ "obj" ]
+    """
+  return Object.entries(obj).reduce(
+    function(xs,[k,v]){ 
+          xs[k] = function(){ v(this)()};
+          return xs;
+          }
+    , {}
+  );
+  """

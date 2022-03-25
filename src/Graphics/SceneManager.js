@@ -1,6 +1,5 @@
 "use strict";
 
-// TODO: put this in a `util` module
 function mapThis(obj) {
   var newObj = {};
   for (const key in obj) {
@@ -19,7 +18,6 @@ exports.addSceneImpl = function (key, sceneConfig, autoStart, game) {
   // TODO: replace with `mkEffectFn1`
   return game.scene.add(key, mapThis(sceneConfig), autoStart);
 };
-
 
 exports.getSceneManagerImpl = function (obj) {
   return obj.scene;

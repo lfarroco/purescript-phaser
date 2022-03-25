@@ -171,15 +171,16 @@ update cursors scene =
       Nothing -> log "Platform image not found!"
 
 move :: forall a. PhysicsEnabled a => Sprite a => CursorKeys -> a -> Effect Unit
-move cursors sprite = void do 
-  isRight <- isDown cursors.right
-  isLeft <- isDown cursors.left
-  if isRight then
-    moveRight
-  else if isLeft then
-    moveLeft
-  else
-    stop
+move cursors sprite =
+  void do
+    isRight <- isDown cursors.right
+    isLeft <- isDown cursors.left
+    if isRight then
+      moveRight
+    else if isLeft then
+      moveLeft
+    else
+      stop
   where
   moveRight = P.setVelocityX (150.0) sprite >>= Sprite.playAnimation { key: "right", ignoreIfPlaying: true }
 

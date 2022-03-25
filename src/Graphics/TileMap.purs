@@ -8,7 +8,7 @@ module Graphics.Phaser.TileMap
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserLayer, PhaserLayerData, PhaserMapData, PhaserScene, PhaserTile, PhaserTileMap, PhaserTileSet)
 import Option (class FromRecord, Option, fromRecord)
-import Utils.FFI (return1, return2, get)
+import Utils.FFI (return1, return2, getProperty)
 
 -- Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
 type TilemapConfig
@@ -59,13 +59,14 @@ makeTileMap mapConfig scene =
 -- | `TilesetDesc`
 addTilesetImage ::
   forall tilesetDesc.
-  FromRecord tilesetDesc () TilesetDesc => String -> Record tilesetDesc -> PhaserTileMap  -> Effect PhaserTileSet
-addTilesetImage tilesetName tilesetDesc tileMap  =
+  FromRecord tilesetDesc () TilesetDesc => String -> Record tilesetDesc -> PhaserTileMap -> Effect PhaserTileSet
+addTilesetImage tilesetName tilesetDesc tileMap =
   let
-      config :: Option TilesetDesc
-      config = fromRecord tilesetDesc
-   in
-    return2 """
+    config :: Option TilesetDesc
+    config = fromRecord tilesetDesc
+  in
+    return2
+      """
       addTilesetImage(
         v1,
         v2.key,
@@ -74,7 +75,10 @@ addTilesetImage tilesetName tilesetDesc tileMap  =
         v2.tileMargin,
         v2.tileSpacing,
         v2.gid
-      )""" tilesetName config tileMap
+      )"""
+      tilesetName
+      config
+      tileMap
 
 type TilesetDesc
   = ( key :: String
@@ -85,7 +89,7 @@ type TilesetDesc
     , gid :: Int
     )
 
-createLayer :: 
+createLayer ::
   String ->
   Array PhaserTileSet ->
   PhaserTileMap ->
@@ -93,4 +97,4 @@ createLayer ::
 createLayer = return2 "createLayer(v1,v2)"
 
 tilesets :: PhaserTileMap -> Effect (Array PhaserTileSet)
-tilesets= get "tilesets"
+tilesets = getProperty "tilesets"

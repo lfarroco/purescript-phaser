@@ -10,6 +10,9 @@ import Utils.FFI (method0, method1, method2, method5, return0, return1)
 create :: String -> PhaserScene -> Effect PhaserText
 create = return1 "add.text(0,0,v1)"
 
+createFromArray :: Array String -> PhaserScene -> Effect PhaserText
+createFromArray = return1 "add.text(0,0,v1)"
+
 setText :: String -> PhaserText -> Effect PhaserText
 setText = method1 "setText(v1)"
 

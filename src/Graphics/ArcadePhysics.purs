@@ -3,14 +3,12 @@ module Graphics.Phaser.ArcadePhysics where
 -- A port of
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.StaticGroup.html
 -- TODO: create Groups as parent of static and dynamic groups
-
 import Prelude
-
 import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserScene, StaticGroup)
-import Utils.FFI (get, method0, method1, method2, method3, return0, return2)
+import Utils.FFI (getProperty, method0, method1, method2, method3, return0, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserScene -> Effect StaticGroup
@@ -41,7 +39,7 @@ setImmovable :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setImmovable = method1 "setImmovable(v1)"
 
 allowGravity :: forall a. PhysicsEnabled a => a -> Effect Boolean
-allowGravity = get "body.allowGravity"
+allowGravity = getProperty "body.allowGravity"
 
 setAllowGravity :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setAllowGravity = method1 "body.setAllowGravity(v1)"
@@ -73,7 +71,7 @@ type ArcadeBodyCollision
     }
 
 getTouching :: forall a. PhysicsEnabled a => a -> Effect ArcadeBodyCollision
-getTouching = get "body.touching"
+getTouching = getProperty "body.touching"
 
 addOverlap :: forall a b c d. Collidable a => Collidable b => Collidable c => Collidable d => a -> b -> (c -> d -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 addOverlap = method3 "physics.add.overlap(v1,v2,(a,b)=>v3(a)(b)())"

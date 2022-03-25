@@ -102,3 +102,5 @@ foreign import data PhaserDisplayList :: Type
 foreign import data PhaserSystems :: Type
 
 foreign import data PhaserCache :: Type
+
+foreign import data PhaserScenePlugin :: Type

@@ -7,6 +7,14 @@ import Graphics.Phaser.ForeignTypes as FT
 import Option (Option)
 import Prelude (Unit)
 import Web.HTML.HTMLElement (HTMLElement)
+-- Current time in milliseconds
+
+type Time
+  = Number
+
+-- Milliseconds since the last frame
+type Delta
+  = Number
 
 type Vector
   = { x :: Number, y :: Number }
@@ -289,6 +297,19 @@ instance HasNodeEventEmitter FT.PhaserGamePad
 instance HasNodeEventEmitter FT.PhaserGamePadButton
 instance HasNodeEventEmitter FT.PhaserSystems
 instance HasNodeEventEmitter FT.PhaserCache
+
+{-         
+  According to Phaser docs, users should not interact with the scene manager directly -
+  they should use the scene plugin instead:
+  "* You should not usually interact directly with the Scene Manager at all. Instead, you should use
+  * the Scene Plugin, which is available from every Scene in your game via the `this.scene` property."
+           -}
+
+class HasScenePlugin :: forall k. k -> Constraint
+class HasScenePlugin a
+
+instance HasScenePlugin  FT.PhaserGame
+instance HasScenePlugin  FT.PhaserScene
 
 instance PhysicsEnabled ArcadeImage
 instance PhysicsEnabled ArcadeSprite
