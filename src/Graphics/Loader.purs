@@ -6,7 +6,7 @@ module Graphics.Phaser.Loader
   , loadSpritesheet
   , loadPlugin
   , loadScene
-  , loadTilemapTileJSON
+  -- , loadTilemapTileJSON
   , loadTilemapTiledJSON
   ) where
 
@@ -21,10 +21,10 @@ setBaseUrl = method1 "load.setBaseUrl(v1)"
 setPath :: String -> PhaserScene -> Effect PhaserScene
 setPath = method1 "load.setPath(v1)"
 
-type ImagePath
+type AssetLoadConfig
   = { key :: String, path :: String }
 
-loadImage :: ImagePath -> PhaserScene -> Effect PhaserScene
+loadImage :: AssetLoadConfig -> PhaserScene -> Effect PhaserScene
 loadImage = method1 "load.image(v1.key,v1.path)"
 
 loadAtlas :: String -> String -> String -> PhaserScene -> Effect PhaserScene
@@ -39,36 +39,26 @@ loadScene = method3 "load.scenePlugin({ key: v1, url: v2, sceneKey: v3})"
 type LoadSpriteSheetConfig
   = { frameWidth :: Number
     , frameHeight :: Number
-    , startFrame :: Int
-    , endFrame :: Int
-    , margin :: Int
-    , spacing :: Int
     }
 
--- | Key, Texture, Config
 loadSpritesheet ::
-  String ->
-  String ->
+  AssetLoadConfig  ->
   LoadSpriteSheetConfig ->
   PhaserScene ->
   Effect PhaserScene
-loadSpritesheet = method3 "load.spritesheet(v1,v2,v3)"
+loadSpritesheet = method2 "load.spritesheet(v1.key,v1.path,v2)"
 
-loadTilemapTileJSON ::
-  String ->
-  String ->
-  PhaserScene ->
-  Effect PhaserScene
-loadTilemapTileJSON = 
-  method2 "load.tilemapTileJSON(v1, v2)"
-
-
-type TiledLoadConfiguration
-  = { key :: String, url :: String }
+-- loadTilemapTiledJSON ::
+--   String ->
+--   String ->
+--   PhaserScene ->
+--   Effect PhaserScene
+-- loadTilemapTileJSON = 
+--   method2 "load.tilemapTiledJSON(v1, v2)"
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.Loader.LoaderPlugin.html#tilemapTiledJSON__anchor
 loadTilemapTiledJSON ::
-  (Array TiledLoadConfiguration) ->
+  AssetLoadConfig ->
   PhaserScene ->
   Effect PhaserScene
-loadTilemapTiledJSON = method1 "load.tilemapTiledJSON(v1, v2)"
+loadTilemapTiledJSON = method1 "load.tilemapTiledJSON(v1.key,v1.path)"

@@ -1,7 +1,6 @@
 module Test.Main where
 
 import Prelude
-
 import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser.CoreTypes (class EventEmitter, class GameObject, class HasNodeEventEmitter, class Transform, EventListener)
@@ -18,8 +17,9 @@ gameObjectSpec ::
   FT.ArcadeImage ->
   FT.ArcadeSprite ->
   FT.PhaserText ->
+  FT.PhaserLayer ->
   Effect Unit
-gameObjectSpec img container graphic sprite image arcadeImage arcadeSprite text =
+gameObjectSpec img container graphic sprite image arcadeImage arcadeSprite text layer =
   let
     isGameObject :: forall gameObject. GameObject gameObject => gameObject -> Effect Unit
     isGameObject = setName "" >=> const (pure unit)
@@ -33,6 +33,7 @@ gameObjectSpec img container graphic sprite image arcadeImage arcadeSprite text 
       isGameObject arcadeImage
       isGameObject arcadeSprite
       isGameObject text
+      isGameObject layer
 
 transformSpec ::
   FT.PhaserImage ->

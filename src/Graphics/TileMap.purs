@@ -66,8 +66,7 @@ addTilesetImage tilesetName tilesetDesc tileMap =
     config = fromRecord tilesetDesc
   in
     return2
-      """
-      addTilesetImage(
+      """ addTilesetImage(
         v1,
         v2.key,
         v2.tileWidth,

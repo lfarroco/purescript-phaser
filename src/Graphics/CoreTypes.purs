@@ -2,11 +2,12 @@ module Graphics.Phaser.CoreTypes where
 
 import Effect (Effect)
 import Graphics.Canvas (CanvasElement, Context2D)
-import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, AudioContext, BootCallback, Group, JSONCamera, Key, KeyboardPlugin, NodeEventEmitter, PackFileSection, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserScene, PhaserSprite, PhaserText, PluginObjectItem, StaticGroup, WebGLPipeline)
+import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, AudioContext, BootCallback, Group, JSONCamera, Key, KeyboardPlugin, NodeEventEmitter, PackFileSection, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserLayer, PhaserScene, PhaserSprite, PhaserText, PluginObjectItem, StaticGroup, WebGLPipeline)
 import Graphics.Phaser.ForeignTypes as FT
 import Option (Option)
 import Prelude (Unit)
 import Web.HTML.HTMLElement (HTMLElement)
+
 -- Current time in milliseconds
 
 type Time
@@ -233,6 +234,7 @@ instance GameObject PhaserSprite
 instance GameObject PhaserText
 instance GameObject ArcadeImage
 instance GameObject ArcadeSprite
+instance GameObject PhaserLayer
 
 -- Transform
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Transform.html
@@ -246,6 +248,7 @@ instance Transform PhaserSprite
 instance Transform PhaserText
 instance Transform ArcadeImage
 instance Transform ArcadeSprite
+instance Transform PhaserLayer
 
 -- Tint
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Tint.html
@@ -259,6 +262,7 @@ instance Tint PhaserSprite
 instance Tint PhaserText
 instance Tint ArcadeImage
 instance Tint ArcadeSprite
+instance Tint PhaserLayer
 
 class EventEmitter :: forall k. k -> Constraint
 class EventEmitter a
@@ -276,6 +280,7 @@ instance EventEmitter ArcadeImage
 instance EventEmitter ArcadeSprite
 instance EventEmitter KeyboardPlugin
 instance EventEmitter Key
+instance EventEmitter PhaserLayer
 
 -- | This is somewhat confusing.
 -- | Some phaser objects inherit direct from Event Emitter
