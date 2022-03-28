@@ -18,23 +18,14 @@ ghRoot = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/
 
 preload :: PhaserScene -> Effect Unit
 preload scene =
-  void do
     for_
-      [ loadSpritesheet "explosion" (ghRoot <> "explosion.png")
+      [ loadSpritesheet { key: "explosion", path: ghRoot <> "explosion.png" }
           { frameWidth: 64.0
           , frameHeight: 64.0
-          , startFrame: 0
-          , endFrame: 23
-          , margin: 0
-          , spacing: 0
           }
-      , loadSpritesheet "balls" (ghRoot <> "balls.png")
+      , loadSpritesheet { key: "balls", path: ghRoot <> "balls.png" }
           { frameWidth: 17.0
           , frameHeight: 17.0
-          , startFrame: 0
-          , endFrame: 4
-          , margin: 0
-          , spacing: 0
           }
       ] \fn -> fn scene
 
@@ -59,7 +50,7 @@ create scene =
     void $ Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
     _ <-
       Sprite.add explodeSpriteKey { x: 100.0, y: 100.0 } scene
-      >>= Sprite.playAnimation {key: explodeAnimationKey, ignoreIfPlaying: true}
+        >>= Sprite.playAnimation { key: explodeAnimationKey, ignoreIfPlaying: true }
         >>= scale
     Sprite.add
       "balls"

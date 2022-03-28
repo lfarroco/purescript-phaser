@@ -1075,7 +1075,6 @@ var PS = {};
 (function(exports) {
   "use strict";
 
-  // TODO: put this in a `util` module
   function mapThis(obj) {
     var newObj = {};
     for (const key in obj) {
@@ -1131,7 +1130,7 @@ var PS = {};
                           if (autoStart instanceof NoStart) {
                               return false;
                           };
-                          throw new Error("Failed pattern match at Graphics.Phaser.SceneManager (line 101, column 15 - line 103, column 25): " + [ autoStart.constructor.name ]);
+                          throw new Error("Failed pattern match at Graphics.Phaser.SceneManager (line 121, column 15 - line 123, column 25): " + [ autoStart.constructor.name ]);
                       })();
                       return Data_Functor.map(Effect.functorEffect)(Data_Nullable.toMaybe)(function () {
                           return $foreign.addSceneImpl(key, Option.fromRecord(dictFromRecord)(sceneConfig), start, game);
@@ -1149,7 +1148,7 @@ var PS = {};
   "use strict";
   $PS["Graphics.Phaser.Text"] = $PS["Graphics.Phaser.Text"] || {};
   var exports = $PS["Graphics.Phaser.Text"];
-  var Utils_FFI = $PS["Utils.FFI"];                          
+  var Utils_FFI = $PS["Utils.FFI"];                           
   var create = Utils_FFI.return1("add.text(0,0,v1)");
   exports["create"] = create;
 })(PS);

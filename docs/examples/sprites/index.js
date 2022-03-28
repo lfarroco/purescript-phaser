@@ -928,26 +928,24 @@ var PS = {};
           };
       };
   };
+  var method2 = function (expr) {
+      return function (v1) {
+          return function (v2) {
+              return function (obj) {
+                  return function __do() {
+                      Data_Functor["void"](Effect.functorEffect)(return2(expr)(v1)(v2)(obj))();
+                      return obj;
+                  };
+              };
+          };
+      };
+  };
   var return3 = function (expr) {
       return function (v1) {
           return function (v2) {
               return function (v3) {
                   return function (obj) {
                       return Data_Foreign_EasyFFI.unsafeForeignFunction(argsN(3))("obj." + expr)(v1)(v2)(v3)(obj);
-                  };
-              };
-          };
-      };
-  };
-  var method3 = function (expr) {
-      return function (v1) {
-          return function (v2) {
-              return function (v3) {
-                  return function (obj) {
-                      return function __do() {
-                          Data_Functor["void"](Effect.functorEffect)(return3(expr)(v1)(v2)(v3)(obj))();
-                          return obj;
-                      };
                   };
               };
           };
@@ -968,8 +966,8 @@ var PS = {};
   };
   exports["method1"] = method1;
   exports["return2"] = return2;
+  exports["method2"] = method2;
   exports["return3"] = return3;
-  exports["method3"] = method3;
   exports["return4"] = return4;
 })(PS);
 (function($PS) {
@@ -988,14 +986,13 @@ var PS = {};
   "use strict";
   $PS["Graphics.Phaser.Loader"] = $PS["Graphics.Phaser.Loader"] || {};
   var exports = $PS["Graphics.Phaser.Loader"];
-  var Utils_FFI = $PS["Utils.FFI"];                                           
-  var loadSpritesheet = Utils_FFI.method3("load.spritesheet(v1,v2,v3)");
+  var Utils_FFI = $PS["Utils.FFI"];                                                     
+  var loadSpritesheet = Utils_FFI.method2("load.spritesheet(v1.key,v1.path,v2)");
   exports["loadSpritesheet"] = loadSpritesheet;
 })(PS);
 (function(exports) {
   "use strict";
 
-  // TODO: put this in a `util` module
   function mapThis(obj) {
     var newObj = {};
     for (const key in obj) {
@@ -1051,7 +1048,7 @@ var PS = {};
                           if (autoStart instanceof NoStart) {
                               return false;
                           };
-                          throw new Error("Failed pattern match at Graphics.Phaser.SceneManager (line 101, column 15 - line 103, column 25): " + [ autoStart.constructor.name ]);
+                          throw new Error("Failed pattern match at Graphics.Phaser.SceneManager (line 121, column 15 - line 123, column 25): " + [ autoStart.constructor.name ]);
                       })();
                       return Data_Functor.map(Effect.functorEffect)(Data_Nullable.toMaybe)(function () {
                           return $foreign.addSceneImpl(key, Option.fromRecord(dictFromRecord)(sceneConfig), start, game);
@@ -1106,23 +1103,21 @@ var PS = {};
   };
   var ghRoot = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/sprites/";
   var preload = function (scene) {
-      return Data_Functor["void"](Effect.functorEffect)(Data_Foldable.for_(Effect.applicativeEffect)(Data_Foldable.foldableArray)([ Graphics_Phaser_Loader.loadSpritesheet("explosion")(ghRoot + "explosion.png")({
+      return Data_Foldable.for_(Effect.applicativeEffect)(Data_Foldable.foldableArray)([ Graphics_Phaser_Loader.loadSpritesheet({
+          key: "explosion",
+          path: ghRoot + "explosion.png"
+      })({
           frameWidth: 64.0,
-          frameHeight: 64.0,
-          startFrame: 0,
-          endFrame: 23,
-          margin: 0,
-          spacing: 0
-      }), Graphics_Phaser_Loader.loadSpritesheet("balls")(ghRoot + "balls.png")({
+          frameHeight: 64.0
+      }), Graphics_Phaser_Loader.loadSpritesheet({
+          key: "balls",
+          path: ghRoot + "balls.png"
+      })({
           frameWidth: 17.0,
-          frameHeight: 17.0,
-          startFrame: 0,
-          endFrame: 4,
-          margin: 0,
-          spacing: 0
+          frameHeight: 17.0
       }) ])(function (fn) {
           return fn(scene);
-      }));
+      });
   };
   var explodeSpriteKey = "explosion";
   var explodeAnimationKey = "explodeAnimation";

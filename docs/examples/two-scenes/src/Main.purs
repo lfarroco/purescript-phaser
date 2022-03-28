@@ -1,7 +1,6 @@
 module Main where
 
 import Prelude
-
 import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
@@ -10,7 +9,7 @@ import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject (setAngle, setDisplaySize, setInteractive, setPosition)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImage)
-import Graphics.Phaser.Scene (launch)
+import Graphics.Phaser.Scene (getScenePlugin, launch)
 import Graphics.Phaser.SceneManager (Start(..), addScene)
 import Graphics.Phaser.Text as Text
 
@@ -30,8 +29,9 @@ mainScene =
         _ <- Text.create "Click the logo to create a new scene" scene
         startButton scene
   , preload:
-      \scene -> void do
-        loadImage { key: "logo", path: logoPath } scene
+      \scene ->
+        void do
+          loadImage { key: "logo", path: logoPath } scene
   }
   where
   startButton :: PhaserScene -> Effect Unit
@@ -48,7 +48,8 @@ mainScene =
       void do
         log "clicked!"
         -- Don't do anything with the image, just launch a new scene.
-        launch "snd" {} scene
+        getScenePlugin scene >>= launch "snd" {}
+
     listener = createEventListener0 callback
 
 logoPath :: String
@@ -62,8 +63,9 @@ secondScene =
   { create:
       \scene -> void do createLogo scene
   , preload:
-      \scene -> void do
-        loadImage  { key: "logo", path: logoPath } scene
+      \scene ->
+        void do
+          loadImage { key: "logo", path: logoPath } scene
   }
   where
   createLogo :: PhaserScene -> Effect PhaserImage

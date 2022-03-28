@@ -44,13 +44,9 @@ preload scene =
   for_ [ "sky", "platform", "star" ] \key ->
     do
       Loader.loadImage { key, path: basePath <> key <> ".png" } scene
-      >>= Loader.loadSpritesheet "dude" (basePath <> "dude.png")
+      >>= Loader.loadSpritesheet { key: "dude", path: basePath <> "dude.png" }
           { frameWidth: 32.0
           , frameHeight: 48.0
-          , startFrame: 0
-          , endFrame: 8
-          , margin: 0
-          , spacing: 0
           }
   where
   basePath = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/"

@@ -967,8 +967,8 @@ var PS = {};
   var Data_Nullable = $PS["Data.Nullable"];
   var Data_Semigroup = $PS["Data.Semigroup"];
   var Data_Show = $PS["Data.Show"];
-  var Effect = $PS["Effect"];
-  var get = function (name) {
+  var Effect = $PS["Effect"];                                                                                                                                                                                                                                   
+  var getProperty = function (name) {
       return function (obj) {
           return Data_Foreign_EasyFFI.unsafeForeignFunction([ "obj", "" ])("obj." + name)(obj);
       };
@@ -1096,7 +1096,7 @@ var PS = {};
   exports["return3"] = return3;
   exports["method3"] = method3;
   exports["return4"] = return4;
-  exports["get"] = get;
+  exports["getProperty"] = getProperty;
   exports["safeGet"] = safeGet;
 })(PS);
 (function($PS) {
@@ -1127,7 +1127,7 @@ var PS = {};
       return Utils_FFI.method0("refreshBody()");
   };
   var getTouching = function (dictPhysicsEnabled) {
-      return Utils_FFI.get("body.touching");
+      return Utils_FFI.getProperty("body.touching");
   };
   var disableBody = function (dictPhysicsEnabled) {
       return Utils_FFI.method0("disableBody(true,true)");
@@ -1181,7 +1181,7 @@ var PS = {};
       return Utils_FFI.method2("on(v1,v2)");
   };                                     
   var getEventEmitter = function (dictHasNodeEventEmitter) {
-      return Utils_FFI.get("events");
+      return Utils_FFI.getProperty("events");
   };                                                                                                
   var createEventListener0 = Data_Foreign_EasyFFI.unsafeForeignFunction([ "fn" ])("arg=>fn()");
   exports["createEventListener0"] = createEventListener0;
@@ -1204,7 +1204,7 @@ var PS = {};
       return Utils_FFI.method1("setName(v1)");
   };
   var getX = function (dictTransform) {
-      return Utils_FFI.get("x");
+      return Utils_FFI.getProperty("x");
   };
   exports["getX"] = getX;
   exports["setPosition"] = setPosition;
@@ -1225,8 +1225,8 @@ var PS = {};
   "use strict";
   $PS["Graphics.Phaser.Input"] = $PS["Graphics.Phaser.Input"] || {};
   var exports = $PS["Graphics.Phaser.Input"];
-  var Utils_FFI = $PS["Utils.FFI"];
-  var isDown = Utils_FFI.get("isDown");                                   
+  var Utils_FFI = $PS["Utils.FFI"];        
+  var isDown = Utils_FFI.getProperty("isDown");                           
   var createCursorKeys = Utils_FFI.return0("input.keyboard.createCursorKeys()");
   exports["createCursorKeys"] = createCursorKeys;
   exports["isDown"] = isDown;
@@ -1236,8 +1236,8 @@ var PS = {};
   "use strict";
   $PS["Graphics.Phaser.Loader"] = $PS["Graphics.Phaser.Loader"] || {};
   var exports = $PS["Graphics.Phaser.Loader"];
-  var Utils_FFI = $PS["Utils.FFI"];                                           
-  var loadSpritesheet = Utils_FFI.method3("load.spritesheet(v1,v2,v3)");
+  var Utils_FFI = $PS["Utils.FFI"];                                                     
+  var loadSpritesheet = Utils_FFI.method2("load.spritesheet(v1.key,v1.path,v2)");
   var loadImage = Utils_FFI.method1("load.image(v1.key,v1.path)");
   exports["loadImage"] = loadImage;
   exports["loadSpritesheet"] = loadSpritesheet;
@@ -1256,7 +1256,6 @@ var PS = {};
 (function(exports) {
   "use strict";
 
-  // TODO: put this in a `util` module
   function mapThis(obj) {
     var newObj = {};
     for (const key in obj) {
@@ -1312,7 +1311,7 @@ var PS = {};
                           if (autoStart instanceof NoStart) {
                               return false;
                           };
-                          throw new Error("Failed pattern match at Graphics.Phaser.SceneManager (line 101, column 15 - line 103, column 25): " + [ autoStart.constructor.name ]);
+                          throw new Error("Failed pattern match at Graphics.Phaser.SceneManager (line 121, column 15 - line 123, column 25): " + [ autoStart.constructor.name ]);
                       })();
                       return Data_Functor.map(Effect.functorEffect)(Data_Nullable.toMaybe)(function () {
                           return $foreign.addSceneImpl(key, Option.fromRecord(dictFromRecord)(sceneConfig), start, game);
@@ -1373,13 +1372,12 @@ var PS = {};
           return Control_Bind.bind(Effect.bindEffect)(Graphics_Phaser_Loader.loadImage({
               key: key,
               path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/" + (key + ".png")
-          })(scene))(Graphics_Phaser_Loader.loadSpritesheet("dude")("https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/" + "dude.png")({
+          })(scene))(Graphics_Phaser_Loader.loadSpritesheet({
+              key: "dude",
+              path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/" + "dude.png"
+          })({
               frameWidth: 32.0,
-              frameHeight: 48.0,
-              startFrame: 0,
-              endFrame: 8,
-              margin: 0,
-              spacing: 0
+              frameHeight: 48.0
           }));
       });
   };
@@ -1441,7 +1439,7 @@ var PS = {};
                   if (player instanceof Data_Maybe.Nothing) {
                       return Effect_Class_Console.log(Effect_Class.monadEffectEffect)("Sprite not found!")();
                   };
-                  throw new Error("Failed pattern match at Main (line 144, column 5 - line 154, column 41): " + [ player.constructor.name ]);
+                  throw new Error("Failed pattern match at Main (line 126, column 5 - line 136, column 41): " + [ player.constructor.name ]);
               };
           })();
           var movePlatform = function __do() {
@@ -1464,7 +1462,7 @@ var PS = {};
               if (platform instanceof Data_Maybe.Nothing) {
                   return Effect_Class_Console.log(Effect_Class.monadEffectEffect)("Platform image not found!")();
               };
-              throw new Error("Failed pattern match at Main (line 160, column 5 - line 171, column 49): " + [ platform.constructor.name ]);
+              throw new Error("Failed pattern match at Main (line 142, column 5 - line 153, column 49): " + [ platform.constructor.name ]);
           };
           return Data_Functor["void"](Effect.functorEffect)(function __do() {
               movePlayer();
