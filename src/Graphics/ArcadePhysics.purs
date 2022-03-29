@@ -59,8 +59,11 @@ setBounce = method1 "body.setVelocityY(v1)"
 setCollideWorldBounds :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setCollideWorldBounds = method1 "setCollideWorldBounds(v1)"
 
-addCollider :: forall a b. Collidable a => Collidable b => a -> b -> PhaserScene -> Effect PhaserScene
+addCollider :: forall a b. Collidable a => Collidable b => Array a -> Array b -> PhaserScene -> Effect PhaserScene
 addCollider = method2 "physics.add.collider(v1,v2)"
+
+addColliderWithCallback :: forall a b. Collidable a => Collidable b => Array a -> Array b -> (a -> b -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+addColliderWithCallback = method3 "physics.add.collider(v1,v2,(a,b)=>v3(a)(b)())"
 
 type ArcadeBodyCollision
   = { none :: Boolean
