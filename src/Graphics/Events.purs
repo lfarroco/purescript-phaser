@@ -19,6 +19,9 @@ createEventListener2 = unsafeForeignFunction [ "fn" ] "(arg1,arg2)=>fn(arg1)(arg
 createEventListener3 :: forall a b c. (a -> b -> c -> Effect Unit) -> EventListener
 createEventListener3 = unsafeForeignFunction [ "fn" ] "(arg1,arg2,arg3)=>fn(arg1)(arg2)(arg3)()"
 
+createEventListener4 :: forall a b c d. (a -> b -> c -> d -> Effect Unit) -> EventListener
+createEventListener4 = unsafeForeignFunction [ "fn" ] "(arg1,arg2,arg3,arg4)=>fn(arg1)(arg2)(arg3)(arg4)()"
+
 on :: forall emitter. EventEmitter emitter => String -> EventListener -> emitter -> Effect emitter
 on = method2 "on(v1,v2)"
 

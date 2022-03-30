@@ -6,6 +6,7 @@ module Graphics.Phaser.Scene
   , getData
   , getIndex
   , getKey
+  , getPhysicsPlugin
   , getPluginInstance
   , getScene
   , getScenePlugin
@@ -45,7 +46,7 @@ import Data.Maybe (Maybe)
 import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin, CreateSceneFromObjectConfig)
-import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserScenePlugin)
+import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserScenePlugin, PhaserPhysicsPlugin)
 import Option (class FromRecord)
 import Utils.FFI (getProperty, injectThis, method1, method2, method4, return1, safeGet)
 
@@ -71,6 +72,9 @@ getKey = getProperty "key"
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Scenes.ScenePlugin.html
 getScenePlugin :: forall a. HasScenePlugin a => a -> Effect PhaserScenePlugin
 getScenePlugin = getProperty "scene"
+
+getPhysicsPlugin :: PhaserScene -> Effect PhaserPhysicsPlugin
+getPhysicsPlugin = getProperty "physics"
 
 add ::
   forall config sceneData.
