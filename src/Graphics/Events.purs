@@ -34,6 +34,8 @@ emit = method2 "emit(v1,v2)"
 off :: forall emitter. String -> emitter -> Effect emitter
 off = method1 "off(v1)"
 
+-- If you want to create a listener that removes itself, you will need to use a reference
+-- https://stackoverflow.com/a/57276021/2467235
 removeListener :: forall emitter. EventEmitter emitter => String -> EventListener -> emitter -> Effect emitter
 removeListener = method2 "removeListener(v1,v2)"
 
