@@ -1014,8 +1014,8 @@ var PS = {};
   var on = function (dictEventEmitter) {
       return Utils_FFI.method2("on(v1,v2)");
   };
-  var off = Utils_FFI.method1("off(v1)");
-  var createEventListener3 = Data_Foreign_EasyFFI.unsafeForeignFunction([ "fn" ])("(arg1,arg2,arg3)=>{console.log(arg1,arg2,arg3); fn(arg1)(arg2)(arg3)()}");
+  var off = Utils_FFI.method1("off(v1)");                                                                                                
+  var createEventListener3 = Data_Foreign_EasyFFI.unsafeForeignFunction([ "fn" ])("(arg1,arg2,arg3)=>fn(arg1)(arg2)(arg3)()");
   exports["createEventListener3"] = createEventListener3;
   exports["on"] = on;
   exports["off"] = off;

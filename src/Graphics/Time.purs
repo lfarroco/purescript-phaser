@@ -7,6 +7,8 @@ import Graphics.Phaser.ForeignTypes (PhaserScene)
 
 foreign import delay_ :: PhaserScene -> Int -> EffectFnAff Unit
 
+-- TODO: remove
+-- this is an abstraction over the API, not a binding
 -- | Example usage: Destroy a container after 1s
 -- | destroyContainer :: PhaserScene -> PhaserContainer -> Effect Unit
 -- | destroyContainer scene cont =

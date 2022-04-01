@@ -5,6 +5,7 @@ import Data.Array ((..))
 import Data.Foldable (for_)
 import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
+import Data.Traversable (sequence)
 import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
@@ -16,7 +17,7 @@ import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Input (CursorKeys, createCursorKeys, isDown)
 import Graphics.Phaser.Loader as Loader
-import Graphics.Phaser.Scene (getChildByName)
+import Graphics.Phaser.Scene (getChildByName, getPhysicsPlugin)
 import Graphics.Phaser.SceneManager (Start(..), addScene)
 import Graphics.Phaser.Sprite (class Sprite)
 import Graphics.Phaser.Sprite as Sprite
@@ -54,16 +55,17 @@ preload scene =
 create :: PhaserScene -> Effect Unit
 create scene =
   void do
+    phy <- getPhysicsPlugin scene
     createBg
-    platformsGroup <- P.createStaticGroup scene
+    platformsGroup <- P.createStaticGroup phy
     createFloor platformsGroup
-    movingPlatform <- createPlatform
-    player <- createPlayer
-    stars <- createStars
+    movingPlatform <- createPlatform phy
+    player <- createPlayer phy
+    stars <- createStars phy
     cursors <- createCursorKeys scene
-    createAnimations
-      >>= setupCollisions player stars platformsGroup movingPlatform
-      >>= getEventEmitter
+    void $ createAnimations
+    void $ setupCollisions player stars platformsGroup movingPlatform phy
+    getEventEmitter scene
       >>= on "update" (createEventListener0 (update cursors scene))
   where
   setupCollisions player stars platformsGroup movingPlatform =
@@ -79,7 +81,6 @@ create scene =
     void $ Sprite.createAnimation "left" leftWalkFrames 10.0 (-1) scene
     void $ Sprite.createAnimation "turn" [ { key: "dude", frame: 4 } ] 10.0 (-1) scene
     void $ Sprite.createAnimation "right" rightWalkFrames 10.0 (-1) scene
-    pure scene
 
   createBg =
     void do
@@ -92,28 +93,31 @@ create scene =
         >>= GO.setScale { x: 2.0, y: 2.0 }
         >>= P.refreshBody
 
-  createPlatform =
-    P.createArcadeImage { x: 400.0, y: 400.0 } "platform" scene
+  createPlatform phy =
+    P.createArcadeImage { x: 400.0, y: 400.0 } "platform" phy
       >>= P.setImmovable true
       >>= P.setAllowGravity false
       >>= P.setVelocityX 50.0
       >>= GO.setName "moving_platform"
 
-  createPlayer =
-    P.createArcadeSprite { x: 50.0, y: 500.0 } "dude" scene
+  createPlayer phy =
+    P.createArcadeSprite { x: 50.0, y: 500.0 } "dude" phy
       >>= P.setBounce 0.4
       >>= P.setCollideWorldBounds true
       >>= GO.setName "player"
 
-  createStars = do
-    group <- P.createGroup scene
-    for_ (1 .. 15)
-      ( \n -> do
-          P.createChild { x: 50.0 + (toNumber n * 40.0), y: 100.0 } "star" group
-            >>= P.setBounce 0.4
-            >>= P.setCollideWorldBounds true
-      )
-    pure group
+  createStars phy = do
+    starsEff <-
+      map
+        ( \n ->
+            do
+              P.createArcadeImage { x: 50.0 + (toNumber n * 40.0), y: 100.0 } "star" phy
+              >>= P.setBounce 0.4
+              >>= P.setCollideWorldBounds true
+        )
+        (1 .. 15)
+        # sequence
+    pure starsEff
 
 update :: CursorKeys -> PhaserScene -> Effect Unit
 update cursors scene =

@@ -35,6 +35,8 @@ foreign import data PhaserMapData :: Type
 
 foreign import data PhaserScene :: Type
 
+foreign import data PhaserPointer :: Type
+
 foreign import data SceneManager :: Type
 
 foreign import data NodeEventEmitter :: Type
