@@ -3,16 +3,12 @@ module Graphics.Phaser.Events where
 import Prelude
 import Data.Foreign.EasyFFI (unsafeForeignFunction)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn2, mkEffectFn2)
 import Graphics.Phaser.CoreTypes (class EventEmitter, class HasNodeEventEmitter, EventListener)
 import Graphics.Phaser.ForeignTypes (NodeEventEmitter)
 import Utils.FFI (getProperty, method0, method1, method2)
 
-fn :: forall a b. (a -> b -> Effect Unit) -> EffectFn2 a b Unit
-fn = mkEffectFn2
-
---replace with
--- https://github.com/purescript/purescript-effect/blob/master/src/Effect/Uncurried.js#L1
+-- consider this to turn any argN fn into an event listener
+-- https://github.com/bklaric/purescript-idiomatic-node-events/blob/master/src/Node/Events/EventListener.js#L3
 createEventListener0 :: Effect Unit -> EventListener
 createEventListener0 = unsafeForeignFunction [ "fn" ] "arg=>fn()"
 
