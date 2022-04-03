@@ -91,6 +91,8 @@ foreign import data ArcadeImage :: Type
 
 foreign import data ArcadeSprite :: Type
 
+foreign import data PhaserArcadeWorld :: Type
+
 foreign import data PhaserGameObjectCreator :: Type
 
 foreign import data PhaserGameObjectFactory :: Type

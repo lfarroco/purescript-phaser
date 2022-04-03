@@ -17,7 +17,9 @@ module Graphics.Phaser.ArcadePhysics
   , createStaticGroup
   , disableBody
   , furthest
+  , getArcadeWorld
   , getTouching
+  , isPaused
   , moveTo
   , moveToObject
   , overlap
@@ -42,7 +44,7 @@ import Prelude
 import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
-import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
+import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
 import Utils.FFI (getProperty, method0, method1, method2, method3, return0, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
@@ -152,3 +154,16 @@ pause = method0 "pause()"
 
 resume :: PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 resume = method0 "resume()"
+
+-- Arcade World
+getArcadeWorld :: PhaserPhysicsPlugin -> Effect PhaserArcadeWorld
+getArcadeWorld = getProperty "world"
+
+isPaused :: PhaserArcadeWorld -> Effect Boolean
+isPaused = getProperty "isPaused"
+
+pauseWorld :: PhaserArcadeWorld -> Effect PhaserArcadeWorld
+pauseWorld = method0 "pause()"
+
+resumeWorld :: PhaserArcadeWorld -> Effect PhaserArcadeWorld
+resumeWorld = method0 "resume()"
