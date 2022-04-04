@@ -6,6 +6,7 @@ module Graphics.Phaser.ArcadePhysics
   , addCollider
   , addColliderWithCallback
   , addOverlap
+  , addOverlapWithCallback
   , allowGravity
   , closest
   , collide
@@ -25,8 +26,10 @@ module Graphics.Phaser.ArcadePhysics
   , overlap
   , overlapWithCallback
   , pause
+  , pauseWorld
   , refreshBody
   , resume
+  , resumeWorld
   , setAllowGravity
   , setBounce
   , setCollideWorldBounds
@@ -35,6 +38,7 @@ module Graphics.Phaser.ArcadePhysics
   , setVelocityX
   , setVelocityY
   , setWorldBounds
+  , velocity
   ) where
 
 -- A port of
@@ -45,7 +49,7 @@ import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
-import Utils.FFI (getProperty, method0, method1, method2, method3, return0, return2)
+import Utils.FFI (getProperty, method0, method1, method2, method3, return0, return2, setProperty)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserPhysicsPlugin -> Effect StaticGroup
@@ -80,6 +84,9 @@ allowGravity = getProperty "body.allowGravity"
 
 setAllowGravity :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setAllowGravity = method1 "body.setAllowGravity(v1)"
+
+velocity :: forall a. PhysicsEnabled a => a -> Effect Vector
+velocity = getProperty "body.velocity"
 
 setVelocityX :: forall a. PhysicsEnabled a => Number -> a -> Effect a
 setVelocityX = method1 "body.setVelocityX(v1)"
@@ -116,6 +123,9 @@ getTouching = getProperty "body.touching"
 addOverlap :: forall a b c d. Collidable a => Collidable b => Collidable c => Collidable d => a -> b -> (c -> d -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 addOverlap = method3 "add.overlap(v1,v2,(a,b)=>v3(a)(b)())"
 
+addOverlapWithCallback :: forall a b. Collidable a => Collidable b => Array a -> Array b -> (a -> b -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
+addOverlapWithCallback = method3 "add.overlap(v1,v2,(a,b)=>v3(a)(b)())"
+
 disableBody :: forall a. PhysicsEnabled a => a -> Effect a
 disableBody = method0 "disableBody(true,true)"
 
@@ -137,11 +147,11 @@ collide = method2 "collide(v1,v2)"
 collideWithCallback :: forall a b. GameObject a => GameObject b => Array a -> Array b -> (a -> b -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 collideWithCallback = method3 "collide(v1,v2,(a,b)=>v3(a)(b)())"
 
-moveTo :: forall a. GameObject a => a -> Vector -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-moveTo = method2 "moveTo(v1,v2.x,v2.y)"
+moveTo :: forall a. GameObject a => a -> Vector -> Number -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
+moveTo = method3 "moveTo(v1,v2.x,v2.y,v3)"
 
-moveToObject :: forall a b. GameObject a => GameObject b => a -> b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-moveToObject = method2 "moveTo(v1,v2)"
+moveToObject :: forall a b. GameObject a => GameObject b => a -> b -> Number -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
+moveToObject = method3 "moveTo(v1,v2,v3)"
 
 overlap :: forall a b. GameObject a => GameObject b => Array a -> Array b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 overlap = method2 "overlap(v1,v2)"

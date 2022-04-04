@@ -87,8 +87,8 @@ method5 expr v1 v2 v3 v4 v5 obj = do
 getProperty :: forall obj returnValue. String -> obj -> Effect returnValue
 getProperty name obj = FFI.unsafeForeignFunction [ "obj", "" ] ("obj." <> name) obj
 
-set :: forall obj value returnValue. String -> value -> obj -> Effect returnValue
-set name value obj = FFI.unsafeForeignFunction [ "v1", "obj", "" ] ("obj." <> name <> " = v1") value obj
+setProperty :: forall obj value. String -> value -> obj -> Effect Unit
+setProperty name value obj = FFI.unsafeForeignFunction [ "v1", "obj", "" ] ("obj." <> name <> " = v1") value obj
 
 getNullable :: forall a obj. String -> String -> obj -> Effect (Nullable a)
 getNullable expr obj = return1 expr obj
