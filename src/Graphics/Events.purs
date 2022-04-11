@@ -27,7 +27,7 @@ createEventListener4 = unsafeForeignFunction [ "fn" ] "(arg1,arg2,arg3,arg4)=>fn
 on :: forall emitter. EventEmitter emitter => String -> EventListener -> emitter -> Effect emitter
 on = method2 "on(v1,v2)"
 
-once :: forall emitter args. String -> (args -> Effect Unit) -> emitter -> Effect emitter
+once :: forall emitter args. EventEmitter emitter => String -> EventListener -> emitter -> Effect emitter
 once = method2 "once(v1,v2)"
 
 emit :: forall emitter args. EventEmitter emitter => String -> args -> emitter -> Effect emitter

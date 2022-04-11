@@ -1,5 +1,6 @@
 module Graphics.Phaser.ArcadePhysics
   ( ArcadeBodyCollision
+  , acceleration 
   , accelerateTo
   , accelerateToObject
   , addChild
@@ -21,6 +22,7 @@ module Graphics.Phaser.ArcadePhysics
   , getArcadeWorld
   , getTouching
   , isPaused
+  , facing 
   , moveTo
   , moveToObject
   , overlap
@@ -49,7 +51,7 @@ import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
-import Utils.FFI (getProperty, method0, method1, method2, method3, return0, return2, setProperty)
+import Utils.FFI (getProperty, method0, method1, method2, method3, return0, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserPhysicsPlugin -> Effect StaticGroup
@@ -84,6 +86,12 @@ allowGravity = getProperty "body.allowGravity"
 
 setAllowGravity :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setAllowGravity = method1 "body.setAllowGravity(v1)"
+
+acceleration :: forall a. PhysicsEnabled a => a -> Effect Vector
+acceleration = getProperty "body.acceleration"
+
+facing :: forall a. PhysicsEnabled a => a -> Effect Number
+facing = getProperty "body.facing"
 
 velocity :: forall a. PhysicsEnabled a => a -> Effect Vector
 velocity = getProperty "body.velocity"

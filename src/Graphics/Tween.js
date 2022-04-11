@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 exports.addTweenImpl = function (config) {
   // spread passed prop into the config object
@@ -8,5 +8,7 @@ exports.addTweenImpl = function (config) {
     config.callback(config.scene)();
   };
 
-  return config.scene.add.tween(config);
+  return () => {
+    config.scene.add.tween(config);
+  };
 };
