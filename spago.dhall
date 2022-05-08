@@ -4,18 +4,15 @@ You can edit this file as you like.
 -}
 { name = "phaser"
 , dependencies =
-  [ "aff"
-  , "arrays"
+  [ "arrays"
   , "canvas"
   , "console"
   , "easy-ffi"
   , "effect"
   , "maybe"
   , "nullable"
-  , "option"
   , "prelude"
-  , "psci-support"
-  , "web-html"
+  , "web-html","options", "psci-support"
   ]
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"

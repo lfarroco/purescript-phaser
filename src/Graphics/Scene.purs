@@ -34,6 +34,11 @@ module Graphics.Phaser.Scene
   , swapPosition
   , switch
   , wake
+  , init
+  , create
+  , update
+  , preload
+  , newScene
   ) where
 
 -- This File has bindings for the following Phaser classes:
@@ -42,13 +47,36 @@ module Graphics.Phaser.Scene
 -- Note that Phaser Docs discourage calling SceneManager directly - bindings
 -- for it are still available for it if you really want to use them
 import Prelude
+import Data.Foreign.EasyFFI (unsafeForeignProcedure)
 import Data.Maybe (Maybe)
 import Data.Nullable (toMaybe)
 import Effect (Effect)
-import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin, CreateSceneFromObjectConfig)
-import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserScenePlugin, PhaserPhysicsPlugin)
-import Option (class FromRecord)
-import Utils.FFI (getProperty, injectThis, method1, method2, method4, return1, safeGet)
+import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
+import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
+import Utils.FFI (getProperty, method1, method2, method4, return1, safeGet)
+
+newScene :: String -> Effect PhaserScene
+newScene = unsafeForeignProcedure [ "key", "" ] "return new Phaser.Scene(key)"
+
+init :: forall a. (a -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+init callback scene = do
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.init = (data) => callback(data)()" callback scene
+  pure scene
+
+update :: ({ time :: Number, delta :: Number } -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+update callback scene = do
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.update = (time,delta) => callback({time, delta})()" callback scene
+  pure scene
+
+create :: forall a. (a -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+create callback scene = do
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.create = (data) => callback(data)()" callback scene
+  pure scene
+
+preload :: (Unit -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+preload callback scene = do
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.preload = () => callback({})()" callback scene
+  pure scene
 
 children :: forall a. GameObject a => PhaserScene -> Effect (Array a)
 children = getProperty "children.list"
@@ -77,15 +105,14 @@ getPhysicsPlugin :: PhaserScene -> Effect PhaserPhysicsPlugin
 getPhysicsPlugin = getProperty "physics"
 
 add ::
-  forall config sceneData.
-  FromRecord config () CreateSceneFromObjectConfig =>
+  forall sceneData.
   String ->
-  Record config ->
+  PhaserScene ->
   Boolean ->
   sceneData ->
   PhaserScenePlugin ->
   Effect PhaserScenePlugin
-add key config autoStart sceneData scenePlugin = method4 "add(v1,v2,v3,v4)" key (injectThis config) autoStart sceneData scenePlugin
+add key scene autoStart sceneData scenePlugin = method4 "add(v1,v2,v3,v4)" key scene autoStart sceneData scenePlugin
 
 bringToTop :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
 bringToTop = method1 "bringToTop(v1)"

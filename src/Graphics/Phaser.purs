@@ -1,78 +1,26 @@
 module Graphics.Phaser
   ( create
   , setGameDimensions
-  , defaultGameConfig
+  , addScene
   ) where
 
 import Prelude
+import Data.Foreign.EasyFFI (unsafeForeignProcedure)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, runEffectFn1, EffectFn2, runEffectFn2)
-import Graphics.Phaser.CoreTypes (GameConfig, Dimensions)
-import Graphics.Phaser.ForeignTypes (PhaserGame)
-import Option (class FromRecord, Option, fromRecord)
+import Graphics.Phaser.CoreTypes (Dimensions)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
+import Utils.FFI (method3, setProperty)
 
--- Leaving this as it might still be useful even after converting GameConfig
--- to `Option`
--- TODO: remove redundant defaults
-defaultGameConfig :: Option GameConfig
-defaultGameConfig =
-  fromRecord
-    { width: 800.0
-    , height: 600.0
-    , type: 0
-    , scale:
-        fromRecord
-          { mode: 0
-          , autoCenter: 0
-          , autoRound: false
-          }
-    , disableContextMenu: false
-    , backgroundColor: 0
-    , render:
-        fromRecord
-          { antialias: true
-          , antialiasGL: true
-          , desynchronized: false
-          , pixelArt: false
-          , roundPixels: false
-          , transparent: false
-          , clearBeforeRender: true
-          , preserveDrawingBuffer: false
-          , premultipliedAlpha: true
-          , failIfMajorPerformanceCaveat: false
-          , powerPreference: "default"
-          , batchSize: 4096
-          , maxLights: 10
-          , maxTextures: -1
-          , mipmapFilter: "LINEAR"
-          }
-    , physics:
-        fromRecord
-          {}
-    , dom:
-        fromRecord
-          { createContainer: false
-          , behindCanvas: false
-          }
-    , fps:
-        fromRecord
-          { min: 10
-          , target: 60
-          , forceSetTimeOut: false
-          , deltaHistory: 10
-          }
-    }
-
--- | Calls Phaser's `new Game([config])` constructor
-foreign import createImpl :: EffectFn1 (Option GameConfig) PhaserGame
-
-create ::
-  forall config.
-  FromRecord config () GameConfig =>
-  Record config -> Effect PhaserGame
-create config = runEffectFn1 createImpl (fromRecord config)
-
-foreign import setGameDimensionsImpl :: EffectFn2 Dimensions PhaserGame PhaserGame
+create :: Effect PhaserGame
+create = unsafeForeignProcedure [ "" ] "return new Phaser.Game()"
 
 setGameDimensions :: Dimensions -> PhaserGame -> Effect PhaserGame
-setGameDimensions = runEffectFn2 setGameDimensionsImpl
+setGameDimensions { width, height } game = do
+  setProperty "config.width=v1" width game
+  setProperty "config.height=v1" height game
+  pure game
+
+-- | This is a escape hatch to SceneManager's method `add`
+-- | This function is provided here to avoid accessing the scene manager directly 
+addScene :: String -> PhaserScene -> Boolean -> PhaserGame -> Effect PhaserGame
+addScene = method3 "scene.add(v1,v2,v3)"

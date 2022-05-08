@@ -1,6 +1,5 @@
 module Graphics.Phaser.Input.Pointer where
 
-import Prelude
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserPointer)

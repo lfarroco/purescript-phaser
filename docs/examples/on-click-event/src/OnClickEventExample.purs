@@ -1,42 +1,54 @@
 module Main where
 
 import Prelude
+
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.CoreTypes (EventListener, Vector)
 import Graphics.Phaser.Events (createEventListener3, off, on)
-import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImage)
-import Graphics.Phaser.Scene (getChildByName)
-import Graphics.Phaser.SceneManager (Start(..), addScene)
+import Graphics.Phaser.Scene as Scene
 import Graphics.Phaser.Text as Text
 
-logoPath :: String
-logoPath = "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
+main :: Effect PhaserGame
+main = do
+  mainScene' <- mainScene
+  Phaser.create
+    >>=Phaser.setGameDimensions {width: 400.0, height: 300.0}
+    >>= Phaser.addScene "main" mainScene' true
 
-main :: Effect Unit
-main =
-  void do
-    game <- Phaser.create { width: 400.0, height: 300.0 }
-    addScene "main" mainScene Start game
-
-mainScene ::
-  { create :: PhaserScene -> Effect Unit
-  , preload :: PhaserScene -> Effect Unit
-  }
+mainScene :: Effect PhaserScene
 mainScene =
-  { create:
-      \scene ->
-        void do
-          title scene
-          startButton scene
-  , preload: loadImage { key: "logo", path: logoPath } >=> const (pure unit)
-  }
+  Scene.newScene "main"
+    >>= onpreload
+    >>= oncreate
   where
+  oncreate scene =
+    Scene.create
+      ( \_ ->
+          void do
+            title scene
+            startButton scene
+      )
+      scene
+
+  onpreload scene =
+    Scene.preload
+      ( \_ ->
+          void do
+            loadImage
+              { key: "logo"
+              , path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
+              }
+              scene
+      )
+      scene
+
   title scene = void do Text.create "Click the logo to trigger an event." scene
 
   startButton :: PhaserScene -> Effect Unit
@@ -69,4 +81,4 @@ mainScene =
       pure unit
 
 getImageByName :: String -> PhaserScene -> Effect (Maybe PhaserImage)
-getImageByName = getChildByName
+getImageByName = Scene.getChildByName

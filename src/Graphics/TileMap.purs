@@ -7,19 +7,20 @@ module Graphics.Phaser.TileMap
 
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserLayer, PhaserLayerData, PhaserMapData, PhaserScene, PhaserTile, PhaserTileMap, PhaserTileSet)
-import Option (class FromRecord, Option, fromRecord)
 import Utils.FFI (return1, return2, getProperty)
 
 -- Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
 type TilemapConfig
-  = ( key :: String
-    , data :: Array (Array Int)
-    , tileWidth :: Int
-    , tileHeight :: Int
-    , width :: Int
-    , height :: Int
-    , insertNull :: Boolean
-    )
+  = { key :: String
+   , data :: Array (Array Int)
+   , tileWidth :: Int
+   , tileHeight :: Int
+   , width :: Int
+   , height :: Int
+   , insertNull :: Boolean  }
+    
+
+
 
 -- | Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.MapDataConfig
 type MapDataConfig
@@ -44,27 +45,12 @@ type MapDataConfig
     , tiles :: Array PhaserTile
     )
 
-makeTileMap ::
-  forall mapConfig.
-  FromRecord mapConfig () TilemapConfig =>
-  Record mapConfig -> PhaserScene -> Effect PhaserTileMap
-makeTileMap mapConfig scene =
-  let
-    config :: Option TilemapConfig
-    config = (fromRecord mapConfig)
-  in
+makeTileMap :: TilemapConfig -> PhaserScene -> Effect PhaserTileMap
+makeTileMap config scene =
     return1 "make.tilemap(v1)" config scene
 
--- | The argument of type `given` must be any record which is a subset of
--- | `TilesetDesc`
-addTilesetImage ::
-  forall tilesetDesc.
-  FromRecord tilesetDesc () TilesetDesc => String -> Record tilesetDesc -> PhaserTileMap -> Effect PhaserTileSet
-addTilesetImage tilesetName tilesetDesc tileMap =
-  let
-    config :: Option TilesetDesc
-    config = fromRecord tilesetDesc
-  in
+addTilesetImage :: String -> TilesetDesc -> PhaserTileMap -> Effect PhaserTileSet
+addTilesetImage tilesetName config tileMap =
     return2
       """ addTilesetImage(
         v1,
@@ -80,13 +66,12 @@ addTilesetImage tilesetName tilesetDesc tileMap =
       tileMap
 
 type TilesetDesc
-  = ( key :: String
-    , tileWidth :: Int
-    , tileHeight :: Int
-    , tileMargin :: Int
-    , tileSpacing :: Int
-    , gid :: Int
-    )
+  ={ key :: String
+   , tileWidth :: Int
+   , tileHeight :: Int
+   , tileMargin :: Int
+   , tileSpacing :: Int
+   , gid :: Int } 
 
 createLayer ::
   String ->

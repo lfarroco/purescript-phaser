@@ -1,6 +1,6 @@
 'use strict';
 
-exports.addTweenImpl = function (config) {
+export const addTweenImpl = (config) => {
   // spread passed prop into the config object
   Object.assign(config, config.prop);
 

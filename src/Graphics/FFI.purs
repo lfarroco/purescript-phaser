@@ -97,18 +97,3 @@ safeGet :: forall obj a. String -> obj -> Effect (Maybe a)
 safeGet k obj = do
   v <- getNullable "children.getByName(v1)" k obj
   pure $ toMaybe v
-
--- | Makes all properties in a scene config object be replaced with a function
--- | that accepts the phaser scene that will run
-injectThis :: forall a b. a -> Effect b
-injectThis =
-  FFI.unsafeForeignProcedure [ "obj" ]
-    """
-  return Object.entries(obj).reduce(
-    function(xs,[k,v]){ 
-          xs[k] = function(){ v(this)()};
-          return xs;
-          }
-    , {}
-  );
-  """

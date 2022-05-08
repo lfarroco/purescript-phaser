@@ -1,13 +1,11 @@
 module Graphics.Phaser.SceneManager
-  ( addScene
+  ( add
   , bringToTop
   , getSceneManager
   , getByKey
   , sendToBack
   , class HasSceneManager
-  , Start(..)
   ) where
-
 
 {-
   Directly calling the scene manager is discouraged by the Phaser docs - use
@@ -31,111 +29,30 @@ module Graphics.Phaser.SceneManager
 import Prelude
 
 import Data.Maybe (Maybe)
-import Data.Nullable (Nullable, toMaybe)
+import Data.Nullable (toMaybe)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn4, runEffectFn4)
-import Graphics.Phaser.CoreTypes (CreateSceneFromObjectConfig)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene, SceneManager)
-import Option (class FromRecord, Option, fromRecord)
-import Utils.FFI (getNullable, method0)
+import Utils.FFI (getNullable, getProperty, method0, method3)
 
-{-
-Im leaving this as a comment for now but it seems unnecessary.
 
-=== Possible API to support multiple scene config types ===
-  - Currently runs into issues with converting JS callbacks
-
-newtype SceneObject
-  = SceneObject (Option CreateSceneFromObjectConfigFn)
-
-newtype SceneSettingsConfig
-  = SceneSettingsConfig (Option SettingsConfig)
-
--- Note that this function would be redundant if we implement row type pattern
--- matching in `addScene`.
--- | Convenience function that takes an `Option` record to create a
--- | `SceneObject`.
-sceneObject ::
-  forall object.
-  FromRecord object () CreateSceneFromObjectConfig =>
-  Record object -> SceneObject
-sceneObject = SceneObject <<< mkSceneConfig
-
--- | This class is used to enumerate valid scene config types to pass to
--- | `addScene`.
-class AddSceneConfig :: forall k. k -> Constraint
--- TODO: use an adt/record/variant instead? Remove this todo if not necessary
-class AddSceneConfig sceneConfig
-
-instance AddSceneConfig PhaserScene
-
-instance AddSceneConfig SceneObject
-
-instance AddSceneConfig SceneSettingsConfig
-
-type CreateSceneFromObjectConfigFn
-  = ( init :: EffectFn1 PhaserScene Unit
-    , preload :: EffectFn1 PhaserScene Unit
-    , create :: EffectFn1 PhaserScene Unit
-    , update :: EffectFn1 PhaserScene Unit
-    )
-
--- Callbacks must be wrapped with mkEffectFn#
-mkSceneConfig :: forall config.
-  FromRecord config () CreateSceneFromObjectConfig =>
-  Record config -> Option CreateSceneFromObjectConfigFn
-mkSceneConfig config = 
-  modify'
-  { init: mk1
-  , preload: mk1
-  , create: mk1
-  , update: mk1
-  }
-  (fromRecord config)
-  where
-  -- Specify the type of mkEffectFn1
-  mk1 :: (PhaserScene -> Effect Unit) -> EffectFn1 PhaserScene Unit
-  mk1 = mkEffectFn1
-
--}
-
-data Start = Start | NoStart
-
--- | Type `a` must be a recognized scene config for `addScene`.
-foreign import addSceneImpl ::
-  EffectFn4 String (Option CreateSceneFromObjectConfig) Boolean PhaserGame (Nullable PhaserScene)
-
--- | ==== Parameters ====
--- | Key             - A unique key used to reference the Scene, i.e. MainMenu or Level1.
--- | Sceneconfig     - A scene config object
--- | AutoStart       - If the scene should start in parallel right now (default false)
--- | 
--- | Docs: https://newdocs.phaser.io/docs/3.52.0/Phaser.Scenes.SceneManager#add
-addScene ::
-  forall config. 
-  FromRecord config () CreateSceneFromObjectConfig =>
-  String ->  Record config -> Start -> PhaserGame -> Effect (Maybe PhaserScene)
-addScene key sceneConfig autoStart game = toMaybe <$> runEffectFn4
-    addSceneImpl key (fromRecord sceneConfig) start game
-    where
-      start = case autoStart of
-        Start -> true
-        NoStart -> false
+-- | https://photonstorm.github.io/phaser3-docs/Phaser.Scenes.SceneManager.html#add__anchor
+-- | This method accpts multiple data types
+-- | We are opting to use the version with a concrete Phaser Scene instance
+add :: String ->  PhaserScene  -> Boolean -> SceneManager -> Effect SceneManager
+add = method3 "add(v1,v2,v3)"
  
-class HasSceneManager a where
-  getSceneManager :: a -> SceneManager
+class HasSceneManager :: forall k. k -> Constraint
+class HasSceneManager a 
 
-foreign import getSceneManagerImpl :: forall a. a -> SceneManager
+getSceneManager :: forall a. HasSceneManager a => a -> Effect SceneManager
+getSceneManager = getProperty "scene"
 
-instance HasSceneManager PhaserScene where
-  getSceneManager = getSceneManagerImpl
-
-instance HasSceneManager PhaserGame where
-  getSceneManager = getSceneManagerImpl
+instance HasSceneManager PhaserScene 
+instance HasSceneManager PhaserGame 
 
 getByKey :: String -> SceneManager -> Effect (Maybe PhaserScene)
 getByKey key mngr = 
-  getNullable "get(v1)" key mngr  >>= (toMaybe >>> pure)
+  getNullable "get(v1)" key mngr >>= (toMaybe >>> pure)
 
 sendToBack :: PhaserScene -> Effect PhaserScene
 sendToBack = method0 "sendToBack()"

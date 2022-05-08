@@ -21,7 +21,10 @@ import Graphics.Phaser.Scene (getChildByName, getPhysicsPlugin)
 import Graphics.Phaser.SceneManager (Start(..), addScene)
 import Graphics.Phaser.Sprite (class Sprite)
 import Graphics.Phaser.Sprite as Sprite
-import Option (fromRecord)
+--import Option (fromRecord)
+
+
+-- !! TODO !! replace Option with https://github.com/purescript-contrib/purescript-options/blob/main/src/Data/Options.purs
 
 -- Adapted from http://labs.phaser.io/edit.html?src=src/physics/arcade/basic%20platform.js
 main :: Effect Unit
