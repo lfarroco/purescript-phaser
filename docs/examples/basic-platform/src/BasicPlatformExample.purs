@@ -11,65 +11,63 @@ import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ArcadePhysics as P
 import Graphics.Phaser.CoreTypes (class PhysicsEnabled)
-import Graphics.Phaser.Events (createEventListener0, getEventEmitter, on)
-import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, PhaserScene)
+import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, PhaserGame, PhaserScene)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Input (CursorKeys, createCursorKeys, isDown)
 import Graphics.Phaser.Loader as Loader
-import Graphics.Phaser.Scene (getChildByName, getPhysicsPlugin)
-import Graphics.Phaser.SceneManager (Start(..), addScene)
+import Graphics.Phaser.Scene as Scene
 import Graphics.Phaser.Sprite (class Sprite)
 import Graphics.Phaser.Sprite as Sprite
+
 --import Option (fromRecord)
-
-
 -- !! TODO !! replace Option with https://github.com/purescript-contrib/purescript-options/blob/main/src/Data/Options.purs
-
 -- Adapted from http://labs.phaser.io/edit.html?src=src/physics/arcade/basic%20platform.js
-main :: Effect Unit
-main =
-  void do
-    game <-
-      Phaser.create
+main :: Effect PhaserGame
+main = do
+  scene <- mainScene
+  Phaser.createWithConfig { physics: { default: "arcade", arcade: { debug: true, gravity: { y: 200 } } } }
+    >>= Phaser.setDimentions
         { width: 800.0
         , height: 600.0
-        , physics:
-            fromRecord
-              { default: "arcade"
-              , arcade:
-                  fromRecord { gravity: fromRecord { y: 300.0 }, debug: false }
-              }
         }
-    addScene "scene 1" { create, preload } Start game
+    >>= Phaser.addScene "main" scene true
 
-preload :: PhaserScene -> Effect Unit
-preload scene =
-  for_ [ "sky", "platform", "star" ] \key ->
-    do
-      Loader.loadImage { key, path: basePath <> key <> ".png" } scene
-      >>= Loader.loadSpritesheet { key: "dude", path: basePath <> "dude.png" }
-          { frameWidth: 32.0
-          , frameHeight: 48.0
-          }
+mainScene :: Effect PhaserScene
+mainScene =
+  do
+    Scene.newScene "main"
+    >>= Scene.create oncreate
+    >>= Scene.preload onpreload
+
+onpreload :: PhaserScene -> Effect PhaserScene
+onpreload scene = do
+  for_ [ "sky", "platform", "star" ]
+    ( \key ->
+        do
+          Loader.loadImage { key, path: basePath <> key <> ".png" } scene
+          >>= Loader.loadSpritesheet { key: "dude", path: basePath <> "dude.png" }
+              { frameWidth: 32.0
+              , frameHeight: 48.0
+              }
+    )
+  pure scene
   where
   basePath = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/"
 
-create :: PhaserScene -> Effect Unit
-create scene =
-  void do
-    phy <- getPhysicsPlugin scene
-    createBg
-    platformsGroup <- P.createStaticGroup phy
-    createFloor platformsGroup
-    movingPlatform <- createPlatform phy
-    player <- createPlayer phy
-    stars <- createStars phy
-    cursors <- createCursorKeys scene
-    void $ createAnimations
-    void $ setupCollisions player stars platformsGroup movingPlatform phy
-    getEventEmitter scene
-      >>= on "update" (createEventListener0 (update cursors scene))
+oncreate :: PhaserScene -> Effect PhaserScene
+oncreate scene = do
+  phy <- Scene.getPhysicsPlugin scene
+  createBg
+  platformsGroup <- P.createStaticGroup phy
+  createFloor platformsGroup
+  movingPlatform <- createPlatform phy
+  player <- createPlayer phy
+  stars <- createStars phy
+  cursors <- createCursorKeys scene
+  createAnimations
+  void $ setupCollisions player stars platformsGroup movingPlatform phy
+  Scene.update (\scn -> update cursors scn) scene
   where
   setupCollisions player stars platformsGroup movingPlatform =
     P.addCollider player platformsGroup
@@ -78,12 +76,13 @@ create scene =
       >=> P.addCollider stars platformsGroup
       >=> P.addOverlap player stars collectStar
 
-  createAnimations = do
-    leftWalkFrames <- Sprite.generateFrameNumbers "dude" 0 3 scene
-    rightWalkFrames <- Sprite.generateFrameNumbers "dude" 5 8 scene
-    void $ Sprite.createAnimation "left" leftWalkFrames 10.0 (-1) scene
-    void $ Sprite.createAnimation "turn" [ { key: "dude", frame: 4 } ] 10.0 (-1) scene
-    void $ Sprite.createAnimation "right" rightWalkFrames 10.0 (-1) scene
+  createAnimations =
+    void do
+      leftWalkFrames <- Sprite.generateFrameNumbers "dude" 0 3 scene
+      rightWalkFrames <- Sprite.generateFrameNumbers "dude" 5 8 scene
+      void $ Sprite.createAnimation "left" leftWalkFrames 10.0 (-1) scene
+      void $ Sprite.createAnimation "turn" [ { key: "dude", frame: 4 } ] 10.0 (-1) scene
+      void $ Sprite.createAnimation "right" rightWalkFrames 10.0 (-1) scene
 
   createBg =
     void do
@@ -122,11 +121,11 @@ create scene =
         # sequence
     pure starsEff
 
-update :: CursorKeys -> PhaserScene -> Effect Unit
-update cursors scene =
-  void do
-    movePlayer
-    movePlatform
+update :: CursorKeys -> PhaserScene -> Effect PhaserScene
+update cursors scene = do
+  movePlayer
+  movePlatform
+  pure scene
   where
   movePlayer = do
     player <- getPlayer scene
@@ -178,10 +177,10 @@ move cursors sprite =
   stop = P.setVelocityX 0.0 sprite >>= Sprite.playAnimation { key: "turn", ignoreIfPlaying: false }
 
 getPlayer :: PhaserScene -> Effect (Maybe ArcadeSprite)
-getPlayer scene = getChildByName "player" scene
+getPlayer scene = Scene.getChildByName "player" scene
 
 getPlatform :: PhaserScene -> Effect (Maybe ArcadeImage)
-getPlatform scene = getChildByName "moving_platform" scene
+getPlatform scene = Scene.getChildByName "moving_platform" scene
 
 collectStar :: ArcadeSprite -> ArcadeImage -> Effect Unit
 collectStar _a b = P.disableBody b >>= const (pure unit)

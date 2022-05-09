@@ -35,8 +35,11 @@ module Graphics.Phaser.Scene
   , switch
   , wake
   , init
+  , initWithData
   , create
+  , createWithData
   , update
+  , updateWithTimes
   , preload
   , newScene
   ) where
@@ -55,26 +58,43 @@ import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
 import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
 import Utils.FFI (getProperty, method1, method2, method4, return1, safeGet)
 
+-- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
+-- | composing multiple functions that operate at that time.
+-- | eg. oncreate = drawBackground >=> drawRetangle
 newScene :: String -> Effect PhaserScene
 newScene = unsafeForeignProcedure [ "key", "" ] "return new Phaser.Scene(key)"
 
-init :: forall a. (a -> PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+init :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 init callback scene = do
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.init = (data) => callback(scene)()" callback scene
+  pure scene
+
+initWithData :: forall a. (a -> PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+initWithData callback scene = do
   void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.init = (data) => callback(data)(scene)()" callback scene
   pure scene
 
-update :: ({ scene :: PhaserScene, time :: Number, delta :: Number } -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+update :: (PhaserScene -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
 update callback scene = do
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.update = (time,delta) => callback(scene)()" callback scene
+  pure scene
+
+updateWithTimes :: ({ scene :: PhaserScene, time :: Number, delta :: Number } -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
+updateWithTimes callback scene = do
   void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.update = (time,delta) => callback({time, delta, scene})()" callback scene
   pure scene
 
--- TODO: add the env in the callback
-create :: forall a. (a -> PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+create :: (PhaserScene -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
 create callback scene = do
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.create = (data) => callback(scene)()" callback scene
+  pure scene
+
+createWithData :: forall a. (a -> PhaserScene -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
+createWithData callback scene = do
   void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.create = (data) => callback(data)(scene)()" callback scene
   pure scene
 
-preload :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+preload :: (PhaserScene -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
 preload callback scene = do
   void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.preload = () => callback(scene)()" callback scene
   pure scene

@@ -27,37 +27,27 @@ mainScene =
     >>= onpreload
     >>= oncreate
   where
-  oncreate =
-    Scene.create
-      ( \_ scene ->
-          void do
-            title scene
-            startButton scene
-      )
+  oncreate = Scene.create (title >=> startButton)
 
   onpreload =
     Scene.preload
-      ( \scene ->
-          void do
-            loadImage
-              { key: "logo"
-              , path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-              }
-              scene
-      )
+      $ loadImage
+          { key: "logo"
+          , path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
+          }
 
-  title scene = void do Text.create "Click the logo to trigger an event." scene
+  title scene = Text.create "Click the logo to trigger an event." scene >>= const (pure scene)
 
-  startButton :: PhaserScene -> Effect Unit
-  startButton scene =
-    void do
-      image <-
-        Image.create "logo" scene
-          >>= GO.setPosition { x: 100.0, y: 100.0 }
-          >>= GO.setDisplaySize { width: 50.0, height: 50.0 }
-          >>= GO.setInteractive
-          >>= GO.setName "clickable_image"
-      on "pointerdown" listener image
+  startButton :: PhaserScene -> Effect PhaserScene
+  startButton scene = do
+    image <-
+      Image.create "logo" scene
+        >>= GO.setPosition { x: 100.0, y: 100.0 }
+        >>= GO.setDisplaySize { width: 50.0, height: 50.0 }
+        >>= GO.setInteractive
+        >>= GO.setName "clickable_image"
+    void $ on "pointerdown" listener image
+    pure scene
     where
     listener :: EventListener
     listener = createEventListener3 callback

@@ -615,7 +615,7 @@ var getScenePlugin = function() {
 var create3 = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(data)(scene)()")(callback)(scene))();
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
       return scene;
     };
   };
@@ -633,10 +633,8 @@ var secondScene = /* @__PURE__ */ function() {
     width: 50,
     height: 50
   }))));
-  return bind(bindEffect)(newScene("snd"))(create3(function(_data) {
-    return function(scene) {
-      return $$void(functorEffect)(createLogo(scene));
-    };
+  return bind(bindEffect)(newScene("snd"))(create3(function(scene) {
+    return bind(bindEffect)(createLogo(scene))($$const(pure(applicativeEffect)(scene)));
   }));
 }();
 var mainScene = /* @__PURE__ */ function() {
@@ -654,19 +652,16 @@ var mainScene = /* @__PURE__ */ function() {
       height: 50
     })))(setInteractive()))(on2()("pointerdown")(listener));
   };
-  return bind(bindEffect)(bind(bindEffect)(newScene("main"))(create3(function(_data) {
-    return function(scene) {
-      return function __do2() {
-        $$void(functorEffect)(create4("Click the logo to create a new scene")(scene))();
-        return $$void(functorEffect)(startButton(scene))();
-      };
+  return bind(bindEffect)(bind(bindEffect)(newScene("main"))(create3(function(scene) {
+    return function __do2() {
+      $$void(functorEffect)(create4("Click the logo to create a new scene")(scene))();
+      $$void(functorEffect)(startButton(scene))();
+      return scene;
     };
-  })))(preload(function(scene) {
-    return $$void(functorEffect)(loadImage({
-      key: "logo",
-      path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-    })(scene));
-  }));
+  })))(preload(loadImage({
+    key: "logo",
+    path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
+  })));
 }();
 var main = function __do() {
   var main$prime = mainScene();

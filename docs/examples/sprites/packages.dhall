@@ -99,7 +99,13 @@ in  upstream
 -------------------------------
 -}
 let upstream =
-      https://github.com/purescript/package-sets/releases/download/psc-0.14.3-20210811/packages.dhall sha256:a2de7ef2f2e753733eddfa90573a82da0c7c61d46fa87d015b7f15ef8a6e97d5
+      https://github.com/purescript/package-sets/releases/download/psc-0.15.0-20220507/packages.dhall
+        sha256:cf54330f3bc1b25a093b69bff8489180c954b43668c81288901a2ec29a08cc64
 
 in  upstream
   with phaser = ../../../spago.dhall as Location
+  with easy-ffi =
+    { dependencies = [ "arrays", "console", "effect", "prelude", "quickcheck" ]
+    , repo = "https://github.com/lfarroco/purescript-easy-ffi.git"
+    , version = "master"
+    }

@@ -502,7 +502,7 @@ var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new P
 var create3 = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(data)(scene)()")(callback)(scene))();
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
       return scene;
     };
   };
@@ -524,9 +524,10 @@ var mainScene = /* @__PURE__ */ function() {
     width: 256,
     height: 256
   }));
-  return bind(bindEffect)(newScene("main"))(create3(function(v) {
-    return function(scene) {
-      return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(create2(scene))(drawGreenRect))(drawRedRect));
+  return bind(bindEffect)(newScene("main"))(create3(function(scene) {
+    return function __do2() {
+      $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(create2(scene))(drawGreenRect))(drawRedRect))();
+      return scene;
     };
   }));
 }();

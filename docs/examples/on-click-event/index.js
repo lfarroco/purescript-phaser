@@ -85,6 +85,15 @@ var liftA1 = function(dictApplicative) {
 var bind = function(dict) {
   return dict.bind;
 };
+var composeKleisli = function(dictBind) {
+  return function(f) {
+    return function(g) {
+      return function(a) {
+        return bind(dictBind)(f(a))(g);
+      };
+    };
+  };
+};
 
 // output/Data.Semigroup/foreign.js
 var concatArray = function(xs) {
@@ -723,7 +732,7 @@ var getChildByName = function() {
 var create3 = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(data)(scene)()")(callback)(scene))();
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
       return scene;
     };
   };
@@ -736,7 +745,7 @@ var create4 = /* @__PURE__ */ return1("add.text(0,0,v1)");
 var getImageByName = /* @__PURE__ */ getChildByName();
 var mainScene = /* @__PURE__ */ function() {
   var title = function(scene) {
-    return $$void(functorEffect)(create4("Click the logo to trigger an event.")(scene));
+    return bind(bindEffect)(create4("Click the logo to trigger an event.")(scene))($$const(pure(applicativeEffect)(scene)));
   };
   var startButton = function(scene) {
     var callback = function(pointer) {
@@ -771,7 +780,7 @@ var mainScene = /* @__PURE__ */ function() {
                 return log2(monadEffectEffect)("Clickable image not found")();
               }
               ;
-              throw new Error("Failed pattern match at Main (line 75, column 7 - line 77, column 51): " + [clickable.constructor.name]);
+              throw new Error("Failed pattern match at Main (line 65, column 7 - line 67, column 51): " + [clickable.constructor.name]);
             })();
             return unit;
           };
@@ -779,7 +788,7 @@ var mainScene = /* @__PURE__ */ function() {
       };
     };
     var listener = createEventListener3(callback);
-    return $$void(functorEffect)(function __do2() {
+    return function __do2() {
       var image = bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(create2("logo")(scene))(setPosition()({
         x: 100,
         y: 100
@@ -787,23 +796,15 @@ var mainScene = /* @__PURE__ */ function() {
         width: 50,
         height: 50
       })))(setInteractive()))(setName()("clickable_image"))();
-      return on2()("pointerdown")(listener)(image)();
-    });
-  };
-  var onpreload = preload(function(scene) {
-    return $$void(functorEffect)(loadImage({
-      key: "logo",
-      path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-    })(scene));
-  });
-  var oncreate = create3(function(v) {
-    return function(scene) {
-      return $$void(functorEffect)(function __do2() {
-        title(scene)();
-        return startButton(scene)();
-      });
+      $$void(functorEffect)(on2()("pointerdown")(listener)(image))();
+      return scene;
     };
-  });
+  };
+  var onpreload = preload(loadImage({
+    key: "logo",
+    path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
+  }));
+  var oncreate = create3(composeKleisli(bindEffect)(title)(startButton));
   return bind(bindEffect)(bind(bindEffect)(newScene("main"))(onpreload))(oncreate);
 }();
 var main = function __do() {

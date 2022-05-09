@@ -15,7 +15,6 @@ to generate this file without the comments in this block.
   [ "arrays"
   , "console"
   , "effect"
-  , "option"
   , "phaser"
   , "prelude"
   , "psci-support"

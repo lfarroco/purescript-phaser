@@ -18,7 +18,6 @@ to generate this file without the comments in this block.
   , "foldable-traversable"
   , "integers"
   , "maybe"
-  , "option"
   , "phaser"
   , "prelude"
   , "psci-support"

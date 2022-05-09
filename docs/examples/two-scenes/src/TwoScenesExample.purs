@@ -5,7 +5,7 @@ import Effect (Effect)
 import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.Events (createEventListener0, on)
-import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserImage, PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
 import Graphics.Phaser.GameObject (setAngle, setDisplaySize, setInteractive, setPosition)
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Loader (loadImage)
@@ -23,22 +23,14 @@ main = do
 
 mainScene :: Effect PhaserScene
 mainScene =
-  do
-    Scene.newScene "main"
+  Scene.newScene "main"
     >>= Scene.create
-        ( \_data scene -> do
+        ( \scene -> do
             void $ Text.create "Click the logo to create a new scene" scene
             void $ startButton scene
+            pure scene
         )
-    >>= Scene.preload
-        ( \scene ->
-            void do
-              loadImage
-                { key: "logo"
-                , path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-                }
-                scene
-        )
+    >>= Scene.preload (loadImage { key: "logo", path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png" })
   where
   startButton scene =
     Image.create "logo" scene
@@ -59,9 +51,8 @@ mainScene =
 secondScene :: Effect PhaserScene
 secondScene = do
   Scene.newScene "snd"
-    >>= Scene.create (\_data scene -> void do createLogo scene)
+    >>= Scene.create (\scene -> createLogo scene >>= const (pure scene))
   where
-  createLogo :: PhaserScene -> Effect PhaserImage
   createLogo =
     Image.create "logo"
       >=> setPosition { x: 200.0, y: 200.0 }

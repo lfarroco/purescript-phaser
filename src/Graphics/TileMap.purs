@@ -12,15 +12,13 @@ import Utils.FFI (return1, return2, getProperty)
 -- Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
 type TilemapConfig
   = { key :: String
-   , data :: Array (Array Int)
-   , tileWidth :: Int
-   , tileHeight :: Int
-   , width :: Int
-   , height :: Int
-   , insertNull :: Boolean  }
-    
-
-
+    , data :: Array (Array Int)
+    , tileWidth :: Int
+    , tileHeight :: Int
+    , width :: Int
+    , height :: Int
+    , insertNull :: Boolean
+    }
 
 -- | Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.MapDataConfig
 type MapDataConfig
@@ -46,13 +44,12 @@ type MapDataConfig
     )
 
 makeTileMap :: TilemapConfig -> PhaserScene -> Effect PhaserTileMap
-makeTileMap config scene =
-    return1 "make.tilemap(v1)" config scene
+makeTileMap config scene = return1 "make.tilemap(v1)" config scene
 
 addTilesetImage :: String -> TilesetDesc -> PhaserTileMap -> Effect PhaserTileSet
 addTilesetImage tilesetName config tileMap =
-    return2
-      """ addTilesetImage(
+  return2
+    """ addTilesetImage(
         v1,
         v2.key,
         v2.tileWidth,
@@ -61,17 +58,18 @@ addTilesetImage tilesetName config tileMap =
         v2.tileSpacing,
         v2.gid
       )"""
-      tilesetName
-      config
-      tileMap
+    tilesetName
+    config
+    tileMap
 
 type TilesetDesc
-  ={ key :: String
-   , tileWidth :: Int
-   , tileHeight :: Int
-   , tileMargin :: Int
-   , tileSpacing :: Int
-   , gid :: Int } 
+  = { key :: String
+    , tileWidth :: Int
+    , tileHeight :: Int
+    , tileMargin :: Int
+    , tileSpacing :: Int
+    , gid :: Int
+    }
 
 createLayer ::
   String ->
