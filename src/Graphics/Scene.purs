@@ -58,24 +58,25 @@ import Utils.FFI (getProperty, method1, method2, method4, return1, safeGet)
 newScene :: String -> Effect PhaserScene
 newScene = unsafeForeignProcedure [ "key", "" ] "return new Phaser.Scene(key)"
 
-init :: forall a. (a -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+init :: forall a. (a -> PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 init callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.init = (data) => callback(data)()" callback scene
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.init = (data) => callback(data)(scene)()" callback scene
   pure scene
 
-update :: ({ time :: Number, delta :: Number } -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+update :: ({ scene :: PhaserScene, time :: Number, delta :: Number } -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 update callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.update = (time,delta) => callback({time, delta})()" callback scene
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.update = (time,delta) => callback({time, delta, scene})()" callback scene
   pure scene
 
-create :: forall a. (a -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+-- TODO: add the env in the callback
+create :: forall a. (a -> PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 create callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.create = (data) => callback(data)()" callback scene
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.create = (data) => callback(data)(scene)()" callback scene
   pure scene
 
-preload :: (Unit -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+preload :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 preload callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.preload = () => callback({})()" callback scene
+  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.preload = () => callback(scene)()" callback scene
   pure scene
 
 children :: forall a. GameObject a => PhaserScene -> Effect (Array a)

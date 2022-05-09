@@ -668,7 +668,7 @@ var method3 = function(expr) {
 };
 
 // output/Graphics.Phaser/index.js
-var setGameDimensions = function(v) {
+var setDimentions = function(v) {
   return function(game) {
     return function __do2() {
       setProperty("config.width=v1")(v.width)(game)();
@@ -711,7 +711,7 @@ var loadImage = /* @__PURE__ */ method1("load.image(v1.key,v1.path)");
 var preload = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback({})()")(callback)(scene))();
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene))();
       return scene;
     };
   };
@@ -723,7 +723,7 @@ var getChildByName = function() {
 var create3 = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(data)()")(callback)(scene))();
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(data)(scene)()")(callback)(scene))();
       return scene;
     };
   };
@@ -771,7 +771,7 @@ var mainScene = /* @__PURE__ */ function() {
                 return log2(monadEffectEffect)("Clickable image not found")();
               }
               ;
-              throw new Error("Failed pattern match at Main (line 78, column 7 - line 80, column 51): " + [clickable.constructor.name]);
+              throw new Error("Failed pattern match at Main (line 75, column 7 - line 77, column 51): " + [clickable.constructor.name]);
             })();
             return unit;
           };
@@ -790,27 +790,25 @@ var mainScene = /* @__PURE__ */ function() {
       return on2()("pointerdown")(listener)(image)();
     });
   };
-  var onpreload = function(scene) {
-    return preload(function(v) {
-      return $$void(functorEffect)(loadImage({
-        key: "logo",
-        path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-      })(scene));
-    })(scene);
-  };
-  var oncreate = function(scene) {
-    return create3(function(v) {
+  var onpreload = preload(function(scene) {
+    return $$void(functorEffect)(loadImage({
+      key: "logo",
+      path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
+    })(scene));
+  });
+  var oncreate = create3(function(v) {
+    return function(scene) {
       return $$void(functorEffect)(function __do2() {
         title(scene)();
         return startButton(scene)();
       });
-    })(scene);
-  };
+    };
+  });
   return bind(bindEffect)(bind(bindEffect)(newScene("main"))(onpreload))(oncreate);
 }();
 var main = function __do() {
   var mainScene$prime = mainScene();
-  return bind(bindEffect)(bind(bindEffect)(create)(setGameDimensions({
+  return bind(bindEffect)(bind(bindEffect)(create)(setDimentions({
     width: 400,
     height: 300
   })))(addScene("main")(mainScene$prime)(true))();

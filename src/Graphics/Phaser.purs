@@ -1,6 +1,6 @@
 module Graphics.Phaser
   ( create
-  , setGameDimensions
+  , setDimentions
   , addScene
   ) where
 
@@ -14,8 +14,8 @@ import Utils.FFI (method3, setProperty)
 create :: Effect PhaserGame
 create = unsafeForeignProcedure [ "" ] "return new Phaser.Game()"
 
-setGameDimensions :: Dimensions -> PhaserGame -> Effect PhaserGame
-setGameDimensions { width, height } game = do
+setDimentions :: Dimensions -> PhaserGame -> Effect PhaserGame
+setDimentions { width, height } game = do
   setProperty "config.width=v1" width game
   setProperty "config.height=v1" height game
   pure game

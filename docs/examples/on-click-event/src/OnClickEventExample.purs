@@ -1,7 +1,6 @@
 module Main where
 
 import Prelude
-
 import Data.Maybe (Maybe(..))
 import Effect (Effect)
 import Effect.Class.Console (log)
@@ -19,7 +18,7 @@ main :: Effect PhaserGame
 main = do
   mainScene' <- mainScene
   Phaser.create
-    >>=Phaser.setGameDimensions {width: 400.0, height: 300.0}
+    >>= Phaser.setDimentions { width: 400.0, height: 300.0 }
     >>= Phaser.addScene "main" mainScene' true
 
 mainScene :: Effect PhaserScene
@@ -28,18 +27,17 @@ mainScene =
     >>= onpreload
     >>= oncreate
   where
-  oncreate scene =
+  oncreate =
     Scene.create
-      ( \_ ->
+      ( \_ scene ->
           void do
             title scene
             startButton scene
       )
-      scene
 
-  onpreload scene =
+  onpreload =
     Scene.preload
-      ( \_ ->
+      ( \scene ->
           void do
             loadImage
               { key: "logo"
@@ -47,7 +45,6 @@ mainScene =
               }
               scene
       )
-      scene
 
   title scene = void do Text.create "Click the logo to trigger an event." scene
 
