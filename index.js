@@ -741,7 +741,7 @@ var setDimentions = function(v) {
     };
   };
 };
-var create = /* @__PURE__ */ unsafeForeignProcedure([""])("return new Phaser.Game()");
+var createWithConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
 var addScene = /* @__PURE__ */ method3("scene.add(v1,v2,v3)");
 
 // output/Graphics.Phaser.ArcadePhysics/index.js
@@ -808,7 +808,7 @@ var getX = function() {
 };
 
 // output/Graphics.Phaser.Image/index.js
-var create2 = /* @__PURE__ */ return1("add.image(0, 0, v1)");
+var create = /* @__PURE__ */ return1("add.image(0, 0, v1)");
 
 // output/Graphics.Phaser.Input/index.js
 var isDown = /* @__PURE__ */ getProperty("isDown");
@@ -840,7 +840,7 @@ var getPhysicsPlugin = /* @__PURE__ */ getProperty("physics");
 var getChildByName = function() {
   return safeGet;
 };
-var create3 = function(callback) {
+var create2 = function(callback) {
   return function(scene) {
     return function __do2() {
       $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
@@ -1020,7 +1020,7 @@ var oncreate = function(scene) {
       y: 2
     })))(refreshBody()));
   };
-  var createBg = $$void(functorEffect)(bind(bindEffect)(create2("sky")(scene))(setPosition()({
+  var createBg = $$void(functorEffect)(bind(bindEffect)(create("sky")(scene))(setPosition()({
     x: 400,
     y: 300
   })));
@@ -1050,10 +1050,10 @@ var oncreate = function(scene) {
     })(scene)();
   };
 };
-var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create3(oncreate)))(/* @__PURE__ */ preload(onpreload));
+var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create2(oncreate)))(/* @__PURE__ */ preload(onpreload));
 var main = function __do() {
   var scene = mainScene();
-  return bind(bindEffect)(bind(bindEffect)(create)(setDimentions({
+  return bind(bindEffect)(bind(bindEffect)(createWithConfig({}))(setDimentions({
     width: 800,
     height: 600
   })))(addScene("main")(scene)(true))();

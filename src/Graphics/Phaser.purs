@@ -1,6 +1,7 @@
 module Graphics.Phaser
   ( create
   , createWithConfig
+  , createWithUnsafeConfig
   , setDimentions
   , addScene
   ) where
@@ -15,9 +16,14 @@ import Utils.FFI (method3, setProperty)
 create :: Effect PhaserGame
 create = unsafeForeignProcedure [ "" ] "return new Phaser.Game()"
 
--- | https://photonstorm.github.io/phaser3-docs/Phaser.Types.Core.html#.GameConfig
 createWithConfig :: forall a. a -> Effect PhaserGame
 createWithConfig = unsafeForeignProcedure [ "config", "" ] "return new Phaser.Game(config)"
+
+-- | This function allows passing anything to Phaser's config
+-- | You can use it for properties that are not defined in this library
+-- | https://photonstorm.github.io/phaser3-docs/Phaser.Types.Core.html#.GameConfig
+createWithUnsafeConfig :: forall a. a -> Effect PhaserGame
+createWithUnsafeConfig = unsafeForeignProcedure [ "config", "" ] "return new Phaser.Game(config)"
 
 setDimentions :: Dimensions -> PhaserGame -> Effect PhaserGame
 setDimentions { width, height } game = do

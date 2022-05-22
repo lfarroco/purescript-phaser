@@ -26,7 +26,7 @@ import Graphics.Phaser.Sprite as Sprite
 main :: Effect PhaserGame
 main = do
   scene <- mainScene
-  Phaser.createWithConfig { physics: { default: "arcade", arcade: { debug: true, gravity: { y: 200 } } } }
+  Phaser.create
     >>= Phaser.setDimentions
         { width: 800.0
         , height: 600.0
