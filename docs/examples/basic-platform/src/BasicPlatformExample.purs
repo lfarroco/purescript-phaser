@@ -14,7 +14,6 @@ import Data.Array ((..))
 import Data.Foldable (for_)
 import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
-import Data.Options ((:=))
 import Data.Traversable (sequence)
 import Effect (Effect)
 import Effect.Class.Console (log)
@@ -22,7 +21,8 @@ import Graphics.Phaser as Phaser
 import Graphics.Phaser.ArcadePhysics as P
 import Graphics.Phaser.CoreTypes (class PhysicsEnabled)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, PhaserGame, PhaserScene)
-import Graphics.Phaser.GameConfig (height, physics, scene, width)
+import Graphics.Phaser.GameConfig (arcade, default)
+import Graphics.Phaser.GameConfig as Cfg
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Input (CursorKeys, createCursorKeys, isDown)
@@ -34,18 +34,17 @@ import Graphics.Phaser.Sprite as Sprite
 -- Adapted from http://labs.phaser.io/edit.html?src=src/physics/arcade/basic%20platform.js
 main :: Effect PhaserGame
 main = do
-  mainScene' <- mainScene
+  scene <- mainScene
   Phaser.createWithConfig
-    ( width := Just 1200.0
-        <> (height := Just 600.0)
-        <> (scene := Just [ mainScene' ]) -- The first scene in the array is started by default
-        <> ( physics
-              := Just
-                  { default: "arcade"
-                  , arcade: { debug: false, gravity: { x: 0.0, y: 100.0 } }
-                  }
-          )
+    ( Cfg.width 800.0
+        <> (Cfg.height 600.0)
+        <> (Cfg.scene [ scene ]) -- The first scene in the array is started by default
+        <> (Cfg.physics physicsConfig)
     )
+  where
+  physicsConfig =
+    default "arcade"
+      <> (arcade { debug: false, gravity: { x: 0.0, y: 100.0 } })
 
 mainScene :: Effect PhaserScene
 mainScene =

@@ -1,61 +1,64 @@
 module Graphics.Phaser.GameConfig where
 
 import Prelude
-import Data.Maybe (Maybe)
-import Data.Options (Option, Options, opt, optional)
+import Data.Maybe (Maybe(..))
+import Data.Options (Options, opt, optional, options, (:=))
 import Graphics.Canvas (CanvasElement, Context2D)
-import Graphics.Phaser.CoreTypes (CallbacksConfig, DOMContainerConfig, FPSConfig, ImagesConfig, LoaderConfig, PhysicsConfig, PluginObject, RenderConfig, ScaleConfig, AudioConfig)
+import Graphics.Phaser.CoreTypes (AudioConfig, CallbacksConfig, DOMContainerConfig, FPSConfig, ImagesConfig, LoaderConfig, PluginObject, RenderConfig, ScaleConfig, ArcadeWorldConfig)
 import Graphics.Phaser.ForeignTypes (PhaserScene, WebGLPipeline)
 
 data GameConfig
 
-width :: Option GameConfig (Maybe Number)
-width = optional (opt "width")
+opt_ :: forall a b. String -> a -> Options b
+opt_ attr val = optional (opt attr) := Just val
 
-height :: Option GameConfig (Maybe Number)
-height = optional (opt "height")
+width :: Number -> Options GameConfig
+width = opt_ "width"
 
-type_ :: Option GameConfig (Maybe Int)
-type_ = optional (opt "type")
+height :: Number -> Options GameConfig
+height = opt_ "height"
 
-zoom :: Option GameConfig (Maybe Number)
-zoom = optional (opt "zoom")
+type_ :: Int -> Options GameConfig
+type_ = opt_ "type"
 
-parent :: Option GameConfig (Maybe String)
-parent = optional (opt "parent")
+zoom :: Number -> Options GameConfig
+zoom = opt_ "zoom"
 
-canvas :: Option GameConfig (Maybe CanvasElement)
-canvas = optional (opt "canvas")
+parent :: String -> Options GameConfig
+parent = opt_ "parent"
 
-canvasStyle :: Option GameConfig (Maybe String)
-canvasStyle = optional (opt "canvasStyle")
+canvas :: CanvasElement -> Options GameConfig
+canvas = opt_ "canvas"
 
-customEnvironment :: Option GameConfig (Maybe Boolean)
-customEnvironment = optional (opt "customEnvironment")
+canvasStyle :: String -> Options GameConfig
+canvasStyle = opt_ "canvasStyle"
 
-context :: Option GameConfig (Maybe Context2D)
-context = optional (opt "context")
+customEnvironment :: Boolean -> Options GameConfig
+customEnvironment = opt_ "customEnvironment"
 
-scene :: Option GameConfig (Maybe (Array PhaserScene))
-scene = optional (opt "scene")
+context :: Context2D -> Options GameConfig
+context = opt_ "context"
 
-seed :: Option GameConfig (Maybe (Array String))
-seed = optional (opt "seed")
+scene :: Array PhaserScene -> Options GameConfig
+scene = opt_ "scene"
 
-title :: Option GameConfig (Maybe String)
-title = optional (opt "title")
+seed :: Array String -> Options GameConfig
+seed = opt_ "seed"
 
-url :: Option GameConfig (Maybe String)
-url = optional (opt "url")
+title :: String -> Options GameConfig
+title = opt_ "title"
 
-version :: Option GameConfig (Maybe String)
-version = optional (opt "version")
+url :: String -> Options GameConfig
+url = opt_ "url"
 
-autofocus :: Option GameConfig (Maybe Boolean)
-autofocus = optional (opt "autofocus")
+version :: String -> Options GameConfig
+version = opt_ "version"
 
-input :: Option GameConfig (Maybe InputConfig)
-input = optional (opt "input")
+autofocus :: Boolean -> Options GameConfig
+autofocus = opt_ "autofocus"
+
+input :: InputConfig -> Options GameConfig
+input = opt_ "input"
 
 type InputConfig
   = { keyboard :: Boolean
@@ -67,11 +70,11 @@ type InputConfig
     , windowEvents :: Boolean
     }
 
-disableContextMenu :: Option GameConfig (Maybe Boolean)
-disableContextMenu = optional (opt "disableContextMenu")
+disableContextMenu :: Boolean -> Options GameConfig
+disableContextMenu = opt_ "disableContextMenu"
 
-banner :: Option GameConfig (Maybe BannerConfig)
-banner = optional (opt "banner")
+banner :: BannerConfig -> Options GameConfig
+banner = opt_ "banner"
 
 type BannerConfig
   = { hidePhaser :: Boolean
@@ -79,91 +82,99 @@ type BannerConfig
     , background :: Array String
     }
 
-dom :: Option GameConfig (Maybe DOMContainerConfig)
-dom = optional (opt "dom")
+dom :: DOMContainerConfig -> Options GameConfig
+dom = opt_ "dom"
 
-fps :: Option GameConfig (Maybe FPSConfig)
-fps = optional (opt "fps")
+fps :: FPSConfig -> Options GameConfig
+fps = opt_ "fps"
 
-render :: Option GameConfig (Maybe RenderConfig)
-render = optional (opt "render")
+render :: RenderConfig -> Options GameConfig
+render = opt_ "render"
 
-callbacks :: Option GameConfig (Maybe CallbacksConfig)
-callbacks = optional (opt "callbacks")
+callbacks :: CallbacksConfig -> Options GameConfig
+callbacks = opt_ "callbacks"
 
-loader :: Option GameConfig (Maybe LoaderConfig)
-loader = optional (opt "loader")
+loader :: LoaderConfig -> Options GameConfig
+loader = opt_ "loader"
 
-images :: Option GameConfig (Maybe ImagesConfig)
-images = optional (opt "images")
+images :: ImagesConfig -> Options GameConfig
+images = opt_ "images"
 
-physics :: Option GameConfig (Maybe PhysicsConfig)
-physics = optional (opt "physics")
+physics :: Options PhysicsConfig -> Options GameConfig
+physics a = optional (opt "physics") := (Just $ options a)
 
-plugins :: Option GameConfig (Maybe PluginObject)
-plugins = optional (opt "plugins")
+plugins :: PluginObject -> Options GameConfig
+plugins = opt_ "plugins"
 
-scale :: Option GameConfig (Maybe ScaleConfig)
-scale = optional (opt "scale")
+scale :: ScaleConfig -> Options GameConfig
+scale = opt_ "scale"
 
-audio :: Option GameConfig (Maybe AudioConfig)
-audio = optional (opt "scale")
+audio :: AudioConfig -> Options GameConfig
+audio = opt_ "scale"
 
-pipeline :: Option GameConfig (Maybe PipelineConfig)
-pipeline = optional (opt "pipeline")
+pipeline :: PipelineConfig -> Options GameConfig
+pipeline = opt_ "pipeline"
 
 type PipelineConfig
   = { name :: String
     , pipeline :: WebGLPipeline
     }
 
-backgroundColor :: Option GameConfig (Maybe Int)
-backgroundColor = optional (opt "backgroundColor")
+backgroundColor :: Int -> Options GameConfig
+backgroundColor = opt_ "backgroundColor"
 
-antialias :: Option GameConfig (Maybe Boolean)
-antialias = optional (opt "antialias")
+antialias :: Boolean -> Options GameConfig
+antialias = opt_ "antialias"
 
-antialiasGL :: Option GameConfig (Maybe Boolean)
-antialiasGL = optional (opt "antialiasGL")
+antialiasGL :: Boolean -> Options GameConfig
+antialiasGL = opt_ "antialiasGL"
 
-desynchronized :: Option GameConfig (Maybe Boolean)
-desynchronized = optional (opt "desynchronized")
+desynchronized :: Boolean -> Options GameConfig
+desynchronized = opt_ "desynchronized"
 
-pixelArt :: Option GameConfig (Maybe Boolean)
-pixelArt = optional (opt "pixelArt")
+pixelArt :: Boolean -> Options GameConfig
+pixelArt = opt_ "pixelArt"
 
-roundPixels :: Option GameConfig (Maybe Boolean)
-roundPixels = optional (opt "roundPixels")
+roundPixels :: Boolean -> Options GameConfig
+roundPixels = opt_ "roundPixels"
 
-transparent :: Option GameConfig (Maybe Boolean)
-transparent = optional (opt "transparent")
+transparent :: Boolean -> Options GameConfig
+transparent = opt_ "transparent"
 
-clearBeforeRender :: Option GameConfig (Maybe Boolean)
-clearBeforeRender = optional (opt "clearBeforeRender")
+clearBeforeRender :: Boolean -> Options GameConfig
+clearBeforeRender = opt_ "clearBeforeRender"
 
-preserveDrawingBuffer :: Option GameConfig (Maybe Boolean)
-preserveDrawingBuffer = optional (opt "preserveDrawingBuffer")
+preserveDrawingBuffer :: Boolean -> Options GameConfig
+preserveDrawingBuffer = opt_ "preserveDrawingBuffer"
 
-premultipliedAlpha :: Option GameConfig (Maybe Boolean)
-premultipliedAlpha = optional (opt "premultipliedAlpha")
+premultipliedAlpha :: Boolean -> Options GameConfig
+premultipliedAlpha = opt_ "premultipliedAlpha"
 
-failIfMajorPerformanceCaveat :: Option GameConfig (Maybe Boolean)
-failIfMajorPerformanceCaveat = optional (opt "failIfMajorPerformanceCaveat")
+failIfMajorPerformanceCaveat :: Boolean -> Options GameConfig
+failIfMajorPerformanceCaveat = opt_ "failIfMajorPerformanceCaveat"
 
-powerPreference :: Option GameConfig (Maybe String)
-powerPreference = optional (opt "powerPreference")
+powerPreference :: String -> Options GameConfig
+powerPreference = opt_ "powerPreference"
 
-batchSize :: Option GameConfig (Maybe Number)
-batchSize = optional (opt "batchSize")
+batchSize :: Number -> Options GameConfig
+batchSize = opt_ "batchSize"
 
-maxLights :: Option GameConfig (Maybe Number)
-maxLights = optional (opt "maxLights")
+maxLights :: Number -> Options GameConfig
+maxLights = opt_ "maxLights"
 
-maxTextures :: Option GameConfig (Maybe Number)
-maxTextures = optional (opt "maxTextures")
+maxTextures :: Number -> Options GameConfig
+maxTextures = opt_ "maxTextures"
 
-mipmapFilter :: Option GameConfig (Maybe String)
-mipmapFilter = optional (opt "mipmapFilter")
+mipmapFilter :: String -> Options GameConfig
+mipmapFilter = opt_ "mipmapFilter"
 
 defaultConfig :: Options GameConfig
 defaultConfig = mempty
+
+data PhysicsConfig
+
+default :: String -> Options PhysicsConfig
+default = opt_ "default"
+
+arcade :: ArcadeWorldConfig -> Options PhysicsConfig
+arcade = opt_ "arcade"

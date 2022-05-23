@@ -689,7 +689,7 @@ function poke2(k) {
 // output/Foreign.Object/index.js
 var fromFoldable3 = function(dictFoldable) {
   return function(l) {
-    return runST(function __do2() {
+    return runST(function __do() {
       var s = newImpl();
       foreach(fromFoldable(dictFoldable)(l))(function(v) {
         return $$void(functorST)(poke2(v.value0)(v.value1)(s));
@@ -788,7 +788,7 @@ var return0 = function(expr) {
 };
 var method0 = function(expr) {
   return function(obj) {
-    return function __do2() {
+    return function __do() {
       $$void(functorEffect)(return0(expr)(obj))();
       return obj;
     };
@@ -808,7 +808,7 @@ var getNullable = function(expr) {
 };
 var safeGet = function(k) {
   return function(obj) {
-    return function __do2() {
+    return function __do() {
       var v = getNullable("children.getByName(v1)")(k)(obj)();
       return toMaybe(v);
     };
@@ -817,7 +817,7 @@ var safeGet = function(k) {
 var method1 = function(expr) {
   return function(value) {
     return function(obj) {
-      return function __do2() {
+      return function __do() {
         $$void(functorEffect)(return1(expr)(value)(obj))();
         return obj;
       };
@@ -837,7 +837,7 @@ var method2 = function(expr) {
   return function(v1) {
     return function(v2) {
       return function(obj) {
-        return function __do2() {
+        return function __do() {
           $$void(functorEffect)(return2(expr)(v1)(v2)(obj))();
           return obj;
         };
@@ -861,7 +861,7 @@ var method3 = function(expr) {
     return function(v2) {
       return function(v3) {
         return function(obj) {
-          return function __do2() {
+          return function __do() {
             $$void(functorEffect)(return3(expr)(v1)(v2)(v3)(obj))();
             return obj;
           };
@@ -940,10 +940,19 @@ var addCollider = function() {
 };
 
 // output/Graphics.Phaser.GameConfig/index.js
-var width = /* @__PURE__ */ optional(/* @__PURE__ */ opt("width"));
-var scene = /* @__PURE__ */ optional(/* @__PURE__ */ opt("scene"));
-var physics = /* @__PURE__ */ optional(/* @__PURE__ */ opt("physics"));
-var height = /* @__PURE__ */ optional(/* @__PURE__ */ opt("height"));
+var physics = function(a) {
+  return assoc(optional(opt("physics")))(new Just(options(a)));
+};
+var opt_ = function(attr) {
+  return function(val) {
+    return assoc(optional(opt(attr)))(new Just(val));
+  };
+};
+var scene = /* @__PURE__ */ opt_("scene");
+var width = /* @__PURE__ */ opt_("width");
+var height = /* @__PURE__ */ opt_("height");
+var $$default = /* @__PURE__ */ opt_("default");
+var arcade = /* @__PURE__ */ opt_("arcade");
 
 // output/Graphics.Phaser.GameObject/index.js
 var setScale = function() {
@@ -973,7 +982,7 @@ var loadImage = /* @__PURE__ */ method1("load.image(v1.key,v1.path)");
 // output/Graphics.Phaser.Scene/index.js
 var update = function(callback) {
   return function(scene2) {
-    return function __do2() {
+    return function __do() {
       $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.update = (time,delta) => callback(scene)()")(callback)(scene2))();
       return scene2;
     };
@@ -981,7 +990,7 @@ var update = function(callback) {
 };
 var preload = function(callback) {
   return function(scene2) {
-    return function __do2() {
+    return function __do() {
       $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene2))();
       return scene2;
     };
@@ -994,7 +1003,7 @@ var getChildByName = function() {
 };
 var create2 = function(callback) {
   return function(scene2) {
-    return function __do2() {
+    return function __do() {
       $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene2))();
       return scene2;
     };
@@ -1010,7 +1019,7 @@ var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v
 
 // output/Main/index.js
 var onpreload = function(scene2) {
-  return function __do2() {
+  return function __do() {
     for_(applicativeEffect)(foldableArray)(["sky", "platform", "star"])(function(key) {
       return bind(bindEffect)(loadImage({
         key,
@@ -1042,7 +1051,7 @@ var move = function() {
           key: "left",
           ignoreIfPlaying: true
         }));
-        return $$void(functorEffect)(function __do2() {
+        return $$void(functorEffect)(function __do() {
           var isRight = isDown(cursors.right)();
           var isLeft = isDown(cursors.left)();
           if (isRight) {
@@ -1069,10 +1078,10 @@ var update2 = function(cursors) {
   return function(scene2) {
     var movePlayer = function() {
       var jump = setVelocityY()(-350);
-      return function __do2() {
+      return function __do() {
         var player = getPlayer(scene2)();
         if (player instanceof Just) {
-          return $$void(functorEffect)(function __do3() {
+          return $$void(functorEffect)(function __do2() {
             var touching = getTouching()(player.value0)();
             var isUp = isDown(cursors.up)();
             move()()(cursors)(player.value0)();
@@ -1089,10 +1098,10 @@ var update2 = function(cursors) {
           return log3(monadEffectEffect)("Sprite not found!")();
         }
         ;
-        throw new Error("Failed pattern match at Main (line 144, column 5 - line 154, column 41): " + [player.constructor.name]);
+        throw new Error("Failed pattern match at Main (line 145, column 5 - line 155, column 41): " + [player.constructor.name]);
       };
     }();
-    var movePlatform = function __do2() {
+    var movePlatform = function __do() {
       var platform = getPlatform(scene2)();
       if (platform instanceof Just) {
         var x = getX()(platform.value0)();
@@ -1116,9 +1125,9 @@ var update2 = function(cursors) {
         return log3(monadEffectEffect)("Platform image not found!")();
       }
       ;
-      throw new Error("Failed pattern match at Main (line 160, column 5 - line 171, column 49): " + [platform.constructor.name]);
+      throw new Error("Failed pattern match at Main (line 161, column 5 - line 172, column 49): " + [platform.constructor.name]);
     };
-    return function __do2() {
+    return function __do() {
       movePlayer();
       movePlatform();
       return scene2;
@@ -1141,7 +1150,7 @@ var oncreate = function(scene2) {
     };
   };
   var createStars = function(phy) {
-    return function __do2() {
+    return function __do() {
       var starsEff = sequence(traversableArray)(applicativeEffect)(map(functorArray)(function(n) {
         return bind(bindEffect)(bind(bindEffect)(createArcadeImage({
           x: 50 + toNumber(n) * 40,
@@ -1176,7 +1185,7 @@ var oncreate = function(scene2) {
     x: 400,
     y: 300
   })));
-  var createAnimations = $$void(functorEffect)(function __do2() {
+  var createAnimations = $$void(functorEffect)(function __do() {
     var leftWalkFrames = generateFrameNumbers("dude")(0)(3)(scene2)();
     var rightWalkFrames = generateFrameNumbers("dude")(5)(8)(scene2)();
     $$void(functorEffect)(createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene2))();
@@ -1186,7 +1195,7 @@ var oncreate = function(scene2) {
     }])(10)(-1 | 0)(scene2))();
     return $$void(functorEffect)(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene2))();
   });
-  return function __do2() {
+  return function __do() {
     var phy = getPhysicsPlugin(scene2)();
     createBg();
     var platformsGroup = createStaticGroup(phy)();
@@ -1203,19 +1212,19 @@ var oncreate = function(scene2) {
   };
 };
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create2(oncreate)))(/* @__PURE__ */ preload(onpreload));
-var main = function __do() {
-  var scene2 = mainScene();
-  return createWithConfig(append(semigroupOptions)(assoc(width)(new Just(1200)))(append(semigroupOptions)(assoc(height)(new Just(600)))(append(semigroupOptions)(assoc(scene)(new Just([scene2])))(assoc(physics)(new Just({
-    "default": "arcade",
-    arcade: {
-      debug: false,
-      gravity: {
-        x: 0,
-        y: 100
-      }
+var main = /* @__PURE__ */ function() {
+  var physicsConfig = append(semigroupOptions)($$default("arcade"))(arcade({
+    debug: false,
+    gravity: {
+      x: 0,
+      y: 100
     }
-  }))))))();
-};
+  }));
+  return function __do() {
+    var scene2 = mainScene();
+    return createWithConfig(append(semigroupOptions)(width(800))(append(semigroupOptions)(height(600))(append(semigroupOptions)(scene([scene2]))(physics(physicsConfig)))))();
+  };
+}();
 
 // <stdin>
 main();

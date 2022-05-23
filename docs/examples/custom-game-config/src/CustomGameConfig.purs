@@ -1,12 +1,10 @@
 module Main where
 
 import Prelude
-import Data.Maybe (Maybe(..))
-import Data.Options ((:=))
 import Effect (Effect)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
-import Graphics.Phaser.GameConfig (width, height, title)
+import Graphics.Phaser.GameConfig (height, scene, title, width)
 import Graphics.Phaser.Scene as Scene
 import Graphics.Phaser.Text as Text
 
@@ -17,11 +15,11 @@ main = do
     -- | This is how you can pass optional parameters when creating a new
     -- | game instance
     config =
-      title := Just "My example game"
-        <> width := Just 500.0
-        <> height := Just 200.0
+      (title "My example game")
+        <> (width 500.0)
+        <> (height 200.0)
+        <> (scene [ main' ])
   Phaser.createWithConfig config
-    >>= Phaser.addScene "main" main' true
 
 mainScene :: Effect PhaserScene
 mainScene =
