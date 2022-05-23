@@ -1,13 +1,8 @@
 module Graphics.Phaser.CoreTypes where
 
-import Effect (Effect)
-import Graphics.Canvas (CanvasElement, Context2D)
-import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, AudioContext, BootCallback, Group, JSONCamera, Key, KeyboardPlugin, NodeEventEmitter, PackFileSection, PhaserContainer, PhaserGame, PhaserGraphic, PhaserImage, PhaserLayer, PhaserScene, PhaserSprite, PhaserText, PluginObjectItem, StaticGroup, WebGLPipeline)
 import Graphics.Phaser.ForeignTypes as FT
 --import Data.Options (Options, opt, options)
-import Prelude (Unit)
 import Web.HTML.HTMLElement (HTMLElement)
-import Data.Options (Options)
 
 -- Current time in milliseconds
 
@@ -26,23 +21,23 @@ type Dimensions
 
 -- TODO: Change to Boolean | *InputConfig
 type InputConfig
-  = ( keyboard :: Boolean
+  = {  keyboard :: Boolean
     , mouse :: Boolean
     , touch :: Boolean
     , gamepad :: Boolean
     , activePointers :: Int
     , smoothFactor :: Number
     , windowEvents :: Boolean
-    )
+     }
 
 type BannerConfig
-  = ( hidePhaser :: Boolean
+  = {  hidePhaser :: Boolean
     , text :: String
     , background :: Array String
-    )
+     }
 
 type ScaleConfig
-  = ( width :: Int
+  = {  width :: Int
     , height :: Int
     , zoom :: Number
     , parent :: HTMLElement
@@ -54,26 +49,26 @@ type ScaleConfig
     , autoCenter :: Int -- TODO: enum CenterType
     , resizeInterval :: Int -- | ms
     -- , fullscreenTarget :: HTMLElement
-    )
+     }
 
 -- TODO: some strings should be wrapped as enums
 type DOMContainerConfig
-  = ( createContainer :: Boolean
+  = { createContainer :: Boolean
     , behindCanvas :: Boolean
     , pointerEvents :: String
-    )
+    }
 
 type FPSConfig
-  = ( min :: Int
+  = { min :: Int
     , target :: Int
     , forceSetTimeOut :: Boolean
     , deltaHistory :: Int
     , panicMax :: Int
     , smoothStep :: Boolean
-    )
+    }
 
 type RenderConfig
-  = ( antialias :: Boolean
+  = { antialias :: Boolean
     , antialiasGL :: Boolean
     , desynchronized :: Boolean
     , pixelArt :: Boolean
@@ -89,16 +84,16 @@ type RenderConfig
     , maxTextures :: Int
     , mipmapFilter :: String
     --, pipeline :: Options PipelineConfig
-    )
+    }
 
 type CallbacksConfig
-  = ( preBoot :: BootCallback
-    , postBoot :: BootCallback
-    )
+  = { preBoot :: FT.BootCallback
+    , postBoot :: FT.BootCallback
+    }
 
 -- TODO: some strings should be wrapped as enums
 type LoaderConfig
-  = ( baseURL :: String
+  = { baseURL :: String
     , path :: String
     , maxParallelDownloads :: Int
     , crossOrigin :: String
@@ -107,34 +102,35 @@ type LoaderConfig
     , user :: String
     , password :: String
     , timeout :: Int -- | ms
-    )
+    }
 
 -- | These are paths to base64 textures
 type ImagesConfig
-  = ( default :: String
+  = { default :: String
     , missing :: String
     , white :: String
-    )
+    }
 
 -- | Arcade / Matter Configs aren't fully implemented yet
 type PhysicsConfig
-  = ( default :: String
-    -- , arcade :: Option ArcadeWorldConfig
-    -- , matter :: Option MatterWorldConfig
-    )
+  = { default :: String
+    , arcade :: ArcadeWorldConfig -- TODO: use Options
+    -- TODO: add Matter
+    -- , matter :: MatterWorldConfig 
+    }
 
 type PluginObject
-  = ( global :: Array PluginObjectItem
-    , scene :: Array PluginObjectItem
+  = { global :: Array FT.PluginObjectItem
+    , scene :: Array FT.PluginObjectItem
     , default :: Array String
     , defaultMerge :: Array String
-    )
+    }
 
 type AudioConfig
-  = ( disableWebAudio :: Boolean
-    , context :: AudioContext
+  = { disableWebAudio :: Boolean
+    , context :: FT.AudioContext
     , noAudio :: Boolean
-    )
+    }
 
 
 -- data PipelineConfig
@@ -149,70 +145,64 @@ type AudioConfig
 --     , pipeline :: WebGLPipeline
 --     )
 
--- TODO: Fill out and move to proper file
 type ArcadeWorldConfig
-  = ( 
-    -- gravity:: Option (x:: Number, y:: Number),
+  = { 
+      gravity ::  {x:: Number, y:: Number},
       debug:: Boolean
-    )
-
--- TODO: Fill out and move to proper file
-type MatterWorldConfig :: forall k. Row k
-type MatterWorldConfig
-  = ()
+    }
 
 type SettingsConfig
-  = ( key :: String
+  = { key :: String
     , active :: Boolean
     , visible :: Boolean
-    , pack :: PackFileSection
-    , cameras :: Array JSONCamera
+    , pack :: FT.PackFileSection
+    , cameras :: Array FT.JSONCamera
     -- TODO: map :: Object <string, string>
     -- TODO: mapAdd :: Object <string, string>
     --, physics :: Option PhysicsConfig
     --, loader :: Option LoaderConfig
     -- TODO:, plugins :: false | *
-    )
+    }
 
 class GameObject :: forall k. k -> Constraint
 class (EventEmitter a, Transform a, Tint a) <= GameObject a
 
-instance GameObject PhaserImage
-instance GameObject PhaserContainer
-instance GameObject PhaserGraphic
-instance GameObject PhaserSprite
-instance GameObject PhaserText
-instance GameObject ArcadeImage
-instance GameObject ArcadeSprite
-instance GameObject PhaserLayer
+instance GameObject FT.PhaserImage
+instance GameObject FT.PhaserContainer
+instance GameObject FT.PhaserGraphic
+instance GameObject FT.PhaserSprite
+instance GameObject FT.PhaserText
+instance GameObject FT.ArcadeImage
+instance GameObject FT.ArcadeSprite
+instance GameObject FT.PhaserLayer
 
 -- Transform
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Transform.html
 class Transform :: forall k. k -> Constraint
 class Transform a
 
-instance Transform PhaserImage
-instance Transform PhaserContainer
-instance Transform PhaserGraphic
-instance Transform PhaserSprite
-instance Transform PhaserText
-instance Transform ArcadeImage
-instance Transform ArcadeSprite
-instance Transform PhaserLayer
+instance Transform FT.PhaserImage
+instance Transform FT.PhaserContainer
+instance Transform FT.PhaserGraphic
+instance Transform FT.PhaserSprite
+instance Transform FT.PhaserText
+instance Transform FT.ArcadeImage
+instance Transform FT.ArcadeSprite
+instance Transform FT.PhaserLayer
 
 -- Tint
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Tint.html
 class Tint :: forall k. k -> Constraint
 class Tint a
 
-instance Tint PhaserImage
-instance Tint PhaserContainer
-instance Tint PhaserGraphic
-instance Tint PhaserSprite
-instance Tint PhaserText
-instance Tint ArcadeImage
-instance Tint ArcadeSprite
-instance Tint PhaserLayer
+instance Tint FT.PhaserImage
+instance Tint FT.PhaserContainer
+instance Tint FT.PhaserGraphic
+instance Tint FT.PhaserSprite
+instance Tint FT.PhaserText
+instance Tint FT.ArcadeImage
+instance Tint FT.ArcadeSprite
+instance Tint FT.PhaserLayer
 
 class EventEmitter :: forall k. k -> Constraint
 class EventEmitter a
@@ -220,17 +210,17 @@ class EventEmitter a
 class PhysicsEnabled :: forall k. k -> Constraint
 class PhysicsEnabled a
 
-instance EventEmitter NodeEventEmitter
-instance EventEmitter PhaserImage
-instance EventEmitter PhaserContainer
-instance EventEmitter PhaserGraphic
-instance EventEmitter PhaserSprite
-instance EventEmitter PhaserText
-instance EventEmitter ArcadeImage
-instance EventEmitter ArcadeSprite
-instance EventEmitter KeyboardPlugin
-instance EventEmitter Key
-instance EventEmitter PhaserLayer
+instance EventEmitter FT.NodeEventEmitter
+instance EventEmitter FT.PhaserImage
+instance EventEmitter FT.PhaserContainer
+instance EventEmitter FT.PhaserGraphic
+instance EventEmitter FT.PhaserSprite
+instance EventEmitter FT.PhaserText
+instance EventEmitter FT.ArcadeImage
+instance EventEmitter FT.ArcadeSprite
+instance EventEmitter FT.KeyboardPlugin
+instance EventEmitter FT.Key
+instance EventEmitter FT.PhaserLayer
 
 -- | This is somewhat confusing.
 -- | Some phaser objects inherit direct from Event Emitter
@@ -242,8 +232,8 @@ instance EventEmitter PhaserLayer
 class HasNodeEventEmitter :: forall k. k -> Constraint
 class HasNodeEventEmitter a
 
-instance HasNodeEventEmitter PhaserScene
-instance HasNodeEventEmitter PhaserGame
+instance HasNodeEventEmitter FT.PhaserScene
+instance HasNodeEventEmitter FT.PhaserGame
 instance HasNodeEventEmitter FT.PhaserDisplayList 
 instance HasNodeEventEmitter FT.PhaserGameObjectCreator
 instance HasNodeEventEmitter FT.PhaserGameObjectFactory
@@ -266,14 +256,14 @@ class HasScenePlugin a
 instance HasScenePlugin  FT.PhaserGame
 instance HasScenePlugin  FT.PhaserScene
 
-instance PhysicsEnabled ArcadeImage
-instance PhysicsEnabled ArcadeSprite
+instance PhysicsEnabled FT.ArcadeImage
+instance PhysicsEnabled FT.ArcadeSprite
 
 class ArcadeGroup :: forall k. k -> Constraint
 class ArcadeGroup a
 
-instance ArcadeGroup Group
-instance ArcadeGroup StaticGroup
+instance ArcadeGroup FT.Group
+instance ArcadeGroup FT.StaticGroup
 
 {-
   same approach as
@@ -289,12 +279,12 @@ foreign import data EventListener :: Type
 class Collidable :: forall k. k -> Constraint
 class Collidable a
 
-instance Collidable Group 
-instance Collidable StaticGroup 
-instance Collidable ArcadeImage 
-instance Collidable ArcadeSprite 
+instance Collidable FT.Group 
+instance Collidable FT.StaticGroup 
+instance Collidable FT.ArcadeImage 
+instance Collidable FT.ArcadeSprite 
 
-instance Collidable (Array Group)
-instance Collidable (Array StaticGroup)
-instance Collidable (Array ArcadeImage)
-instance Collidable (Array ArcadeSprite)
+instance Collidable (Array FT.Group)
+instance Collidable (Array FT.StaticGroup)
+instance Collidable (Array FT.ArcadeImage)
+instance Collidable (Array FT.ArcadeSprite)

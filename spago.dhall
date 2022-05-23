@@ -12,7 +12,8 @@ You can edit this file as you like.
   , "maybe"
   , "nullable"
   , "prelude"
-  , "web-html","options", "psci-support"
+  , "web-html"
+  , "options"
   ]
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"

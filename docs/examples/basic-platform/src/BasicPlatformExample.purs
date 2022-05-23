@@ -1,10 +1,20 @@
-module Main where
+module Main
+  ( collectStar
+  , getPlatform
+  , getPlayer
+  , main
+  , move
+  , oncreate
+  , onpreload
+  , update
+  ) where
 
 import Prelude
 import Data.Array ((..))
 import Data.Foldable (for_)
 import Data.Int (toNumber)
 import Data.Maybe (Maybe(..))
+import Data.Options ((:=))
 import Data.Traversable (sequence)
 import Effect (Effect)
 import Effect.Class.Console (log)
@@ -12,6 +22,7 @@ import Graphics.Phaser as Phaser
 import Graphics.Phaser.ArcadePhysics as P
 import Graphics.Phaser.CoreTypes (class PhysicsEnabled)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, PhaserGame, PhaserScene)
+import Graphics.Phaser.GameConfig (height, physics, scene, width)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image as Image
 import Graphics.Phaser.Input (CursorKeys, createCursorKeys, isDown)
@@ -20,18 +31,21 @@ import Graphics.Phaser.Scene as Scene
 import Graphics.Phaser.Sprite (class Sprite)
 import Graphics.Phaser.Sprite as Sprite
 
---import Option (fromRecord)
--- !! TODO !! replace Option with https://github.com/purescript-contrib/purescript-options/blob/main/src/Data/Options.purs
 -- Adapted from http://labs.phaser.io/edit.html?src=src/physics/arcade/basic%20platform.js
 main :: Effect PhaserGame
 main = do
-  scene <- mainScene
-  Phaser.create
-    >>= Phaser.setDimentions
-        { width: 800.0
-        , height: 600.0
-        }
-    >>= Phaser.addScene "main" scene true
+  mainScene' <- mainScene
+  Phaser.createWithConfig
+    ( width := Just 1200.0
+        <> (height := Just 600.0)
+        <> (scene := Just [ mainScene' ]) -- The first scene in the array is started by default
+        <> ( physics
+              := Just
+                  { default: "arcade"
+                  , arcade: { debug: false, gravity: { x: 0.0, y: 100.0 } }
+                  }
+          )
+    )
 
 mainScene :: Effect PhaserScene
 mainScene =

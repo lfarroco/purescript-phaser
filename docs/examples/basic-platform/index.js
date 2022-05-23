@@ -135,14 +135,14 @@ var replicatePolyfill = function(count) {
 };
 var replicate = typeof Array.prototype.fill === "function" ? replicateFill : replicatePolyfill;
 var fromFoldableImpl = function() {
-  function Cons(head, tail) {
+  function Cons2(head, tail) {
     this.head = head;
     this.tail = tail;
   }
   var emptyList = {};
   function curryCons(head) {
     return function(tail) {
-      return new Cons(head, tail);
+      return new Cons2(head, tail);
     };
   }
   function listToArray(list) {
@@ -280,8 +280,29 @@ var Just = /* @__PURE__ */ function() {
   };
   return Just2;
 }();
+var maybe = function(v) {
+  return function(v1) {
+    return function(v2) {
+      if (v2 instanceof Nothing) {
+        return v;
+      }
+      ;
+      if (v2 instanceof Just) {
+        return v1(v2.value0);
+      }
+      ;
+      throw new Error("Failed pattern match at Data.Maybe (line 237, column 1 - line 237, column 51): " + [v.constructor.name, v1.constructor.name, v2.constructor.name]);
+    };
+  };
+};
 
 // output/Data.Monoid/index.js
+var monoidArray = {
+  mempty: [],
+  Semigroup0: function() {
+    return semigroupArray;
+  }
+};
 var mempty = function(dict) {
   return dict.mempty;
 };
@@ -301,17 +322,17 @@ var bindE = function(a) {
 };
 
 // output/Effect/index.js
-var $runtime_lazy = function(name, moduleName, init) {
-  var state = 0;
+var $runtime_lazy = function(name2, moduleName, init2) {
+  var state2 = 0;
   var val;
   return function(lineNumber) {
-    if (state === 2)
+    if (state2 === 2)
       return val;
-    if (state === 1)
-      throw new ReferenceError(name + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
-    state = 1;
-    val = init();
-    state = 2;
+    if (state2 === 1)
+      throw new ReferenceError(name2 + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
+    state2 = 1;
+    val = init2();
+    state2 = 2;
     return val;
   };
 };
@@ -349,6 +370,29 @@ var $lazy_applyEffect = /* @__PURE__ */ $runtime_lazy("applyEffect", "Effect", f
   };
 });
 var functorEffect = /* @__PURE__ */ $lazy_functorEffect(20);
+
+// output/Control.Monad.ST.Internal/foreign.js
+var map_ = function(f) {
+  return function(a) {
+    return function() {
+      return f(a());
+    };
+  };
+};
+var foreach = function(as) {
+  return function(f) {
+    return function() {
+      for (var i = 0, l = as.length; i < l; i++) {
+        f(as[i])();
+      }
+    };
+  };
+};
+
+// output/Control.Monad.ST.Internal/index.js
+var functorST = {
+  map: map_
+};
 
 // output/Data.Array.ST/foreign.js
 var sortByImpl2 = function() {
@@ -403,9 +447,9 @@ var sortByImpl2 = function() {
 
 // output/Data.Foldable/foreign.js
 var foldrArray = function(f) {
-  return function(init) {
+  return function(init2) {
     return function(xs) {
-      var acc = init;
+      var acc = init2;
       var len = xs.length;
       for (var i = len - 1; i >= 0; i--) {
         acc = f(xs[i])(acc);
@@ -415,9 +459,9 @@ var foldrArray = function(f) {
   };
 };
 var foldlArray = function(f) {
-  return function(init) {
+  return function(init2) {
     return function(xs) {
-      var acc = init;
+      var acc = init2;
       var len = xs.length;
       for (var i = 0; i < len; i++) {
         acc = f(acc)(xs[i]);
@@ -426,6 +470,34 @@ var foldlArray = function(f) {
     };
   };
 };
+
+// output/Data.Tuple/index.js
+var Tuple = /* @__PURE__ */ function() {
+  function Tuple2(value0, value1) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+  ;
+  Tuple2.create = function(value0) {
+    return function(value1) {
+      return new Tuple2(value0, value1);
+    };
+  };
+  return Tuple2;
+}();
+
+// output/Unsafe.Coerce/foreign.js
+var unsafeCoerce2 = function(x) {
+  return x;
+};
+
+// output/Safe.Coerce/index.js
+var coerce = function() {
+  return unsafeCoerce2;
+};
+
+// output/Data.Newtype/index.js
+var unwrap = coerce;
 
 // output/Data.Foldable/index.js
 var foldr = function(dict) {
@@ -544,9 +616,24 @@ var sequence = function(dict) {
   return dict.sequence;
 };
 
+// output/Data.Array/index.js
+var fromFoldable = function(dictFoldable) {
+  return fromFoldableImpl(foldr(dictFoldable));
+};
+
 // output/Data.Int/foreign.js
 var toNumber = function(n) {
   return n;
+};
+
+// output/Data.Op/index.js
+var Op = function(x) {
+  return x;
+};
+
+// output/Foreign/foreign.js
+var isArray = Array.isArray || function(value) {
+  return Object.prototype.toString.call(value) === "[object Array]";
 };
 
 // output/Effect.Class/index.js
@@ -558,6 +645,79 @@ var monadEffectEffect = {
 };
 var liftEffect = function(dict) {
   return dict.liftEffect;
+};
+
+// output/Foreign/index.js
+var unsafeToForeign = unsafeCoerce2;
+
+// output/Foreign.Object/foreign.js
+function runST(f) {
+  return f();
+}
+function toArrayWithKey(f) {
+  return function(m) {
+    var r = [];
+    for (var k in m) {
+      if (hasOwnProperty.call(m, k)) {
+        r.push(f(k)(m[k]));
+      }
+    }
+    return r;
+  };
+}
+var keys = Object.keys || toArrayWithKey(function(k) {
+  return function() {
+    return k;
+  };
+});
+
+// output/Foreign.Object.ST/foreign.js
+var newImpl = function() {
+  return {};
+};
+function poke2(k) {
+  return function(v) {
+    return function(m) {
+      return function() {
+        m[k] = v;
+        return m;
+      };
+    };
+  };
+}
+
+// output/Foreign.Object/index.js
+var fromFoldable3 = function(dictFoldable) {
+  return function(l) {
+    return runST(function __do2() {
+      var s = newImpl();
+      foreach(fromFoldable(dictFoldable)(l))(function(v) {
+        return $$void(functorST)(poke2(v.value0)(v.value1)(s));
+      })();
+      return s;
+    });
+  };
+};
+
+// output/Data.Options/index.js
+var semigroupOptions = semigroupArray;
+var options = function(v) {
+  return unsafeToForeign(fromFoldable3(foldableArray)(v));
+};
+var monoidOptions = monoidArray;
+var defaultToOptions = function(k) {
+  return function(v) {
+    return [new Tuple(k, unsafeToForeign(v))];
+  };
+};
+var opt = function($4) {
+  return Op(defaultToOptions($4));
+};
+var assoc = /* @__PURE__ */ unwrap();
+var optional = function(option) {
+  return maybe(mempty(monoidOptions))(function(v) {
+    return assoc(option)(v);
+  });
 };
 
 // output/Effect.Console/foreign.js
@@ -603,16 +763,9 @@ var toMaybe = function(n) {
 };
 
 // output/Utils.FFI/index.js
-var setProperty = function(name) {
-  return function(value) {
-    return function(obj) {
-      return unsafeForeignFunction(["v1", "obj", ""])("obj." + (name + " = v1"))(value)(obj);
-    };
-  };
-};
-var getProperty = function(name) {
+var getProperty = function(name2) {
   return function(obj) {
-    return unsafeForeignFunction(["obj", ""])("obj." + name)(obj);
+    return unsafeForeignFunction(["obj", ""])("obj." + name2)(obj);
   };
 };
 var argsN = function(n) {
@@ -732,17 +885,10 @@ var return4 = function(expr) {
 };
 
 // output/Graphics.Phaser/index.js
-var setDimentions = function(v) {
-  return function(game) {
-    return function __do2() {
-      setProperty("config.width=v1")(v.width)(game)();
-      setProperty("config.height=v1")(v.height)(game)();
-      return game;
-    };
-  };
+var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
+var createWithConfig = function(opts) {
+  return createWithUnsafeConfig(options(opts));
 };
-var create = /* @__PURE__ */ unsafeForeignProcedure([""])("return new Phaser.Game()");
-var addScene = /* @__PURE__ */ method3("scene.add(v1,v2,v3)");
 
 // output/Graphics.Phaser.ArcadePhysics/index.js
 var setVelocityY = function() {
@@ -793,6 +939,12 @@ var addCollider = function() {
   };
 };
 
+// output/Graphics.Phaser.GameConfig/index.js
+var width = /* @__PURE__ */ optional(/* @__PURE__ */ opt("width"));
+var scene = /* @__PURE__ */ optional(/* @__PURE__ */ opt("scene"));
+var physics = /* @__PURE__ */ optional(/* @__PURE__ */ opt("physics"));
+var height = /* @__PURE__ */ optional(/* @__PURE__ */ opt("height"));
+
 // output/Graphics.Phaser.GameObject/index.js
 var setScale = function() {
   return method1("setScale(v1.x,v1.y)");
@@ -808,7 +960,7 @@ var getX = function() {
 };
 
 // output/Graphics.Phaser.Image/index.js
-var create2 = /* @__PURE__ */ return1("add.image(0, 0, v1)");
+var create = /* @__PURE__ */ return1("add.image(0, 0, v1)");
 
 // output/Graphics.Phaser.Input/index.js
 var isDown = /* @__PURE__ */ getProperty("isDown");
@@ -820,18 +972,18 @@ var loadImage = /* @__PURE__ */ method1("load.image(v1.key,v1.path)");
 
 // output/Graphics.Phaser.Scene/index.js
 var update = function(callback) {
-  return function(scene) {
+  return function(scene2) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.update = (time,delta) => callback(scene)()")(callback)(scene))();
-      return scene;
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.update = (time,delta) => callback(scene)()")(callback)(scene2))();
+      return scene2;
     };
   };
 };
 var preload = function(callback) {
-  return function(scene) {
+  return function(scene2) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene))();
-      return scene;
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene2))();
+      return scene2;
     };
   };
 };
@@ -840,11 +992,11 @@ var getPhysicsPlugin = /* @__PURE__ */ getProperty("physics");
 var getChildByName = function() {
   return safeGet;
 };
-var create3 = function(callback) {
-  return function(scene) {
+var create2 = function(callback) {
+  return function(scene2) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
-      return scene;
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene2))();
+      return scene2;
     };
   };
 };
@@ -857,13 +1009,13 @@ var generateFrameNumbers = /* @__PURE__ */ return3("anims.generateFrameNumbers(v
 var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })");
 
 // output/Main/index.js
-var onpreload = function(scene) {
+var onpreload = function(scene2) {
   return function __do2() {
     for_(applicativeEffect)(foldableArray)(["sky", "platform", "star"])(function(key) {
       return bind(bindEffect)(loadImage({
         key,
         path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/" + (key + ".png")
-      })(scene))(loadSpritesheet({
+      })(scene2))(loadSpritesheet({
         key: "dude",
         path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/dude.png"
       })({
@@ -871,7 +1023,7 @@ var onpreload = function(scene) {
         frameHeight: 48
       }));
     })();
-    return scene;
+    return scene2;
   };
 };
 var move = function() {
@@ -907,18 +1059,18 @@ var move = function() {
     };
   };
 };
-var getPlayer = function(scene) {
-  return getChildByName()("player")(scene);
+var getPlayer = function(scene2) {
+  return getChildByName()("player")(scene2);
 };
-var getPlatform = function(scene) {
-  return getChildByName()("moving_platform")(scene);
+var getPlatform = function(scene2) {
+  return getChildByName()("moving_platform")(scene2);
 };
 var update2 = function(cursors) {
-  return function(scene) {
+  return function(scene2) {
     var movePlayer = function() {
       var jump = setVelocityY()(-350);
       return function __do2() {
-        var player = getPlayer(scene)();
+        var player = getPlayer(scene2)();
         if (player instanceof Just) {
           return $$void(functorEffect)(function __do3() {
             var touching = getTouching()(player.value0)();
@@ -937,11 +1089,11 @@ var update2 = function(cursors) {
           return log3(monadEffectEffect)("Sprite not found!")();
         }
         ;
-        throw new Error("Failed pattern match at Main (line 132, column 5 - line 142, column 41): " + [player.constructor.name]);
+        throw new Error("Failed pattern match at Main (line 144, column 5 - line 154, column 41): " + [player.constructor.name]);
       };
     }();
     var movePlatform = function __do2() {
-      var platform = getPlatform(scene)();
+      var platform = getPlatform(scene2)();
       if (platform instanceof Just) {
         var x = getX()(platform.value0)();
         (function() {
@@ -964,12 +1116,12 @@ var update2 = function(cursors) {
         return log3(monadEffectEffect)("Platform image not found!")();
       }
       ;
-      throw new Error("Failed pattern match at Main (line 148, column 5 - line 159, column 49): " + [platform.constructor.name]);
+      throw new Error("Failed pattern match at Main (line 160, column 5 - line 171, column 49): " + [platform.constructor.name]);
     };
     return function __do2() {
       movePlayer();
       movePlatform();
-      return scene;
+      return scene2;
     };
   };
 };
@@ -978,7 +1130,7 @@ var collectStar = function(_a) {
     return bind(bindEffect)(disableBody()(b))($$const(pure(applicativeEffect)(unit)));
   };
 };
-var oncreate = function(scene) {
+var oncreate = function(scene2) {
   var setupCollisions = function(player) {
     return function(stars) {
       return function(platformsGroup) {
@@ -1011,52 +1163,58 @@ var oncreate = function(scene) {
       y: 400
     })("platform")(phy))(setImmovable()(true)))(setAllowGravity()(false)))(setVelocityX()(50)))(setName()("moving_platform"));
   };
-  var createFloor = function(group) {
+  var createFloor = function(group2) {
     return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(createChild()({
       x: 400,
       y: 568
-    })("platform")(group))(setScale()({
+    })("platform")(group2))(setScale()({
       x: 2,
       y: 2
     })))(refreshBody()));
   };
-  var createBg = $$void(functorEffect)(bind(bindEffect)(create2("sky")(scene))(setPosition()({
+  var createBg = $$void(functorEffect)(bind(bindEffect)(create("sky")(scene2))(setPosition()({
     x: 400,
     y: 300
   })));
   var createAnimations = $$void(functorEffect)(function __do2() {
-    var leftWalkFrames = generateFrameNumbers("dude")(0)(3)(scene)();
-    var rightWalkFrames = generateFrameNumbers("dude")(5)(8)(scene)();
-    $$void(functorEffect)(createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene))();
+    var leftWalkFrames = generateFrameNumbers("dude")(0)(3)(scene2)();
+    var rightWalkFrames = generateFrameNumbers("dude")(5)(8)(scene2)();
+    $$void(functorEffect)(createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene2))();
     $$void(functorEffect)(createAnimation("turn")([{
       key: "dude",
       frame: 4
-    }])(10)(-1 | 0)(scene))();
-    return $$void(functorEffect)(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene))();
+    }])(10)(-1 | 0)(scene2))();
+    return $$void(functorEffect)(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene2))();
   });
   return function __do2() {
-    var phy = getPhysicsPlugin(scene)();
+    var phy = getPhysicsPlugin(scene2)();
     createBg();
     var platformsGroup = createStaticGroup(phy)();
     createFloor(platformsGroup)();
     var movingPlatform = createPlatform(phy)();
     var player = createPlayer(phy)();
     var stars = createStars(phy)();
-    var cursors = createCursorKeys(scene)();
+    var cursors = createCursorKeys(scene2)();
     createAnimations();
     $$void(functorEffect)(setupCollisions(player)(stars)(platformsGroup)(movingPlatform)(phy))();
     return update(function(scn) {
       return update2(cursors)(scn);
-    })(scene)();
+    })(scene2)();
   };
 };
-var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create3(oncreate)))(/* @__PURE__ */ preload(onpreload));
+var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create2(oncreate)))(/* @__PURE__ */ preload(onpreload));
 var main = function __do() {
-  var scene = mainScene();
-  return bind(bindEffect)(bind(bindEffect)(create)(setDimentions({
-    width: 800,
-    height: 600
-  })))(addScene("main")(scene)(true))();
+  var scene2 = mainScene();
+  return createWithConfig(append(semigroupOptions)(assoc(width)(new Just(1200)))(append(semigroupOptions)(assoc(height)(new Just(600)))(append(semigroupOptions)(assoc(scene)(new Just([scene2])))(assoc(physics)(new Just({
+    "default": "arcade",
+    arcade: {
+      debug: false,
+      gravity: {
+        x: 0,
+        y: 100
+      }
+    }
+  }))))))();
 };
 
 // <stdin>

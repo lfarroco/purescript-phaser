@@ -8,16 +8,18 @@ module Graphics.Phaser
 
 import Prelude
 import Data.Foreign.EasyFFI (unsafeForeignProcedure)
+import Data.Options (Options, options)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Dimensions)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
+import Graphics.Phaser.GameConfig (GameConfig)
 import Utils.FFI (method3, setProperty)
 
 create :: Effect PhaserGame
 create = unsafeForeignProcedure [ "" ] "return new Phaser.Game()"
 
-createWithConfig :: forall a. a -> Effect PhaserGame
-createWithConfig = unsafeForeignProcedure [ "config", "" ] "return new Phaser.Game(config)"
+createWithConfig :: Options GameConfig -> Effect PhaserGame
+createWithConfig opts = createWithUnsafeConfig (options opts)
 
 -- | This function allows passing anything to Phaser's config
 -- | You can use it for properties that are not defined in this library
