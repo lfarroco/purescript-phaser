@@ -17,7 +17,6 @@ to generate this file without the comments in this block.
   , "maybe"
   , "phaser"
   , "prelude"
-  , "psci-support"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]

@@ -53,6 +53,32 @@ var bind = function(dict) {
   return dict.bind;
 };
 
+// output/Data.Foldable/foreign.js
+var foldrArray = function(f) {
+  return function(init2) {
+    return function(xs) {
+      var acc = init2;
+      var len = xs.length;
+      for (var i = len - 1; i >= 0; i--) {
+        acc = f(xs[i])(acc);
+      }
+      return acc;
+    };
+  };
+};
+var foldlArray = function(f) {
+  return function(init2) {
+    return function(xs) {
+      var acc = init2;
+      var len = xs.length;
+      for (var i = 0; i < len; i++) {
+        acc = f(acc)(xs[i]);
+      }
+      return acc;
+    };
+  };
+};
+
 // output/Data.Semigroup/foreign.js
 var concatArray = function(xs) {
   return function(ys) {
@@ -121,32 +147,6 @@ var maybe = function(v) {
       }
       ;
       throw new Error("Failed pattern match at Data.Maybe (line 237, column 1 - line 237, column 51): " + [v.constructor.name, v1.constructor.name, v2.constructor.name]);
-    };
-  };
-};
-
-// output/Data.Foldable/foreign.js
-var foldrArray = function(f) {
-  return function(init2) {
-    return function(xs) {
-      var acc = init2;
-      var len = xs.length;
-      for (var i = len - 1; i >= 0; i--) {
-        acc = f(xs[i])(acc);
-      }
-      return acc;
-    };
-  };
-};
-var foldlArray = function(f) {
-  return function(init2) {
-    return function(xs) {
-      var acc = init2;
-      var len = xs.length;
-      for (var i = 0; i < len; i++) {
-        acc = f(acc)(xs[i]);
-      }
-      return acc;
     };
   };
 };
@@ -630,6 +630,65 @@ var unsafeForeignFunction = function(args) {
   };
 };
 
+// output/Graphics.Phaser.GameConfig/index.js
+var physics = function(a) {
+  return assoc(optional(opt("physics")))(new Just(options(a)));
+};
+var opt_ = function(attr) {
+  return function(val) {
+    return assoc(optional(opt(attr)))(new Just(val));
+  };
+};
+var defaultConfig = /* @__PURE__ */ mempty(monoidOptions);
+var _gameConfig = {
+  width: /* @__PURE__ */ opt_("width"),
+  height: /* @__PURE__ */ opt_("height"),
+  type_: /* @__PURE__ */ opt_("type_"),
+  zoom: /* @__PURE__ */ opt_("zoom"),
+  parent: /* @__PURE__ */ opt_("parent"),
+  canvas: /* @__PURE__ */ opt_("canvas"),
+  canvasStyle: /* @__PURE__ */ opt_("canvasStyle"),
+  customEnvironment: /* @__PURE__ */ opt_("customEnvironment"),
+  context: /* @__PURE__ */ opt_("context"),
+  scene: /* @__PURE__ */ opt_("scene"),
+  seed: /* @__PURE__ */ opt_("seed"),
+  title: /* @__PURE__ */ opt_("title"),
+  url: /* @__PURE__ */ opt_("url"),
+  version: /* @__PURE__ */ opt_("version"),
+  autofocus: /* @__PURE__ */ opt_("autofocus"),
+  input: /* @__PURE__ */ opt_("input"),
+  disableContextMenu: /* @__PURE__ */ opt_("disableContextMenu"),
+  banner: /* @__PURE__ */ opt_("banner"),
+  dom: /* @__PURE__ */ opt_("dom"),
+  fps: /* @__PURE__ */ opt_("fps"),
+  render: /* @__PURE__ */ opt_("render"),
+  callbacks: /* @__PURE__ */ opt_("callbacks"),
+  loader: /* @__PURE__ */ opt_("loader"),
+  images: /* @__PURE__ */ opt_("images"),
+  physics,
+  plugins: /* @__PURE__ */ opt_("plugins"),
+  scale: /* @__PURE__ */ opt_("scale"),
+  audio: /* @__PURE__ */ opt_("audio"),
+  pipeline: /* @__PURE__ */ opt_("pipeline"),
+  backgroundColor: /* @__PURE__ */ opt_("backgroundColor"),
+  antialias: /* @__PURE__ */ opt_("antialias"),
+  antialiasGL: /* @__PURE__ */ opt_("antialiasGL"),
+  desynchronized: /* @__PURE__ */ opt_("desynchronized"),
+  pixelArt: /* @__PURE__ */ opt_("pixelArt"),
+  roundPixels: /* @__PURE__ */ opt_("roundPixels"),
+  transparent: /* @__PURE__ */ opt_("transparent"),
+  clearBeforeRender: /* @__PURE__ */ opt_("clearBeforeRender"),
+  preserveDrawingBuffer: /* @__PURE__ */ opt_("preserveDrawingBuffer"),
+  premultipliedAlpha: /* @__PURE__ */ opt_("premultipliedAlpha"),
+  failIfMajorPerformanceCaveat: /* @__PURE__ */ opt_("failIfMajorPerformanceCaveat"),
+  powerPreference: /* @__PURE__ */ opt_("powerPreference"),
+  batchSize: /* @__PURE__ */ opt_("batchSize"),
+  maxLights: /* @__PURE__ */ opt_("maxLights"),
+  maxTextures: /* @__PURE__ */ opt_("maxTextures"),
+  mipmapFilter: /* @__PURE__ */ opt_("mipmapFilter"),
+  "default": defaultConfig
+};
+
 // output/Utils.FFI/index.js
 var argsN = function(n) {
   var values = function() {
@@ -651,43 +710,13 @@ var return1 = function(expr) {
     };
   };
 };
-var return3 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(obj) {
-          return unsafeForeignFunction(argsN(3))("obj." + expr)(v1)(v2)(v3)(obj);
-        };
-      };
-    };
-  };
-};
-var method3 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(obj) {
-          return function __do2() {
-            $$void(functorEffect)(return3(expr)(v1)(v2)(v3)(obj))();
-            return obj;
-          };
-        };
-      };
-    };
-  };
-};
 
 // output/Graphics.Phaser/index.js
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
 var createWithConfig = function(opts) {
   return createWithUnsafeConfig(options(opts));
 };
-var addScene = /* @__PURE__ */ method3("scene.add(v1,v2,v3)");
-
-// output/Graphics.Phaser.GameConfig/index.js
-var width = /* @__PURE__ */ optional(/* @__PURE__ */ opt("width"));
-var title = /* @__PURE__ */ optional(/* @__PURE__ */ opt("title"));
-var height = /* @__PURE__ */ optional(/* @__PURE__ */ opt("height"));
+var config = _gameConfig;
 
 // output/Graphics.Phaser.Scene/index.js
 var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
@@ -712,8 +741,8 @@ var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"
 }));
 var main = function __do() {
   var main$prime = mainScene();
-  var config = append(semigroupOptions)(assoc(title)(new Just("My example game")))(append(semigroupOptions)(assoc(width)(new Just(500)))(assoc(height)(new Just(200))));
-  return bind(bindEffect)(createWithConfig(config))(addScene("main")(main$prime)(true))();
+  var config2 = append(semigroupOptions)(config.title("My example game"))(append(semigroupOptions)(config.width(500))(append(semigroupOptions)(config.height(200))(config.scene([main$prime]))));
+  return createWithConfig(config2)();
 };
 
 // <stdin>

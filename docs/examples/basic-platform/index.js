@@ -752,6 +752,71 @@ var unsafeForeignFunction = function(args) {
   };
 };
 
+// output/Graphics.Phaser.GameConfig/index.js
+var physics = function(a) {
+  return assoc(optional(opt("physics")))(new Just(options(a)));
+};
+var opt_ = function(attr) {
+  return function(val) {
+    return assoc(optional(opt(attr)))(new Just(val));
+  };
+};
+var defaultPhysicsConfig = /* @__PURE__ */ opt_("default");
+var defaultConfig = /* @__PURE__ */ mempty(monoidOptions);
+var arcade = /* @__PURE__ */ opt_("arcade");
+var _physicsConfig = {
+  "default": defaultPhysicsConfig,
+  arcade
+};
+var _gameConfig = {
+  width: /* @__PURE__ */ opt_("width"),
+  height: /* @__PURE__ */ opt_("height"),
+  type_: /* @__PURE__ */ opt_("type_"),
+  zoom: /* @__PURE__ */ opt_("zoom"),
+  parent: /* @__PURE__ */ opt_("parent"),
+  canvas: /* @__PURE__ */ opt_("canvas"),
+  canvasStyle: /* @__PURE__ */ opt_("canvasStyle"),
+  customEnvironment: /* @__PURE__ */ opt_("customEnvironment"),
+  context: /* @__PURE__ */ opt_("context"),
+  scene: /* @__PURE__ */ opt_("scene"),
+  seed: /* @__PURE__ */ opt_("seed"),
+  title: /* @__PURE__ */ opt_("title"),
+  url: /* @__PURE__ */ opt_("url"),
+  version: /* @__PURE__ */ opt_("version"),
+  autofocus: /* @__PURE__ */ opt_("autofocus"),
+  input: /* @__PURE__ */ opt_("input"),
+  disableContextMenu: /* @__PURE__ */ opt_("disableContextMenu"),
+  banner: /* @__PURE__ */ opt_("banner"),
+  dom: /* @__PURE__ */ opt_("dom"),
+  fps: /* @__PURE__ */ opt_("fps"),
+  render: /* @__PURE__ */ opt_("render"),
+  callbacks: /* @__PURE__ */ opt_("callbacks"),
+  loader: /* @__PURE__ */ opt_("loader"),
+  images: /* @__PURE__ */ opt_("images"),
+  physics,
+  plugins: /* @__PURE__ */ opt_("plugins"),
+  scale: /* @__PURE__ */ opt_("scale"),
+  audio: /* @__PURE__ */ opt_("audio"),
+  pipeline: /* @__PURE__ */ opt_("pipeline"),
+  backgroundColor: /* @__PURE__ */ opt_("backgroundColor"),
+  antialias: /* @__PURE__ */ opt_("antialias"),
+  antialiasGL: /* @__PURE__ */ opt_("antialiasGL"),
+  desynchronized: /* @__PURE__ */ opt_("desynchronized"),
+  pixelArt: /* @__PURE__ */ opt_("pixelArt"),
+  roundPixels: /* @__PURE__ */ opt_("roundPixels"),
+  transparent: /* @__PURE__ */ opt_("transparent"),
+  clearBeforeRender: /* @__PURE__ */ opt_("clearBeforeRender"),
+  preserveDrawingBuffer: /* @__PURE__ */ opt_("preserveDrawingBuffer"),
+  premultipliedAlpha: /* @__PURE__ */ opt_("premultipliedAlpha"),
+  failIfMajorPerformanceCaveat: /* @__PURE__ */ opt_("failIfMajorPerformanceCaveat"),
+  powerPreference: /* @__PURE__ */ opt_("powerPreference"),
+  batchSize: /* @__PURE__ */ opt_("batchSize"),
+  maxLights: /* @__PURE__ */ opt_("maxLights"),
+  maxTextures: /* @__PURE__ */ opt_("maxTextures"),
+  mipmapFilter: /* @__PURE__ */ opt_("mipmapFilter"),
+  "default": defaultConfig
+};
+
 // output/Data.Nullable/foreign.js
 function nullable(a, r, f) {
   return a == null ? r : f(a);
@@ -885,10 +950,12 @@ var return4 = function(expr) {
 };
 
 // output/Graphics.Phaser/index.js
+var physicsConfig = _physicsConfig;
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
 var createWithConfig = function(opts) {
   return createWithUnsafeConfig(options(opts));
 };
+var config = _gameConfig;
 
 // output/Graphics.Phaser.ArcadePhysics/index.js
 var setVelocityY = function() {
@@ -939,21 +1006,6 @@ var addCollider = function() {
   };
 };
 
-// output/Graphics.Phaser.GameConfig/index.js
-var physics = function(a) {
-  return assoc(optional(opt("physics")))(new Just(options(a)));
-};
-var opt_ = function(attr) {
-  return function(val) {
-    return assoc(optional(opt(attr)))(new Just(val));
-  };
-};
-var scene = /* @__PURE__ */ opt_("scene");
-var width = /* @__PURE__ */ opt_("width");
-var height = /* @__PURE__ */ opt_("height");
-var $$default = /* @__PURE__ */ opt_("default");
-var arcade = /* @__PURE__ */ opt_("arcade");
-
 // output/Graphics.Phaser.GameObject/index.js
 var setScale = function() {
   return method1("setScale(v1.x,v1.y)");
@@ -981,18 +1033,18 @@ var loadImage = /* @__PURE__ */ method1("load.image(v1.key,v1.path)");
 
 // output/Graphics.Phaser.Scene/index.js
 var update = function(callback) {
-  return function(scene2) {
+  return function(scene) {
     return function __do() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.update = (time,delta) => callback(scene)()")(callback)(scene2))();
-      return scene2;
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.update = (time,delta) => callback(scene)()")(callback)(scene))();
+      return scene;
     };
   };
 };
 var preload = function(callback) {
-  return function(scene2) {
+  return function(scene) {
     return function __do() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene2))();
-      return scene2;
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene))();
+      return scene;
     };
   };
 };
@@ -1002,10 +1054,10 @@ var getChildByName = function() {
   return safeGet;
 };
 var create2 = function(callback) {
-  return function(scene2) {
+  return function(scene) {
     return function __do() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene2))();
-      return scene2;
+      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
+      return scene;
     };
   };
 };
@@ -1018,13 +1070,13 @@ var generateFrameNumbers = /* @__PURE__ */ return3("anims.generateFrameNumbers(v
 var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })");
 
 // output/Main/index.js
-var onpreload = function(scene2) {
+var onpreload = function(scene) {
   return function __do() {
     for_(applicativeEffect)(foldableArray)(["sky", "platform", "star"])(function(key) {
       return bind(bindEffect)(loadImage({
         key,
         path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/" + (key + ".png")
-      })(scene2))(loadSpritesheet({
+      })(scene))(loadSpritesheet({
         key: "dude",
         path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/dude.png"
       })({
@@ -1032,7 +1084,7 @@ var onpreload = function(scene2) {
         frameHeight: 48
       }));
     })();
-    return scene2;
+    return scene;
   };
 };
 var move = function() {
@@ -1068,18 +1120,18 @@ var move = function() {
     };
   };
 };
-var getPlayer = function(scene2) {
-  return getChildByName()("player")(scene2);
+var getPlayer = function(scene) {
+  return getChildByName()("player")(scene);
 };
-var getPlatform = function(scene2) {
-  return getChildByName()("moving_platform")(scene2);
+var getPlatform = function(scene) {
+  return getChildByName()("moving_platform")(scene);
 };
 var update2 = function(cursors) {
-  return function(scene2) {
+  return function(scene) {
     var movePlayer = function() {
       var jump = setVelocityY()(-350);
       return function __do() {
-        var player = getPlayer(scene2)();
+        var player = getPlayer(scene)();
         if (player instanceof Just) {
           return $$void(functorEffect)(function __do2() {
             var touching = getTouching()(player.value0)();
@@ -1098,11 +1150,11 @@ var update2 = function(cursors) {
           return log3(monadEffectEffect)("Sprite not found!")();
         }
         ;
-        throw new Error("Failed pattern match at Main (line 145, column 5 - line 155, column 41): " + [player.constructor.name]);
+        throw new Error("Failed pattern match at Main (line 143, column 5 - line 153, column 41): " + [player.constructor.name]);
       };
     }();
     var movePlatform = function __do() {
-      var platform = getPlatform(scene2)();
+      var platform = getPlatform(scene)();
       if (platform instanceof Just) {
         var x = getX()(platform.value0)();
         (function() {
@@ -1125,12 +1177,12 @@ var update2 = function(cursors) {
         return log3(monadEffectEffect)("Platform image not found!")();
       }
       ;
-      throw new Error("Failed pattern match at Main (line 161, column 5 - line 172, column 49): " + [platform.constructor.name]);
+      throw new Error("Failed pattern match at Main (line 159, column 5 - line 170, column 49): " + [platform.constructor.name]);
     };
     return function __do() {
       movePlayer();
       movePlatform();
-      return scene2;
+      return scene;
     };
   };
 };
@@ -1139,7 +1191,7 @@ var collectStar = function(_a) {
     return bind(bindEffect)(disableBody()(b))($$const(pure(applicativeEffect)(unit)));
   };
 };
-var oncreate = function(scene2) {
+var oncreate = function(scene) {
   var setupCollisions = function(player) {
     return function(stars) {
       return function(platformsGroup) {
@@ -1181,39 +1233,39 @@ var oncreate = function(scene2) {
       y: 2
     })))(refreshBody()));
   };
-  var createBg = $$void(functorEffect)(bind(bindEffect)(create("sky")(scene2))(setPosition()({
+  var createBg = $$void(functorEffect)(bind(bindEffect)(create("sky")(scene))(setPosition()({
     x: 400,
     y: 300
   })));
   var createAnimations = $$void(functorEffect)(function __do() {
-    var leftWalkFrames = generateFrameNumbers("dude")(0)(3)(scene2)();
-    var rightWalkFrames = generateFrameNumbers("dude")(5)(8)(scene2)();
-    $$void(functorEffect)(createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene2))();
+    var leftWalkFrames = generateFrameNumbers("dude")(0)(3)(scene)();
+    var rightWalkFrames = generateFrameNumbers("dude")(5)(8)(scene)();
+    $$void(functorEffect)(createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene))();
     $$void(functorEffect)(createAnimation("turn")([{
       key: "dude",
       frame: 4
-    }])(10)(-1 | 0)(scene2))();
-    return $$void(functorEffect)(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene2))();
+    }])(10)(-1 | 0)(scene))();
+    return $$void(functorEffect)(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene))();
   });
   return function __do() {
-    var phy = getPhysicsPlugin(scene2)();
+    var phy = getPhysicsPlugin(scene)();
     createBg();
     var platformsGroup = createStaticGroup(phy)();
     createFloor(platformsGroup)();
     var movingPlatform = createPlatform(phy)();
     var player = createPlayer(phy)();
     var stars = createStars(phy)();
-    var cursors = createCursorKeys(scene2)();
+    var cursors = createCursorKeys(scene)();
     createAnimations();
     $$void(functorEffect)(setupCollisions(player)(stars)(platformsGroup)(movingPlatform)(phy))();
     return update(function(scn) {
       return update2(cursors)(scn);
-    })(scene2)();
+    })(scene)();
   };
 };
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create2(oncreate)))(/* @__PURE__ */ preload(onpreload));
 var main = /* @__PURE__ */ function() {
-  var physicsConfig = append(semigroupOptions)($$default("arcade"))(arcade({
+  var physicsConfig$prime = append(semigroupOptions)(physicsConfig["default"]("arcade"))(physicsConfig.arcade({
     debug: false,
     gravity: {
       x: 0,
@@ -1221,8 +1273,8 @@ var main = /* @__PURE__ */ function() {
     }
   }));
   return function __do() {
-    var scene2 = mainScene();
-    return createWithConfig(append(semigroupOptions)(width(800))(append(semigroupOptions)(height(600))(append(semigroupOptions)(scene([scene2]))(physics(physicsConfig)))))();
+    var scene = mainScene();
+    return createWithConfig(append(semigroupOptions)(config.width(800))(append(semigroupOptions)(config.height(600))(append(semigroupOptions)(config.scene([scene]))(config.physics(physicsConfig$prime)))))();
   };
 }();
 

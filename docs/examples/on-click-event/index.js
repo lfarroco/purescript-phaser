@@ -222,6 +222,119 @@ var Just = /* @__PURE__ */ function() {
   };
   return Just2;
 }();
+var maybe = function(v) {
+  return function(v1) {
+    return function(v2) {
+      if (v2 instanceof Nothing) {
+        return v;
+      }
+      ;
+      if (v2 instanceof Just) {
+        return v1(v2.value0);
+      }
+      ;
+      throw new Error("Failed pattern match at Data.Maybe (line 237, column 1 - line 237, column 51): " + [v.constructor.name, v1.constructor.name, v2.constructor.name]);
+    };
+  };
+};
+
+// output/Data.Foldable/foreign.js
+var foldrArray = function(f) {
+  return function(init2) {
+    return function(xs) {
+      var acc = init2;
+      var len = xs.length;
+      for (var i = len - 1; i >= 0; i--) {
+        acc = f(xs[i])(acc);
+      }
+      return acc;
+    };
+  };
+};
+var foldlArray = function(f) {
+  return function(init2) {
+    return function(xs) {
+      var acc = init2;
+      var len = xs.length;
+      for (var i = 0; i < len; i++) {
+        acc = f(acc)(xs[i]);
+      }
+      return acc;
+    };
+  };
+};
+
+// output/Data.Monoid/index.js
+var monoidArray = {
+  mempty: [],
+  Semigroup0: function() {
+    return semigroupArray;
+  }
+};
+var mempty = function(dict) {
+  return dict.mempty;
+};
+
+// output/Data.Tuple/index.js
+var Tuple = /* @__PURE__ */ function() {
+  function Tuple2(value0, value1) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+  ;
+  Tuple2.create = function(value0) {
+    return function(value1) {
+      return new Tuple2(value0, value1);
+    };
+  };
+  return Tuple2;
+}();
+
+// output/Unsafe.Coerce/foreign.js
+var unsafeCoerce2 = function(x) {
+  return x;
+};
+
+// output/Safe.Coerce/index.js
+var coerce = function() {
+  return unsafeCoerce2;
+};
+
+// output/Data.Newtype/index.js
+var unwrap = coerce;
+
+// output/Data.Foldable/index.js
+var foldr = function(dict) {
+  return dict.foldr;
+};
+var foldMapDefaultR = function(dictFoldable) {
+  return function(dictMonoid) {
+    return function(f) {
+      return foldr(dictFoldable)(function(x) {
+        return function(acc) {
+          return append(dictMonoid.Semigroup0())(f(x))(acc);
+        };
+      })(mempty(dictMonoid));
+    };
+  };
+};
+var foldableArray = {
+  foldr: foldrArray,
+  foldl: foldlArray,
+  foldMap: function(dictMonoid) {
+    return foldMapDefaultR(foldableArray)(dictMonoid);
+  }
+};
+
+// output/Data.Op/index.js
+var Op = function(x) {
+  return x;
+};
+
+// output/Foreign/foreign.js
+var isArray = Array.isArray || function(value) {
+  return Object.prototype.toString.call(value) === "[object Array]";
+};
 
 // output/Effect/foreign.js
 var pureE = function(a) {
@@ -251,17 +364,17 @@ var ap = function(dictMonad) {
 };
 
 // output/Effect/index.js
-var $runtime_lazy = function(name, moduleName, init) {
-  var state = 0;
+var $runtime_lazy = function(name2, moduleName, init2) {
+  var state2 = 0;
   var val;
   return function(lineNumber) {
-    if (state === 2)
+    if (state2 === 2)
       return val;
-    if (state === 1)
-      throw new ReferenceError(name + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
-    state = 1;
-    val = init();
-    state = 2;
+    if (state2 === 1)
+      throw new ReferenceError(name2 + " was needed before it finished initializing (module " + moduleName + ", line " + lineNumber + ")", moduleName, lineNumber);
+    state2 = 1;
+    val = init2();
+    state2 = 2;
     return val;
   };
 };
@@ -311,40 +424,105 @@ var liftEffect = function(dict) {
   return dict.liftEffect;
 };
 
-// output/Effect.Console/foreign.js
-var log = function(s) {
-  return function() {
-    console.log(s);
+// output/Data.Traversable/foreign.js
+var traverseArrayImpl = function() {
+  function array1(a) {
+    return [a];
+  }
+  function array2(a) {
+    return function(b) {
+      return [a, b];
+    };
+  }
+  function array3(a) {
+    return function(b) {
+      return function(c) {
+        return [a, b, c];
+      };
+    };
+  }
+  function concat2(xs) {
+    return function(ys) {
+      return xs.concat(ys);
+    };
+  }
+  return function(apply2) {
+    return function(map2) {
+      return function(pure2) {
+        return function(f) {
+          return function(array) {
+            function go(bot, top2) {
+              switch (top2 - bot) {
+                case 0:
+                  return pure2([]);
+                case 1:
+                  return map2(array1)(f(array[bot]));
+                case 2:
+                  return apply2(map2(array2)(f(array[bot])))(f(array[bot + 1]));
+                case 3:
+                  return apply2(apply2(map2(array3)(f(array[bot])))(f(array[bot + 1])))(f(array[bot + 2]));
+                default:
+                  var pivot = bot + Math.floor((top2 - bot) / 4) * 2;
+                  return apply2(map2(concat2)(go(bot, pivot)))(go(pivot, top2));
+              }
+            }
+            return go(0, array.length);
+          };
+        };
+      };
+    };
   };
-};
+}();
 
-// output/Effect.Class.Console/index.js
-var log2 = function(dictMonadEffect) {
-  var $33 = liftEffect(dictMonadEffect);
-  return function($34) {
-    return $33(log($34));
-  };
-};
+// output/Foreign/index.js
+var unsafeToForeign = unsafeCoerce2;
 
-// output/Data.Foreign.EasyFFI/foreign.js
-function unsafeForeignProcedure(args) {
-  return function(stmt) {
-    return Function(wrap(args.slice()))();
-    function wrap() {
-      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
+// output/Foreign.Object/foreign.js
+function runST(f) {
+  return f();
+}
+function toArrayWithKey(f) {
+  return function(m) {
+    var r = [];
+    for (var k in m) {
+      if (hasOwnProperty.call(m, k)) {
+        r.push(f(k)(m[k]));
+      }
     }
+    return r;
   };
 }
-
-// output/Data.Foreign.EasyFFI/index.js
-var unsafeForeignFunction = function(args) {
-  return function(expr) {
-    return unsafeForeignProcedure(args)("return " + (expr + ";"));
+var keys = Object.keys || toArrayWithKey(function(k) {
+  return function() {
+    return k;
   };
+});
+
+// output/Control.Monad.ST.Internal/foreign.js
+var map_ = function(f) {
+  return function(a) {
+    return function() {
+      return f(a());
+    };
+  };
+};
+var foreach = function(as) {
+  return function(f) {
+    return function() {
+      for (var i = 0, l = as.length; i < l; i++) {
+        f(as[i])();
+      }
+    };
+  };
+};
+
+// output/Control.Monad.ST.Internal/index.js
+var functorST = {
+  map: map_
 };
 
 // output/Data.Array/foreign.js
-var range = function(start) {
+var range2 = function(start) {
   return function(end) {
     var step = start > end ? -1 : 1;
     var result = new Array(step * (end - start) + 1);
@@ -378,14 +556,14 @@ var replicatePolyfill = function(count) {
 };
 var replicate = typeof Array.prototype.fill === "function" ? replicateFill : replicatePolyfill;
 var fromFoldableImpl = function() {
-  function Cons(head, tail) {
+  function Cons2(head, tail) {
     this.head = head;
     this.tail = tail;
   }
   var emptyList = {};
   function curryCons(head) {
     return function(tail) {
-      return new Cons(head, tail);
+      return new Cons2(head, tail);
     };
   }
   function listToArray(list) {
@@ -505,55 +683,150 @@ var sortByImpl2 = function() {
   };
 }();
 
-// output/Data.Traversable/foreign.js
-var traverseArrayImpl = function() {
-  function array1(a) {
-    return [a];
-  }
-  function array2(a) {
-    return function(b) {
-      return [a, b];
-    };
-  }
-  function array3(a) {
-    return function(b) {
-      return function(c) {
-        return [a, b, c];
-      };
-    };
-  }
-  function concat2(xs) {
-    return function(ys) {
-      return xs.concat(ys);
-    };
-  }
-  return function(apply2) {
-    return function(map2) {
-      return function(pure2) {
-        return function(f) {
-          return function(array) {
-            function go(bot, top2) {
-              switch (top2 - bot) {
-                case 0:
-                  return pure2([]);
-                case 1:
-                  return map2(array1)(f(array[bot]));
-                case 2:
-                  return apply2(map2(array2)(f(array[bot])))(f(array[bot + 1]));
-                case 3:
-                  return apply2(apply2(map2(array3)(f(array[bot])))(f(array[bot + 1])))(f(array[bot + 2]));
-                default:
-                  var pivot = bot + Math.floor((top2 - bot) / 4) * 2;
-                  return apply2(map2(concat2)(go(bot, pivot)))(go(pivot, top2));
-              }
-            }
-            return go(0, array.length);
-          };
-        };
+// output/Data.Array/index.js
+var fromFoldable2 = function(dictFoldable) {
+  return fromFoldableImpl(foldr(dictFoldable));
+};
+
+// output/Foreign.Object.ST/foreign.js
+var newImpl = function() {
+  return {};
+};
+function poke2(k) {
+  return function(v) {
+    return function(m) {
+      return function() {
+        m[k] = v;
+        return m;
       };
     };
   };
-}();
+}
+
+// output/Foreign.Object/index.js
+var fromFoldable3 = function(dictFoldable) {
+  return function(l) {
+    return runST(function __do2() {
+      var s = newImpl();
+      foreach(fromFoldable2(dictFoldable)(l))(function(v) {
+        return $$void(functorST)(poke2(v.value0)(v.value1)(s));
+      })();
+      return s;
+    });
+  };
+};
+
+// output/Data.Options/index.js
+var semigroupOptions = semigroupArray;
+var options = function(v) {
+  return unsafeToForeign(fromFoldable3(foldableArray)(v));
+};
+var monoidOptions = monoidArray;
+var defaultToOptions = function(k) {
+  return function(v) {
+    return [new Tuple(k, unsafeToForeign(v))];
+  };
+};
+var opt = function($4) {
+  return Op(defaultToOptions($4));
+};
+var assoc = /* @__PURE__ */ unwrap();
+var optional = function(option) {
+  return maybe(mempty(monoidOptions))(function(v) {
+    return assoc(option)(v);
+  });
+};
+
+// output/Effect.Console/foreign.js
+var log2 = function(s) {
+  return function() {
+    console.log(s);
+  };
+};
+
+// output/Effect.Class.Console/index.js
+var log3 = function(dictMonadEffect) {
+  var $33 = liftEffect(dictMonadEffect);
+  return function($34) {
+    return $33(log2($34));
+  };
+};
+
+// output/Data.Foreign.EasyFFI/foreign.js
+function unsafeForeignProcedure(args) {
+  return function(stmt) {
+    return Function(wrap(args.slice()))();
+    function wrap() {
+      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
+    }
+  };
+}
+
+// output/Data.Foreign.EasyFFI/index.js
+var unsafeForeignFunction = function(args) {
+  return function(expr) {
+    return unsafeForeignProcedure(args)("return " + (expr + ";"));
+  };
+};
+
+// output/Graphics.Phaser.GameConfig/index.js
+var physics = function(a) {
+  return assoc(optional(opt("physics")))(new Just(options(a)));
+};
+var opt_ = function(attr) {
+  return function(val) {
+    return assoc(optional(opt(attr)))(new Just(val));
+  };
+};
+var defaultConfig = /* @__PURE__ */ mempty(monoidOptions);
+var _gameConfig = {
+  width: /* @__PURE__ */ opt_("width"),
+  height: /* @__PURE__ */ opt_("height"),
+  type_: /* @__PURE__ */ opt_("type_"),
+  zoom: /* @__PURE__ */ opt_("zoom"),
+  parent: /* @__PURE__ */ opt_("parent"),
+  canvas: /* @__PURE__ */ opt_("canvas"),
+  canvasStyle: /* @__PURE__ */ opt_("canvasStyle"),
+  customEnvironment: /* @__PURE__ */ opt_("customEnvironment"),
+  context: /* @__PURE__ */ opt_("context"),
+  scene: /* @__PURE__ */ opt_("scene"),
+  seed: /* @__PURE__ */ opt_("seed"),
+  title: /* @__PURE__ */ opt_("title"),
+  url: /* @__PURE__ */ opt_("url"),
+  version: /* @__PURE__ */ opt_("version"),
+  autofocus: /* @__PURE__ */ opt_("autofocus"),
+  input: /* @__PURE__ */ opt_("input"),
+  disableContextMenu: /* @__PURE__ */ opt_("disableContextMenu"),
+  banner: /* @__PURE__ */ opt_("banner"),
+  dom: /* @__PURE__ */ opt_("dom"),
+  fps: /* @__PURE__ */ opt_("fps"),
+  render: /* @__PURE__ */ opt_("render"),
+  callbacks: /* @__PURE__ */ opt_("callbacks"),
+  loader: /* @__PURE__ */ opt_("loader"),
+  images: /* @__PURE__ */ opt_("images"),
+  physics,
+  plugins: /* @__PURE__ */ opt_("plugins"),
+  scale: /* @__PURE__ */ opt_("scale"),
+  audio: /* @__PURE__ */ opt_("audio"),
+  pipeline: /* @__PURE__ */ opt_("pipeline"),
+  backgroundColor: /* @__PURE__ */ opt_("backgroundColor"),
+  antialias: /* @__PURE__ */ opt_("antialias"),
+  antialiasGL: /* @__PURE__ */ opt_("antialiasGL"),
+  desynchronized: /* @__PURE__ */ opt_("desynchronized"),
+  pixelArt: /* @__PURE__ */ opt_("pixelArt"),
+  roundPixels: /* @__PURE__ */ opt_("roundPixels"),
+  transparent: /* @__PURE__ */ opt_("transparent"),
+  clearBeforeRender: /* @__PURE__ */ opt_("clearBeforeRender"),
+  preserveDrawingBuffer: /* @__PURE__ */ opt_("preserveDrawingBuffer"),
+  premultipliedAlpha: /* @__PURE__ */ opt_("premultipliedAlpha"),
+  failIfMajorPerformanceCaveat: /* @__PURE__ */ opt_("failIfMajorPerformanceCaveat"),
+  powerPreference: /* @__PURE__ */ opt_("powerPreference"),
+  batchSize: /* @__PURE__ */ opt_("batchSize"),
+  maxLights: /* @__PURE__ */ opt_("maxLights"),
+  maxTextures: /* @__PURE__ */ opt_("maxTextures"),
+  mipmapFilter: /* @__PURE__ */ opt_("mipmapFilter"),
+  "default": defaultConfig
+};
 
 // output/Data.Nullable/foreign.js
 function nullable(a, r, f) {
@@ -566,13 +839,6 @@ var toMaybe = function(n) {
 };
 
 // output/Utils.FFI/index.js
-var setProperty = function(name) {
-  return function(value) {
-    return function(obj) {
-      return unsafeForeignFunction(["v1", "obj", ""])("obj." + (name + " = v1"))(value)(obj);
-    };
-  };
-};
 var argsN = function(n) {
   var values = function() {
     var $0 = n < 1;
@@ -582,7 +848,7 @@ var argsN = function(n) {
     ;
     return map(functorArray)(function(i) {
       return "v" + show(showInt)(i);
-    })(range(1)(n));
+    })(range2(1)(n));
   }();
   return append(semigroupArray)(values)(["obj", ""]);
 };
@@ -650,44 +916,13 @@ var method2 = function(expr) {
     };
   };
 };
-var return3 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(obj) {
-          return unsafeForeignFunction(argsN(3))("obj." + expr)(v1)(v2)(v3)(obj);
-        };
-      };
-    };
-  };
-};
-var method3 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(obj) {
-          return function __do2() {
-            $$void(functorEffect)(return3(expr)(v1)(v2)(v3)(obj))();
-            return obj;
-          };
-        };
-      };
-    };
-  };
-};
 
 // output/Graphics.Phaser/index.js
-var setDimentions = function(v) {
-  return function(game) {
-    return function __do2() {
-      setProperty("config.width=v1")(v.width)(game)();
-      setProperty("config.height=v1")(v.height)(game)();
-      return game;
-    };
-  };
+var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
+var createWithConfig = function(opts) {
+  return createWithUnsafeConfig(options(opts));
 };
-var create = /* @__PURE__ */ unsafeForeignProcedure([""])("return new Phaser.Game()");
-var addScene = /* @__PURE__ */ method3("scene.add(v1,v2,v3)");
+var config = _gameConfig;
 
 // output/Graphics.Phaser.Events/index.js
 var on2 = function() {
@@ -711,7 +946,7 @@ var setDisplaySize = function() {
 };
 
 // output/Graphics.Phaser.Image/index.js
-var create2 = /* @__PURE__ */ return1("add.image(0, 0, v1)");
+var create = /* @__PURE__ */ return1("add.image(0, 0, v1)");
 
 // output/Graphics.Phaser.Loader/index.js
 var loadImage = /* @__PURE__ */ method1("load.image(v1.key,v1.path)");
@@ -729,7 +964,7 @@ var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new P
 var getChildByName = function() {
   return safeGet;
 };
-var create3 = function(callback) {
+var create2 = function(callback) {
   return function(scene) {
     return function __do2() {
       $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
@@ -739,20 +974,20 @@ var create3 = function(callback) {
 };
 
 // output/Graphics.Phaser.Text/index.js
-var create4 = /* @__PURE__ */ return1("add.text(0,0,v1)");
+var create3 = /* @__PURE__ */ return1("add.text(0,0,v1)");
 
 // output/Main/index.js
 var getImageByName = /* @__PURE__ */ getChildByName();
 var mainScene = /* @__PURE__ */ function() {
   var title = function(scene) {
-    return bind(bindEffect)(create4("Click the logo to trigger an event.")(scene))($$const(pure(applicativeEffect)(scene)));
+    return bind(bindEffect)(create3("Click the logo to trigger an event.")(scene))($$const(pure(applicativeEffect)(scene)));
   };
   var startButton = function(scene) {
     var callback = function(pointer) {
       return function(localX) {
         return function(localY) {
           return function __do2() {
-            log2(monadEffectEffect)(show(showRecord()()(showRecordFieldsCons({
+            log3(monadEffectEffect)(show(showRecord()()(showRecordFieldsCons({
               reflectSymbol: function() {
                 return "x";
               }
@@ -761,9 +996,9 @@ var mainScene = /* @__PURE__ */ function() {
                 return "y";
               }
             })(showRecordFieldsNil)(showNumber))(showNumber)))(pointer))();
-            log2(monadEffectEffect)(localX)();
-            log2(monadEffectEffect)(localY)();
-            bind(bindEffect)(bind(bindEffect)(create2("logo")(scene))(setPosition()({
+            log3(monadEffectEffect)(localX)();
+            log3(monadEffectEffect)(localY)();
+            bind(bindEffect)(bind(bindEffect)(create("logo")(scene))(setPosition()({
               x: 200,
               y: 200
             })))(setDisplaySize()({
@@ -777,10 +1012,10 @@ var mainScene = /* @__PURE__ */ function() {
               }
               ;
               if (clickable instanceof Nothing) {
-                return log2(monadEffectEffect)("Clickable image not found")();
+                return log3(monadEffectEffect)("Clickable image not found")();
               }
               ;
-              throw new Error("Failed pattern match at Main (line 65, column 7 - line 67, column 51): " + [clickable.constructor.name]);
+              throw new Error("Failed pattern match at Main (line 67, column 7 - line 69, column 51): " + [clickable.constructor.name]);
             })();
             return unit;
           };
@@ -789,7 +1024,7 @@ var mainScene = /* @__PURE__ */ function() {
     };
     var listener = createEventListener3(callback);
     return function __do2() {
-      var image = bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(create2("logo")(scene))(setPosition()({
+      var image = bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(create("logo")(scene))(setPosition()({
         x: 100,
         y: 100
       })))(setDisplaySize()({
@@ -804,15 +1039,12 @@ var mainScene = /* @__PURE__ */ function() {
     key: "logo",
     path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
   }));
-  var oncreate = create3(composeKleisli(bindEffect)(title)(startButton));
+  var oncreate = create2(composeKleisli(bindEffect)(title)(startButton));
   return bind(bindEffect)(bind(bindEffect)(newScene("main"))(onpreload))(oncreate);
 }();
 var main = function __do() {
   var mainScene$prime = mainScene();
-  return bind(bindEffect)(bind(bindEffect)(create)(setDimentions({
-    width: 400,
-    height: 300
-  })))(addScene("main")(mainScene$prime)(true))();
+  return createWithConfig(append(semigroupOptions)(config.width(400))(append(semigroupOptions)(config.height(300))(config.scene([mainScene$prime]))))();
 };
 
 // <stdin>

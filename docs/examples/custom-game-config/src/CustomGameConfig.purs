@@ -4,7 +4,6 @@ import Prelude
 import Effect (Effect)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
-import Graphics.Phaser.GameConfig (height, scene, title, width)
 import Graphics.Phaser.Scene as Scene
 import Graphics.Phaser.Text as Text
 
@@ -15,10 +14,10 @@ main = do
     -- | This is how you can pass optional parameters when creating a new
     -- | game instance
     config =
-      (title "My example game")
-        <> (width 500.0)
-        <> (height 200.0)
-        <> (scene [ main' ])
+      (Phaser.config.title "My example game")
+        <> (Phaser.config.width 500.0)
+        <> (Phaser.config.height 200.0)
+        <> (Phaser.config.scene [ main' ])
   Phaser.createWithConfig config
 
 mainScene :: Effect PhaserScene

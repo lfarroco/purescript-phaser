@@ -14,12 +14,12 @@ import Graphics.Phaser.Text as Text
 
 main :: Effect PhaserGame
 main = do
-  main' <- mainScene
+  mainScene' <- mainScene
   snd' <- secondScene
-  Phaser.create
-    >>= Phaser.setDimentions { width: 400.0, height: 400.0 }
-    >>= Phaser.addScene "main" main' true
-    >>= Phaser.addScene "snd" snd' false
+  Phaser.createWithConfig
+    $ (Phaser.config.width 400.0)
+    <> (Phaser.config.height 400.0)
+    <> (Phaser.config.scene [ mainScene', snd' ])
 
 mainScene :: Effect PhaserScene
 mainScene =

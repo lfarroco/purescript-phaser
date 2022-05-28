@@ -17,9 +17,11 @@ ghRoot = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/
 main :: Effect PhaserGame
 main = do
   scene <- mainScene
-  Phaser.create
-    >>= Phaser.setDimentions { width: 250.0, height: 250.0 }
-    >>= Phaser.addScene "main" scene true
+  Phaser.createWithConfig
+    ( (Phaser.config.width 250.0)
+        <> (Phaser.config.height 250.0)
+        <> (Phaser.config.scene [ scene ])
+    )
 
 explodeSpriteKey :: String
 explodeSpriteKey = "explosion"

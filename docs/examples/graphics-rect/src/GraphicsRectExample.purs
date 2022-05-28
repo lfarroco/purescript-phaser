@@ -11,9 +11,14 @@ import Graphics.Phaser.Scene as Scene
 main :: Effect PhaserGame
 main = do
   scene <- mainScene
-  Phaser.create
-    >>= Phaser.setDimentions { width: 800.0, height: 600.0 }
-    >>= Phaser.addScene "main" scene true
+  -- | This is how you can pass optional parameters when creating a new
+  -- | game instance
+  let
+    config =
+      (Phaser.config.width 800.0)
+        <> (Phaser.config.height 600.0)
+        <> (Phaser.config.scene [ scene ])
+  Phaser.createWithConfig config
 
 mainScene :: Effect PhaserScene
 mainScene = do

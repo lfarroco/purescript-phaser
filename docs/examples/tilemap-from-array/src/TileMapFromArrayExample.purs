@@ -25,9 +25,11 @@ mainSceneKey = "main key"
 main :: Effect PhaserGame
 main = do
   scene <- mainScene
-  Phaser.create
-    >>= Phaser.setDimentions { height: 16.0 * 11.0, width: 16.0 * 11.0 }
-    >>= Phaser.addScene "main" scene true
+  Phaser.createWithConfig
+    ( (Phaser.config.width (16.0 * 11.0))
+        <> (Phaser.config.height (16.0 * 11.0))
+        <> (Phaser.config.scene [ scene ])
+    )
 
 mainScene :: Effect PhaserScene
 mainScene =

@@ -12,7 +12,7 @@ to generate this file without the comments in this block.
 -}
 { name = "my-project"
 , dependencies =
-  [ "console", "effect", "maybe", "phaser", "prelude", "psci-support" ]
+  [ "console", "effect", "maybe", "phaser", "prelude" ]
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"
 , packages = ./packages.dhall

@@ -17,7 +17,6 @@ to generate this file without the comments in this block.
   , "effect"
   , "phaser"
   , "prelude"
-  , "psci-support"
   ]
 , license = "MIT"
 , repository = "https://github.com/lfarroco/purescript-phaser"
