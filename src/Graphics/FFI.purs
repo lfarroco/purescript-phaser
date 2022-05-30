@@ -28,29 +28,29 @@ foreign import __getProp :: forall a b. EffectFn2 String a b
 _getProp :: forall obj returnValue. String -> obj -> Effect returnValue
 _getProp = runEffectFn2 __getProp
 
-foreign import __return0 :: forall a b c. EffectFn2 a b c
+foreign import __return0 :: forall a b. EffectFn2 String a b
 
-_return0 :: forall prop obj returnValue. prop -> obj -> Effect returnValue
+_return0 :: forall obj returnValue. String -> obj -> Effect returnValue
 _return0 = runEffectFn2 __return0
 
-foreign import __return1 :: forall a b c d. EffectFn3 a b c d
+foreign import __return1 :: forall a b c. EffectFn3 String a b c
 
-_return1 :: forall prop obj v1 returnValue. prop -> v1 -> obj -> Effect returnValue
+_return1 :: forall obj v1 returnValue. String -> v1 -> obj -> Effect returnValue
 _return1 = runEffectFn3 __return1
 
-foreign import __return2 :: forall a b c d e. EffectFn4 a b c d e
+foreign import __return2 :: forall a b c d. EffectFn4 String a b c d
 
-_return2 :: forall prop obj v1 v2 returnValue. prop -> v1 -> v2 -> obj -> Effect returnValue
+_return2 :: forall obj v1 v2 returnValue. String -> v1 -> v2 -> obj -> Effect returnValue
 _return2 = runEffectFn4 __return2
 
-foreign import __return3 :: forall a b c d e f. EffectFn5 a b c d e f
+foreign import __return3 :: forall a b c d e. EffectFn5 String a b c d e
 
-_return3 :: forall prop obj v1 v2 v3 returnValue. prop -> v1 -> v2 -> v3 -> obj -> Effect returnValue
+_return3 :: forall obj v1 v2 v3 returnValue. String -> v1 -> v2 -> v3 -> obj -> Effect returnValue
 _return3 = runEffectFn5 __return3
 
-foreign import __return4 :: forall a b c d e f g. EffectFn6 a b c d e f g
+foreign import __return4 :: forall a b c d e f. EffectFn6 String a b c d e f
 
-_return4 :: forall prop obj v1 v2 v3 v4 returnValue. prop -> v1 -> v2 -> v3 -> v4 -> obj -> Effect returnValue
+_return4 :: forall obj v1 v2 v3 v4 returnValue. String -> v1 -> v2 -> v3 -> v4 -> obj -> Effect returnValue
 _return4 = runEffectFn6 __return4
 
 foreign import __return5 :: forall a b c d e f g h. EffectFn7 a b c d e f g h
@@ -58,16 +58,34 @@ foreign import __return5 :: forall a b c d e f g h. EffectFn7 a b c d e f g h
 _return5 :: forall prop obj v1 v2 v3 v4 v5 returnValue. prop -> v1 -> v2 -> v3 -> v4 -> v5 -> obj -> Effect returnValue
 _return5 = runEffectFn7 __return5
 
--- | methodN function are called in the same way as returnN, but it returns the
--- | provided object back.
 _method0 :: forall obj. String -> obj -> Effect obj
-_method0 expr obj = do
-  void $ _return0 expr obj
+_method0 prop obj = do
+  void $ _return0 prop obj
+  pure obj
+
+_method1 :: forall obj v1. String -> v1 -> obj -> Effect obj
+_method1 prop v1 obj = do
+  void $ _return1 prop v1 obj
   pure obj
 
 _method2 :: forall obj v1 v2. String -> v1 -> v2 -> obj -> Effect obj
-_method2 expr v1 v2 obj = do
-  void $ _return2 expr v1 v2 obj
+_method2 prop v1 v2 obj = do
+  void $ _return2 prop v1 v2 obj
+  pure obj
+
+_method3 :: forall obj v1 v2 v3. String -> v1 -> v2 -> v3 -> obj -> Effect obj
+_method3 prop v1 v2 v3 obj = do
+  void $ _return3 prop v1 v2 v3 obj
+  pure obj
+
+_method4 :: forall obj v1 v2 v3 v4. String -> v1 -> v2 -> v3 -> v4 -> obj -> Effect obj
+_method4 prop v1 v2 v3 v4 obj = do
+  void $ _return4 prop v1 v2 v3 v4 obj
+  pure obj
+
+_method5 :: forall obj v1 v2 v3 v4 v5. String -> v1 -> v2 -> v3 -> v4 -> v5 -> obj -> Effect obj
+_method5 prop v1 v2 v3 v4 v5 obj = do
+  void $ _return5 prop v1 v2 v3 v4 v5 obj
   pure obj
 
 return1 :: forall obj v1 returnValue. String -> v1 -> obj -> Effect returnValue

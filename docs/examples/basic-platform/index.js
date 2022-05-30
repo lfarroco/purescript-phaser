@@ -961,22 +961,22 @@ var return4 = function(expr) {
 };
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
-var _method2 = function(expr) {
+var _method2 = function(prop) {
   return function(v1) {
     return function(v2) {
       return function(obj) {
         return function __do() {
-          $$void(functorEffect)(_return2(expr)(v1)(v2)(obj))();
+          $$void(functorEffect)(_return2(prop)(v1)(v2)(obj))();
           return obj;
         };
       };
     };
   };
 };
-var _method0 = function(expr) {
+var _method0 = function(prop) {
   return function(obj) {
     return function __do() {
-      $$void(functorEffect)(_return0(expr)(obj))();
+      $$void(functorEffect)(_return0(prop)(obj))();
       return obj;
     };
   };
