@@ -1,48 +1,4 @@
-module Graphics.Phaser.Scene
-  ( add
-  , bringToTop
-  , children
-  , getChildByName
-  , getData
-  , getIndex
-  , getKey
-  , getPhysicsPlugin
-  , getPluginInstance
-  , getScene
-  , getScenePlugin
-  , isActive
-  , isPaused
-  , isSleeping
-  , isVisible
-  , launch
-  , moveAbove
-  , moveBelow
-  , moveDown
-  , moveUp
-  , pause
-  , remove
-  , restart
-  , resume
-  , run
-  , sendToBack
-  , setActive
-  , setData
-  , setVisible
-  , sleep
-  , start
-  , stop
-  , swapPosition
-  , switch
-  , wake
-  , init
-  , initWithData
-  , create
-  , createWithData
-  , update
-  , updateWithTimes
-  , preload
-  , newScene
-  ) where
+module Graphics.Phaser.Scene where
 
 -- This File has bindings for the following Phaser classes:
 -- Scene - https://photonstorm.github.io/phaser3-docs/Phaser.Scene.html
@@ -52,11 +8,10 @@ module Graphics.Phaser.Scene
 import Prelude
 import Data.Foreign.EasyFFI (unsafeForeignProcedure)
 import Data.Maybe (Maybe)
-import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
 import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
-import Utils.FFI (_getProp, _method1, method2, method4, return1, safeGet)
+import Utils.FFI (_getProp, _method1, _return1, method2, method4, safeGet)
 
 -- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
 -- | composing multiple functions that operate at that time.
@@ -106,7 +61,7 @@ getChildByName :: forall a. GameObject a => String -> PhaserScene -> Effect (May
 getChildByName = safeGet
 
 getData :: forall a. String -> PhaserScene -> Effect a
-getData = return1 "getData(v1)"
+getData = _return1 "getData"
 
 setData :: forall k v. k -> v -> PhaserScene -> Effect PhaserScene
 setData = do method2 "data.set(v1,v2)"
@@ -138,25 +93,24 @@ add key scene autoStart sceneData scenePlugin = method4 "add(v1,v2,v3,v4)" key s
 bringToTop :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
 bringToTop = _method1 "bringToTop"
 
-getScene :: String -> PhaserScenePlugin -> Effect (Maybe PhaserScene)
-getScene key plugin = do
-  v <- return1 "_getProp(v1)" key plugin
-  pure $ toMaybe v
-
+-- getScene :: String -> PhaserScenePlugin -> Effect (Maybe PhaserScene)
+-- getScene key plugin = do
+--   v <- _return1 "scene" key plugin
+--   pure $ toMaybe v
 getIndex :: String -> PhaserScenePlugin -> Effect Number
-getIndex = return1 "getIndex(v1)"
+getIndex = _return1 "getIndex"
 
 isActive :: String -> PhaserScenePlugin -> Effect Boolean
-isActive = return1 "isActive(v1)"
+isActive = _return1 "isActive"
 
 isPaused :: String -> PhaserScenePlugin -> Effect Boolean
-isPaused = return1 "isPaused(v1)"
+isPaused = _return1 "isPaused"
 
 isSleeping :: String -> PhaserScenePlugin -> Effect Boolean
-isSleeping = return1 "isSleeping(v1)"
+isSleeping = _return1 "isSleeping"
 
 isVisible :: String -> PhaserScenePlugin -> Effect Boolean
-isVisible = return1 "isVisible(v1)"
+isVisible = _return1 "isVisible"
 
 launch :: forall sceneData. String -> sceneData -> PhaserScenePlugin -> Effect PhaserScenePlugin
 launch = method2 "launch(v1,v2)"

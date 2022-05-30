@@ -52,6 +52,15 @@ var liftA1 = function(dictApplicative) {
 var bind = function(dict) {
   return dict.bind;
 };
+var composeKleisli = function(dictBind) {
+  return function(f) {
+    return function(g) {
+      return function(a) {
+        return bind(dictBind)(f(a))(g);
+      };
+    };
+  };
+};
 
 // output/Data.Array/foreign.js
 var range = function(start) {
@@ -701,6 +710,8 @@ var _gameConfig = {
 
 // output/Utils.FFI/foreign.js
 var __getProp = (path, obj) => obj[path];
+var __return1 = (prop, v1, obj) => obj[prop](v1);
+var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
 
 // output/Effect.Uncurried/foreign.js
 var runEffectFn2 = function runEffectFn22(fn) {
@@ -708,6 +719,30 @@ var runEffectFn2 = function runEffectFn22(fn) {
     return function(b) {
       return function() {
         return fn(a, b);
+      };
+    };
+  };
+};
+var runEffectFn3 = function runEffectFn32(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function() {
+          return fn(a, b, c);
+        };
+      };
+    };
+  };
+};
+var runEffectFn4 = function runEffectFn42(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function() {
+            return fn(a, b, c, d);
+          };
+        };
       };
     };
   };
@@ -727,23 +762,6 @@ var argsN = function(n) {
   }();
   return append(semigroupArray)(values)(["obj", ""]);
 };
-var return1 = function(expr) {
-  return function(v1) {
-    return function(obj) {
-      return unsafeForeignFunction(argsN(1))("obj." + expr)(v1)(obj);
-    };
-  };
-};
-var method1 = function(expr) {
-  return function(value) {
-    return function(obj) {
-      return function __do2() {
-        $$void(functorEffect)(return1(expr)(value)(obj))();
-        return obj;
-      };
-    };
-  };
-};
 var return2 = function(expr) {
   return function(v1) {
     return function(v2) {
@@ -753,6 +771,8 @@ var return2 = function(expr) {
     };
   };
 };
+var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
+var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
@@ -763,7 +783,14 @@ var createWithConfig = function(opts) {
 var config = _gameConfig;
 
 // output/Graphics.Phaser.Loader/index.js
-var loadImage = /* @__PURE__ */ method1("load.image(v1.key,v1.path)");
+var loadImage = function(v) {
+  return function(scn) {
+    return function __do2() {
+      $$void(functorEffect)(bind(bindEffect)(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
+      return scn;
+    };
+  };
+};
 
 // output/Graphics.Phaser.Scene/index.js
 var preload = function(callback) {
@@ -787,9 +814,7 @@ var create = function(callback) {
 // output/Graphics.Phaser.TileMap/index.js
 var tilesets = /* @__PURE__ */ _getProp("tilesets");
 var makeTileMap = function(config2) {
-  return function(scene) {
-    return return1("make.tilemap(v1)")(config2)(scene);
-  };
+  return composeKleisli(bindEffect)(_getProp("make"))(_return1("tilemap")(config2));
 };
 var createLayer = /* @__PURE__ */ return2("createLayer(v1,v2)");
 var addTilesetImage = function(tilesetName) {

@@ -3,7 +3,7 @@ module Graphics.Phaser.Input.Pointer where
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserPointer)
-import Utils.FFI (_getProp, _method0, _method1, _return0, return1)
+import Utils.FFI (_getProp, _method0, _method1, _return0, _return1)
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Input.Pointer.html
 --
@@ -145,7 +145,7 @@ getDuration :: PhaserPointer -> Effect Number
 getDuration = _return0 "getDuration"
 
 getInterpolatedPosition :: Int -> PhaserPointer -> Effect (Array Vector)
-getInterpolatedPosition = return1 "getInterpolatedPosition(v1)"
+getInterpolatedPosition = _return1 "getInterpolatedPosition"
 
 leftButtonDown :: PhaserPointer -> Effect Boolean
 leftButtonDown = _return0 "leftButtonDown"
@@ -163,7 +163,7 @@ noButtonDown :: PhaserPointer -> Effect Boolean
 noButtonDown = _return0 "noButtonDown"
 
 positionToCamera :: PhaserCamera -> PhaserPointer -> Effect Boolean
-positionToCamera = return1 "positionToCamera(v1)"
+positionToCamera = _return1 "positionToCamera"
 
 rightButtonDown :: PhaserPointer -> Effect Boolean
 rightButtonDown = _return0 "rightButtonDown"

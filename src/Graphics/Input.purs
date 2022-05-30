@@ -8,7 +8,7 @@ import Effect (Effect)
 import Graphics.Phaser.CoreTypes (EventListener)
 import Graphics.Phaser.Events (createEventListener2, on)
 import Graphics.Phaser.ForeignTypes (Key, KeyBoardEvent, KeyBoardPlugin, KeyCode, PhaserScene)
-import Utils.FFI (_getProp, _method0, _method1, _return0, return1)
+import Utils.FFI (_getProp, _method0, _method1, _return0, _return1)
 
 type CursorKeys
   = { up :: Key
@@ -28,7 +28,10 @@ createCursorKeys =
     >=> _return0 "createCursorKeys"
 
 addKey :: KeyCode -> PhaserScene -> Effect CursorKeys
-addKey = return1 "input.keyboard.addKey(v1)"
+addKey v1 =
+  _getProp "input"
+    >=> _getProp "keyboard"
+    >=> _return1 "addKey" v1
 
 altKey :: Key -> Effect Boolean
 altKey = _getProp "altKey"

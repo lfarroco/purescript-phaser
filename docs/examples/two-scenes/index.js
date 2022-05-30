@@ -751,6 +751,9 @@ var _gameConfig = {
 // output/Utils.FFI/foreign.js
 var __getProp = (path, obj) => obj[path];
 var __return0 = (prop, obj) => obj[prop]();
+var __return1 = (prop, v1, obj) => obj[prop](v1);
+var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
+var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
 
 // output/Effect.Uncurried/foreign.js
 var runEffectFn2 = function runEffectFn22(fn) {
@@ -758,6 +761,45 @@ var runEffectFn2 = function runEffectFn22(fn) {
     return function(b) {
       return function() {
         return fn(a, b);
+      };
+    };
+  };
+};
+var runEffectFn3 = function runEffectFn32(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function() {
+          return fn(a, b, c);
+        };
+      };
+    };
+  };
+};
+var runEffectFn4 = function runEffectFn42(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function() {
+            return fn(a, b, c, d);
+          };
+        };
+      };
+    };
+  };
+};
+var runEffectFn5 = function runEffectFn52(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function(e) {
+            return function() {
+              return fn(a, b, c, d, e);
+            };
+          };
+        };
       };
     };
   };
@@ -776,23 +818,6 @@ var argsN = function(n) {
     })(range2(1)(n));
   }();
   return append(semigroupArray)(values)(["obj", ""]);
-};
-var return1 = function(expr) {
-  return function(v1) {
-    return function(obj) {
-      return unsafeForeignFunction(argsN(1))("obj." + expr)(v1)(obj);
-    };
-  };
-};
-var method1 = function(expr) {
-  return function(value) {
-    return function(obj) {
-      return function __do2() {
-        $$void(functorEffect)(return1(expr)(value)(obj))();
-        return obj;
-      };
-    };
-  };
 };
 var return2 = function(expr) {
   return function(v1) {
@@ -815,11 +840,36 @@ var method2 = function(expr) {
     };
   };
 };
+var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
+var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
+var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
-var _method0 = function(expr) {
+var _method2 = function(prop) {
+  return function(v1) {
+    return function(v2) {
+      return function(obj) {
+        return function __do2() {
+          $$void(functorEffect)(_return2(prop)(v1)(v2)(obj))();
+          return obj;
+        };
+      };
+    };
+  };
+};
+var _method1 = function(prop) {
+  return function(v1) {
+    return function(obj) {
+      return function __do2() {
+        $$void(functorEffect)(_return1(prop)(v1)(obj))();
+        return obj;
+      };
+    };
+  };
+};
+var _method0 = function(prop) {
   return function(obj) {
     return function __do2() {
-      $$void(functorEffect)(_return0(expr)(obj))();
+      $$void(functorEffect)(_return0(prop)(obj))();
       return obj;
     };
   };
@@ -841,23 +891,36 @@ var createEventListener0 = /* @__PURE__ */ unsafeForeignFunction(["fn"])("arg=>f
 
 // output/Graphics.Phaser.GameObject/index.js
 var setPosition = function() {
-  return method1("setPosition(v1.x,v1.y)");
+  return function(v) {
+    return _method2("setPosition")(v.x)(v.y);
+  };
 };
 var setInteractive = function() {
   return _method0("setInteractive");
 };
 var setDisplaySize = function() {
-  return method1("setDisplaySize(v1.width, v1.height)");
+  return function(v) {
+    return _method2("setDisplaySize")(v.width)(v.height);
+  };
 };
 var setAngle = function() {
-  return method1("setAngle(v1)");
+  return _method1("setAngle");
 };
 
 // output/Graphics.Phaser.Image/index.js
-var create = /* @__PURE__ */ return1("add.image(0, 0, v1)");
+var create = function(v1) {
+  return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
+};
 
 // output/Graphics.Phaser.Loader/index.js
-var loadImage = /* @__PURE__ */ method1("load.image(v1.key,v1.path)");
+var loadImage = function(v) {
+  return function(scn) {
+    return function __do2() {
+      $$void(functorEffect)(bind(bindEffect)(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
+      return scn;
+    };
+  };
+};
 
 // output/Graphics.Phaser.Scene/index.js
 var preload = function(callback) {
@@ -883,7 +946,9 @@ var create2 = function(callback) {
 };
 
 // output/Graphics.Phaser.Text/index.js
-var create3 = /* @__PURE__ */ return1("add.text(0,0,v1)");
+var create3 = function(v1) {
+  return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
+};
 
 // output/Main/index.js
 var secondScene = /* @__PURE__ */ function() {

@@ -1,9 +1,9 @@
 module Graphics.Phaser.Image (create) where
 
+import Prelude
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserScene)
-import Utils.FFI (return1)
-
+import Utils.FFI (_getProp, _return3)
 
 create :: String -> PhaserScene -> Effect PhaserImage
-create = return1 "add.image(0, 0, v1)"
+create v1 = _getProp "add" >=> _return3 "image" 0 0 v1

@@ -1,13 +1,9 @@
-module Graphics.Phaser.TileMap
-  ( makeTileMap
-  , createLayer
-  , addTilesetImage
-  , tilesets
-  ) where
+module Graphics.Phaser.TileMap where
 
+import Prelude
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserLayer, PhaserLayerData, PhaserMapData, PhaserScene, PhaserTile, PhaserTileMap, PhaserTileSet)
-import Utils.FFI (return1, return2, _getProp)
+import Utils.FFI (_getProp, _return1, return2)
 
 -- Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
 type TilemapConfig
@@ -44,7 +40,7 @@ type MapDataConfig
     )
 
 makeTileMap :: TilemapConfig -> PhaserScene -> Effect PhaserTileMap
-makeTileMap config scene = return1 "make.tilemap(v1)" config scene
+makeTileMap config = _getProp "make" >=> _return1 "tilemap" config
 
 addTilesetImage :: String -> TilesetDesc -> PhaserTileMap -> Effect PhaserTileSet
 addTilesetImage tilesetName config tileMap =

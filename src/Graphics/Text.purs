@@ -1,16 +1,17 @@
 module Graphics.Phaser.Text where
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Text.html
+import Prelude
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)
-import Utils.FFI (_method0, _method1, _method4, _return0, method2, method5, return1)
+import Utils.FFI (_getProp, _method0, _method1, _method4, _return0, _return3, method2, method5)
 
 create :: String -> PhaserScene -> Effect PhaserText
-create = return1 "add.text(0,0,v1)"
+create v1 = _getProp "add" >=> _return3 "text" 0.0 0.0 v1
 
 createFromArray :: Array String -> PhaserScene -> Effect PhaserText
-createFromArray = return1 "add.text(0,0,v1)"
+createFromArray v1 = _getProp "add" >=> _return3 "text" 0.0 0.0 v1
 
 setText :: String -> PhaserText -> Effect PhaserText
 setText = _method1 "setText"

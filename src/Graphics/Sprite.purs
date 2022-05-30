@@ -1,9 +1,10 @@
 module Graphics.Phaser.Sprite where
 
 import Prelude
-import Utils.FFI (_getProp, _method0, _method1, _method2, return1, return2, return3, return4)
+
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (ArcadeSprite, PhaserAnimation, PhaserScene, PhaserSprite)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _return2, return2, return3, return4)
 
 type FrameNumber
   = { key :: String, frame :: Int }
@@ -51,8 +52,7 @@ type FrameNamesConfig
     }
 
 generateFrameNames :: FrameNamesConfig -> PhaserScene -> Effect PhaserAnimation
-generateFrameNames =
-  return1 "anims.generateFrameNames(v1.key, v1)"
+generateFrameNames v1 = _getProp "anims" >=> _return2 "generateFrameNames" v1.key v1
 
 setFrame :: Int -> PhaserSprite -> Effect PhaserSprite
 setFrame = _method1 "setFrame"

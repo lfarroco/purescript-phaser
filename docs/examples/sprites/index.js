@@ -90,6 +90,15 @@ var liftA1 = function(dictApplicative) {
 var bind = function(dict) {
   return dict.bind;
 };
+var composeKleisli = function(dictBind) {
+  return function(f) {
+    return function(g) {
+      return function(a) {
+        return bind(dictBind)(f(a))(g);
+      };
+    };
+  };
+};
 
 // output/Data.Foldable/foreign.js
 var foldrArray = function(f) {
@@ -744,6 +753,46 @@ var _gameConfig = {
   "default": defaultConfig
 };
 
+// output/Utils.FFI/foreign.js
+var __getProp = (path, obj) => obj[path];
+var __return1 = (prop, v1, obj) => obj[prop](v1);
+var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
+
+// output/Effect.Uncurried/foreign.js
+var runEffectFn2 = function runEffectFn22(fn) {
+  return function(a) {
+    return function(b) {
+      return function() {
+        return fn(a, b);
+      };
+    };
+  };
+};
+var runEffectFn3 = function runEffectFn32(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function() {
+          return fn(a, b, c);
+        };
+      };
+    };
+  };
+};
+var runEffectFn4 = function runEffectFn42(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function() {
+            return fn(a, b, c, d);
+          };
+        };
+      };
+    };
+  };
+};
+
 // output/Utils.FFI/index.js
 var argsN = function(n) {
   var values = function() {
@@ -757,23 +806,6 @@ var argsN = function(n) {
     })(range2(1)(n));
   }();
   return append(semigroupArray)(values)(["obj", ""]);
-};
-var return1 = function(expr) {
-  return function(v1) {
-    return function(obj) {
-      return unsafeForeignFunction(argsN(1))("obj." + expr)(v1)(obj);
-    };
-  };
-};
-var method1 = function(expr) {
-  return function(value) {
-    return function(obj) {
-      return function __do2() {
-        $$void(functorEffect)(return1(expr)(value)(obj))();
-        return obj;
-      };
-    };
-  };
 };
 var return2 = function(expr) {
   return function(v1) {
@@ -820,6 +852,31 @@ var return4 = function(expr) {
     };
   };
 };
+var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
+var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
+var _method2 = function(prop) {
+  return function(v1) {
+    return function(v2) {
+      return function(obj) {
+        return function __do2() {
+          $$void(functorEffect)(_return2(prop)(v1)(v2)(obj))();
+          return obj;
+        };
+      };
+    };
+  };
+};
+var _method1 = function(prop) {
+  return function(v1) {
+    return function(obj) {
+      return function __do2() {
+        $$void(functorEffect)(_return1(prop)(v1)(obj))();
+        return obj;
+      };
+    };
+  };
+};
+var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
@@ -830,7 +887,9 @@ var config = _gameConfig;
 
 // output/Graphics.Phaser.GameObject/index.js
 var setScale = function() {
-  return method1("setScale(v1.x,v1.y)");
+  return function(v) {
+    return _method2("setScale")(v.x)(v.y);
+  };
 };
 
 // output/Graphics.Phaser.Loader/index.js
@@ -856,9 +915,11 @@ var create = function(callback) {
 };
 
 // output/Graphics.Phaser.Sprite/index.js
-var setFrame = /* @__PURE__ */ method1("setFrame(v1)");
+var setFrame = /* @__PURE__ */ _method1("setFrame");
 var playAnimation = function() {
-  return method1("anims.play(v1.key,v1.ignoreIfPlaying)");
+  return function(v) {
+    return composeKleisli(bindEffect)(_getProp("anims"))(_method2("play")(v.key)(v.ignoreIfPlaying));
+  };
 };
 var generateFrameNumbers = /* @__PURE__ */ return3("anims.generateFrameNumbers(v1, {start: v2, end: v3})");
 var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })");

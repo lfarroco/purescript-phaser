@@ -822,6 +822,7 @@ var __getProp = (path, obj) => obj[path];
 var __return0 = (prop, obj) => obj[prop]();
 var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
+var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
 
 // output/Data.Nullable/foreign.js
 function nullable(a, r, f) {
@@ -861,6 +862,21 @@ var runEffectFn4 = function runEffectFn42(fn) {
         return function(d) {
           return function() {
             return fn(a, b, c, d);
+          };
+        };
+      };
+    };
+  };
+};
+var runEffectFn5 = function runEffectFn52(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function(e) {
+            return function() {
+              return fn(a, b, c, d, e);
+            };
           };
         };
       };
@@ -961,6 +977,7 @@ var return4 = function(expr) {
     };
   };
 };
+var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
@@ -1088,7 +1105,9 @@ var getX = function() {
 };
 
 // output/Graphics.Phaser.Image/index.js
-var create = /* @__PURE__ */ return1("add.image(0, 0, v1)");
+var create = function(v1) {
+  return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
+};
 
 // output/Graphics.Phaser.Input/index.js
 var isDown = /* @__PURE__ */ _getProp("isDown");

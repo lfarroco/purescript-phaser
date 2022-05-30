@@ -57,8 +57,6 @@ loadSpritesheet = method2 "load.spritesheet(v1.key,v1.path,v2)"
 --   String ->
 --   PhaserScene ->
 --   Effect PhaserScene
--- loadTilemapTileJSON = 
---   method2 "load.tilemapTiledJSON(v1, v2)"
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.Loader.LoaderPlugin.html#tilemapTiledJSON__anchor
 loadTilemapTiledJSON ::
   AssetLoadConfig ->

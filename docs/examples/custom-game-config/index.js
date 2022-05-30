@@ -5,18 +5,6 @@ var $$const = function(a) {
   };
 };
 
-// output/Data.Functor/foreign.js
-var arrayMap = function(f) {
-  return function(arr) {
-    var l = arr.length;
-    var result = new Array(l);
-    for (var i = 0; i < l; i++) {
-      result[i] = f(arr[i]);
-    }
-    return result;
-  };
-};
-
 // output/Data.Unit/foreign.js
 var unit = void 0;
 
@@ -26,9 +14,6 @@ var map = function(dict) {
 };
 var $$void = function(dictFunctor) {
   return map(dictFunctor)($$const(unit));
-};
-var functorArray = {
-  map: arrayMap
 };
 
 // output/Control.Apply/index.js
@@ -51,6 +36,15 @@ var liftA1 = function(dictApplicative) {
 // output/Control.Bind/index.js
 var bind = function(dict) {
   return dict.bind;
+};
+var composeKleisli = function(dictBind) {
+  return function(f) {
+    return function(g) {
+      return function(a) {
+        return bind(dictBind)(f(a))(g);
+      };
+    };
+  };
 };
 
 // output/Data.Foldable/foreign.js
@@ -103,19 +97,6 @@ var topChar = String.fromCharCode(65535);
 var bottomChar = String.fromCharCode(0);
 var topNumber = Number.POSITIVE_INFINITY;
 var bottomNumber = Number.NEGATIVE_INFINITY;
-
-// output/Data.Show/foreign.js
-var showIntImpl = function(n) {
-  return n.toString();
-};
-
-// output/Data.Show/index.js
-var showInt = {
-  show: showIntImpl
-};
-var show = function(dict) {
-  return dict.show;
-};
 
 // output/Data.Maybe/index.js
 var Nothing = /* @__PURE__ */ function() {
@@ -398,19 +379,6 @@ var functorST = {
 };
 
 // output/Data.Array/foreign.js
-var range2 = function(start) {
-  return function(end) {
-    var step = start > end ? -1 : 1;
-    var result = new Array(step * (end - start) + 1);
-    var i = start, n = 0;
-    while (i !== end) {
-      result[n++] = i;
-      i += step;
-    }
-    result[n] = i;
-    return result;
-  };
-};
 var replicateFill = function(count) {
   return function(value) {
     if (count < 1) {
@@ -623,13 +591,6 @@ function unsafeForeignProcedure(args) {
   };
 }
 
-// output/Data.Foreign.EasyFFI/index.js
-var unsafeForeignFunction = function(args) {
-  return function(expr) {
-    return unsafeForeignProcedure(args)("return " + (expr + ";"));
-  };
-};
-
 // output/Graphics.Phaser.GameConfig/index.js
 var physics = function(a) {
   return assoc(optional(opt("physics")))(new Just(options(a)));
@@ -689,27 +650,39 @@ var _gameConfig = {
   "default": defaultConfig
 };
 
-// output/Utils.FFI/index.js
-var argsN = function(n) {
-  var values = function() {
-    var $0 = n < 1;
-    if ($0) {
-      return [];
-    }
-    ;
-    return map(functorArray)(function(i) {
-      return "v" + show(showInt)(i);
-    })(range2(1)(n));
-  }();
-  return append(semigroupArray)(values)(["obj", ""]);
-};
-var return1 = function(expr) {
-  return function(v1) {
-    return function(obj) {
-      return unsafeForeignFunction(argsN(1))("obj." + expr)(v1)(obj);
+// output/Utils.FFI/foreign.js
+var __getProp = (path, obj) => obj[path];
+var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
+
+// output/Effect.Uncurried/foreign.js
+var runEffectFn2 = function runEffectFn22(fn) {
+  return function(a) {
+    return function(b) {
+      return function() {
+        return fn(a, b);
+      };
     };
   };
 };
+var runEffectFn5 = function runEffectFn52(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function(e) {
+            return function() {
+              return fn(a, b, c, d, e);
+            };
+          };
+        };
+      };
+    };
+  };
+};
+
+// output/Utils.FFI/index.js
+var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
+var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
@@ -730,7 +703,9 @@ var create = function(callback) {
 };
 
 // output/Graphics.Phaser.Text/index.js
-var create2 = /* @__PURE__ */ return1("add.text(0,0,v1)");
+var create2 = function(v1) {
+  return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
+};
 
 // output/Main/index.js
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(function(scene) {
