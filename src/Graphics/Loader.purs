@@ -13,7 +13,7 @@ module Graphics.Phaser.Loader
 import Prelude
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Utils.FFI (_getProp, _method1, _method2, _return2, method1, method2, method3)
+import Utils.FFI (_getProp, _method1, _method2, _return2, method2, method3)
 
 setBaseUrl :: String -> PhaserScene -> Effect PhaserScene
 setBaseUrl v1 = _getProp "load" >=> _method1 "setBaseUrl" v1
