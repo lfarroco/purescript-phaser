@@ -8,7 +8,7 @@ import Effect (Effect)
 import Graphics.Phaser.CoreTypes (EventListener)
 import Graphics.Phaser.Events (createEventListener2, on)
 import Graphics.Phaser.ForeignTypes (Key, KeyBoardEvent, KeyBoardPlugin, KeyCode, PhaserScene)
-import Utils.FFI (getProperty, method0, method1, return0, return1)
+import Utils.FFI (getProp, getProperty, method, method0, method1, return0, return1)
 
 type CursorKeys
   = { up :: Key
@@ -22,7 +22,10 @@ type CursorKeys
 -- TODO: create typeclass for the Input Plugin
 -- so that keys can be created outside of scenes
 createCursorKeys :: PhaserScene -> Effect CursorKeys
-createCursorKeys = return0 "input.keyboard.createCursorKeys()"
+createCursorKeys =
+  getProp "input"
+    >=> getProp "keyboard"
+    >=> method "createCursorKeys" []
 
 addKey :: KeyCode -> PhaserScene -> Effect CursorKeys
 addKey = return1 "input.keyboard.addKey(v1)"

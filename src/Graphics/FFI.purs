@@ -6,6 +6,7 @@ import Data.Foreign.EasyFFI as FFI
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
+import Effect.Uncurried (EffectFn2, EffectFn3, runEffectFn2, runEffectFn3)
 
 -- | argsN 3 == ["v1", "v2", "v3", "obj", "" ]
 -- | argsN 0 == ["obj", "" ]
@@ -22,6 +23,21 @@ argsN n =
   in
     values <> [ "obj", "" ]
 
+foreign import _getProp :: forall a b. EffectFn2 String a b
+
+getProp :: forall obj returnValue. String -> obj -> Effect returnValue
+getProp = runEffectFn2 _getProp
+
+foreign import _runFn :: forall a b c. EffectFn2 a b c
+
+runFn :: forall fn args returnValue. fn -> args -> Effect returnValue
+runFn = runEffectFn2 _runFn
+
+foreign import _method :: forall a b c d. EffectFn3 a b c d
+
+method :: forall prop args obj returnValue. prop -> args -> obj -> Effect returnValue
+method = runEffectFn3 _method
+
 -- | FFI Helpers
 -- | returnN functions receive a given object and run one of its methods,
 -- | providing N arguments to it, and return the value to the caller, wrapped
@@ -30,7 +46,8 @@ argsN n =
 -- | "name=>obj=>()=>obj.setName(v1)"
 return0 :: forall obj returnValue. String -> obj -> Effect returnValue
 return0 expr obj = do
-  FFI.unsafeForeignFunction (argsN 0) ("obj." <> expr) obj
+  fn <- getProp expr obj
+  runFn fn []
 
 -- | methodN function are called in the same way as returnN, but it returns the
 -- | provided object back.

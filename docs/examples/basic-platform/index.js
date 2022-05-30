@@ -817,6 +817,10 @@ var _gameConfig = {
   "default": defaultConfig
 };
 
+// output/Utils.FFI/foreign.js
+var _getProp = (path, obj) => obj[path];
+var _method = (prop, args, obj) => obj[prop](...args);
+
 // output/Data.Nullable/foreign.js
 function nullable(a, r, f) {
   return a == null ? r : f(a);
@@ -827,12 +831,36 @@ var toMaybe = function(n) {
   return nullable(n, Nothing.value, Just.create);
 };
 
+// output/Effect.Uncurried/foreign.js
+var runEffectFn2 = function runEffectFn22(fn) {
+  return function(a) {
+    return function(b) {
+      return function() {
+        return fn(a, b);
+      };
+    };
+  };
+};
+var runEffectFn3 = function runEffectFn32(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function() {
+          return fn(a, b, c);
+        };
+      };
+    };
+  };
+};
+
 // output/Utils.FFI/index.js
+var method = /* @__PURE__ */ runEffectFn3(_method);
 var getProperty = function(name2) {
   return function(obj) {
     return unsafeForeignFunction(["obj", ""])("obj." + name2)(obj);
   };
 };
+var getProp = /* @__PURE__ */ runEffectFn2(_getProp);
 var argsN = function(n) {
   var values = function() {
     var $0 = n < 1;
@@ -845,19 +873,6 @@ var argsN = function(n) {
     })(range(1)(n));
   }();
   return append(semigroupArray)(values)(["obj", ""]);
-};
-var return0 = function(expr) {
-  return function(obj) {
-    return unsafeForeignFunction(argsN(0))("obj." + expr)(obj);
-  };
-};
-var method0 = function(expr) {
-  return function(obj) {
-    return function __do() {
-      $$void(functorEffect)(return0(expr)(obj))();
-      return obj;
-    };
-  };
 };
 var return1 = function(expr) {
   return function(v1) {
@@ -977,15 +992,15 @@ var setAllowGravity = function() {
   return method1("body.setAllowGravity(v1)");
 };
 var refreshBody = function() {
-  return method0("refreshBody()");
+  return method("refreshBody")([]);
 };
 var getTouching = function() {
   return getProperty("body.touching");
 };
 var disableBody = function() {
-  return method0("disableBody(true,true)");
+  return method("disableBody")([true, true]);
 };
-var createStaticGroup = /* @__PURE__ */ return0("add.staticGroup()");
+var createStaticGroup = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ getProp("add"))(/* @__PURE__ */ method("staticGroup")([]));
 var createChild = function() {
   return return2("create(v1.x,v1.y,v2)");
 };
@@ -1025,7 +1040,7 @@ var create = /* @__PURE__ */ return1("add.image(0, 0, v1)");
 
 // output/Graphics.Phaser.Input/index.js
 var isDown = /* @__PURE__ */ getProperty("isDown");
-var createCursorKeys = /* @__PURE__ */ return0("input.keyboard.createCursorKeys()");
+var createCursorKeys = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ getProp("input"))(/* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ getProp("keyboard"))(/* @__PURE__ */ method("createCursorKeys")([])));
 
 // output/Graphics.Phaser.Loader/index.js
 var loadSpritesheet = /* @__PURE__ */ method2("load.spritesheet(v1.key,v1.path,v2)");

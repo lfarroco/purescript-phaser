@@ -1,7 +1,6 @@
 module Graphics.Phaser.Text where
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Text.html
-
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)

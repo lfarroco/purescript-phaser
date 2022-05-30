@@ -17,7 +17,7 @@ import Data.Maybe (Maybe(..))
 import Data.Traversable (sequence)
 import Effect (Effect)
 import Effect.Class.Console (log)
-import Graphics.Phaser
+import Graphics.Phaser (config, createWithConfig, physicsConfig)
 import Graphics.Phaser.ArcadePhysics as P
 import Graphics.Phaser.CoreTypes (class PhysicsEnabled)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, PhaserGame, PhaserScene)

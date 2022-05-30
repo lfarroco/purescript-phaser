@@ -1,6 +1,6 @@
 module Graphics.Phaser.ArcadePhysics
   ( ArcadeBodyCollision
-  , acceleration 
+  , acceleration
   , accelerateTo
   , accelerateToObject
   , addChild
@@ -22,7 +22,7 @@ module Graphics.Phaser.ArcadePhysics
   , getArcadeWorld
   , getTouching
   , isPaused
-  , facing 
+  , facing
   , moveTo
   , moveToObject
   , overlap
@@ -51,14 +51,14 @@ import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
-import Utils.FFI (getProperty, method0, method1, method2, method3, return0, return2)
+import Utils.FFI (getProp, getProperty, method, method1, method2, method3, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserPhysicsPlugin -> Effect StaticGroup
-createStaticGroup = return0 "add.staticGroup()"
+createStaticGroup = getProp "add" >=> method "staticGroup" []
 
 createGroup :: PhaserPhysicsPlugin -> Effect Group
-createGroup = return0 "add.group()"
+createGroup = getProp "add" >=> method "group" []
 
 createChild :: forall g. ArcadeGroup g => Vector -> String -> g -> Effect ArcadeSprite
 createChild = return2 "create(v1.x,v1.y,v2)"
@@ -76,7 +76,7 @@ setWorldBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
 setWorldBounds = method2 "world.setWorldBounds(v1.x,v1.y,v2.width,v2.height)"
 
 refreshBody :: forall a. PhysicsEnabled a => a -> Effect a
-refreshBody = method0 "refreshBody()"
+refreshBody = method "refreshBody" []
 
 setImmovable :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setImmovable = method1 "setImmovable(v1)"
@@ -135,7 +135,7 @@ addOverlapWithCallback :: forall a b. Collidable a => Collidable b => Array a ->
 addOverlapWithCallback = method3 "add.overlap(v1,v2,(a,b)=>v3(a)(b)())"
 
 disableBody :: forall a. PhysicsEnabled a => a -> Effect a
-disableBody = method0 "disableBody(true,true)"
+disableBody = method "disableBody" [ true, true ]
 
 accelerateTo :: forall a. GameObject a => a -> Vector -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 accelerateTo = method2 "accelerateTo(v1,v2.x,v2.y)"
@@ -168,10 +168,10 @@ overlapWithCallback :: forall a b. GameObject a => GameObject b => Array a -> Ar
 overlapWithCallback = method3 "overlap(v1,v2,(a,b)=>v3(a)(b)())"
 
 pause :: PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-pause = method0 "pause()"
+pause = method "pause" []
 
 resume :: PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-resume = method0 "resume()"
+resume = method "resume" []
 
 -- Arcade World
 getArcadeWorld :: PhaserPhysicsPlugin -> Effect PhaserArcadeWorld
@@ -181,7 +181,7 @@ isPaused :: PhaserArcadeWorld -> Effect Boolean
 isPaused = getProperty "isPaused"
 
 pauseWorld :: PhaserArcadeWorld -> Effect PhaserArcadeWorld
-pauseWorld = method0 "pause()"
+pauseWorld = method "pause" []
 
 resumeWorld :: PhaserArcadeWorld -> Effect PhaserArcadeWorld
-resumeWorld = method0 "resume()"
+resumeWorld = method "resume" []
