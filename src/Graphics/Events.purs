@@ -5,7 +5,7 @@ import Data.Foreign.EasyFFI (unsafeForeignFunction)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class EventEmitter, class HasNodeEventEmitter, EventListener)
 import Graphics.Phaser.ForeignTypes (NodeEventEmitter)
-import Utils.FFI (getProperty, method0, method1, method2)
+import Utils.FFI (_getProperty, _method, method1, method2)
 
 -- consider this to turn any argN fn into an event listener
 -- https://github.com/bklaric/purescript-idiomatic-node-events/blob/master/src/Node/Events/EventListener.js#L3
@@ -42,10 +42,10 @@ removeListener :: forall emitter. EventEmitter emitter => String -> EventListene
 removeListener = method2 "removeListener(v1,v2)"
 
 removeAllListeners :: forall emitter. EventEmitter emitter => emitter -> Effect emitter
-removeAllListeners = method0 "removeAllListeners()"
+removeAllListeners = _method "removeAllListeners" []
 
 shutdown :: forall emitter. EventEmitter emitter => emitter -> Effect emitter
-shutdown = method0 "shutdown()"
+shutdown = _method "shutdown" []
 
 getEventEmitter :: forall a. HasNodeEventEmitter a => a -> Effect NodeEventEmitter
-getEventEmitter = getProperty "events"
+getEventEmitter = _getProperty "events"

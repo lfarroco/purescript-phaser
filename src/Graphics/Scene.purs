@@ -56,7 +56,7 @@ import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
 import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
-import Utils.FFI (getProperty, method1, method2, method4, return1, safeGet)
+import Utils.FFI (_getProperty, method1, method2, method4, return1, safeGet)
 
 -- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
 -- | composing multiple functions that operate at that time.
@@ -100,7 +100,7 @@ preload callback scene = do
   pure scene
 
 children :: forall a. GameObject a => PhaserScene -> Effect (Array a)
-children = getProperty "children.list"
+children = _getProperty "children.list"
 
 getChildByName :: forall a. GameObject a => String -> PhaserScene -> Effect (Maybe a)
 getChildByName = safeGet
@@ -112,18 +112,18 @@ setData :: forall k v. k -> v -> PhaserScene -> Effect PhaserScene
 setData = do method2 "data.set(v1,v2)"
 
 getPluginInstance :: forall a. String -> PhaserScene -> Effect a
-getPluginInstance = getProperty
+getPluginInstance = _getProperty
 
 getKey :: PhaserScene -> Effect String
-getKey = getProperty "key"
+getKey = _getProperty "key"
 
 -- ScenePlugin bindings
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Scenes.ScenePlugin.html
 getScenePlugin :: forall a. HasScenePlugin a => a -> Effect PhaserScenePlugin
-getScenePlugin = getProperty "scene"
+getScenePlugin = _getProperty "scene"
 
 getPhysicsPlugin :: PhaserScene -> Effect PhaserPhysicsPlugin
-getPhysicsPlugin = getProperty "physics"
+getPhysicsPlugin = _getProperty "physics"
 
 add ::
   forall sceneData.
@@ -140,7 +140,7 @@ bringToTop = method1 "bringToTop(v1)"
 
 getScene :: String -> PhaserScenePlugin -> Effect (Maybe PhaserScene)
 getScene key plugin = do
-  v <- return1 "getProperty(v1)" key plugin
+  v <- return1 "_getProperty(v1)" key plugin
   pure $ toMaybe v
 
 getIndex :: String -> PhaserScenePlugin -> Effect Number

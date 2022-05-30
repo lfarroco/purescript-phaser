@@ -44,7 +44,7 @@ removeAnimation :: String -> PhaserSprite -> Effect PhaserSprite
 removeAnimation = method1 "anims.remove(v1)"
 
 stopAnimation :: PhaserSprite -> Effect PhaserSprite
-stopAnimation = method0 "stop()"
+stopAnimation = _method "stop" []
 
 stopAfterDelay :: Number -> PhaserSprite -> Effect PhaserSprite
 stopAfterDelay = method1 "stopAfterDelay(v1)"

@@ -23,38 +23,20 @@ argsN n =
   in
     values <> [ "obj", "" ]
 
-foreign import _getProp :: forall a b. EffectFn2 String a b
+foreign import __getProp :: forall a b. EffectFn2 String a b
 
-getProp :: forall obj returnValue. String -> obj -> Effect returnValue
-getProp = runEffectFn2 _getProp
+_getProp :: forall obj returnValue. String -> obj -> Effect returnValue
+_getProp = runEffectFn2 __getProp
 
-foreign import _runFn :: forall a b c. EffectFn2 a b c
+foreign import __runFn :: forall a b c. EffectFn2 a b c
 
-runFn :: forall fn args returnValue. fn -> args -> Effect returnValue
-runFn = runEffectFn2 _runFn
+_runFn :: forall fn args returnValue. fn -> args -> Effect returnValue
+_runFn = runEffectFn2 __runFn
 
-foreign import _method :: forall a b c d. EffectFn3 a b c d
+foreign import __method :: forall a b c d. EffectFn3 a b c d
 
-method :: forall prop args obj returnValue. prop -> args -> obj -> Effect returnValue
-method = runEffectFn3 _method
-
--- | FFI Helpers
--- | returnN functions receive a given object and run one of its methods,
--- | providing N arguments to it, and return the value to the caller, wrapped
--- | in an Effect.
--- | eg. a call like"method1 "setName(v1)" is compiled to a function like
--- | "name=>obj=>()=>obj.setName(v1)"
-return0 :: forall obj returnValue. String -> obj -> Effect returnValue
-return0 expr obj = do
-  fn <- getProp expr obj
-  runFn fn []
-
--- | methodN function are called in the same way as returnN, but it returns the
--- | provided object back.
-method0 :: forall obj. String -> obj -> Effect obj
-method0 expr obj = do
-  void $ return0 expr obj
-  pure obj
+_method :: forall prop args obj returnValue. prop -> args -> obj -> Effect returnValue
+_method = runEffectFn3 __method
 
 return1 :: forall obj v1 returnValue. String -> v1 -> obj -> Effect returnValue
 return1 expr v1 obj = do
@@ -101,8 +83,8 @@ method5 expr v1 v2 v3 v4 v5 obj = do
   void $ return5 expr v1 v2 v3 v4 v5 obj
   pure obj
 
-getProperty :: forall obj returnValue. String -> obj -> Effect returnValue
-getProperty name obj = FFI.unsafeForeignFunction [ "obj", "" ] ("obj." <> name) obj
+_getProperty :: forall obj returnValue. String -> obj -> Effect returnValue
+_getProperty name obj = FFI.unsafeForeignFunction [ "obj", "" ] ("obj." <> name) obj
 
 setProperty :: forall obj value. String -> value -> obj -> Effect Unit
 setProperty name value obj = FFI.unsafeForeignFunction [ "v1", "obj", "" ] ("obj." <> name <> " = v1") value obj

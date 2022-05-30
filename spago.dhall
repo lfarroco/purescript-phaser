@@ -9,7 +9,6 @@ You can edit this file as you like.
   , "console"
   , "easy-ffi"
   , "effect"
-  , "foreign"
   , "maybe"
   , "nullable"
   , "options"

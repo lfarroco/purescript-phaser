@@ -818,8 +818,8 @@ var _gameConfig = {
 };
 
 // output/Utils.FFI/foreign.js
-var _getProp = (path, obj) => obj[path];
-var _method = (prop, args, obj) => obj[prop](...args);
+var __getProp = (path, obj) => obj[path];
+var __method = (prop, args, obj) => obj[prop](...args);
 
 // output/Data.Nullable/foreign.js
 function nullable(a, r, f) {
@@ -854,13 +854,6 @@ var runEffectFn3 = function runEffectFn32(fn) {
 };
 
 // output/Utils.FFI/index.js
-var method = /* @__PURE__ */ runEffectFn3(_method);
-var getProperty = function(name2) {
-  return function(obj) {
-    return unsafeForeignFunction(["obj", ""])("obj." + name2)(obj);
-  };
-};
-var getProp = /* @__PURE__ */ runEffectFn2(_getProp);
 var argsN = function(n) {
   var values = function() {
     var $0 = n < 1;
@@ -963,6 +956,13 @@ var return4 = function(expr) {
     };
   };
 };
+var _method = /* @__PURE__ */ runEffectFn3(__method);
+var _getProperty = function(name2) {
+  return function(obj) {
+    return unsafeForeignFunction(["obj", ""])("obj." + name2)(obj);
+  };
+};
+var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
 var physicsConfig = _physicsConfig;
@@ -992,15 +992,15 @@ var setAllowGravity = function() {
   return method1("body.setAllowGravity(v1)");
 };
 var refreshBody = function() {
-  return method("refreshBody")([]);
+  return _method("refreshBody")([]);
 };
 var getTouching = function() {
-  return getProperty("body.touching");
+  return _getProperty("body.touching");
 };
 var disableBody = function() {
-  return method("disableBody")([true, true]);
+  return _method("disableBody")([true, true]);
 };
-var createStaticGroup = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ getProp("add"))(/* @__PURE__ */ method("staticGroup")([]));
+var createStaticGroup = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("add"))(/* @__PURE__ */ _method("staticGroup")([]));
 var createChild = function() {
   return return2("create(v1.x,v1.y,v2)");
 };
@@ -1023,24 +1023,30 @@ var addCollider = function() {
 
 // output/Graphics.Phaser.GameObject/index.js
 var setScale = function() {
-  return method1("setScale(v1.x,v1.y)");
+  return function(v) {
+    return _method("setScale")([v.x, v.y]);
+  };
 };
 var setPosition = function() {
-  return method1("setPosition(v1.x,v1.y)");
+  return function(v) {
+    return _method("setPosition")([v.x, v.y]);
+  };
 };
 var setName = function() {
-  return method1("setName(v1)");
+  return function(name2) {
+    return _method("setName")([name2]);
+  };
 };
 var getX = function() {
-  return getProperty("x");
+  return _getProp("x");
 };
 
 // output/Graphics.Phaser.Image/index.js
 var create = /* @__PURE__ */ return1("add.image(0, 0, v1)");
 
 // output/Graphics.Phaser.Input/index.js
-var isDown = /* @__PURE__ */ getProperty("isDown");
-var createCursorKeys = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ getProp("input"))(/* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ getProp("keyboard"))(/* @__PURE__ */ method("createCursorKeys")([])));
+var isDown = /* @__PURE__ */ _getProperty("isDown");
+var createCursorKeys = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("input"))(/* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("keyboard"))(/* @__PURE__ */ _method("createCursorKeys")([])));
 
 // output/Graphics.Phaser.Loader/index.js
 var loadSpritesheet = /* @__PURE__ */ method2("load.spritesheet(v1.key,v1.path,v2)");
@@ -1064,7 +1070,7 @@ var preload = function(callback) {
   };
 };
 var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
-var getPhysicsPlugin = /* @__PURE__ */ getProperty("physics");
+var getPhysicsPlugin = /* @__PURE__ */ _getProperty("physics");
 var getChildByName = function() {
   return safeGet;
 };
