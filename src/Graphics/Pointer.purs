@@ -3,7 +3,7 @@ module Graphics.Phaser.Input.Pointer where
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserPointer)
-import Utils.FFI (_getProp, _method0, method1, _return0, return1)
+import Utils.FFI (_getProp, _method0, _method1, _return0, return1)
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Input.Pointer.html
 --
@@ -172,4 +172,4 @@ rightButtonReleased :: PhaserPointer -> Effect Boolean
 rightButtonReleased = _return0 "rightButtonReleased"
 
 updateWorldPoint :: PhaserCamera -> PhaserPointer -> Effect PhaserPointer
-updateWorldPoint = method1 "updateWorldPoint(v1)"
+updateWorldPoint = _method1 "updateWorldPoint"

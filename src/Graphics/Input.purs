@@ -8,7 +8,7 @@ import Effect (Effect)
 import Graphics.Phaser.CoreTypes (EventListener)
 import Graphics.Phaser.Events (createEventListener2, on)
 import Graphics.Phaser.ForeignTypes (Key, KeyBoardEvent, KeyBoardPlugin, KeyCode, PhaserScene)
-import Utils.FFI (_getProp, _method0, method1, _return0, return1)
+import Utils.FFI (_getProp, _method0, _method1, _return0, return1)
 
 type CursorKeys
   = { up :: Key
@@ -43,7 +43,7 @@ emitOnRepeat :: Key -> Effect Boolean
 emitOnRepeat = _getProp "emitOnRepeat"
 
 setEmitOnRepeat :: Boolean -> Key -> Effect Key
-setEmitOnRepeat = method1 "emitOnRepeat(v1)"
+setEmitOnRepeat = _method1 "emitOnRepeat"
 
 enabled :: Key -> Effect Boolean
 enabled = _getProp "enabled"
@@ -96,11 +96,11 @@ getDuration = _return0 "getDuration"
 
 -- "Processes the Key Down action for this Key. Called automatically by the Keyboard Plugin."
 onDown :: KeyBoardEvent -> Key -> Effect Key
-onDown = method1 "onDown(v1)"
+onDown = _method1 "onDown"
 
 -- "Processes the Key Up action for this Key. Called automatically by the Keyboard Plugin."
 onUp :: KeyBoardEvent -> Key -> Effect Key
-onUp = method1 "onUp(v1)"
+onUp = _method1 "onUp"
 
 -- DOM Event Helpers
 stopPropagation :: KeyBoardEvent -> Effect KeyBoardEvent

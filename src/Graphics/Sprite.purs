@@ -1,18 +1,7 @@
-module Graphics.Phaser.Sprite
-  ( add
-  , createAnimation
-  , playAnimation
-  , removeAnimation
-  , stopAfterDelay
-  , stopAnimation
-  , generateFrameNumbers
-  , generateFrameNames
-  , setFrame
-  , class Sprite
-  ) where
+module Graphics.Phaser.Sprite where
 
-import Utils.FFI
-
+import Prelude
+import Utils.FFI (_getProp, _method0, _method1, _method2, return1, return2, return3, return4)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (ArcadeSprite, PhaserAnimation, PhaserScene, PhaserSprite)
 
@@ -38,16 +27,16 @@ instance Sprite ArcadeSprite
 instance Sprite PhaserSprite
 
 playAnimation :: forall a. Sprite a=> {key:: String, ignoreIfPlaying:: Boolean} -> a -> Effect a
-playAnimation = method1 "anims.play(v1.key,v1.ignoreIfPlaying)"
+playAnimation {key, ignoreIfPlaying} = _getProp "anims" >=> _method2 "play" key ignoreIfPlaying 
 
 removeAnimation :: String -> PhaserSprite -> Effect PhaserSprite
-removeAnimation = method1 "anims.remove(v1)"
+removeAnimation = _method1 "anims"
 
 stopAnimation :: PhaserSprite -> Effect PhaserSprite
 stopAnimation = _method0 "stop"
 
 stopAfterDelay :: Number -> PhaserSprite -> Effect PhaserSprite
-stopAfterDelay = method1 "stopAfterDelay(v1)"
+stopAfterDelay = _method1 "stopAfterDelay"
 
 generateFrameNumbers :: String -> Int -> Int -> PhaserScene -> Effect (Array FrameNumber)
 generateFrameNumbers =
@@ -66,4 +55,4 @@ generateFrameNames =
   return1 "anims.generateFrameNames(v1.key, v1)"
 
 setFrame :: Int -> PhaserSprite -> Effect PhaserSprite
-setFrame = method1 "setFrame(v1)"
+setFrame = _method1 "setFrame"

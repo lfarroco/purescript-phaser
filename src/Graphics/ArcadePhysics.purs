@@ -1,4 +1,47 @@
-module Graphics.Phaser.ArcadePhysics where
+module Graphics.Phaser.ArcadePhysics
+  ( accelerateTo
+  , accelerateToObject
+  , acceleration
+  , addChild
+  , addCollider
+  , addColliderWithCallback
+  , addOverlap
+  , addOverlapWithCallback
+  , allowGravity
+  , closest
+  , collide
+  , collideWithCallback
+  , createArcadeImage
+  , createArcadeSprite
+  , createChild
+  , createGroup
+  , createStaticGroup
+  , disableBody
+  , facing
+  , furthest
+  , getArcadeWorld
+  , getTouching
+  , isPaused
+  , moveTo
+  , moveToObject
+  , overlap
+  , overlapWithCallback
+  , pause
+  , pauseWorld
+  , refreshBody
+  , resume
+  , resumeWorld
+  , setAllowGravity
+  , setBounce
+  , setCollideWorldBounds
+  , setImmovable
+  , setVelocity
+  , setVelocityX
+  , setVelocityY
+  , setWorldBounds
+  , velocity
+  )
+  where
 
 -- A port of
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.StaticGroup.html
@@ -8,7 +51,7 @@ import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
-import Utils.FFI (_getProp, _method0, _method2, _return0, method1, method2, method3, return2)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _return0, _return1, method2, method3, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserPhysicsPlugin -> Effect StaticGroup
@@ -21,7 +64,7 @@ createChild :: forall g. ArcadeGroup g => Vector -> String -> g -> Effect Arcade
 createChild = return2 "create(v1.x,v1.y,v2)"
 
 addChild :: forall a g. GameObject a => ArcadeGroup g => a -> g -> Effect g
-addChild = method1 "add(v1)"
+addChild = _method1 "add"
 
 createArcadeImage :: Vector -> String -> PhaserPhysicsPlugin -> Effect ArcadeImage
 createArcadeImage = return2 "add.image(v1.x,v1.y,v2)"
@@ -36,13 +79,16 @@ refreshBody :: forall a. PhysicsEnabled a => a -> Effect a
 refreshBody = _method0 "refreshBody"
 
 setImmovable :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
-setImmovable = method1 "setImmovable(v1)"
+setImmovable = _method1 "setImmovable"
 
 allowGravity :: forall a. PhysicsEnabled a => a -> Effect Boolean
 allowGravity = _getProp "body.allowGravity"
 
 setAllowGravity :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
-setAllowGravity = method1 "body.setAllowGravity(v1)"
+setAllowGravity v1 obj =
+  _getProp "body" obj
+    >>= _return1 "setAllowGravity" v1
+    >>= const (pure obj)
 
 acceleration :: forall a. PhysicsEnabled a => a -> Effect Vector
 acceleration = _getProp "body.acceleration"
@@ -51,22 +97,30 @@ facing :: forall a. PhysicsEnabled a => a -> Effect Number
 facing = _getProp "body.facing"
 
 velocity :: forall a. PhysicsEnabled a => a -> Effect Vector
-velocity = _getProp "body.velocity"
+velocity obj = _getProp "body" obj >>= _getProp "velocity"
 
 setVelocityX :: forall a. PhysicsEnabled a => Number -> a -> Effect a
-setVelocityX = method1 "body.setVelocityX(v1)"
+setVelocityX v1 obj =
+  _getProp "body" obj >>= _method1 "setVelocityX" v1
+    >>= const (pure obj)
 
 setVelocityY :: forall a. PhysicsEnabled a => Number -> a -> Effect a
-setVelocityY = method1 "body.setVelocityY(v1)"
+setVelocityY v1 obj =
+  _getProp "body" obj >>= _method1 "setVelocityY" v1
+    >>= const (pure obj)
 
 setVelocity :: forall a. PhysicsEnabled a => Vector -> a -> Effect a
-setVelocity = method1 "body.setVelocity(v1.x,v1.y)"
+setVelocity { x, y } obj =
+  _getProp "body" obj >>= _method2 "setVelocity" x y
+    >>= const (pure obj)
 
 setBounce :: forall a. PhysicsEnabled a => Number -> a -> Effect a
-setBounce = method1 "body.setVelocityY(v1)"
+setBounce v1 obj =
+  _getProp "body" obj >>= _method1 "setBounce" v1
+    >>= const (pure obj)
 
 setCollideWorldBounds :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
-setCollideWorldBounds = method1 "setCollideWorldBounds(v1)"
+setCollideWorldBounds = _method1 "setCollideWorldBounds"
 
 addCollider :: forall a b. Collidable a => Collidable b => a -> b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 addCollider = method2 "add.collider(v1,v2)"
@@ -101,10 +155,10 @@ accelerateToObject :: forall a b. GameObject a => GameObject b => a -> b -> Phas
 accelerateToObject = method2 "accelerateToObject(v1,v2)"
 
 closest :: forall a. GameObject a => a -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-closest = method1 "closest(v1)"
+closest = _method1 "closest"
 
 furthest :: forall a. GameObject a => a -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-furthest = method1 "furthest(v1)"
+furthest = _method1 "furthest"
 
 collide :: forall a b. GameObject a => GameObject b => Array a -> Array b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 collide = method2 "collide(v1,v2)"

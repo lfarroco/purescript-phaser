@@ -5,7 +5,7 @@ import Data.Foreign.EasyFFI (unsafeForeignFunction)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class EventEmitter, class HasNodeEventEmitter, EventListener)
 import Graphics.Phaser.ForeignTypes (NodeEventEmitter)
-import Utils.FFI (_getProp, _method0, method1, method2)
+import Utils.FFI (_getProp, _method0, _method1, method2)
 
 -- consider this to turn any argN fn into an event listener
 -- https://github.com/bklaric/purescript-idiomatic-node-events/blob/master/src/Node/Events/EventListener.js#L3
@@ -34,7 +34,7 @@ emit :: forall emitter args. EventEmitter emitter => String -> args -> emitter -
 emit = method2 "emit(v1,v2)"
 
 off :: forall emitter. String -> emitter -> Effect emitter
-off = method1 "off(v1)"
+off = _method1 "off"
 
 -- If you want to create a listener that removes itself, you will need to use a reference
 -- https://stackoverflow.com/a/57276021/2467235

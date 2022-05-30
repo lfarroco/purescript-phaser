@@ -10,23 +10,27 @@ module Graphics.Phaser.Loader
   , loadTilemapTiledJSON
   ) where
 
-
+import Prelude
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Utils.FFI (method1, method2, method3)
+import Utils.FFI (_getProp, _method1, _method2, _return2, method1, method2, method3)
 
 setBaseUrl :: String -> PhaserScene -> Effect PhaserScene
-setBaseUrl = method1 "load.setBaseUrl(v1)"
+setBaseUrl v1 = _getProp "load" >=> _method1 "setBaseUrl" v1
 
 setPath :: String -> PhaserScene -> Effect PhaserScene
-setPath = method1 "load.setPath(v1)"
+setPath v1 = _getProp "load" >=> _method1 "setPath" v1
 
 type AssetLoadConfig
   = { key :: String, path :: String }
 
 loadImage :: AssetLoadConfig -> PhaserScene -> Effect PhaserScene
-loadImage = method1 "load.image(v1.key,v1.path)"
+loadImage { key, path } scn = do
+  void $ _getProp "load" scn
+    >>= _return2 "image" key path
+  pure scn
 
+--method1 "load.image(v1.key,v1.path)"
 loadAtlas :: String -> String -> String -> PhaserScene -> Effect PhaserScene
 loadAtlas = method3 "load.atlas(v1, v2, v3)"
 
@@ -42,7 +46,7 @@ type LoadSpriteSheetConfig
     }
 
 loadSpritesheet ::
-  AssetLoadConfig  ->
+  AssetLoadConfig ->
   LoadSpriteSheetConfig ->
   PhaserScene ->
   Effect PhaserScene
@@ -55,10 +59,12 @@ loadSpritesheet = method2 "load.spritesheet(v1.key,v1.path,v2)"
 --   Effect PhaserScene
 -- loadTilemapTileJSON = 
 --   method2 "load.tilemapTiledJSON(v1, v2)"
-
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.Loader.LoaderPlugin.html#tilemapTiledJSON__anchor
 loadTilemapTiledJSON ::
   AssetLoadConfig ->
   PhaserScene ->
   Effect PhaserScene
-loadTilemapTiledJSON = method1 "load.tilemapTiledJSON(v1.key,v1.path)"
+loadTilemapTiledJSON { key, path } scn =
+  _getProp "load" scn
+    >>= _method2 "tilemapTiledJSON" key path
+    >>= const (pure scn)

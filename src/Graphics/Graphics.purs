@@ -1,11 +1,10 @@
 module Graphics.Phaser.Graphics where
 
 import Prelude
-
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Graphics.Phaser.ForeignTypes as Types
-import Utils.FFI (_getProp, _method0, _return0, method1, method2, method3)
+import Utils.FFI (_getProp, _method0, _method2, _method3, _method4, _return0, method2, method3)
 
 create :: Types.PhaserScene -> Effect Types.PhaserGraphic
 create = _getProp "add" >=> _return0 "graphics"
@@ -29,16 +28,16 @@ type LineStyleConfig
   = { width :: Number, color :: String, alpha :: Number }
 
 lineStyle :: LineStyleConfig -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-lineStyle = method1 "lineStyle(v1.width, v1.color, v1.alpha)"
+lineStyle { width, color, alpha } = _method3 "lineStyle" width color alpha
 
 beginPath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
 beginPath = _method0 "beginPath"
 
 moveTo :: Vector -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-moveTo = method1 "moveTo(v1.x,v1.y)"
+moveTo { x, y } = _method2 "moveTo" x y
 
 lineTo :: Vector -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-lineTo = method1 "lineTo (v1.x,v1.y)"
+lineTo { x, y } = _method2 "lineTo" x y
 
 closePath :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
 closePath = _method0 "closePath"
@@ -54,7 +53,7 @@ type FillGradientConfig
     }
 
 fillGradientStyle :: FillGradientConfig -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-fillGradientStyle = method1 "fillGradientStyle(v1.topLeft,v1.topRight,v1.bottomLeft,v1.bottomRight)"
+fillGradientStyle { topLeft, topRight, bottomLeft, bottomRight } = _method4 "fillGradientStyle" topLeft topRight bottomLeft bottomRight
 
 clear :: Types.PhaserGraphic -> Effect Types.PhaserGraphic
 clear = _method0 "clear"

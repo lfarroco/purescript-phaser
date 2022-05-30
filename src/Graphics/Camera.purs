@@ -7,9 +7,9 @@ module Graphics.Phaser.Camera
 
 import Data.Foreign.EasyFFI as FFI
 import Effect (Effect)
-import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserCameraController, PhaserScene)
 import Graphics.Phaser.CoreTypes (Vector, Dimensions)
-import Utils.FFI (method1, method2, _return0)
+import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserCameraController, PhaserScene)
+import Utils.FFI (_method1, _return0, method2)
 
 setMainCameraBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
 setMainCameraBounds = method2 "cameras.main.setBounds(v1.x,v1.y,v2.width,v2.height)"
@@ -32,4 +32,4 @@ createSmoothedKeyControl :: KeyControlConfig -> Effect PhaserCameraController
 createSmoothedKeyControl = FFI.unsafeForeignFunction [ "config", "" ] "new Phaser.Cameras.Controls.FixedKeyControl(config)"
 
 updateCameraControlDelta :: Number -> PhaserCameraController -> Effect PhaserCameraController
-updateCameraControlDelta = method1 "update(delta)"
+updateCameraControlDelta = _method1 "update"

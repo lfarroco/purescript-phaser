@@ -820,6 +820,7 @@ var _gameConfig = {
 // output/Utils.FFI/foreign.js
 var __getProp = (path, obj) => obj[path];
 var __return0 = (prop, obj) => obj[prop]();
+var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
 
 // output/Data.Nullable/foreign.js
@@ -838,6 +839,17 @@ var runEffectFn2 = function runEffectFn22(fn) {
     return function(b) {
       return function() {
         return fn(a, b);
+      };
+    };
+  };
+};
+var runEffectFn3 = function runEffectFn32(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function() {
+          return fn(a, b, c);
+        };
       };
     };
   };
@@ -887,16 +899,6 @@ var safeGet = function(k) {
     return function __do() {
       var v = getNullable("children.getByName(v1)")(k)(obj)();
       return toMaybe(v);
-    };
-  };
-};
-var method1 = function(expr) {
-  return function(value) {
-    return function(obj) {
-      return function __do() {
-        $$void(functorEffect)(return1(expr)(value)(obj))();
-        return obj;
-      };
     };
   };
 };
@@ -960,6 +962,7 @@ var return4 = function(expr) {
   };
 };
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
+var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
 var _method2 = function(prop) {
   return function(v1) {
@@ -969,6 +972,16 @@ var _method2 = function(prop) {
           $$void(functorEffect)(_return2(prop)(v1)(v2)(obj))();
           return obj;
         };
+      };
+    };
+  };
+};
+var _method1 = function(prop) {
+  return function(v1) {
+    return function(obj) {
+      return function __do() {
+        $$void(functorEffect)(_return1(prop)(v1)(obj))();
+        return obj;
       };
     };
   };
@@ -993,22 +1006,38 @@ var config = _gameConfig;
 
 // output/Graphics.Phaser.ArcadePhysics/index.js
 var setVelocityY = function() {
-  return method1("body.setVelocityY(v1)");
+  return function(v1) {
+    return function(obj) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("body")(obj))(_method1("setVelocityY")(v1)))($$const(pure(applicativeEffect)(obj)));
+    };
+  };
 };
 var setVelocityX = function() {
-  return method1("body.setVelocityX(v1)");
+  return function(v1) {
+    return function(obj) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("body")(obj))(_method1("setVelocityX")(v1)))($$const(pure(applicativeEffect)(obj)));
+    };
+  };
 };
 var setImmovable = function() {
-  return method1("setImmovable(v1)");
+  return _method1("setImmovable");
 };
 var setCollideWorldBounds = function() {
-  return method1("setCollideWorldBounds(v1)");
+  return _method1("setCollideWorldBounds");
 };
 var setBounce = function() {
-  return method1("body.setVelocityY(v1)");
+  return function(v1) {
+    return function(obj) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("body")(obj))(_method1("setBounce")(v1)))($$const(pure(applicativeEffect)(obj)));
+    };
+  };
 };
 var setAllowGravity = function() {
-  return method1("body.setAllowGravity(v1)");
+  return function(v1) {
+    return function(obj) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("body")(obj))(_return1("setAllowGravity")(v1)))($$const(pure(applicativeEffect)(obj)));
+    };
+  };
 };
 var refreshBody = function() {
   return _method0("refreshBody");
@@ -1042,13 +1071,17 @@ var addCollider = function() {
 
 // output/Graphics.Phaser.GameObject/index.js
 var setScale = function() {
-  return method1("setScale(v1.x,v1.y)");
+  return function(v) {
+    return _method2("setScale")(v.x)(v.y);
+  };
 };
 var setPosition = function() {
-  return method1("setPosition(v1.x,v1.y)");
+  return function(v) {
+    return _method2("setPosition")(v.x)(v.y);
+  };
 };
 var setName = function() {
-  return method1("setName(v1)");
+  return _method1("setName");
 };
 var getX = function() {
   return _getProp("x");
@@ -1063,7 +1096,14 @@ var createCursorKeys = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ *
 
 // output/Graphics.Phaser.Loader/index.js
 var loadSpritesheet = /* @__PURE__ */ method2("load.spritesheet(v1.key,v1.path,v2)");
-var loadImage = /* @__PURE__ */ method1("load.image(v1.key,v1.path)");
+var loadImage = function(v) {
+  return function(scn) {
+    return function __do() {
+      $$void(functorEffect)(bind(bindEffect)(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
+      return scn;
+    };
+  };
+};
 
 // output/Graphics.Phaser.Scene/index.js
 var update = function(callback) {
@@ -1098,7 +1138,9 @@ var create2 = function(callback) {
 
 // output/Graphics.Phaser.Sprite/index.js
 var playAnimation = function() {
-  return method1("anims.play(v1.key,v1.ignoreIfPlaying)");
+  return function(v) {
+    return composeKleisli(bindEffect)(_getProp("anims"))(_method2("play")(v.key)(v.ignoreIfPlaying));
+  };
 };
 var generateFrameNumbers = /* @__PURE__ */ return3("anims.generateFrameNumbers(v1, {start: v2, end: v3})");
 var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })");

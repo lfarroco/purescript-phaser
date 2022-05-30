@@ -56,7 +56,7 @@ import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
 import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
-import Utils.FFI (_getProp, method1, method2, method4, return1, safeGet)
+import Utils.FFI (_getProp, _method1, method2, method4, return1, safeGet)
 
 -- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
 -- | composing multiple functions that operate at that time.
@@ -136,7 +136,7 @@ add ::
 add key scene autoStart sceneData scenePlugin = method4 "add(v1,v2,v3,v4)" key scene autoStart sceneData scenePlugin
 
 bringToTop :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-bringToTop = method1 "bringToTop(v1)"
+bringToTop = _method1 "bringToTop"
 
 getScene :: String -> PhaserScenePlugin -> Effect (Maybe PhaserScene)
 getScene key plugin = do
@@ -162,25 +162,25 @@ launch :: forall sceneData. String -> sceneData -> PhaserScenePlugin -> Effect P
 launch = method2 "launch(v1,v2)"
 
 moveAbove :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-moveAbove = method1 "moveAbove(v1)"
+moveAbove = _method1 "moveAbove"
 
 moveBelow :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-moveBelow = method1 "moveBelow(v1)"
+moveBelow = _method1 "moveBelow"
 
 moveDown :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-moveDown = method1 "moveDown(v1)"
+moveDown = _method1 "moveDown"
 
 moveUp :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-moveUp = method1 "moveUp(v1)"
+moveUp = _method1 "moveUp"
 
 pause :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-pause = method1 "pause(v1)"
+pause = _method1 "pause"
 
 remove :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-remove = method1 "remove(v1)"
+remove = _method1 "remove"
 
 restart :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-restart = method1 "restart(v1)"
+restart = _method1 "restart"
 
 resume :: forall sceneData. String -> sceneData -> PhaserScenePlugin -> Effect PhaserScenePlugin
 resume = method2 "resume(v1,v2)"
@@ -198,7 +198,7 @@ setVisible :: Boolean -> String -> PhaserScenePlugin -> Effect PhaserScenePlugin
 setVisible = method2 "setVisible(v1,v2)"
 
 sleep :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-sleep = method1 "sleep(v1)"
+sleep = _method1 "sleep"
 
 start :: forall sceneData. String -> sceneData -> PhaserScenePlugin -> Effect PhaserScenePlugin
 start = method2 "start(v1,v2)"
@@ -207,10 +207,10 @@ stop :: forall sceneData. String -> sceneData -> PhaserScenePlugin -> Effect Pha
 stop = method2 "stop(v1,v2)"
 
 swapPosition :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-swapPosition = method1 "swapPosition(v1)"
+swapPosition = _method1 "swapPosition"
 
 switch :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
-switch = method1 "switch(v1)"
+switch = _method1 "switch"
 
 -- TODO: add transition
 wake :: forall sceneData. String -> sceneData -> PhaserScenePlugin -> Effect PhaserScenePlugin

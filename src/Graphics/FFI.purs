@@ -92,11 +92,6 @@ return1 :: forall obj v1 returnValue. String -> v1 -> obj -> Effect returnValue
 return1 expr v1 obj = do
   FFI.unsafeForeignFunction (argsN 1) ("obj." <> expr) v1 obj
 
-method1 :: forall obj value. String -> value -> obj -> Effect obj
-method1 expr value obj = do
-  void $ return1 expr value obj
-  pure obj
-
 return2 :: forall obj v1 v2 returnValue. String -> v1 -> v2 -> obj -> Effect returnValue
 return2 expr v1 v2 obj = do
   FFI.unsafeForeignFunction (argsN 2) ("obj." <> expr) v1 v2 obj
