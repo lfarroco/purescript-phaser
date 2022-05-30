@@ -32,7 +32,7 @@ import Data.Maybe (Maybe)
 import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene, SceneManager)
-import Utils.FFI (getNullable, getProperty, method0, method3)
+import Utils.FFI (getNullable, _getProp, _method0, method3)
 
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.Scenes.SceneManager.html#add__anchor
@@ -45,7 +45,7 @@ class HasSceneManager :: forall k. k -> Constraint
 class HasSceneManager a 
 
 getSceneManager :: forall a. HasSceneManager a => a -> Effect SceneManager
-getSceneManager = getProperty "scene"
+getSceneManager = _getProp "scene"
 
 instance HasSceneManager PhaserScene 
 instance HasSceneManager PhaserGame 
@@ -55,7 +55,7 @@ getByKey key mngr =
   getNullable "get(v1)" key mngr >>= (toMaybe >>> pure)
 
 sendToBack :: PhaserScene -> Effect PhaserScene
-sendToBack = method0 "sendToBack()"
+sendToBack = _method0 "sendToBack"
 
 bringToTop ::  PhaserScene -> Effect PhaserScene
-bringToTop = method0 "beingToTop()"
+bringToTop = _method0 "beingToTop"

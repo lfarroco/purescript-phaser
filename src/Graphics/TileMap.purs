@@ -7,7 +7,7 @@ module Graphics.Phaser.TileMap
 
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserLayer, PhaserLayerData, PhaserMapData, PhaserScene, PhaserTile, PhaserTileMap, PhaserTileSet)
-import Utils.FFI (return1, return2, getProperty)
+import Utils.FFI (return1, return2, _getProp)
 
 -- Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
 type TilemapConfig
@@ -79,4 +79,4 @@ createLayer ::
 createLayer = return2 "createLayer(v1,v2)"
 
 tilesets :: PhaserTileMap -> Effect (Array PhaserTileSet)
-tilesets = getProperty "tilesets"
+tilesets = _getProp "tilesets"

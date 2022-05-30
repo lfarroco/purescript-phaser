@@ -3,173 +3,173 @@ module Graphics.Phaser.Input.Pointer where
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserPointer)
-import Utils.FFI (getProperty, method0, method1, return0, return1)
+import Utils.FFI (_getProp, _method0, method1, _return0, return1)
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Input.Pointer.html
 --
 -- Members
 active :: PhaserPointer -> Effect Boolean
-active = getProperty "active"
+active = _getProp "active"
 
 angle :: PhaserPointer -> Effect Number
-angle = getProperty "angle"
+angle = _getProp "angle"
 
 button :: PhaserPointer -> Effect Number
-button = getProperty "button"
+button = _getProp "button"
 
 buttons :: PhaserPointer -> Effect Number
-buttons = getProperty "buttons"
+buttons = _getProp "buttons"
 
 camera :: PhaserPointer -> Effect PhaserCamera
-camera = getProperty "camera"
+camera = _getProp "camera"
 
 deltaX :: PhaserPointer -> Effect Number
-deltaX = getProperty "deltaX"
+deltaX = _getProp "deltaX"
 
 deltaY :: PhaserPointer -> Effect Number
-deltaY = getProperty "deltaY"
+deltaY = _getProp "deltaY"
 
 deltaZ :: PhaserPointer -> Effect Number
-deltaZ = getProperty "deltaZ"
+deltaZ = _getProp "deltaZ"
 
 distance :: PhaserPointer -> Effect Number
-distance = getProperty "distance"
+distance = _getProp "distance"
 
 downTime :: PhaserPointer -> Effect Number
-downTime = getProperty "downTime"
+downTime = _getProp "downTime"
 
 downX :: PhaserPointer -> Effect Number
-downX = getProperty "downX"
+downX = _getProp "downX"
 
 downY :: PhaserPointer -> Effect Number
-downY = getProperty "downY"
+downY = _getProp "downY"
 
 id :: PhaserPointer -> Effect Number
-id = getProperty "id"
+id = _getProp "id"
 
 identifier :: PhaserPointer -> Effect Number
-identifier = getProperty "identifier"
+identifier = _getProp "identifier"
 
 isDown :: PhaserPointer -> Effect Boolean
-isDown = getProperty "isDown"
+isDown = _getProp "isDown"
 
 locked :: PhaserPointer -> Effect Boolean
-locked = getProperty "locked"
+locked = _getProp "locked"
 
 motionFactor :: PhaserPointer -> Effect Number
-motionFactor = getProperty "motionFactor"
+motionFactor = _getProp "motionFactor"
 
 movementX :: PhaserPointer -> Effect Number
-movementX = getProperty "movementX"
+movementX = _getProp "movementX"
 
 movementY :: PhaserPointer -> Effect Number
-movementY = getProperty "movementY"
+movementY = _getProp "movementY"
 
 moveTime :: PhaserPointer -> Effect Number
-moveTime = getProperty "moveTime"
+moveTime = _getProp "moveTime"
 
 pointerId :: PhaserPointer -> Effect Number
-pointerId = getProperty "pointerId"
+pointerId = _getProp "pointerId"
 
 position :: PhaserPointer -> Effect Vector
-position = getProperty "position"
+position = _getProp "position"
 
 prevPosition :: PhaserPointer -> Effect Vector
-prevPosition = getProperty "prevPosition"
+prevPosition = _getProp "prevPosition"
 
 primaryDown :: PhaserPointer -> Effect Boolean
-primaryDown = getProperty "primaryDown"
+primaryDown = _getProp "primaryDown"
 
 smoothFactor :: PhaserPointer -> Effect Number
-smoothFactor = getProperty "smoothFactor"
+smoothFactor = _getProp "smoothFactor"
 
 time :: PhaserPointer -> Effect Number
-time = getProperty "time"
+time = _getProp "time"
 
 upTime :: PhaserPointer -> Effect Number
-upTime = getProperty "upTime"
+upTime = _getProp "upTime"
 
 upX :: PhaserPointer -> Effect Number
-upX = getProperty "upX"
+upX = _getProp "upX"
 
 upY :: PhaserPointer -> Effect Number
-upY = getProperty "upY"
+upY = _getProp "upY"
 
 velocity :: PhaserPointer -> Effect Vector
-velocity = getProperty "velocity"
+velocity = _getProp "velocity"
 
 wasTouch :: PhaserPointer -> Effect Boolean
-wasTouch = getProperty "wasTouch"
+wasTouch = _getProp "wasTouch"
 
 worldX :: PhaserPointer -> Effect Number
-worldX = getProperty "worldX"
+worldX = _getProp "worldX"
 
 worldY :: PhaserPointer -> Effect Number
-worldY = getProperty "worldY"
+worldY = _getProp "worldY"
 
 x :: PhaserPointer -> Effect Number
-x = getProperty "y"
+x = _getProp "y"
 
 y :: PhaserPointer -> Effect Number
-y = getProperty "y"
+y = _getProp "y"
 
 -- Methods
 backButtonDown :: PhaserPointer -> Effect Boolean
-backButtonDown = return0 "backButtonDown()"
+backButtonDown = _return0 "backButtonDown"
 
 backButtonReleased :: PhaserPointer -> Effect Boolean
-backButtonReleased = return0 "backButtonReleased()"
+backButtonReleased = _return0 "backButtonReleased"
 
 destroy :: PhaserPointer -> Effect PhaserPointer
-destroy = method0 "destroy()"
+destroy = _method0 "destroy"
 
 forwardButtonDown :: PhaserPointer -> Effect Boolean
-forwardButtonDown = return0 "forwardButtonDown()"
+forwardButtonDown = _return0 "forwardButtonDown"
 
 forwardButtonReleased :: PhaserPointer -> Effect Boolean
-forwardButtonReleased = return0 "forwardButtonReleased()"
+forwardButtonReleased = _return0 "forwardButtonReleased"
 
 getAngle :: PhaserPointer -> Effect Number
-getAngle = return0 "getAngle()"
+getAngle = _return0 "getAngle"
 
 getDistance :: PhaserPointer -> Effect Number
-getDistance = return0 "getDistance()"
+getDistance = _return0 "getDistance"
 
 getDistanceX :: PhaserPointer -> Effect Number
-getDistanceX = return0 "getDistanceX()"
+getDistanceX = _return0 "getDistanceX"
 
 getDistanceY :: PhaserPointer -> Effect Number
-getDistanceY = return0 "getDistanceY()"
+getDistanceY = _return0 "getDistanceY"
 
 getDuration :: PhaserPointer -> Effect Number
-getDuration = return0 "getDuration()"
+getDuration = _return0 "getDuration"
 
 getInterpolatedPosition :: Int -> PhaserPointer -> Effect (Array Vector)
 getInterpolatedPosition = return1 "getInterpolatedPosition(v1)"
 
 leftButtonDown :: PhaserPointer -> Effect Boolean
-leftButtonDown = return0 "leftButtonDown()"
+leftButtonDown = _return0 "leftButtonDown"
 
 leftButtonReleased :: PhaserPointer -> Effect Boolean
-leftButtonReleased = return0 "leftButtonReleased()"
+leftButtonReleased = _return0 "leftButtonReleased"
 
 middleButtonDown :: PhaserPointer -> Effect Boolean
-middleButtonDown = return0 "middleButtonDown()"
+middleButtonDown = _return0 "middleButtonDown"
 
 middleButtonReleased :: PhaserPointer -> Effect Boolean
-middleButtonReleased = return0 "middleButtonReleased()"
+middleButtonReleased = _return0 "middleButtonReleased"
 
 noButtonDown :: PhaserPointer -> Effect Boolean
-noButtonDown = return0 "noButtonDown()"
+noButtonDown = _return0 "noButtonDown"
 
 positionToCamera :: PhaserCamera -> PhaserPointer -> Effect Boolean
 positionToCamera = return1 "positionToCamera(v1)"
 
 rightButtonDown :: PhaserPointer -> Effect Boolean
-rightButtonDown = return0 "rightButtonDown()"
+rightButtonDown = _return0 "rightButtonDown"
 
 rightButtonReleased :: PhaserPointer -> Effect Boolean
-rightButtonReleased = return0 "rightButtonReleased()"
+rightButtonReleased = _return0 "rightButtonReleased"
 
 updateWorldPoint :: PhaserCamera -> PhaserPointer -> Effect PhaserPointer
 updateWorldPoint = method1 "updateWorldPoint(v1)"

@@ -4,7 +4,7 @@ module Graphics.Phaser.Text where
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)
-import Utils.FFI (method0, method1, method2, method5, return0, return1)
+import Utils.FFI (_method0, method1, method2, method5, _return0, return1)
 
 create :: String -> PhaserScene -> Effect PhaserText
 create = return1 "add.text(0,0,v1)"
@@ -19,7 +19,7 @@ type PhaserTextMetrics
   = { ascent :: Number, descent :: Number, fontSize :: Number }
 
 getTextMetrics :: PhaserText -> Effect PhaserTextMetrics
-getTextMetrics = return0 "getTextMetrics()"
+getTextMetrics = _return0 "getTextMetrics"
 
 setColor :: String -> PhaserText -> Effect PhaserText
 setColor = method1 "setColor(v1)"
@@ -83,4 +83,4 @@ setStyle :: SetStyleConfig -> PhaserText -> Effect PhaserText
 setStyle = method1 "setStyle(v1)"
 
 updateText :: PhaserText -> Effect PhaserText
-updateText = method0 "updateText()"
+updateText = _method0 "updateText"

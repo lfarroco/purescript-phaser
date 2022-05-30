@@ -8,7 +8,7 @@ import Effect (Effect)
 import Graphics.Phaser.CoreTypes (EventListener)
 import Graphics.Phaser.Events (createEventListener2, on)
 import Graphics.Phaser.ForeignTypes (Key, KeyBoardEvent, KeyBoardPlugin, KeyCode, PhaserScene)
-import Utils.FFI (getProp, getProperty, method, method0, method1, return0, return1)
+import Utils.FFI (_getProp, _method0, method1, _return0, return1)
 
 type CursorKeys
   = { up :: Key
@@ -23,76 +23,76 @@ type CursorKeys
 -- so that keys can be created outside of scenes
 createCursorKeys :: PhaserScene -> Effect CursorKeys
 createCursorKeys =
-  getProp "input"
-    >=> getProp "keyboard"
-    >=> method "createCursorKeys" []
+  _getProp "input"
+    >=> _getProp "keyboard"
+    >=> _return0 "createCursorKeys"
 
 addKey :: KeyCode -> PhaserScene -> Effect CursorKeys
 addKey = return1 "input.keyboard.addKey(v1)"
 
 altKey :: Key -> Effect Boolean
-altKey = getProperty "altKey"
+altKey = _getProp "altKey"
 
 ctrlKey :: Key -> Effect Boolean
-ctrlKey = getProperty "ctrlKey"
+ctrlKey = _getProp "ctrlKey"
 
 duration :: Key -> Effect Number
-duration = getProperty "duration"
+duration = _getProp "duration"
 
 emitOnRepeat :: Key -> Effect Boolean
-emitOnRepeat = getProperty "emitOnRepeat"
+emitOnRepeat = _getProp "emitOnRepeat"
 
 setEmitOnRepeat :: Boolean -> Key -> Effect Key
 setEmitOnRepeat = method1 "emitOnRepeat(v1)"
 
 enabled :: Key -> Effect Boolean
-enabled = getProperty "enabled"
+enabled = _getProp "enabled"
 
 isDown :: Key -> Effect Boolean
-isDown = getProperty "isDown"
+isDown = _getProp "isDown"
 
 isUp :: Key -> Effect Boolean
-isUp = getProperty "isUp"
+isUp = _getProp "isUp"
 
 reset :: Key -> Effect Key
-reset = method0 "reset()"
+reset = _method0 "reset"
 
 keyCode :: Key -> Effect Number
-keyCode = getProperty "keyCode"
+keyCode = _getProp "keyCode"
 
 -- "The location of the modifier key. 0 for standard (or unknown), 1 for left, 2 for right, 3 for numpad."
 location :: Key -> Effect Number
-location = getProperty "location"
+location = _getProp "location"
 
 -- "The down state of the Meta key, if pressed at the same time as this key. On a Mac the Meta Key is the Command key. On Windows keyboards, it's the Windows key."
 metaKey :: Key -> Effect Boolean
-metaKey = getProperty "metaKey"
+metaKey = _getProp "metaKey"
 
 -- "The Keyboard Plugin instance that owns this Key object."
 plugin :: Key -> Effect KeyBoardPlugin
-plugin = getProperty "plugin"
+plugin = _getProp "plugin"
 
 -- "If a key is held down this holds down the number of times the key has 'repeated'."
 repeats :: Key -> Effect Number
-repeats = getProperty "repeats"
+repeats = _getProp "repeats"
 
 -- "The down state of the SHIFT key, if pressed at the same time as this key."
 shiftKey :: Key -> Effect Boolean
-shiftKey = getProperty "shiftKey"
+shiftKey = _getProp "shiftKey"
 
 -- "The timestamp when the key was last pressed down."
 timeDown :: Key -> Effect Boolean
-timeDown = getProperty "timeDown"
+timeDown = _getProp "timeDown"
 
 -- "The timestamp when the key was last released."
 timeUp :: Key -> Effect Boolean
-timeUp = getProperty "timeUp"
+timeUp = _getProp "timeUp"
 
 -- ## Events ##
 --
 -- "Returns the duration, in ms, that the Key has been held down for."
 getDuration :: Key -> Effect Number
-getDuration = return0 "getDuration()"
+getDuration = _return0 "getDuration"
 
 -- "Processes the Key Down action for this Key. Called automatically by the Keyboard Plugin."
 onDown :: KeyBoardEvent -> Key -> Effect Key
@@ -104,10 +104,10 @@ onUp = method1 "onUp(v1)"
 
 -- DOM Event Helpers
 stopPropagation :: KeyBoardEvent -> Effect KeyBoardEvent
-stopPropagation = method0 "stopPropagation()"
+stopPropagation = _method0 "stopPropagation"
 
 stopImmediatePropagation :: KeyBoardEvent -> Effect KeyBoardEvent
-stopImmediatePropagation = method0 "stopImmediatePropagation()"
+stopImmediatePropagation = _method0 "stopImmediatePropagation"
 
 -- ### Key up/down Events
 -- reference: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/keyboardevents/
