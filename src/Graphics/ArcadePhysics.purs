@@ -51,14 +51,14 @@ import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
-import Utils.FFI (_getProp, _getProperty, _method, method1, method2, method3, return2)
+import Utils.FFI (getProp, getProperty, method, method1, method2, method3, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserPhysicsPlugin -> Effect StaticGroup
-createStaticGroup = _getProp "add" >=> _method "staticGroup" []
+createStaticGroup = getProp "add" >=> method "staticGroup" []
 
 createGroup :: PhaserPhysicsPlugin -> Effect Group
-createGroup = _getProp "add" >=> _method "group" []
+createGroup = getProp "add" >=> method "group" []
 
 createChild :: forall g. ArcadeGroup g => Vector -> String -> g -> Effect ArcadeSprite
 createChild = return2 "create(v1.x,v1.y,v2)"
@@ -76,25 +76,25 @@ setWorldBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
 setWorldBounds = method2 "world.setWorldBounds(v1.x,v1.y,v2.width,v2.height)"
 
 refreshBody :: forall a. PhysicsEnabled a => a -> Effect a
-refreshBody = _method "refreshBody" []
+refreshBody = method "refreshBody" []
 
 setImmovable :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setImmovable = method1 "setImmovable(v1)"
 
 allowGravity :: forall a. PhysicsEnabled a => a -> Effect Boolean
-allowGravity = _getProperty "body.allowGravity"
+allowGravity = getProperty "body.allowGravity"
 
 setAllowGravity :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setAllowGravity = method1 "body.setAllowGravity(v1)"
 
 acceleration :: forall a. PhysicsEnabled a => a -> Effect Vector
-acceleration = _getProperty "body.acceleration"
+acceleration = getProperty "body.acceleration"
 
 facing :: forall a. PhysicsEnabled a => a -> Effect Number
-facing = _getProperty "body.facing"
+facing = getProperty "body.facing"
 
 velocity :: forall a. PhysicsEnabled a => a -> Effect Vector
-velocity = _getProperty "body.velocity"
+velocity = getProperty "body.velocity"
 
 setVelocityX :: forall a. PhysicsEnabled a => Number -> a -> Effect a
 setVelocityX = method1 "body.setVelocityX(v1)"
@@ -126,7 +126,7 @@ type ArcadeBodyCollision
     }
 
 getTouching :: forall a. PhysicsEnabled a => a -> Effect ArcadeBodyCollision
-getTouching = _getProperty "body.touching"
+getTouching = getProperty "body.touching"
 
 addOverlap :: forall a b c d. Collidable a => Collidable b => Collidable c => Collidable d => a -> b -> (c -> d -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 addOverlap = method3 "add.overlap(v1,v2,(a,b)=>v3(a)(b)())"
@@ -135,7 +135,7 @@ addOverlapWithCallback :: forall a b. Collidable a => Collidable b => Array a ->
 addOverlapWithCallback = method3 "add.overlap(v1,v2,(a,b)=>v3(a)(b)())"
 
 disableBody :: forall a. PhysicsEnabled a => a -> Effect a
-disableBody = _method "disableBody" [ true, true ]
+disableBody = method "disableBody" [ true, true ]
 
 accelerateTo :: forall a. GameObject a => a -> Vector -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 accelerateTo = method2 "accelerateTo(v1,v2.x,v2.y)"
@@ -168,20 +168,20 @@ overlapWithCallback :: forall a b. GameObject a => GameObject b => Array a -> Ar
 overlapWithCallback = method3 "overlap(v1,v2,(a,b)=>v3(a)(b)())"
 
 pause :: PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-pause = _method "pause" []
+pause = method "pause" []
 
 resume :: PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-resume = _method "resume" []
+resume = method "resume" []
 
 -- Arcade World
 getArcadeWorld :: PhaserPhysicsPlugin -> Effect PhaserArcadeWorld
-getArcadeWorld = _getProperty "world"
+getArcadeWorld = getProperty "world"
 
 isPaused :: PhaserArcadeWorld -> Effect Boolean
-isPaused = _getProperty "isPaused"
+isPaused = getProperty "isPaused"
 
 pauseWorld :: PhaserArcadeWorld -> Effect PhaserArcadeWorld
-pauseWorld = _method "pause" []
+pauseWorld = method "pause" []
 
 resumeWorld :: PhaserArcadeWorld -> Effect PhaserArcadeWorld
-resumeWorld = _method "resume" []
+resumeWorld = method "resume" []

@@ -8,7 +8,7 @@ import Effect (Effect)
 import Graphics.Phaser.CoreTypes (EventListener)
 import Graphics.Phaser.Events (createEventListener2, on)
 import Graphics.Phaser.ForeignTypes (Key, KeyBoardEvent, KeyBoardPlugin, KeyCode, PhaserScene)
-import Utils.FFI (_getProp, _getProperty, _method, method1, return1)
+import Utils.FFI (getProp, getProperty, method, method0, method1, return0, return1)
 
 type CursorKeys
   = { up :: Key
@@ -23,76 +23,76 @@ type CursorKeys
 -- so that keys can be created outside of scenes
 createCursorKeys :: PhaserScene -> Effect CursorKeys
 createCursorKeys =
-  _getProp "input"
-    >=> _getProp "keyboard"
-    >=> _method "createCursorKeys" []
+  getProp "input"
+    >=> getProp "keyboard"
+    >=> method "createCursorKeys" []
 
 addKey :: KeyCode -> PhaserScene -> Effect CursorKeys
 addKey = return1 "input.keyboard.addKey(v1)"
 
 altKey :: Key -> Effect Boolean
-altKey = _getProperty "altKey"
+altKey = getProperty "altKey"
 
 ctrlKey :: Key -> Effect Boolean
-ctrlKey = _getProperty "ctrlKey"
+ctrlKey = getProperty "ctrlKey"
 
 duration :: Key -> Effect Number
-duration = _getProperty "duration"
+duration = getProperty "duration"
 
 emitOnRepeat :: Key -> Effect Boolean
-emitOnRepeat = _getProperty "emitOnRepeat"
+emitOnRepeat = getProperty "emitOnRepeat"
 
 setEmitOnRepeat :: Boolean -> Key -> Effect Key
 setEmitOnRepeat = method1 "emitOnRepeat(v1)"
 
 enabled :: Key -> Effect Boolean
-enabled = _getProperty "enabled"
+enabled = getProperty "enabled"
 
 isDown :: Key -> Effect Boolean
-isDown = _getProperty "isDown"
+isDown = getProperty "isDown"
 
 isUp :: Key -> Effect Boolean
-isUp = _getProperty "isUp"
+isUp = getProperty "isUp"
 
 reset :: Key -> Effect Key
-reset = _method "reset" []
+reset = method0 "reset()"
 
 keyCode :: Key -> Effect Number
-keyCode = _getProperty "keyCode"
+keyCode = getProperty "keyCode"
 
 -- "The location of the modifier key. 0 for standard (or unknown), 1 for left, 2 for right, 3 for numpad."
 location :: Key -> Effect Number
-location = _getProperty "location"
+location = getProperty "location"
 
 -- "The down state of the Meta key, if pressed at the same time as this key. On a Mac the Meta Key is the Command key. On Windows keyboards, it's the Windows key."
 metaKey :: Key -> Effect Boolean
-metaKey = _getProperty "metaKey"
+metaKey = getProperty "metaKey"
 
 -- "The Keyboard Plugin instance that owns this Key object."
 plugin :: Key -> Effect KeyBoardPlugin
-plugin = _getProperty "plugin"
+plugin = getProperty "plugin"
 
 -- "If a key is held down this holds down the number of times the key has 'repeated'."
 repeats :: Key -> Effect Number
-repeats = _getProperty "repeats"
+repeats = getProperty "repeats"
 
 -- "The down state of the SHIFT key, if pressed at the same time as this key."
 shiftKey :: Key -> Effect Boolean
-shiftKey = _getProperty "shiftKey"
+shiftKey = getProperty "shiftKey"
 
 -- "The timestamp when the key was last pressed down."
 timeDown :: Key -> Effect Boolean
-timeDown = _getProperty "timeDown"
+timeDown = getProperty "timeDown"
 
 -- "The timestamp when the key was last released."
 timeUp :: Key -> Effect Boolean
-timeUp = _getProperty "timeUp"
+timeUp = getProperty "timeUp"
 
 -- ## Events ##
 --
 -- "Returns the duration, in ms, that the Key has been held down for."
 getDuration :: Key -> Effect Number
-getDuration = _method "getDuration" []
+getDuration = return0 "getDuration()"
 
 -- "Processes the Key Down action for this Key. Called automatically by the Keyboard Plugin."
 onDown :: KeyBoardEvent -> Key -> Effect Key
@@ -104,10 +104,10 @@ onUp = method1 "onUp(v1)"
 
 -- DOM Event Helpers
 stopPropagation :: KeyBoardEvent -> Effect KeyBoardEvent
-stopPropagation = _method "stopPropagation" []
+stopPropagation = method0 "stopPropagation()"
 
 stopImmediatePropagation :: KeyBoardEvent -> Effect KeyBoardEvent
-stopImmediatePropagation = _method "stopImmediatePropagation" []
+stopImmediatePropagation = method0 "stopImmediatePropagation()"
 
 -- ### Key up/down Events
 -- reference: https://rexrainbow.github.io/phaser3-rex-notes/docs/site/keyboardevents/

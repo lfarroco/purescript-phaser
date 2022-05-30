@@ -32,11 +32,11 @@ import Data.Maybe (Maybe)
 import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene, SceneManager)
-import Utils.FFI (_getProperty, _method, getNullable, method3)
+import Utils.FFI (getNullable, getProperty, method0, method3)
 
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.Scenes.SceneManager.html#add__anchor
--- | This _method accpts multiple data types
+-- | This method accpts multiple data types
 -- | We are opting to use the version with a concrete Phaser Scene instance
 add :: String ->  PhaserScene  -> Boolean -> SceneManager -> Effect SceneManager
 add = method3 "add(v1,v2,v3)"
@@ -45,7 +45,7 @@ class HasSceneManager :: forall k. k -> Constraint
 class HasSceneManager a 
 
 getSceneManager :: forall a. HasSceneManager a => a -> Effect SceneManager
-getSceneManager = _getProperty "scene"
+getSceneManager = getProperty "scene"
 
 instance HasSceneManager PhaserScene 
 instance HasSceneManager PhaserGame 
@@ -55,7 +55,7 @@ getByKey key mngr =
   getNullable "get(v1)" key mngr >>= (toMaybe >>> pure)
 
 sendToBack :: PhaserScene -> Effect PhaserScene
-sendToBack = _method "sendToBack" []
+sendToBack = method0 "sendToBack()"
 
 bringToTop ::  PhaserScene -> Effect PhaserScene
-bringToTop = _method "beingToTop" []
+bringToTop = method0 "beingToTop()"
