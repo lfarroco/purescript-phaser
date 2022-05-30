@@ -699,12 +699,21 @@ var _gameConfig = {
   "default": defaultConfig
 };
 
-// output/Utils.FFI/index.js
-var getProperty = function(name2) {
-  return function(obj) {
-    return unsafeForeignFunction(["obj", ""])("obj." + name2)(obj);
+// output/Utils.FFI/foreign.js
+var __getProp = (path, obj) => obj[path];
+
+// output/Effect.Uncurried/foreign.js
+var runEffectFn2 = function runEffectFn22(fn) {
+  return function(a) {
+    return function(b) {
+      return function() {
+        return fn(a, b);
+      };
+    };
   };
 };
+
+// output/Utils.FFI/index.js
 var argsN = function(n) {
   var values = function() {
     var $0 = n < 1;
@@ -744,6 +753,7 @@ var return2 = function(expr) {
     };
   };
 };
+var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
@@ -775,7 +785,7 @@ var create = function(callback) {
 };
 
 // output/Graphics.Phaser.TileMap/index.js
-var tilesets = /* @__PURE__ */ getProperty("tilesets");
+var tilesets = /* @__PURE__ */ _getProp("tilesets");
 var makeTileMap = function(config2) {
   return function(scene) {
     return return1("make.tilemap(v1)")(config2)(scene);

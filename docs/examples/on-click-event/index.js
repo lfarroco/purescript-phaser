@@ -828,6 +828,9 @@ var _gameConfig = {
   "default": defaultConfig
 };
 
+// output/Utils.FFI/foreign.js
+var __return0 = (prop, obj) => obj[prop]();
+
 // output/Data.Nullable/foreign.js
 function nullable(a, r, f) {
   return a == null ? r : f(a);
@@ -836,6 +839,17 @@ function nullable(a, r, f) {
 // output/Data.Nullable/index.js
 var toMaybe = function(n) {
   return nullable(n, Nothing.value, Just.create);
+};
+
+// output/Effect.Uncurried/foreign.js
+var runEffectFn2 = function runEffectFn22(fn) {
+  return function(a) {
+    return function(b) {
+      return function() {
+        return fn(a, b);
+      };
+    };
+  };
 };
 
 // output/Utils.FFI/index.js
@@ -851,19 +865,6 @@ var argsN = function(n) {
     })(range2(1)(n));
   }();
   return append(semigroupArray)(values)(["obj", ""]);
-};
-var return0 = function(expr) {
-  return function(obj) {
-    return unsafeForeignFunction(argsN(0))("obj." + expr)(obj);
-  };
-};
-var method0 = function(expr) {
-  return function(obj) {
-    return function __do2() {
-      $$void(functorEffect)(return0(expr)(obj))();
-      return obj;
-    };
-  };
 };
 var return1 = function(expr) {
   return function(v1) {
@@ -916,6 +917,15 @@ var method2 = function(expr) {
     };
   };
 };
+var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
+var _method0 = function(expr) {
+  return function(obj) {
+    return function __do2() {
+      $$void(functorEffect)(_return0(expr)(obj))();
+      return obj;
+    };
+  };
+};
 
 // output/Graphics.Phaser/index.js
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
@@ -939,7 +949,7 @@ var setName = function() {
   return method1("setName(v1)");
 };
 var setInteractive = function() {
-  return method0("setInteractive()");
+  return _method0("setInteractive");
 };
 var setDisplaySize = function() {
   return method1("setDisplaySize(v1.width, v1.height)");

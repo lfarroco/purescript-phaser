@@ -698,6 +698,21 @@ var _gameConfig = {
   "default": defaultConfig
 };
 
+// output/Utils.FFI/foreign.js
+var __getProp = (path, obj) => obj[path];
+var __return0 = (prop, obj) => obj[prop]();
+
+// output/Effect.Uncurried/foreign.js
+var runEffectFn2 = function runEffectFn22(fn) {
+  return function(a) {
+    return function(b) {
+      return function() {
+        return fn(a, b);
+      };
+    };
+  };
+};
+
 // output/Utils.FFI/index.js
 var argsN = function(n) {
   var values = function() {
@@ -711,11 +726,6 @@ var argsN = function(n) {
     })(range2(1)(n));
   }();
   return append(semigroupArray)(values)(["obj", ""]);
-};
-var return0 = function(expr) {
-  return function(obj) {
-    return unsafeForeignFunction(argsN(0))("obj." + expr)(obj);
-  };
 };
 var return2 = function(expr) {
   return function(v1) {
@@ -738,6 +748,8 @@ var method2 = function(expr) {
     };
   };
 };
+var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
+var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
@@ -749,7 +761,7 @@ var config = _gameConfig;
 // output/Graphics.Phaser.Graphics/index.js
 var fillStyle = /* @__PURE__ */ method2("fillStyle(v1,v2)");
 var fillRect = /* @__PURE__ */ method2("fillRect(v1.x, v1.y, v2.width, v2.height)");
-var create = /* @__PURE__ */ return0("add.graphics()");
+var create = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("add"))(/* @__PURE__ */ _return0("graphics"));
 
 // output/Graphics.Phaser.Scene/index.js
 var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");

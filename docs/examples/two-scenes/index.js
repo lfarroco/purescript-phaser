@@ -748,12 +748,22 @@ var _gameConfig = {
   "default": defaultConfig
 };
 
-// output/Utils.FFI/index.js
-var getProperty = function(name2) {
-  return function(obj) {
-    return unsafeForeignFunction(["obj", ""])("obj." + name2)(obj);
+// output/Utils.FFI/foreign.js
+var __getProp = (path, obj) => obj[path];
+var __return0 = (prop, obj) => obj[prop]();
+
+// output/Effect.Uncurried/foreign.js
+var runEffectFn2 = function runEffectFn22(fn) {
+  return function(a) {
+    return function(b) {
+      return function() {
+        return fn(a, b);
+      };
+    };
   };
 };
+
+// output/Utils.FFI/index.js
 var argsN = function(n) {
   var values = function() {
     var $0 = n < 1;
@@ -766,19 +776,6 @@ var argsN = function(n) {
     })(range2(1)(n));
   }();
   return append(semigroupArray)(values)(["obj", ""]);
-};
-var return0 = function(expr) {
-  return function(obj) {
-    return unsafeForeignFunction(argsN(0))("obj." + expr)(obj);
-  };
-};
-var method0 = function(expr) {
-  return function(obj) {
-    return function __do2() {
-      $$void(functorEffect)(return0(expr)(obj))();
-      return obj;
-    };
-  };
 };
 var return1 = function(expr) {
   return function(v1) {
@@ -818,6 +815,16 @@ var method2 = function(expr) {
     };
   };
 };
+var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
+var _method0 = function(expr) {
+  return function(obj) {
+    return function __do2() {
+      $$void(functorEffect)(_return0(expr)(obj))();
+      return obj;
+    };
+  };
+};
+var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
@@ -837,7 +844,7 @@ var setPosition = function() {
   return method1("setPosition(v1.x,v1.y)");
 };
 var setInteractive = function() {
-  return method0("setInteractive()");
+  return _method0("setInteractive");
 };
 var setDisplaySize = function() {
   return method1("setDisplaySize(v1.width, v1.height)");
@@ -864,7 +871,7 @@ var preload = function(callback) {
 var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
 var launch = /* @__PURE__ */ method2("launch(v1,v2)");
 var getScenePlugin = function() {
-  return getProperty("scene");
+  return _getProp("scene");
 };
 var create2 = function(callback) {
   return function(scene) {
