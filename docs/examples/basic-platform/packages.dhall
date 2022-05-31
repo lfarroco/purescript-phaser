@@ -104,8 +104,3 @@ let upstream =
 
 in  upstream
   with phaser = ../../../spago.dhall as Location
-  with easy-ffi =
-    { dependencies = [ "arrays", "console", "effect", "prelude", "quickcheck" ]
-    , repo = "https://github.com/lfarroco/purescript-easy-ffi.git"
-    , version = "master"
-    }

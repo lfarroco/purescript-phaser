@@ -1099,7 +1099,9 @@ var create2 = function(callback) {
 // output/Graphics.Phaser.Sprite/index.js
 var playAnimation = function() {
   return function(v) {
-    return composeKleisli(bindEffect)(_getProp("anims"))(_method2("play")(v.key)(v.ignoreIfPlaying));
+    return function(obj) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("anims")(obj))(_method2("play")(v.key)(v.ignoreIfPlaying)))($$const(pure(applicativeEffect)(obj)));
+    };
   };
 };
 var generateFrameNumbers = function(v1) {

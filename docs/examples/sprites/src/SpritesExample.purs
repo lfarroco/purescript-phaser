@@ -1,7 +1,6 @@
 module Main where
 
 import Prelude
-import Data.Foldable (for_)
 import Effect (Effect)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
@@ -18,8 +17,8 @@ main :: Effect PhaserGame
 main = do
   scene <- mainScene
   Phaser.createWithConfig
-    ( (Phaser.config.width 250.0)
-        <> (Phaser.config.height 250.0)
+    ( (Phaser.config.width 500.0)
+        <> (Phaser.config.height 500.0)
         <> (Phaser.config.scene [ scene ])
     )
 
@@ -31,8 +30,7 @@ explodeAnimationKey = "explodeAnimation"
 
 mainScene :: Effect PhaserScene
 mainScene =
-  do
-    Scene.newScene "main"
+  Scene.newScene "main"
     >>= Scene.create oncreate
     >>= Scene.preload onpreload
 
@@ -40,27 +38,27 @@ oncreate :: PhaserScene -> Effect Unit
 oncreate scene =
   void do
     explosionFrames <- Sprite.generateFrameNumbers explodeSpriteKey 0 23 scene
-    void $ Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
-    void $ Sprite.add explodeSpriteKey { x: 100.0, y: 100.0 } scene
-      >>= Sprite.playAnimation { key: explodeAnimationKey, ignoreIfPlaying: true }
-      >>= scale
-    void $ Sprite.add "balls" { x: 100.0, y: 100.0 } scene
-      >>= Sprite.setFrame 3
-      >>= scale
+    _ress <- Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
+    _ress2 <-
+      Sprite.add explodeSpriteKey { x: 200.0, y: 200.0 } scene
+        >>= Sprite.playAnimation { key: explodeAnimationKey, ignoreIfPlaying: true }
+        >>= scale
+    _balls <-
+      Sprite.add "balls" { x: 200.0, y: 200.0 } scene
+        >>= Sprite.setFrame 3
+        >>= scale
+    pure unit
   where
   scale = GO.setScale ({ x: 3.0, y: 3.0 })
 
 onpreload :: PhaserScene -> Effect Unit
-onpreload scene =
-  void do
-    for_
-      [ loadSpritesheet { key: "explosion", path: ghRoot <> "explosion.png" }
-          { frameWidth: 64.0
-          , frameHeight: 64.0
-          }
-      , loadSpritesheet { key: "balls", path: ghRoot <> "balls.png" }
-          { frameWidth: 17.0
-          , frameHeight: 17.0
-          }
-      ]
-      (\fn -> fn scene)
+onpreload =
+  loadSpritesheet { key: "explosion", path: ghRoot <> "explosion.png" }
+    { frameWidth: 64.0
+    , frameHeight: 64.0
+    }
+    >=> loadSpritesheet { key: "balls", path: ghRoot <> "balls.png" }
+        { frameWidth: 17.0
+        , frameHeight: 17.0
+        }
+    >=> const (pure unit)

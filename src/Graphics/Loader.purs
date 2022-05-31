@@ -30,7 +30,6 @@ loadImage { key, path } scn = do
     >>= _return2 "image" key path
   pure scn
 
---method1 "load.image(v1.key,v1.path)"
 loadAtlas :: String -> String -> String -> PhaserScene -> Effect PhaserScene
 loadAtlas v1 v2 v3 scn =
   _getProp "load" scn

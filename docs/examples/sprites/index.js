@@ -1,35 +1,4 @@
-// output/Control.Semigroupoid/index.js
-var semigroupoidFn = {
-  compose: function(f) {
-    return function(g) {
-      return function(x) {
-        return f(g(x));
-      };
-    };
-  }
-};
-
-// output/Control.Category/index.js
-var identity = function(dict) {
-  return dict.identity;
-};
-var categoryFn = {
-  identity: function(x) {
-    return x;
-  },
-  Semigroupoid0: function() {
-    return semigroupoidFn;
-  }
-};
-
 // output/Data.Function/index.js
-var flip = function(f) {
-  return function(b) {
-    return function(a) {
-      return f(a)(b);
-    };
-  };
-};
 var $$const = function(a) {
   return function(v) {
     return a;
@@ -50,13 +19,6 @@ var $$void = function(dictFunctor) {
 // output/Control.Apply/index.js
 var apply = function(dict) {
   return dict.apply;
-};
-var applySecond = function(dictApply) {
-  return function(a) {
-    return function(b) {
-      return apply(dictApply)(map(dictApply.Functor0())($$const(identity(categoryFn)))(a))(b);
-    };
-  };
 };
 
 // output/Control.Applicative/index.js
@@ -212,23 +174,6 @@ var unwrap = coerce;
 // output/Data.Foldable/index.js
 var foldr = function(dict) {
   return dict.foldr;
-};
-var traverse_ = function(dictApplicative) {
-  return function(dictFoldable) {
-    return function(f) {
-      return foldr(dictFoldable)(function() {
-        var $316 = applySecond(dictApplicative.Apply0());
-        return function($317) {
-          return $316(f($317));
-        };
-      }())(pure(dictApplicative)(unit));
-    };
-  };
-};
-var for_ = function(dictApplicative) {
-  return function(dictFoldable) {
-    return flip(traverse_(dictApplicative)(dictFoldable));
-  };
 };
 var foldMapDefaultR = function(dictFoldable) {
   return function(dictMonoid) {
@@ -836,7 +781,9 @@ var create = function(callback) {
 var setFrame = /* @__PURE__ */ _method1("setFrame");
 var playAnimation = function() {
   return function(v) {
-    return composeKleisli(bindEffect)(_getProp("anims"))(_method2("play")(v.key)(v.ignoreIfPlaying));
+    return function(obj) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("anims")(obj))(_return2("play")(v.key)(v.ignoreIfPlaying)))($$const(pure(applicativeEffect)(obj)));
+    };
   };
 };
 var generateFrameNumbers = function(v1) {
@@ -865,29 +812,27 @@ var createAnimation = function(key) {
 };
 var add2 = function(v1) {
   return function(v) {
-    return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v1)(v.x)(v.y));
+    return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v.x)(v.y)(v1));
   };
 };
 
 // output/Main/index.js
 var ghRoot = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/sprites/";
-var onpreload = function(scene) {
-  return $$void(functorEffect)(for_(applicativeEffect)(foldableArray)([loadSpritesheet({
+var onpreload = /* @__PURE__ */ function() {
+  return composeKleisli(bindEffect)(loadSpritesheet({
     key: "explosion",
     path: ghRoot + "explosion.png"
   })({
     frameWidth: 64,
     frameHeight: 64
-  }), loadSpritesheet({
+  }))(composeKleisli(bindEffect)(loadSpritesheet({
     key: "balls",
     path: ghRoot + "balls.png"
   })({
     frameWidth: 17,
     frameHeight: 17
-  })])(function(fn) {
-    return fn(scene);
-  }));
-};
+  }))($$const(pure(applicativeEffect)(unit))));
+}();
 var explodeSpriteKey = "explosion";
 var explodeAnimationKey = "explodeAnimation";
 var oncreate = function(scene) {
@@ -897,24 +842,25 @@ var oncreate = function(scene) {
   });
   return $$void(functorEffect)(function __do2() {
     var explosionFrames = generateFrameNumbers(explodeSpriteKey)(0)(23)(scene)();
-    $$void(functorEffect)(createAnimation(explodeAnimationKey)(explosionFrames)(20)(-1 | 0)(scene))();
-    $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2(explodeSpriteKey)({
-      x: 100,
-      y: 100
+    var _ress = createAnimation(explodeAnimationKey)(explosionFrames)(20)(-1 | 0)(scene)();
+    var _ress2 = bind(bindEffect)(bind(bindEffect)(add2(explodeSpriteKey)({
+      x: 200,
+      y: 200
     })(scene))(playAnimation()({
       key: explodeAnimationKey,
       ignoreIfPlaying: true
-    })))(scale))();
-    return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2("balls")({
-      x: 100,
-      y: 100
-    })(scene))(setFrame(3)))(scale))();
+    })))(scale)();
+    var _balls = bind(bindEffect)(bind(bindEffect)(add2("balls")({
+      x: 200,
+      y: 200
+    })(scene))(setFrame(3)))(scale)();
+    return unit;
   });
 };
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(oncreate)))(/* @__PURE__ */ preload(onpreload));
 var main = function __do() {
   var scene = mainScene();
-  return createWithConfig(append(semigroupOptions)(config.width(250))(append(semigroupOptions)(config.height(250))(config.scene([scene]))))();
+  return createWithConfig(append(semigroupOptions)(config.width(500))(append(semigroupOptions)(config.height(500))(config.scene([scene]))))();
 };
 
 // <stdin>
