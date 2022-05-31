@@ -909,20 +909,6 @@ var return3 = function(expr) {
     };
   };
 };
-var method3 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(obj) {
-          return function __do() {
-            $$void(functorEffect)(return3(expr)(v1)(v2)(v3)(obj))();
-            return obj;
-          };
-        };
-      };
-    };
-  };
-};
 var return4 = function(expr) {
   return function(v1) {
     return function(v2) {
@@ -995,6 +981,9 @@ var createWithConfig = function(opts) {
 };
 var config = _gameConfig;
 
+// output/Graphics.Phaser.Events/index.js
+var createEventListener2 = /* @__PURE__ */ unsafeForeignFunction(["fn"])("(arg1,arg2)=>fn(arg1)(arg2)()");
+
 // output/Graphics.Phaser.ArcadePhysics/index.js
 var setVelocityY = function() {
   return function(v1) {
@@ -1061,7 +1050,16 @@ var addOverlap = function() {
   return function() {
     return function() {
       return function() {
-        return method3("add.overlap(v1,v2,(a,b)=>v3(a)(b)())");
+        return function(v1) {
+          return function(v2) {
+            return function(v3) {
+              return function(plugin) {
+                var listener = createEventListener2(v3);
+                return bind(bindEffect)(bind(bindEffect)(_getProp("add")(plugin))(_return3("overlap")(v1)(v2)(listener)))($$const(pure(applicativeEffect)(plugin)));
+              };
+            };
+          };
+        };
       };
     };
   };

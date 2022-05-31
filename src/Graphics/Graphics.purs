@@ -4,7 +4,7 @@ import Prelude
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Graphics.Phaser.ForeignTypes as Types
-import Utils.FFI (_getProp, _method0, _method2, _method3, _method4, _return0, method3)
+import Utils.FFI (_getProp, _method0, _method2, _method3, _method4, _method5, _return0)
 
 create :: Types.PhaserScene -> Effect Types.PhaserGraphic
 create = _getProp "add" >=> _return0 "graphics"
@@ -22,7 +22,7 @@ strokeRect :: Vector -> Dimensions -> Types.PhaserGraphic -> Effect Types.Phaser
 strokeRect { x, y } { width, height } = _method4 "strokeRect" x y width height
 
 strokeRoundedRect :: Vector -> Dimensions -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-strokeRoundedRect = method3 "strokeRoundedRect(v1.x, v1.y, v2.width, v2.height, v3)"
+strokeRoundedRect { x, y } { width, height } v3 = _method5 "strokeRoundedRect" x y width height v3
 
 type LineStyleConfig
   = { width :: Number, color :: String, alpha :: Number }

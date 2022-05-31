@@ -13,7 +13,7 @@ module Graphics.Phaser.Loader
 import Prelude
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Utils.FFI (_getProp, _method1, _method2, _return2, _return3, method3)
+import Utils.FFI (_getProp, _method1, _method2, _method3, _return1, _return2, _return3)
 
 setBaseUrl :: String -> PhaserScene -> Effect PhaserScene
 setBaseUrl v1 = _getProp "load" >=> _method1 "setBaseUrl" v1
@@ -32,13 +32,19 @@ loadImage { key, path } scn = do
 
 --method1 "load.image(v1.key,v1.path)"
 loadAtlas :: String -> String -> String -> PhaserScene -> Effect PhaserScene
-loadAtlas = method3 "load.atlas(v1, v2, v3)"
+loadAtlas v1 v2 v3 scn =
+  _getProp "load" scn
+    >>= _method3 "atlas" v1 v2 v3
+    >>= const (pure scn)
 
 loadPlugin :: String -> String -> PhaserScene -> Effect PhaserScene
 loadPlugin v1 v2 scn = _getProp "load" scn >>= _method2 "plugin" v1 v2 >>= const (pure scn)
 
 loadScene :: String -> String -> String -> PhaserScene -> Effect PhaserScene
-loadScene = method3 "load.scenePlugin({ key: v1, url: v2, sceneKey: v3})"
+loadScene key url sceneKey scn =
+  _getProp "load" scn
+    >>= _return1 "scenePlugin" { key, url, sceneKey }
+    >>= const (pure scn)
 
 type LoadSpriteSheetConfig
   = { frameWidth :: Number

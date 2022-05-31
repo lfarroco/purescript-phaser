@@ -32,14 +32,14 @@ import Data.Maybe (Maybe)
 import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene, SceneManager)
-import Utils.FFI (getNullable, _getProp, _method0, method3)
+import Utils.FFI (_getProp, _method0, _method3, getNullable)
 
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.Scenes.SceneManager.html#add__anchor
 -- | This method accpts multiple data types
 -- | We are opting to use the version with a concrete Phaser Scene instance
 add :: String ->  PhaserScene  -> Boolean -> SceneManager -> Effect SceneManager
-add = method3 "add(v1,v2,v3)"
+add = _method3 "add"
  
 class HasSceneManager :: forall k. k -> Constraint
 class HasSceneManager a 
