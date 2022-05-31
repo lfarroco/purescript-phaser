@@ -38,16 +38,13 @@ oncreate :: PhaserScene -> Effect Unit
 oncreate scene =
   void do
     explosionFrames <- Sprite.generateFrameNumbers explodeSpriteKey 0 23 scene
-    _ress <- Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
-    _ress2 <-
-      Sprite.add explodeSpriteKey { x: 200.0, y: 200.0 } scene
-        >>= Sprite.playAnimation { key: explodeAnimationKey, ignoreIfPlaying: true }
-        >>= scale
-    _balls <-
-      Sprite.add "balls" { x: 200.0, y: 200.0 } scene
-        >>= Sprite.setFrame 3
-        >>= scale
-    pure unit
+    void $ Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
+    void $ Sprite.add { x: 200.0, y: 200.0 } explodeSpriteKey scene
+      >>= Sprite.playAnimation { key: explodeAnimationKey, ignoreIfPlaying: true }
+      >>= scale
+    void $ Sprite.add { x: 200.0, y: 200.0 } "balls" scene
+      >>= Sprite.setFrame 3
+      >>= scale
   where
   scale = GO.setScale ({ x: 3.0, y: 3.0 })
 

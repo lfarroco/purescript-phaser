@@ -11,9 +11,8 @@ type FrameNumber
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Sprite.html
 -- | A PhaserSprite also implements the PhaserGameObject typeclass
--- | TODO: use same param order as Phaser
-add :: String -> { x :: Number, y :: Number } -> PhaserScene -> Effect PhaserSprite
-add v1 {x,y} = _getProp "add"  >=> _return3 "sprite" x y v1 
+add :: { x :: Number, y :: Number } -> String -> PhaserScene -> Effect PhaserSprite
+add {x,y} v2 = _getProp "add"  >=> _return3 "sprite" x y v2 
 
 -- | Besides having a `PhaserScene` parameter, animations created with `createAnimation`
 -- | are in fact global and can be accessed from other scenes. Because of that you

@@ -1100,7 +1100,7 @@ var create2 = function(callback) {
 var playAnimation = function() {
   return function(v) {
     return function(obj) {
-      return bind(bindEffect)(bind(bindEffect)(_getProp("anims")(obj))(_method2("play")(v.key)(v.ignoreIfPlaying)))($$const(pure(applicativeEffect)(obj)));
+      return bind(bindEffect)(bind(bindEffect)(_getProp("anims")(obj))(_return2("play")(v.key)(v.ignoreIfPlaying)))($$const(pure(applicativeEffect)(obj)));
     };
   };
 };

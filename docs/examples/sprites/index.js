@@ -810,9 +810,9 @@ var createAnimation = function(key) {
     };
   };
 };
-var add2 = function(v1) {
-  return function(v) {
-    return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v.x)(v.y)(v1));
+var add2 = function(v) {
+  return function(v2) {
+    return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v.x)(v.y)(v2));
   };
 };
 
@@ -842,19 +842,18 @@ var oncreate = function(scene) {
   });
   return $$void(functorEffect)(function __do2() {
     var explosionFrames = generateFrameNumbers(explodeSpriteKey)(0)(23)(scene)();
-    var _ress = createAnimation(explodeAnimationKey)(explosionFrames)(20)(-1 | 0)(scene)();
-    var _ress2 = bind(bindEffect)(bind(bindEffect)(add2(explodeSpriteKey)({
+    $$void(functorEffect)(createAnimation(explodeAnimationKey)(explosionFrames)(20)(-1 | 0)(scene))();
+    $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2({
       x: 200,
       y: 200
-    })(scene))(playAnimation()({
+    })(explodeSpriteKey)(scene))(playAnimation()({
       key: explodeAnimationKey,
       ignoreIfPlaying: true
-    })))(scale)();
-    var _balls = bind(bindEffect)(bind(bindEffect)(add2("balls")({
+    })))(scale))();
+    return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2({
       x: 200,
       y: 200
-    })(scene))(setFrame(3)))(scale)();
-    return unit;
+    })("balls")(scene))(setFrame(3)))(scale))();
   });
 };
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(oncreate)))(/* @__PURE__ */ preload(onpreload));
