@@ -757,6 +757,7 @@ var _gameConfig = {
 var __getProp = (path, obj) => obj[path];
 var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
+var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
 
 // output/Effect.Uncurried/foreign.js
 var runEffectFn2 = function runEffectFn22(fn) {
@@ -792,6 +793,21 @@ var runEffectFn4 = function runEffectFn42(fn) {
     };
   };
 };
+var runEffectFn5 = function runEffectFn52(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function(e) {
+            return function() {
+              return fn(a, b, c, d, e);
+            };
+          };
+        };
+      };
+    };
+  };
+};
 
 // output/Utils.FFI/index.js
 var argsN = function(n) {
@@ -806,27 +822,6 @@ var argsN = function(n) {
     })(range2(1)(n));
   }();
   return append(semigroupArray)(values)(["obj", ""]);
-};
-var return2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return unsafeForeignFunction(argsN(2))("obj." + expr)(v1)(v2)(obj);
-      };
-    };
-  };
-};
-var method2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return function __do2() {
-          $$void(functorEffect)(return2(expr)(v1)(v2)(obj))();
-          return obj;
-        };
-      };
-    };
-  };
 };
 var return3 = function(expr) {
   return function(v1) {
@@ -852,6 +847,7 @@ var return4 = function(expr) {
     };
   };
 };
+var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
 var _method2 = function(prop) {
@@ -893,7 +889,13 @@ var setScale = function() {
 };
 
 // output/Graphics.Phaser.Loader/index.js
-var loadSpritesheet = /* @__PURE__ */ method2("load.spritesheet(v1.key,v1.path,v2)");
+var loadSpritesheet = function(v) {
+  return function(v2) {
+    return function(scn) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("load")(scn))(_return3("spritesheet")(v.key)(v.path)(v2)))($$const(pure(applicativeEffect)(scn)));
+    };
+  };
+};
 
 // output/Graphics.Phaser.Scene/index.js
 var preload = function(callback) {
@@ -923,7 +925,11 @@ var playAnimation = function() {
 };
 var generateFrameNumbers = /* @__PURE__ */ return3("anims.generateFrameNumbers(v1, {start: v2, end: v3})");
 var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })");
-var add2 = /* @__PURE__ */ return2("add.sprite(v2.x, v2.y, v1)");
+var add2 = function(v1) {
+  return function(v) {
+    return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v1)(v.x)(v.y));
+  };
+};
 
 // output/Main/index.js
 var ghRoot = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/sprites/";

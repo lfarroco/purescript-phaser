@@ -898,15 +898,6 @@ var argsN = function(n) {
   }();
   return append(semigroupArray)(values)(["obj", ""]);
 };
-var return2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return unsafeForeignFunction(argsN(2))("obj." + expr)(v1)(v2)(obj);
-      };
-    };
-  };
-};
 var return3 = function(expr) {
   return function(v1) {
     return function(v2) {
@@ -1050,10 +1041,22 @@ var disableBody = function() {
 };
 var createStaticGroup = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("add"))(/* @__PURE__ */ _return0("staticGroup"));
 var createChild = function() {
-  return return2("create(v1.x,v1.y,v2)");
+  return function(v) {
+    return function(v2) {
+      return _return3("create")(v.x)(v.y)(v2);
+    };
+  };
 };
-var createArcadeSprite = /* @__PURE__ */ return2("add.sprite(v1.x,v1.y,v2)");
-var createArcadeImage = /* @__PURE__ */ return2("add.image(v1.x,v1.y,v2)");
+var createArcadeSprite = function(v) {
+  return function(v2) {
+    return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v.x)(v.y)(v2));
+  };
+};
+var createArcadeImage = function(v) {
+  return function(v2) {
+    return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(v.x)(v.y)(v2));
+  };
+};
 var addOverlap = function() {
   return function() {
     return function() {

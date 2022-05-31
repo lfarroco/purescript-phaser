@@ -29,18 +29,6 @@ var $$const = function(a) {
   };
 };
 
-// output/Data.Functor/foreign.js
-var arrayMap = function(f) {
-  return function(arr) {
-    var l = arr.length;
-    var result = new Array(l);
-    for (var i = 0; i < l; i++) {
-      result[i] = f(arr[i]);
-    }
-    return result;
-  };
-};
-
 // output/Data.Unit/foreign.js
 var unit = void 0;
 
@@ -50,9 +38,6 @@ var map = function(dict) {
 };
 var $$void = function(dictFunctor) {
   return map(dictFunctor)($$const(unit));
-};
-var functorArray = {
-  map: arrayMap
 };
 
 // output/Control.Apply/index.js
@@ -136,19 +121,6 @@ var topChar = String.fromCharCode(65535);
 var bottomChar = String.fromCharCode(0);
 var topNumber = Number.POSITIVE_INFINITY;
 var bottomNumber = Number.NEGATIVE_INFINITY;
-
-// output/Data.Show/foreign.js
-var showIntImpl = function(n) {
-  return n.toString();
-};
-
-// output/Data.Show/index.js
-var showInt = {
-  show: showIntImpl
-};
-var show = function(dict) {
-  return dict.show;
-};
 
 // output/Data.Maybe/index.js
 var Nothing = /* @__PURE__ */ function() {
@@ -442,19 +414,6 @@ var functorST = {
 };
 
 // output/Data.Array/foreign.js
-var range2 = function(start) {
-  return function(end) {
-    var step = start > end ? -1 : 1;
-    var result = new Array(step * (end - start) + 1);
-    var i = start, n = 0;
-    while (i !== end) {
-      result[n++] = i;
-      i += step;
-    }
-    result[n] = i;
-    return result;
-  };
-};
 var replicateFill = function(count) {
   return function(value) {
     if (count < 1) {
@@ -806,40 +765,6 @@ var runEffectFn5 = function runEffectFn52(fn) {
 };
 
 // output/Utils.FFI/index.js
-var argsN = function(n) {
-  var values = function() {
-    var $0 = n < 1;
-    if ($0) {
-      return [];
-    }
-    ;
-    return map(functorArray)(function(i) {
-      return "v" + show(showInt)(i);
-    })(range2(1)(n));
-  }();
-  return append(semigroupArray)(values)(["obj", ""]);
-};
-var return2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return unsafeForeignFunction(argsN(2))("obj." + expr)(v1)(v2)(obj);
-      };
-    };
-  };
-};
-var method2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return function __do2() {
-          $$void(functorEffect)(return2(expr)(v1)(v2)(obj))();
-          return obj;
-        };
-      };
-    };
-  };
-};
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
@@ -885,7 +810,7 @@ var config = _gameConfig;
 
 // output/Graphics.Phaser.Events/index.js
 var on2 = function() {
-  return method2("on(v1,v2)");
+  return _method2("on");
 };
 var createEventListener0 = /* @__PURE__ */ unsafeForeignFunction(["fn"])("arg=>fn()");
 
@@ -932,7 +857,7 @@ var preload = function(callback) {
   };
 };
 var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
-var launch = /* @__PURE__ */ method2("launch(v1,v2)");
+var launch = /* @__PURE__ */ _method2("launch");
 var getScenePlugin = function() {
   return _getProp("scene");
 };

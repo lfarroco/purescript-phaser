@@ -5,18 +5,6 @@ var $$const = function(a) {
   };
 };
 
-// output/Data.Functor/foreign.js
-var arrayMap = function(f) {
-  return function(arr) {
-    var l = arr.length;
-    var result = new Array(l);
-    for (var i = 0; i < l; i++) {
-      result[i] = f(arr[i]);
-    }
-    return result;
-  };
-};
-
 // output/Data.Unit/foreign.js
 var unit = void 0;
 
@@ -26,9 +14,6 @@ var map = function(dict) {
 };
 var $$void = function(dictFunctor) {
   return map(dictFunctor)($$const(unit));
-};
-var functorArray = {
-  map: arrayMap
 };
 
 // output/Control.Apply/index.js
@@ -112,19 +97,6 @@ var topChar = String.fromCharCode(65535);
 var bottomChar = String.fromCharCode(0);
 var topNumber = Number.POSITIVE_INFINITY;
 var bottomNumber = Number.NEGATIVE_INFINITY;
-
-// output/Data.Show/foreign.js
-var showIntImpl = function(n) {
-  return n.toString();
-};
-
-// output/Data.Show/index.js
-var showInt = {
-  show: showIntImpl
-};
-var show = function(dict) {
-  return dict.show;
-};
 
 // output/Data.Maybe/index.js
 var Nothing = /* @__PURE__ */ function() {
@@ -407,19 +379,6 @@ var functorST = {
 };
 
 // output/Data.Array/foreign.js
-var range2 = function(start) {
-  return function(end) {
-    var step = start > end ? -1 : 1;
-    var result = new Array(step * (end - start) + 1);
-    var i = start, n = 0;
-    while (i !== end) {
-      result[n++] = i;
-      i += step;
-    }
-    result[n] = i;
-    return result;
-  };
-};
 var replicateFill = function(count) {
   return function(value) {
     if (count < 1) {
@@ -632,13 +591,6 @@ function unsafeForeignProcedure(args) {
   };
 }
 
-// output/Data.Foreign.EasyFFI/index.js
-var unsafeForeignFunction = function(args) {
-  return function(expr) {
-    return unsafeForeignProcedure(args)("return " + (expr + ";"));
-  };
-};
-
 // output/Graphics.Phaser.GameConfig/index.js
 var physics = function(a) {
   return assoc(optional(opt("physics")))(new Just(options(a)));
@@ -701,6 +653,8 @@ var _gameConfig = {
 // output/Utils.FFI/foreign.js
 var __getProp = (path, obj) => obj[path];
 var __return0 = (prop, obj) => obj[prop]();
+var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
+var __return4 = (prop, v1, v2, v3, v4, obj) => obj[prop](v_1, v2, v3, v4);
 
 // output/Effect.Uncurried/foreign.js
 var runEffectFn2 = function runEffectFn22(fn) {
@@ -712,43 +666,69 @@ var runEffectFn2 = function runEffectFn22(fn) {
     };
   };
 };
-
-// output/Utils.FFI/index.js
-var argsN = function(n) {
-  var values = function() {
-    var $0 = n < 1;
-    if ($0) {
-      return [];
-    }
-    ;
-    return map(functorArray)(function(i) {
-      return "v" + show(showInt)(i);
-    })(range2(1)(n));
-  }();
-  return append(semigroupArray)(values)(["obj", ""]);
-};
-var return2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return unsafeForeignFunction(argsN(2))("obj." + expr)(v1)(v2)(obj);
+var runEffectFn4 = function runEffectFn42(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function() {
+            return fn(a, b, c, d);
+          };
+        };
       };
     };
   };
 };
-var method2 = function(expr) {
+var runEffectFn6 = function runEffectFn62(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function(d) {
+          return function(e) {
+            return function(f) {
+              return function() {
+                return fn(a, b, c, d, e, f);
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+};
+
+// output/Utils.FFI/index.js
+var _return4 = /* @__PURE__ */ runEffectFn6(__return4);
+var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
+var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
+var _method4 = function(prop) {
+  return function(v1) {
+    return function(v2) {
+      return function(v3) {
+        return function(v4) {
+          return function(obj) {
+            return function __do2() {
+              $$void(functorEffect)(_return4(prop)(v1)(v2)(v3)(v4)(obj))();
+              return obj;
+            };
+          };
+        };
+      };
+    };
+  };
+};
+var _method2 = function(prop) {
   return function(v1) {
     return function(v2) {
       return function(obj) {
         return function __do2() {
-          $$void(functorEffect)(return2(expr)(v1)(v2)(obj))();
+          $$void(functorEffect)(_return2(prop)(v1)(v2)(obj))();
           return obj;
         };
       };
     };
   };
 };
-var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
@@ -759,8 +739,12 @@ var createWithConfig = function(opts) {
 var config = _gameConfig;
 
 // output/Graphics.Phaser.Graphics/index.js
-var fillStyle = /* @__PURE__ */ method2("fillStyle(v1,v2)");
-var fillRect = /* @__PURE__ */ method2("fillRect(v1.x, v1.y, v2.width, v2.height)");
+var fillStyle = /* @__PURE__ */ _method2("fillStyle");
+var fillRect = function(v) {
+  return function(v1) {
+    return _method4("fillRect")(v.x)(v.y)(v1.width)(v1.height);
+  };
+};
 var create = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("add"))(/* @__PURE__ */ _return0("graphics"));
 
 // output/Graphics.Phaser.Scene/index.js

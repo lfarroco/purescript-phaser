@@ -50,7 +50,7 @@ import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _method3, _return0, _return1, _return2, _return4, method3, return2)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _method3, _return0, _return1, _return2, _return3, _return4, method3)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserPhysicsPlugin -> Effect StaticGroup
@@ -60,16 +60,16 @@ createGroup :: PhaserPhysicsPlugin -> Effect Group
 createGroup = _getProp "add" >=> _return0 "group"
 
 createChild :: forall g. ArcadeGroup g => Vector -> String -> g -> Effect ArcadeSprite
-createChild = return2 "create(v1.x,v1.y,v2)"
+createChild { x, y } v2 = _return3 "create" x y v2
 
 addChild :: forall a g. GameObject a => ArcadeGroup g => a -> g -> Effect g
 addChild = _method1 "add"
 
 createArcadeImage :: Vector -> String -> PhaserPhysicsPlugin -> Effect ArcadeImage
-createArcadeImage = return2 "add.image(v1.x,v1.y,v2)"
+createArcadeImage { x, y } v2 = _getProp "add" >=> _return3 "image" x y v2
 
 createArcadeSprite :: Vector -> String -> PhaserPhysicsPlugin -> Effect ArcadeSprite
-createArcadeSprite = return2 "add.sprite(v1.x,v1.y,v2)"
+createArcadeSprite { x, y } v2 = _getProp "add" >=> _return3 "sprite" x y v2
 
 setWorldBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
 setWorldBounds { x, y } { width, height } scn =

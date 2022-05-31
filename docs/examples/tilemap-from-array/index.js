@@ -5,18 +5,6 @@ var $$const = function(a) {
   };
 };
 
-// output/Data.Functor/foreign.js
-var arrayMap = function(f) {
-  return function(arr) {
-    var l = arr.length;
-    var result = new Array(l);
-    for (var i = 0; i < l; i++) {
-      result[i] = f(arr[i]);
-    }
-    return result;
-  };
-};
-
 // output/Data.Unit/foreign.js
 var unit = void 0;
 
@@ -26,9 +14,6 @@ var map = function(dict) {
 };
 var $$void = function(dictFunctor) {
   return map(dictFunctor)($$const(unit));
-};
-var functorArray = {
-  map: arrayMap
 };
 
 // output/Control.Apply/index.js
@@ -63,19 +48,6 @@ var composeKleisli = function(dictBind) {
 };
 
 // output/Data.Array/foreign.js
-var range = function(start) {
-  return function(end) {
-    var step = start > end ? -1 : 1;
-    var result = new Array(step * (end - start) + 1);
-    var i = start, n = 0;
-    while (i !== end) {
-      result[n++] = i;
-      i += step;
-    }
-    result[n] = i;
-    return result;
-  };
-};
 var replicateFill = function(count) {
   return function(value) {
     if (count < 1) {
@@ -642,13 +614,6 @@ function unsafeForeignProcedure(args) {
   };
 }
 
-// output/Data.Foreign.EasyFFI/index.js
-var unsafeForeignFunction = function(args) {
-  return function(expr) {
-    return unsafeForeignProcedure(args)("return " + (expr + ";"));
-  };
-};
-
 // output/Graphics.Phaser.GameConfig/index.js
 var physics = function(a) {
   return assoc(optional(opt("physics")))(new Just(options(a)));
@@ -749,28 +714,6 @@ var runEffectFn4 = function runEffectFn42(fn) {
 };
 
 // output/Utils.FFI/index.js
-var argsN = function(n) {
-  var values = function() {
-    var $0 = n < 1;
-    if ($0) {
-      return [];
-    }
-    ;
-    return map(functorArray)(function(i) {
-      return "v" + show(showInt)(i);
-    })(range(1)(n));
-  }();
-  return append(semigroupArray)(values)(["obj", ""]);
-};
-var return2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return unsafeForeignFunction(argsN(2))("obj." + expr)(v1)(v2)(obj);
-      };
-    };
-  };
-};
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
@@ -816,14 +759,8 @@ var tilesets = /* @__PURE__ */ _getProp("tilesets");
 var makeTileMap = function(config2) {
   return composeKleisli(bindEffect)(_getProp("make"))(_return1("tilemap")(config2));
 };
-var createLayer = /* @__PURE__ */ return2("createLayer(v1,v2)");
-var addTilesetImage = function(tilesetName) {
-  return function(config2) {
-    return function(tileMap) {
-      return return2(" addTilesetImage(\n        v1,\n        v2.key,\n        v2.tileWidth,\n        v2.tileHeight,\n        v2.tileMargin,\n        v2.tileSpacing,\n        v2.gid\n      )")(tilesetName)(config2)(tileMap);
-    };
-  };
-};
+var createLayer = /* @__PURE__ */ _return2("createLayer");
+var addTilesetImage = /* @__PURE__ */ _return2("addTilesetImage");
 
 // output/Main/index.js
 var tileName = "mario-tiles";
@@ -845,14 +782,7 @@ var create2 = function(scene) {
       height: 16 * 11 | 0,
       insertNull: false
     })(scene)();
-    var tileset = addTilesetImage(tileName)({
-      tileWidth: 16,
-      tileHeight: 16,
-      key: "mario-tiles",
-      tileMargin: 0,
-      tileSpacing: 0,
-      gid: 0
-    })(tileMap)();
+    var tileset = addTilesetImage(tileName)("mario-tiles")(tileMap)();
     var tilesetsList = tilesets(tileMap)();
     log2("Found " + (show(showInt)(length(tilesetsList)) + " tileset"))();
     var _layer = createLayer("layer")([tileset])(tileMap)();

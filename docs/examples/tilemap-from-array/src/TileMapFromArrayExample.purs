@@ -52,7 +52,6 @@ create scene = do
   -- tileWidth and tileHeight
   tileMap <-
     makeTileMap
-      -- Create a new record instead of updating a default one.
       { key: tileMapKey
       , data: level
       , tileHeight: 16
@@ -62,19 +61,7 @@ create scene = do
       , insertNull: false
       }
       scene
-  -- Note about purescript: Accidentally using record update syntax here
-  -- ('=' instead of ':') gives a weird error "Could not match Record
-  -- with Function"
-  tileset <-
-    addTilesetImage tileName
-      { tileWidth: 16
-      , tileHeight: 16
-      , key: "mario-tiles"
-      , tileMargin: 0
-      , tileSpacing: 0
-      , gid: 0
-      }
-      tileMap
+  tileset <- addTilesetImage tileName "mario-tiles" tileMap
   tilesetsList <- tilesets tileMap
   -- Another note: Forgetting to give a record as an argument to an effectful
   -- function also gives a weird error "Could not match Effect with Function"

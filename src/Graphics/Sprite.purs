@@ -4,7 +4,7 @@ import Prelude
 
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (ArcadeSprite, PhaserAnimation, PhaserScene, PhaserSprite)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _return2, return2, return3, return4)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _return2, _return3, return3, return4)
 
 type FrameNumber
   = { key :: String, frame :: Int }
@@ -12,7 +12,7 @@ type FrameNumber
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Sprite.html
 -- | A PhaserSprite also implements the PhaserGameObject typeclass
 add :: String -> { x :: Number, y :: Number } -> PhaserScene -> Effect PhaserSprite
-add = return2 "add.sprite(v2.x, v2.y, v1)"
+add v1 {x,y} = _getProp "add" >=> _return3 "sprite" v1 x y
 
 -- | Besides having a `PhaserScene` parameter, animations created with `createAnimation`
 -- | are in fact global and can be accessed from other scenes. Because of that you

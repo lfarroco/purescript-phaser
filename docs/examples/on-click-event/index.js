@@ -29,18 +29,6 @@ var $$const = function(a) {
   };
 };
 
-// output/Data.Functor/foreign.js
-var arrayMap = function(f) {
-  return function(arr) {
-    var l = arr.length;
-    var result = new Array(l);
-    for (var i = 0; i < l; i++) {
-      result[i] = f(arr[i]);
-    }
-    return result;
-  };
-};
-
 // output/Data.Unit/foreign.js
 var unit = void 0;
 
@@ -59,9 +47,6 @@ var map = function(dict) {
 };
 var $$void = function(dictFunctor) {
   return map(dictFunctor)($$const(unit));
-};
-var functorArray = {
-  map: arrayMap
 };
 
 // output/Control.Apply/index.js
@@ -133,9 +118,6 @@ var topNumber = Number.POSITIVE_INFINITY;
 var bottomNumber = Number.NEGATIVE_INFINITY;
 
 // output/Data.Show/foreign.js
-var showIntImpl = function(n) {
-  return n.toString();
-};
 var showNumberImpl = function(n) {
   var str = n.toString();
   return isNaN(str + ".0") ? str : str + ".0";
@@ -180,9 +162,6 @@ var showRecord = function() {
 };
 var showNumber = {
   show: showNumberImpl
-};
-var showInt = {
-  show: showIntImpl
 };
 var show = function(dict) {
   return dict.show;
@@ -522,19 +501,6 @@ var functorST = {
 };
 
 // output/Data.Array/foreign.js
-var range2 = function(start) {
-  return function(end) {
-    var step = start > end ? -1 : 1;
-    var result = new Array(step * (end - start) + 1);
-    var i = start, n = 0;
-    while (i !== end) {
-      result[n++] = i;
-      i += step;
-    }
-    result[n] = i;
-    return result;
-  };
-};
 var replicateFill = function(count) {
   return function(value) {
     if (count < 1) {
@@ -896,63 +862,14 @@ var runEffectFn5 = function runEffectFn52(fn) {
 };
 
 // output/Utils.FFI/index.js
-var argsN = function(n) {
-  var values = function() {
-    var $0 = n < 1;
-    if ($0) {
-      return [];
-    }
-    ;
-    return map(functorArray)(function(i) {
-      return "v" + show(showInt)(i);
-    })(range2(1)(n));
-  }();
-  return append(semigroupArray)(values)(["obj", ""]);
-};
-var return1 = function(expr) {
-  return function(v1) {
-    return function(obj) {
-      return unsafeForeignFunction(argsN(1))("obj." + expr)(v1)(obj);
-    };
-  };
-};
-var getNullable = function(expr) {
-  return function(obj) {
-    return return1(expr)(obj);
-  };
-};
-var safeGet = function(k) {
-  return function(obj) {
-    return function __do2() {
-      var v = getNullable("children.getByName(v1)")(k)(obj)();
-      return toMaybe(v);
-    };
-  };
-};
-var return2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return unsafeForeignFunction(argsN(2))("obj." + expr)(v1)(v2)(obj);
-      };
-    };
-  };
-};
-var method2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return function __do2() {
-          $$void(functorEffect)(return2(expr)(v1)(v2)(obj))();
-          return obj;
-        };
-      };
-    };
-  };
-};
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
+var getNullable = function(expr) {
+  return function(obj) {
+    return _return1(expr)(obj);
+  };
+};
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
 var _method2 = function(prop) {
   return function(v1) {
@@ -985,6 +902,16 @@ var _method0 = function(prop) {
   };
 };
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
+var safeGet = function(k) {
+  return function(obj) {
+    return bind(bindEffect)(bind(bindEffect)(_getProp("children")(obj))(getNullable("getByName")(k)))(function() {
+      var $1 = pure(applicativeEffect);
+      return function($2) {
+        return $1(toMaybe($2));
+      };
+    }());
+  };
+};
 
 // output/Graphics.Phaser/index.js
 var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
@@ -995,7 +922,7 @@ var config = _gameConfig;
 
 // output/Graphics.Phaser.Events/index.js
 var on2 = function() {
-  return method2("on(v1,v2)");
+  return _method2("on");
 };
 var off = /* @__PURE__ */ _method1("off");
 var createEventListener3 = /* @__PURE__ */ unsafeForeignFunction(["fn"])("(arg1,arg2,arg3)=>fn(arg1)(arg2)(arg3)()");

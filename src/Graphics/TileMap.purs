@@ -2,8 +2,9 @@ module Graphics.Phaser.TileMap where
 
 import Prelude
 import Effect (Effect)
+import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.ForeignTypes (PhaserImage, PhaserLayer, PhaserLayerData, PhaserMapData, PhaserScene, PhaserTile, PhaserTileMap, PhaserTileSet)
-import Utils.FFI (_getProp, _return1, return2)
+import Utils.FFI (_getProp, _method2, _return1, _return2)
 
 -- Docs: https://newdocs.phaser.io/docs/3.55.2/Phaser.Types.Tilemaps.TilemapConfig
 type TilemapConfig
@@ -42,37 +43,18 @@ type MapDataConfig
 makeTileMap :: TilemapConfig -> PhaserScene -> Effect PhaserTileMap
 makeTileMap config = _getProp "make" >=> _return1 "tilemap" config
 
-addTilesetImage :: String -> TilesetDesc -> PhaserTileMap -> Effect PhaserTileSet
-addTilesetImage tilesetName config tileMap =
-  return2
-    """ addTilesetImage(
-        v1,
-        v2.key,
-        v2.tileWidth,
-        v2.tileHeight,
-        v2.tileMargin,
-        v2.tileSpacing,
-        v2.gid
-      )"""
-    tilesetName
-    config
-    tileMap
+addTilesetImage :: String -> String -> PhaserTileMap -> Effect PhaserTileSet
+addTilesetImage = _return2 "addTilesetImage"
 
-type TilesetDesc
-  = { key :: String
-    , tileWidth :: Int
-    , tileHeight :: Int
-    , tileMargin :: Int
-    , tileSpacing :: Int
-    , gid :: Int
-    }
+setTileSize :: Dimensions -> PhaserTileSet -> Effect PhaserTileSet
+setTileSize { width, height } = _method2 "setTileSize" width height
 
 createLayer ::
   String ->
   Array PhaserTileSet ->
   PhaserTileMap ->
   Effect PhaserLayer
-createLayer = return2 "createLayer(v1,v2)"
+createLayer = _return2 "createLayer"
 
 tilesets :: PhaserTileMap -> Effect (Array PhaserTileSet)
 tilesets = _getProp "tilesets"
