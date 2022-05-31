@@ -18,6 +18,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: npm install purescript -g
     - run: npm install spago -g
+    - run: npm install esbuild -g
     - run: spago build
     - run: spago test
     - run: make compile-examples
