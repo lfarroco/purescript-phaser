@@ -85,10 +85,6 @@ _method5 prop v1 v2 v3 v4 v5 obj = do
   void $ _return5 prop v1 v2 v3 v4 v5 obj
   pure obj
 
-return3 :: forall obj v1 v2 v3 returnValue. String -> v1 -> v2 -> v3 -> obj -> Effect returnValue
-return3 expr v1 v2 v3 obj = do
-  FFI.unsafeForeignFunction (argsN 3) ("obj." <> expr) v1 v2 v3 obj
-
 return4 :: forall obj v1 v2 v3 v4 returnValue. String -> v1 -> v2 -> v3 -> v4 -> obj -> Effect returnValue
 return4 expr v1 v2 v3 v4 obj = do
   FFI.unsafeForeignFunction (argsN 4) ("obj." <> expr) v1 v2 v3 v4 obj

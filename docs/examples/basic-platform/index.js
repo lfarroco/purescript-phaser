@@ -898,17 +898,6 @@ var argsN = function(n) {
   }();
   return append(semigroupArray)(values)(["obj", ""]);
 };
-var return3 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(obj) {
-          return unsafeForeignFunction(argsN(3))("obj." + expr)(v1)(v2)(v3)(obj);
-        };
-      };
-    };
-  };
-};
 var return4 = function(expr) {
   return function(v1) {
     return function(v2) {
@@ -1157,7 +1146,16 @@ var playAnimation = function() {
     return composeKleisli(bindEffect)(_getProp("anims"))(_method2("play")(v.key)(v.ignoreIfPlaying));
   };
 };
-var generateFrameNumbers = /* @__PURE__ */ return3("anims.generateFrameNumbers(v1, {start: v2, end: v3})");
+var generateFrameNumbers = function(v1) {
+  return function(start) {
+    return function(end) {
+      return composeKleisli(bindEffect)(_getProp("anims"))(_return2("generateFrameNumbers")(v1)({
+        start,
+        end
+      }));
+    };
+  };
+};
 var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })");
 
 // output/Main/index.js

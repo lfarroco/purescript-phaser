@@ -4,7 +4,7 @@ import Prelude
 
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (ArcadeSprite, PhaserAnimation, PhaserScene, PhaserSprite)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _return2, _return3, return3, return4)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _return2, _return3, return4)
 
 type FrameNumber
   = { key :: String, frame :: Int }
@@ -40,8 +40,7 @@ stopAfterDelay :: Number -> PhaserSprite -> Effect PhaserSprite
 stopAfterDelay = _method1 "stopAfterDelay"
 
 generateFrameNumbers :: String -> Int -> Int -> PhaserScene -> Effect (Array FrameNumber)
-generateFrameNumbers =
-  return3 "anims.generateFrameNumbers(v1, {start: v2, end: v3})"
+generateFrameNumbers v1 start end = _getProp "anims" >=> _return2 "generateFrameNumbers" v1 {start, end}
 
 type FrameNamesConfig
   = { key :: String
