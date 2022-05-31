@@ -40,8 +40,7 @@ module Graphics.Phaser.ArcadePhysics
   , setVelocityY
   , setWorldBounds
   , velocity
-  )
-  where
+  ) where
 
 -- A port of
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.StaticGroup.html
@@ -51,7 +50,7 @@ import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _return0, _return1, method2, method3, return2)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _method3, _return0, _return1, _return2, _return4, method3, return2)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserPhysicsPlugin -> Effect StaticGroup
@@ -73,7 +72,10 @@ createArcadeSprite :: Vector -> String -> PhaserPhysicsPlugin -> Effect ArcadeSp
 createArcadeSprite = return2 "add.sprite(v1.x,v1.y,v2)"
 
 setWorldBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
-setWorldBounds = method2 "world.setWorldBounds(v1.x,v1.y,v2.width,v2.height)"
+setWorldBounds { x, y } { width, height } scn =
+  _getProp "world" scn
+    >>= _return4 "setWorldBounds" x y width height
+    >>= const (pure scn)
 
 refreshBody :: forall a. PhysicsEnabled a => a -> Effect a
 refreshBody = _method0 "refreshBody"
@@ -123,7 +125,10 @@ setCollideWorldBounds :: forall a. PhysicsEnabled a => Boolean -> a -> Effect a
 setCollideWorldBounds = _method1 "setCollideWorldBounds"
 
 addCollider :: forall a b. Collidable a => Collidable b => a -> b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-addCollider = method2 "add.collider(v1,v2)"
+addCollider v1 v2 plugin =
+  _getProp "add" plugin
+    >>= _return2 "collider" v1 v2
+    >>= const (pure plugin)
 
 addColliderWithCallback :: forall a b. Collidable a => Collidable b => Array a -> Array b -> (a -> b -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 addColliderWithCallback = method3 "add.collider(v1,v2,(a,b)=>v3(a)(b)())"
@@ -149,10 +154,10 @@ disableBody :: forall a. PhysicsEnabled a => a -> Effect a
 disableBody = _method2 "disableBody" true true
 
 accelerateTo :: forall a. GameObject a => a -> Vector -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-accelerateTo = method2 "accelerateTo(v1,v2.x,v2.y)"
+accelerateTo v1 { x, y } = _method3 "accelerateTo" v1 x y
 
 accelerateToObject :: forall a b. GameObject a => GameObject b => a -> b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-accelerateToObject = method2 "accelerateToObject(v1,v2)"
+accelerateToObject = _method2 "accelerateToObject"
 
 closest :: forall a. GameObject a => a -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 closest = _method1 "closest"
@@ -161,7 +166,7 @@ furthest :: forall a. GameObject a => a -> PhaserPhysicsPlugin -> Effect PhaserP
 furthest = _method1 "furthest"
 
 collide :: forall a b. GameObject a => GameObject b => Array a -> Array b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-collide = method2 "collide(v1,v2)"
+collide = _method2 "collide"
 
 collideWithCallback :: forall a b. GameObject a => GameObject b => Array a -> Array b -> (a -> b -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 collideWithCallback = method3 "collide(v1,v2,(a,b)=>v3(a)(b)())"
@@ -173,7 +178,7 @@ moveToObject :: forall a b. GameObject a => GameObject b => a -> b -> Number -> 
 moveToObject = method3 "moveTo(v1,v2,v3)"
 
 overlap :: forall a b. GameObject a => GameObject b => Array a -> Array b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-overlap = method2 "overlap(v1,v2)"
+overlap = _method2 "overlap"
 
 overlapWithCallback :: forall a b. GameObject a => GameObject b => Array a -> Array b -> (a -> b -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 overlapWithCallback = method3 "overlap(v1,v2,(a,b)=>v3(a)(b)())"

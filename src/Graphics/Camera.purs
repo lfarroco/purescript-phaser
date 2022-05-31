@@ -5,14 +5,19 @@ module Graphics.Phaser.Camera
   , updateCameraControlDelta
   ) where
 
+import Prelude
 import Data.Foreign.EasyFFI as FFI
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserCameraController, PhaserScene)
-import Utils.FFI (_method1, _return0, method2)
+import Utils.FFI (_getProp, _method1, _return0, _return4)
 
 setMainCameraBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
-setMainCameraBounds = method2 "cameras.main.setBounds(v1.x,v1.y,v2.width,v2.height)"
+setMainCameraBounds { x, y } { width, height } scn =
+  _getProp "cameras" scn
+    >>= _getProp "main"
+    >>= _return4 "setBounds" x y width height
+    >>= const (pure scn)
 
 getMainCamera :: PhaserScene -> Effect PhaserCamera
 getMainCamera = _return0 "cameras.main"

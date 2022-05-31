@@ -4,7 +4,7 @@ import Prelude
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Graphics.Phaser.ForeignTypes as Types
-import Utils.FFI (_getProp, _method0, _method2, _method3, _method4, _return0, method2, method3)
+import Utils.FFI (_getProp, _method0, _method2, _method3, _method4, _return0, method3)
 
 create :: Types.PhaserScene -> Effect Types.PhaserGraphic
 create = _getProp "add" >=> _return0 "graphics"
@@ -13,13 +13,13 @@ rectangle :: Types.PhaserScene -> Effect Types.PhaserRectangle
 rectangle = _getProp "add" >=> _return0 "rectangle"
 
 fillStyle :: String -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-fillStyle = method2 "fillStyle(v1,v2)"
+fillStyle = _method2 "fillStyle"
 
 fillRect :: Vector -> Dimensions -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-fillRect = method2 "fillRect(v1.x, v1.y, v2.width, v2.height)"
+fillRect { x, y } { width, height } = _method4 "fillRect" x y width height
 
 strokeRect :: Vector -> Dimensions -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
-strokeRect = method2 "strokeRect (v1.x, v1.y, v2.width, v2.height)"
+strokeRect { x, y } { width, height } = _method4 "strokeRect" x y width height
 
 strokeRoundedRect :: Vector -> Dimensions -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
 strokeRoundedRect = method3 "strokeRoundedRect(v1.x, v1.y, v2.width, v2.height, v3)"

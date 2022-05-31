@@ -898,43 +898,11 @@ var argsN = function(n) {
   }();
   return append(semigroupArray)(values)(["obj", ""]);
 };
-var return1 = function(expr) {
-  return function(v1) {
-    return function(obj) {
-      return unsafeForeignFunction(argsN(1))("obj." + expr)(v1)(obj);
-    };
-  };
-};
-var getNullable = function(expr) {
-  return function(obj) {
-    return return1(expr)(obj);
-  };
-};
-var safeGet = function(k) {
-  return function(obj) {
-    return function __do() {
-      var v = getNullable("children.getByName(v1)")(k)(obj)();
-      return toMaybe(v);
-    };
-  };
-};
 var return2 = function(expr) {
   return function(v1) {
     return function(v2) {
       return function(obj) {
         return unsafeForeignFunction(argsN(2))("obj." + expr)(v1)(v2)(obj);
-      };
-    };
-  };
-};
-var method2 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(obj) {
-        return function __do() {
-          $$void(functorEffect)(return2(expr)(v1)(v2)(obj))();
-          return obj;
-        };
       };
     };
   };
@@ -980,6 +948,11 @@ var return4 = function(expr) {
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
+var getNullable = function(expr) {
+  return function(obj) {
+    return _return1(expr)(obj);
+  };
+};
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
 var _method2 = function(prop) {
   return function(v1) {
@@ -1012,6 +985,16 @@ var _method0 = function(prop) {
   };
 };
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
+var safeGet = function(k) {
+  return function(obj) {
+    return bind(bindEffect)(bind(bindEffect)(_getProp("children")(obj))(getNullable("getByName")(k)))(function() {
+      var $1 = pure(applicativeEffect);
+      return function($2) {
+        return $1(toMaybe($2));
+      };
+    }());
+  };
+};
 
 // output/Graphics.Phaser/index.js
 var physicsConfig = _physicsConfig;
@@ -1082,7 +1065,13 @@ var addOverlap = function() {
 };
 var addCollider = function() {
   return function() {
-    return method2("add.collider(v1,v2)");
+    return function(v1) {
+      return function(v2) {
+        return function(plugin) {
+          return bind(bindEffect)(bind(bindEffect)(_getProp("add")(plugin))(_return2("collider")(v1)(v2)))($$const(pure(applicativeEffect)(plugin)));
+        };
+      };
+    };
   };
 };
 
@@ -1114,7 +1103,13 @@ var isDown = /* @__PURE__ */ _getProp("isDown");
 var createCursorKeys = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("input"))(/* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("keyboard"))(/* @__PURE__ */ _return0("createCursorKeys")));
 
 // output/Graphics.Phaser.Loader/index.js
-var loadSpritesheet = /* @__PURE__ */ method2("load.spritesheet(v1.key,v1.path,v2)");
+var loadSpritesheet = function(v) {
+  return function(v2) {
+    return function(scn) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("load")(scn))(_return3("spritesheet")(v.key)(v.path)(v2)))($$const(pure(applicativeEffect)(scn)));
+    };
+  };
+};
 var loadImage = function(v) {
   return function(scn) {
     return function __do() {

@@ -8,9 +8,6 @@ import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
 import Effect.Uncurried (EffectFn2, EffectFn3, EffectFn4, EffectFn5, EffectFn6, EffectFn7, runEffectFn2, runEffectFn3, runEffectFn4, runEffectFn5, runEffectFn6, runEffectFn7)
 
--- | argsN 3 == ["v1", "v2", "v3", "obj", "" ]
--- | argsN 0 == ["obj", "" ]
--- |
 argsN :: Int -> Array String
 argsN n =
   let
@@ -92,12 +89,6 @@ return2 :: forall obj v1 v2 returnValue. String -> v1 -> v2 -> obj -> Effect ret
 return2 expr v1 v2 obj = do
   FFI.unsafeForeignFunction (argsN 2) ("obj." <> expr) v1 v2 obj
 
--- TODO: be careful with chained.methods, as they return the inner obj
-method2 :: forall obj v1 v2. String -> v1 -> v2 -> obj -> Effect obj
-method2 expr v1 v2 obj = do
-  void $ return2 expr v1 v2 obj
-  pure obj
-
 return3 :: forall obj v1 v2 v3 returnValue. String -> v1 -> v2 -> v3 -> obj -> Effect returnValue
 return3 expr v1 v2 v3 obj = do
   FFI.unsafeForeignFunction (argsN 3) ("obj." <> expr) v1 v2 v3 obj
@@ -129,9 +120,9 @@ setProperty :: forall obj value. String -> value -> obj -> Effect Unit
 setProperty name value obj = FFI.unsafeForeignFunction [ "v1", "obj", "" ] ("obj." <> name <> " = v1") value obj
 
 getNullable :: forall a obj. String -> String -> obj -> Effect (Nullable a)
-getNullable expr obj = return1 expr obj
+getNullable expr obj = _return1 expr obj
 
 safeGet :: forall obj a. String -> obj -> Effect (Maybe a)
-safeGet k obj = do
-  v <- getNullable "children.getByName(v1)" k obj
-  pure $ toMaybe v
+safeGet k obj =
+  _getProp "children" obj >>= getNullable "getByName" k
+    >>= (toMaybe >>> pure)

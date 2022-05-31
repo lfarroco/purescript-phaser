@@ -5,7 +5,7 @@ import Prelude
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)
-import Utils.FFI (_getProp, _method0, _method1, _method4, _return0, _return3, method2, method5)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _method4, _return0, _return3, method5)
 
 create :: String -> PhaserScene -> Effect PhaserText
 create v1 = _getProp "add" >=> _return3 "text" 0.0 0.0 v1
@@ -70,7 +70,7 @@ setShadowStroke = _method1 "setShadowStroke"
 
 -- | Color, Thickness
 setStroke :: String -> Number -> PhaserText -> Effect PhaserText
-setStroke = method2 "setStroke(v1,v2)"
+setStroke = _method2 "setStroke"
 
 type SetStyleConfig
   = { fontSize :: String

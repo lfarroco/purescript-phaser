@@ -13,7 +13,7 @@ module Graphics.Phaser.Loader
 import Prelude
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Utils.FFI (_getProp, _method1, _method2, _return2, method2, method3)
+import Utils.FFI (_getProp, _method1, _method2, _return2, _return3, method3)
 
 setBaseUrl :: String -> PhaserScene -> Effect PhaserScene
 setBaseUrl v1 = _getProp "load" >=> _method1 "setBaseUrl" v1
@@ -35,7 +35,7 @@ loadAtlas :: String -> String -> String -> PhaserScene -> Effect PhaserScene
 loadAtlas = method3 "load.atlas(v1, v2, v3)"
 
 loadPlugin :: String -> String -> PhaserScene -> Effect PhaserScene
-loadPlugin = method2 "load.plugin(v1, v2)"
+loadPlugin v1 v2 scn = _getProp "load" scn >>= _method2 "plugin" v1 v2 >>= const (pure scn)
 
 loadScene :: String -> String -> String -> PhaserScene -> Effect PhaserScene
 loadScene = method3 "load.scenePlugin({ key: v1, url: v2, sceneKey: v3})"
@@ -50,7 +50,10 @@ loadSpritesheet ::
   LoadSpriteSheetConfig ->
   PhaserScene ->
   Effect PhaserScene
-loadSpritesheet = method2 "load.spritesheet(v1.key,v1.path,v2)"
+loadSpritesheet { key, path } v2 scn =
+  _getProp "load" scn
+    >>= _return3 "spritesheet" key path v2
+    >>= const (pure scn)
 
 -- loadTilemapTiledJSON ::
 --   String ->
