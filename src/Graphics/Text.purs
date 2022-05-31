@@ -5,7 +5,7 @@ import Prelude
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserText)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _method4, _return0, _return3, method5)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _method4, _return0, _return3)
 
 create :: String -> PhaserScene -> Effect PhaserText
 create v1 = _getProp "add" >=> _return3 "text" 0.0 0.0 v1
@@ -58,9 +58,8 @@ setShadowColor = _method1 "setShadowColor"
 setShadowFill :: String -> PhaserText -> Effect PhaserText
 setShadowFill = _method1 "setShadowFill"
 
--- | Position, Color, Blur, shadowStroke, shadowFill
-setShadow :: Vector -> String -> Number -> Boolean -> Boolean -> PhaserText -> Effect PhaserText
-setShadow = method5 "setShadow(v1.x,v1.y,v2,v3,v4)"
+setShadow :: PhaserText -> Effect PhaserText
+setShadow = _method0 "setShadow"
 
 setShadowOffset :: Vector -> PhaserText -> Effect PhaserText
 setShadowOffset = _method1 "setShadowOffset"

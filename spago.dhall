@@ -4,8 +4,7 @@ You can edit this file as you like.
 -}
 { name = "phaser"
 , dependencies =
-  [ "arrays"
-  , "canvas"
+  [ "canvas"
   , "console"
   , "easy-ffi"
   , "effect"

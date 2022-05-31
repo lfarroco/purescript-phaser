@@ -249,19 +249,6 @@ var bottomChar = String.fromCharCode(0);
 var topNumber = Number.POSITIVE_INFINITY;
 var bottomNumber = Number.NEGATIVE_INFINITY;
 
-// output/Data.Show/foreign.js
-var showIntImpl = function(n) {
-  return n.toString();
-};
-
-// output/Data.Show/index.js
-var showInt = {
-  show: showIntImpl
-};
-var show = function(dict) {
-  return dict.show;
-};
-
 // output/Data.Maybe/index.js
 var Nothing = /* @__PURE__ */ function() {
   function Nothing2() {
@@ -885,32 +872,6 @@ var runEffectFn5 = function runEffectFn52(fn) {
 };
 
 // output/Utils.FFI/index.js
-var argsN = function(n) {
-  var values = function() {
-    var $0 = n < 1;
-    if ($0) {
-      return [];
-    }
-    ;
-    return map(functorArray)(function(i) {
-      return "v" + show(showInt)(i);
-    })(range(1)(n));
-  }();
-  return append(semigroupArray)(values)(["obj", ""]);
-};
-var return4 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(v4) {
-          return function(obj) {
-            return unsafeForeignFunction(argsN(4))("obj." + expr)(v1)(v2)(v3)(v4)(obj);
-          };
-        };
-      };
-    };
-  };
-};
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
@@ -954,9 +915,9 @@ var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 var safeGet = function(k) {
   return function(obj) {
     return bind(bindEffect)(bind(bindEffect)(_getProp("children")(obj))(getNullable("getByName")(k)))(function() {
-      var $1 = pure(applicativeEffect);
-      return function($2) {
-        return $1(toMaybe($2));
+      var $0 = pure(applicativeEffect);
+      return function($1) {
+        return $0(toMaybe($1));
       };
     }());
   };
@@ -1156,7 +1117,20 @@ var generateFrameNumbers = function(v1) {
     };
   };
 };
-var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })");
+var createAnimation = function(key) {
+  return function(frames) {
+    return function(frameRate) {
+      return function(repeat) {
+        return composeKleisli(bindEffect)(_getProp("anims"))(_return1("create")({
+          key,
+          frames,
+          frameRate,
+          repeat
+        }));
+      };
+    };
+  };
+};
 
 // output/Main/index.js
 var onpreload = function(scene) {

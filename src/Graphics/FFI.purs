@@ -1,24 +1,11 @@
 module Utils.FFI where
 
 import Prelude
-import Data.Array ((..))
 import Data.Foreign.EasyFFI as FFI
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
 import Effect.Uncurried (EffectFn2, EffectFn3, EffectFn4, EffectFn5, EffectFn6, EffectFn7, runEffectFn2, runEffectFn3, runEffectFn4, runEffectFn5, runEffectFn6, runEffectFn7)
-
-argsN :: Int -> Array String
-argsN n =
-  let
-    values =
-      if n < 1 then
-        []
-      else
-        1 .. n
-          # map (\i -> "v" <> show i)
-  in
-    values <> [ "obj", "" ]
 
 foreign import __getProp :: forall a b. EffectFn2 String a b
 
@@ -83,24 +70,6 @@ _method4 prop v1 v2 v3 v4 obj = do
 _method5 :: forall obj v1 v2 v3 v4 v5. String -> v1 -> v2 -> v3 -> v4 -> v5 -> obj -> Effect obj
 _method5 prop v1 v2 v3 v4 v5 obj = do
   void $ _return5 prop v1 v2 v3 v4 v5 obj
-  pure obj
-
-return4 :: forall obj v1 v2 v3 v4 returnValue. String -> v1 -> v2 -> v3 -> v4 -> obj -> Effect returnValue
-return4 expr v1 v2 v3 v4 obj = do
-  FFI.unsafeForeignFunction (argsN 4) ("obj." <> expr) v1 v2 v3 v4 obj
-
-method4 :: forall obj v1 v2 v3 v4. String -> v1 -> v2 -> v3 -> v4 -> obj -> Effect obj
-method4 expr v1 v2 v3 v4 obj = do
-  void $ return4 expr v1 v2 v3 v4 obj
-  pure obj
-
-return5 :: forall obj v1 v2 v3 v4 v5 returnValue. String -> v1 -> v2 -> v3 -> v4 -> v5 -> obj -> Effect returnValue
-return5 expr v1 v2 v3 v4 v5 obj = do
-  FFI.unsafeForeignFunction (argsN 5) ("obj." <> expr) v1 v2 v3 v4 v5 obj
-
-method5 :: forall obj v1 v2 v3 v4 v5. String -> v1 -> v2 -> v3 -> v4 -> v5 -> obj -> Effect obj
-method5 expr v1 v2 v3 v4 v5 obj = do
-  void $ return5 expr v1 v2 v3 v4 v5 obj
   pure obj
 
 setProperty :: forall obj value. String -> value -> obj -> Effect Unit

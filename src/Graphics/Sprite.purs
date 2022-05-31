@@ -4,7 +4,7 @@ import Prelude
 
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (ArcadeSprite, PhaserAnimation, PhaserScene, PhaserSprite)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _return2, _return3, return4)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _return1, _return2, _return3)
 
 type FrameNumber
   = { key :: String, frame :: Int }
@@ -18,8 +18,7 @@ add v1 {x,y} = _getProp "add" >=> _return3 "sprite" v1 x y
 -- | are in fact global and can be accessed from other scenes. Because of that you
 -- | need to create the animations only once in your application.
 createAnimation :: String -> Array FrameNumber -> Number -> Int -> PhaserScene -> Effect PhaserAnimation
-createAnimation =
-  return4 "anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })"
+createAnimation key frames frameRate repeat = _getProp "anims" >=> _return1 "create" { key, frames, frameRate, repeat }
 
 class Sprite :: forall k. k -> Constraint
 class Sprite a

@@ -11,7 +11,7 @@ import Data.Maybe (Maybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
 import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
-import Utils.FFI (_getProp, _method1, _method2, _return1, _return2, method4, safeGet)
+import Utils.FFI (_getProp, _method1, _method2, _method4, _return1, _return2, safeGet)
 
 -- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
 -- | composing multiple functions that operate at that time.
@@ -91,7 +91,7 @@ add ::
   sceneData ->
   PhaserScenePlugin ->
   Effect PhaserScenePlugin
-add key scene autoStart sceneData scenePlugin = method4 "add(v1,v2,v3,v4)" key scene autoStart sceneData scenePlugin
+add = _method4 "add"
 
 bringToTop :: String -> PhaserScenePlugin -> Effect PhaserScenePlugin
 bringToTop = _method1 "bringToTop"
