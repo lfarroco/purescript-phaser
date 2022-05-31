@@ -7,7 +7,7 @@ import Prelude
 import Effect (Effect)
 import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
-import Graphics.Phaser.Events (createEventListener2, createEventListener3)
+import Graphics.Phaser.Events (createEventListener2)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
 import Utils.FFI (_getProp, _method0, _method1, _method2, _method3, _method4, _return0, _return1, _return2, _return3, _return4)
 

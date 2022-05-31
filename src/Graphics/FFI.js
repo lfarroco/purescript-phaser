@@ -1,4 +1,7 @@
 export const __getProp = (path, obj) => obj[path];
+export const __setProp = (path, val, obj) => {
+  obj[path] = val;
+};
 
 export const __return0 = (prop, obj) => obj[prop]();
 export const __return1 = (prop, v1, obj) => obj[prop](v1);

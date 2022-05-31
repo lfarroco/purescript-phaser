@@ -1,7 +1,6 @@
 module Utils.FFI where
 
 import Prelude
-import Data.Foreign.EasyFFI as FFI
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
@@ -72,8 +71,10 @@ _method5 prop v1 v2 v3 v4 v5 obj = do
   void $ _return5 prop v1 v2 v3 v4 v5 obj
   pure obj
 
-setProperty :: forall obj value. String -> value -> obj -> Effect Unit
-setProperty name value obj = FFI.unsafeForeignFunction [ "v1", "obj", "" ] ("obj." <> name <> " = v1") value obj
+foreign import __setProp :: forall val obj. EffectFn3 String val obj Unit
+
+_setProp :: forall val obj. String -> val -> obj -> Effect Unit
+_setProp = runEffectFn3 __setProp
 
 getNullable :: forall a obj. String -> String -> obj -> Effect (Nullable a)
 getNullable expr obj = _return1 expr obj

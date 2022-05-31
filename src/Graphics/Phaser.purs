@@ -14,7 +14,7 @@ import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Dimensions)
 import Graphics.Phaser.ForeignTypes (PhaserGame)
 import Graphics.Phaser.GameConfig (GameConfig, GameConfigIndex, PhysicsConfigIndex, _gameConfig, _physicsConfig)
-import Utils.FFI (setProperty)
+import Utils.FFI (_getProp, _setProp)
 
 create :: Effect PhaserGame
 create = unsafeForeignProcedure [ "" ] "return new Phaser.Game()"
@@ -30,8 +30,9 @@ createWithUnsafeConfig = unsafeForeignProcedure [ "config", "" ] "return new Pha
 
 setDimentions :: Dimensions -> PhaserGame -> Effect PhaserGame
 setDimentions { width, height } game = do
-  setProperty "config.width=v1" width game
-  setProperty "config.height=v1" height game
+  conf <- _getProp "config" game
+  _setProp "width" width conf
+  _setProp "height" height conf
   pure game
 
 config :: GameConfigIndex
