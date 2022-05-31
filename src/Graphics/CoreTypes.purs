@@ -6,6 +6,8 @@ import Web.HTML.HTMLElement (HTMLElement)
 
 -- Current time in milliseconds
 
+data PhaserNamespace
+
 type Time
   = Number
 

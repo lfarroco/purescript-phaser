@@ -722,23 +722,6 @@ var log3 = function(dictMonadEffect) {
   };
 };
 
-// output/Data.Foreign.EasyFFI/foreign.js
-function unsafeForeignProcedure(args) {
-  return function(stmt) {
-    return Function(wrap(args.slice()))();
-    function wrap() {
-      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
-    }
-  };
-}
-
-// output/Data.Foreign.EasyFFI/index.js
-var unsafeForeignFunction = function(args) {
-  return function(expr) {
-    return unsafeForeignProcedure(args)("return " + (expr + ";"));
-  };
-};
-
 // output/Graphics.Phaser.GameConfig/index.js
 var physics = function(a) {
   return assoc(optional(opt("physics")))(new Just(options(a)));
@@ -805,7 +788,9 @@ var _gameConfig = {
 };
 
 // output/Utils.FFI/foreign.js
+var phaser = () => Phaser;
 var __getProp = (path, obj) => obj[path];
+var __new1 = (config2, fn) => new fn(config2);
 var __return0 = (prop, obj) => obj[prop]();
 var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
@@ -881,6 +866,7 @@ var getNullable = function(expr) {
   };
 };
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
+var _new1 = /* @__PURE__ */ runEffectFn2(__new1);
 var _method2 = function(prop) {
   return function(v1) {
     return function(v2) {
@@ -925,11 +911,30 @@ var safeGet = function(k) {
 
 // output/Graphics.Phaser/index.js
 var physicsConfig = _physicsConfig;
-var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
+var createWithUnsafeConfig = function(cfg) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+};
 var createWithConfig = function(opts) {
   return createWithUnsafeConfig(options(opts));
 };
 var config = _gameConfig;
+
+// output/Data.Foreign.EasyFFI/foreign.js
+function unsafeForeignProcedure(args) {
+  return function(stmt) {
+    return Function(wrap(args.slice()))();
+    function wrap() {
+      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
+    }
+  };
+}
+
+// output/Data.Foreign.EasyFFI/index.js
+var unsafeForeignFunction = function(args) {
+  return function(expr) {
+    return unsafeForeignProcedure(args)("return " + (expr + ";"));
+  };
+};
 
 // output/Graphics.Phaser.Events/index.js
 var createEventListener2 = /* @__PURE__ */ unsafeForeignFunction(["fn"])("(arg1,arg2)=>fn(arg1)(arg2)()");
@@ -1087,7 +1092,9 @@ var preload = function(callback) {
     };
   };
 };
-var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
+var newScene = function(key) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+};
 var getPhysicsPlugin = /* @__PURE__ */ _getProp("physics");
 var getChildByName = function() {
   return safeGet;

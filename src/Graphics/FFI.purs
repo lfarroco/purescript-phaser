@@ -4,7 +4,20 @@ import Prelude
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn2, EffectFn3, EffectFn4, EffectFn5, EffectFn6, EffectFn7, runEffectFn2, runEffectFn3, runEffectFn4, runEffectFn5, runEffectFn6, runEffectFn7)
+import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, EffectFn5, EffectFn6, EffectFn7, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4, runEffectFn5, runEffectFn6, runEffectFn7)
+import Graphics.Phaser.ForeignTypes (PhaserMainNamespace)
+
+foreign import phaser :: Effect PhaserMainNamespace
+
+foreign import __new0 :: forall fn returnValue. EffectFn1 fn returnValue
+
+_new0 :: forall fn returnValue. fn -> Effect returnValue
+_new0 = runEffectFn1 __new0
+
+foreign import __new1 :: forall fn v1 returnValue. EffectFn2 fn v1 returnValue
+
+_new1 :: forall fn v1 returnValue. fn -> v1 -> Effect returnValue
+_new1 = runEffectFn2 __new1
 
 foreign import __getProp :: forall a b. EffectFn2 String a b
 

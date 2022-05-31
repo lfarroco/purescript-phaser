@@ -1,7 +1,12 @@
+export const phaser = () => Phaser;
+
 export const __getProp = (path, obj) => obj[path];
 export const __setProp = (path, val, obj) => {
   obj[path] = val;
 };
+
+export const __new0 = (fn) => new fn();
+export const __new1 = (config, fn) => new fn(config);
 
 export const __return0 = (prop, obj) => obj[prop]();
 export const __return1 = (prop, v1, obj) => obj[prop](v1);

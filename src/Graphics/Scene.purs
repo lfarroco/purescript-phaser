@@ -11,13 +11,13 @@ import Data.Maybe (Maybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
 import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
-import Utils.FFI (_getProp, _method1, _method2, _method4, _return1, _return2, safeGet)
+import Utils.FFI (_getProp, _method1, _method2, _method4, _new1, _return1, _return2, phaser, safeGet)
 
 -- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
 -- | composing multiple functions that operate at that time.
 -- | eg. oncreate = drawBackground >=> drawRetangle
 newScene :: String -> Effect PhaserScene
-newScene = unsafeForeignProcedure [ "key", "" ] "return new Phaser.Scene(key)"
+newScene key = phaser >>= _getProp "Scene" >>= _new1 key
 
 init :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 init callback scene = do

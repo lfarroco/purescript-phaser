@@ -1,5 +1,8 @@
 module Graphics.Phaser.ForeignTypes where
 
+-- https://photonstorm.github.io/phaser3-docs/Phaser.html
+foreign import data PhaserMainNamespace :: Type
+
 foreign import data PhaserGame :: Type
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.GameObject.html
