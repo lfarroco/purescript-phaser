@@ -581,16 +581,6 @@ var optional = function(option) {
   });
 };
 
-// output/Data.Foreign.EasyFFI/foreign.js
-function unsafeForeignProcedure(args) {
-  return function(stmt) {
-    return Function(wrap(args.slice()))();
-    function wrap() {
-      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
-    }
-  };
-}
-
 // output/Graphics.Phaser.GameConfig/index.js
 var physics = function(a) {
   return assoc(optional(opt("physics")))(new Just(options(a)));
@@ -651,7 +641,12 @@ var _gameConfig = {
 };
 
 // output/Utils.FFI/foreign.js
+var phaser = () => Phaser;
 var __getProp = (path, obj) => obj[path];
+var __setProp = (path, val, obj) => {
+  obj[path] = val;
+};
+var __new1 = (config2, fn) => new fn(config2);
 var __return0 = (prop, obj) => obj[prop]();
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
 var __return4 = (prop, v1, v2, v3, v4, obj) => obj[prop](v_1, v2, v3, v4);
@@ -662,6 +657,17 @@ var runEffectFn2 = function runEffectFn22(fn) {
     return function(b) {
       return function() {
         return fn(a, b);
+      };
+    };
+  };
+};
+var runEffectFn3 = function runEffectFn32(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function() {
+          return fn(a, b, c);
+        };
       };
     };
   };
@@ -698,9 +704,11 @@ var runEffectFn6 = function runEffectFn62(fn) {
 };
 
 // output/Utils.FFI/index.js
+var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
 var _return4 = /* @__PURE__ */ runEffectFn6(__return4);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
+var _new1 = /* @__PURE__ */ runEffectFn2(__new1);
 var _method4 = function(prop) {
   return function(v1) {
     return function(v2) {
@@ -732,7 +740,9 @@ var _method2 = function(prop) {
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
-var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
+var createWithUnsafeConfig = function(cfg) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+};
 var createWithConfig = function(opts) {
   return createWithUnsafeConfig(options(opts));
 };
@@ -748,11 +758,13 @@ var fillRect = function(v) {
 var create = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("add"))(/* @__PURE__ */ _return0("graphics"));
 
 // output/Graphics.Phaser.Scene/index.js
-var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
+var newScene = function(key) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+};
 var create2 = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
       return scene;
     };
   };
@@ -775,10 +787,7 @@ var mainScene = /* @__PURE__ */ function() {
     height: 256
   }));
   return bind(bindEffect)(newScene("main"))(create2(function(scene) {
-    return function __do2() {
-      $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(create(scene))(drawGreenRect))(drawRedRect))();
-      return scene;
-    };
+    return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(create(scene))(drawGreenRect))(drawRedRect));
   }));
 }();
 var main = function __do() {

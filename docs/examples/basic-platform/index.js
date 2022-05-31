@@ -790,11 +790,15 @@ var _gameConfig = {
 // output/Utils.FFI/foreign.js
 var phaser = () => Phaser;
 var __getProp = (path, obj) => obj[path];
+var __setProp = (path, val, obj) => {
+  obj[path] = val;
+};
 var __new1 = (config2, fn) => new fn(config2);
 var __return0 = (prop, obj) => obj[prop]();
 var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
 var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
+var _listener2 = (fn) => (v1, v2) => fn(v1)(v2)();
 
 // output/Data.Nullable/foreign.js
 function nullable(a, r, f) {
@@ -857,6 +861,7 @@ var runEffectFn5 = function runEffectFn52(fn) {
 };
 
 // output/Utils.FFI/index.js
+var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
@@ -919,25 +924,8 @@ var createWithConfig = function(opts) {
 };
 var config = _gameConfig;
 
-// output/Data.Foreign.EasyFFI/foreign.js
-function unsafeForeignProcedure(args) {
-  return function(stmt) {
-    return Function(wrap(args.slice()))();
-    function wrap() {
-      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
-    }
-  };
-}
-
-// output/Data.Foreign.EasyFFI/index.js
-var unsafeForeignFunction = function(args) {
-  return function(expr) {
-    return unsafeForeignProcedure(args)("return " + (expr + ";"));
-  };
-};
-
 // output/Graphics.Phaser.Events/index.js
-var createEventListener2 = /* @__PURE__ */ unsafeForeignFunction(["fn"])("(arg1,arg2)=>fn(arg1)(arg2)()");
+var createEventListener2 = _listener2;
 
 // output/Graphics.Phaser.ArcadePhysics/index.js
 var setVelocityY = function() {
@@ -1079,7 +1067,7 @@ var loadImage = function(v) {
 var update = function(callback) {
   return function(scene) {
     return function __do() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.update = (time,delta) => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("update")(callback(scene))(scene))();
       return scene;
     };
   };
@@ -1087,7 +1075,7 @@ var update = function(callback) {
 var preload = function(callback) {
   return function(scene) {
     return function __do() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("preload")(callback(scene))(scene))();
       return scene;
     };
   };
@@ -1102,7 +1090,7 @@ var getChildByName = function() {
 var create2 = function(callback) {
   return function(scene) {
     return function __do() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
       return scene;
     };
   };
@@ -1141,21 +1129,18 @@ var createAnimation = function(key) {
 
 // output/Main/index.js
 var onpreload = function(scene) {
-  return function __do() {
-    for_(applicativeEffect)(foldableArray)(["sky", "platform", "star"])(function(key) {
-      return bind(bindEffect)(loadImage({
-        key,
-        path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/" + (key + ".png")
-      })(scene))(loadSpritesheet({
-        key: "dude",
-        path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/dude.png"
-      })({
-        frameWidth: 32,
-        frameHeight: 48
-      }));
-    })();
-    return scene;
-  };
+  return $$void(functorEffect)(for_(applicativeEffect)(foldableArray)(["sky", "platform", "star"])(function(key) {
+    return bind(bindEffect)(loadImage({
+      key,
+      path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/" + (key + ".png")
+    })(scene))(loadSpritesheet({
+      key: "dude",
+      path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/dude.png"
+    })({
+      frameWidth: 32,
+      frameHeight: 48
+    }));
+  }));
 };
 var move = function() {
   return function() {
@@ -1251,8 +1236,7 @@ var update2 = function(cursors) {
     };
     return function __do() {
       movePlayer();
-      movePlatform();
-      return scene;
+      return movePlatform();
     };
   };
 };
@@ -1317,7 +1301,7 @@ var oncreate = function(scene) {
     }])(10)(-1 | 0)(scene))();
     return $$void(functorEffect)(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene))();
   });
-  return function __do() {
+  return $$void(functorEffect)(function __do() {
     var phy = getPhysicsPlugin(scene)();
     createBg();
     var platformsGroup = createStaticGroup(phy)();
@@ -1331,7 +1315,7 @@ var oncreate = function(scene) {
     return update(function(scn) {
       return update2(cursors)(scn);
     })(scene)();
-  };
+  });
 };
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create2(oncreate)))(/* @__PURE__ */ preload(onpreload));
 var main = /* @__PURE__ */ function() {

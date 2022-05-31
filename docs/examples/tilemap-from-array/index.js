@@ -604,16 +604,6 @@ var log2 = function(s) {
   };
 };
 
-// output/Data.Foreign.EasyFFI/foreign.js
-function unsafeForeignProcedure(args) {
-  return function(stmt) {
-    return Function(wrap(args.slice()))();
-    function wrap() {
-      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
-    }
-  };
-}
-
 // output/Graphics.Phaser.GameConfig/index.js
 var physics = function(a) {
   return assoc(optional(opt("physics")))(new Just(options(a)));
@@ -674,7 +664,12 @@ var _gameConfig = {
 };
 
 // output/Utils.FFI/foreign.js
+var phaser = () => Phaser;
 var __getProp = (path, obj) => obj[path];
+var __setProp = (path, val, obj) => {
+  obj[path] = val;
+};
+var __new1 = (config2, fn) => new fn(config2);
 var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
 
@@ -714,12 +709,16 @@ var runEffectFn4 = function runEffectFn42(fn) {
 };
 
 // output/Utils.FFI/index.js
+var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
+var _new1 = /* @__PURE__ */ runEffectFn2(__new1);
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
-var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
+var createWithUnsafeConfig = function(cfg) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+};
 var createWithConfig = function(opts) {
   return createWithUnsafeConfig(options(opts));
 };
@@ -739,16 +738,18 @@ var loadImage = function(v) {
 var preload = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("preload")(callback(scene))(scene))();
       return scene;
     };
   };
 };
-var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
+var newScene = function(key) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+};
 var create = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
       return scene;
     };
   };
@@ -765,13 +766,15 @@ var addTilesetImage = /* @__PURE__ */ _return2("addTilesetImage");
 // output/Main/index.js
 var tileName = "mario-tiles";
 var tileMapKey = "tile map 1";
-var preload2 = /* @__PURE__ */ loadImage({
-  key: tileName,
-  path: "assets/super-mario.png"
-});
+var preload2 = function(scene) {
+  return $$void(functorEffect)(loadImage({
+    key: tileName,
+    path: "assets/super-mario.png"
+  })(scene));
+};
 var create2 = function(scene) {
   var level = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 2, 3, 0, 0, 0, 1, 2, 3, 0], [0, 5, 6, 7, 0, 0, 0, 5, 6, 7, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 14, 13, 14, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 14, 14, 14, 14, 14, 0, 0, 0, 15], [0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 15], [35, 36, 37, 0, 0, 0, 0, 0, 15, 15, 15], [39, 39, 39, 39, 39, 39, 39, 39, 39, 39, 39]];
-  return function __do2() {
+  return $$void(functorEffect)(function __do2() {
     log2("create")();
     var tileMap = makeTileMap({
       key: tileMapKey,
@@ -785,9 +788,8 @@ var create2 = function(scene) {
     var tileset = addTilesetImage(tileName)("mario-tiles")(tileMap)();
     var tilesetsList = tilesets(tileMap)();
     log2("Found " + (show(showInt)(length(tilesetsList)) + " tileset"))();
-    var _layer = createLayer("layer")([tileset])(tileMap)();
-    return scene;
-  };
+    return createLayer("layer")([tileset])(tileMap)();
+  });
 };
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(create2)))(/* @__PURE__ */ preload(preload2));
 var main = function __do() {

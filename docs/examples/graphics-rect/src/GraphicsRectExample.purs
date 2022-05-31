@@ -24,9 +24,9 @@ mainScene :: Effect PhaserScene
 mainScene = do
   Scene.newScene "main"
     >>= Scene.create
-        ( \scene -> do
-            void $ Graphics.create scene >>= drawGreenRect >>= drawRedRect
-            pure scene
+        ( \scene ->
+            void do
+              Graphics.create scene >>= drawGreenRect >>= drawRedRect
         )
   where
   drawGreenRect :: PhaserGraphic -> Effect PhaserGraphic

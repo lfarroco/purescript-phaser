@@ -51,34 +51,35 @@ mainScene =
     >>= Scene.create oncreate
     >>= Scene.preload onpreload
 
-onpreload :: PhaserScene -> Effect PhaserScene
-onpreload scene = do
-  for_ [ "sky", "platform", "star" ]
-    ( \key ->
-        do
-          Loader.loadImage { key, path: basePath <> key <> ".png" } scene
-          >>= Loader.loadSpritesheet { key: "dude", path: basePath <> "dude.png" }
-              { frameWidth: 32.0
-              , frameHeight: 48.0
-              }
-    )
-  pure scene
+onpreload :: PhaserScene -> Effect Unit
+onpreload scene =
+  void do
+    for_ [ "sky", "platform", "star" ]
+      ( \key ->
+          do
+            Loader.loadImage { key, path: basePath <> key <> ".png" } scene
+            >>= Loader.loadSpritesheet { key: "dude", path: basePath <> "dude.png" }
+                { frameWidth: 32.0
+                , frameHeight: 48.0
+                }
+      )
   where
   basePath = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/"
 
-oncreate :: PhaserScene -> Effect PhaserScene
-oncreate scene = do
-  phy <- Scene.getPhysicsPlugin scene
-  createBg
-  platformsGroup <- P.createStaticGroup phy
-  createFloor platformsGroup
-  movingPlatform <- createPlatform phy
-  player <- createPlayer phy
-  stars <- createStars phy
-  cursors <- createCursorKeys scene
-  createAnimations
-  void $ setupCollisions player stars platformsGroup movingPlatform phy
-  Scene.update (\scn -> update cursors scn) scene
+oncreate :: PhaserScene -> Effect Unit
+oncreate scene =
+  void do
+    phy <- Scene.getPhysicsPlugin scene
+    createBg
+    platformsGroup <- P.createStaticGroup phy
+    createFloor platformsGroup
+    movingPlatform <- createPlatform phy
+    player <- createPlayer phy
+    stars <- createStars phy
+    cursors <- createCursorKeys scene
+    createAnimations
+    void $ setupCollisions player stars platformsGroup movingPlatform phy
+    Scene.update (\scn -> update cursors scn) scene
   where
   setupCollisions player stars platformsGroup movingPlatform =
     P.addCollider player platformsGroup
@@ -132,11 +133,10 @@ oncreate scene = do
         # sequence
     pure starsEff
 
-update :: CursorKeys -> PhaserScene -> Effect PhaserScene
+update :: CursorKeys -> PhaserScene -> Effect Unit
 update cursors scene = do
   movePlayer
   movePlatform
-  pure scene
   where
   movePlayer = do
     player <- getPlayer scene

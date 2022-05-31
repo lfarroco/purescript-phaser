@@ -38,37 +38,39 @@ mainScene =
     >>= Scene.create create
     >>= Scene.preload preload
 
-preload :: PhaserScene -> Effect PhaserScene
-preload =
-  loadImage
-    { key: tileName
-    , path: "assets/super-mario.png"
-    }
-
-create :: PhaserScene -> Effect PhaserScene
-create scene = do
-  log $ "create"
-  -- When loading from an array, make sure to specify the
-  -- tileWidth and tileHeight
-  tileMap <-
-    makeTileMap
-      { key: tileMapKey
-      , data: level
-      , tileHeight: 16
-      , tileWidth: 16
-      , width: 16 * 11
-      , height: 16 * 11
-      , insertNull: false
+preload :: PhaserScene -> Effect Unit
+preload scene =
+  void do
+    loadImage
+      { key: tileName
+      , path: "assets/super-mario.png"
       }
       scene
-  tileset <- addTilesetImage tileName "mario-tiles" tileMap
-  tilesetsList <- tilesets tileMap
-  -- Another note: Forgetting to give a record as an argument to an effectful
-  -- function also gives a weird error "Could not match Effect with Function"
-  -- Currently defaulting layerID, x, and y to zeros.
-  log $ "Found " <> show (length tilesetsList) <> " tileset"
-  _layer <- createLayer "layer" [ tileset ] tileMap
-  pure scene
+
+create :: PhaserScene -> Effect Unit
+create scene =
+  void do
+    log $ "create"
+    -- When loading from an array, make sure to specify the
+    -- tileWidth and tileHeight
+    tileMap <-
+      makeTileMap
+        { key: tileMapKey
+        , data: level
+        , tileHeight: 16
+        , tileWidth: 16
+        , width: 16 * 11
+        , height: 16 * 11
+        , insertNull: false
+        }
+        scene
+    tileset <- addTilesetImage tileName "mario-tiles" tileMap
+    tilesetsList <- tilesets tileMap
+    -- Another note: Forgetting to give a record as an argument to an effectful
+    -- function also gives a weird error "Could not match Effect with Function"
+    -- Currently defaulting layerID, x, and y to zeros.
+    log $ "Found " <> show (length tilesetsList) <> " tileset"
+    createLayer "layer" [ tileset ] tileMap
   where
   -- Load a map from a 2D array of tile indices
   level :: Array (Array Int)

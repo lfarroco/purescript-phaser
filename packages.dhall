@@ -109,8 +109,4 @@ let upstream =
         sha256:15dd8041480502850e4043ea2977ed22d6ab3fc24d565211acde6f8c5152a799
 
 in  upstream
-  with easy-ffi =
-    { dependencies = [ "arrays", "console", "effect", "prelude", "quickcheck" ]
-    , repo = "https://github.com/lfarroco/purescript-easy-ffi.git"
-    , version = "master"
-    }
+

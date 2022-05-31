@@ -28,9 +28,14 @@ mainScene =
         ( \scene -> do
             void $ Text.create "Click the logo to create a new scene" scene
             void $ startButton scene
-            pure scene
         )
-    >>= Scene.preload (loadImage { key: "logo", path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png" })
+    >>= Scene.preload
+        ( loadImage
+            { key: "logo"
+            , path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
+            }
+            >=> const (pure unit)
+        )
   where
   startButton scene =
     Image.create "logo" scene
@@ -51,7 +56,7 @@ mainScene =
 secondScene :: Effect PhaserScene
 secondScene = do
   Scene.newScene "snd"
-    >>= Scene.create (\scene -> createLogo scene >>= const (pure scene))
+    >>= Scene.create (createLogo >=> const (pure unit))
   where
   createLogo =
     Image.create "logo"

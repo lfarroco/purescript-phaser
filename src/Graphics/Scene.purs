@@ -6,12 +6,12 @@ module Graphics.Phaser.Scene where
 -- Note that Phaser Docs discourage calling SceneManager directly - bindings
 -- for it are still available for it if you really want to use them
 import Prelude
-import Data.Foreign.EasyFFI (unsafeForeignProcedure)
 import Data.Maybe (Maybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
+import Graphics.Phaser.Events (createEventListener1, createEventListener2)
 import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
-import Utils.FFI (_getProp, _method1, _method2, _method4, _new1, _return1, _return2, phaser, safeGet)
+import Utils.FFI (_getProp, _method1, _method2, _method4, _new1, _return1, _return2, _setProp, phaser, safeGet)
 
 -- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
 -- | composing multiple functions that operate at that time.
@@ -21,37 +21,37 @@ newScene key = phaser >>= _getProp "Scene" >>= _new1 key
 
 init :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 init callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.init = (data) => callback(scene)()" callback scene
+  void $ _setProp "init" (callback scene) scene
   pure scene
 
-initWithData :: forall a. (a -> PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
+initWithData :: forall a. (PhaserScene -> a -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 initWithData callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.init = (data) => callback(data)(scene)()" callback scene
+  void $ _setProp "init" (createEventListener1 (callback scene)) scene
   pure scene
 
-update :: (PhaserScene -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
+update :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 update callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.update = (time,delta) => callback(scene)()" callback scene
+  void $ _setProp "update" (callback scene) scene
   pure scene
 
-updateWithTimes :: ({ scene :: PhaserScene, time :: Number, delta :: Number } -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
+updateWithTimes :: ({ scene :: PhaserScene, time :: Number, delta :: Number } -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 updateWithTimes callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.update = (time,delta) => callback({time, delta, scene})()" callback scene
+  void $ _setProp "update" (createEventListener2 (\time delta -> callback { time, delta, scene })) scene
   pure scene
 
-create :: (PhaserScene -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
+create :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 create callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.create = (data) => callback(scene)()" callback scene
+  void $ _setProp "create" (callback scene) scene
   pure scene
 
-createWithData :: forall a. (a -> PhaserScene -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
+createWithData :: forall a. (PhaserScene -> a -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 createWithData callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.create = (data) => callback(data)(scene)()" callback scene
+  void $ _setProp "create" (callback scene) scene
   pure scene
 
-preload :: (PhaserScene -> Effect PhaserScene) -> PhaserScene -> Effect PhaserScene
+preload :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 preload callback scene = do
-  void $ unsafeForeignProcedure [ "callback", "scene", "" ] "scene.preload = () => callback(scene)()" callback scene
+  void $ _setProp "preload" (callback scene) scene
   pure scene
 
 children :: forall a. GameObject a => PhaserScene -> Effect (Array a)

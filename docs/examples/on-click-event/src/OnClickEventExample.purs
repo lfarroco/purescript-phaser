@@ -29,14 +29,17 @@ mainScene =
     >>= onpreload
     >>= oncreate
   where
-  oncreate = Scene.create (title >=> startButton)
+  oncreate = Scene.create (title >=> startButton >=> const (pure unit))
 
   onpreload =
     Scene.preload
-      $ loadImage
-          { key: "logo"
-          , path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-          }
+      ( \scene ->
+          void do
+            loadImage
+              { key: "logo", path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
+              }
+              scene
+      )
 
   title scene = Text.create "Click the logo to trigger an event." scene >>= const (pure scene)
 

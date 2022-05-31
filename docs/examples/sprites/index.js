@@ -36,18 +36,6 @@ var $$const = function(a) {
   };
 };
 
-// output/Data.Functor/foreign.js
-var arrayMap = function(f) {
-  return function(arr) {
-    var l = arr.length;
-    var result = new Array(l);
-    for (var i = 0; i < l; i++) {
-      result[i] = f(arr[i]);
-    }
-    return result;
-  };
-};
-
 // output/Data.Unit/foreign.js
 var unit = void 0;
 
@@ -57,9 +45,6 @@ var map = function(dict) {
 };
 var $$void = function(dictFunctor) {
   return map(dictFunctor)($$const(unit));
-};
-var functorArray = {
-  map: arrayMap
 };
 
 // output/Control.Apply/index.js
@@ -150,19 +135,6 @@ var topChar = String.fromCharCode(65535);
 var bottomChar = String.fromCharCode(0);
 var topNumber = Number.POSITIVE_INFINITY;
 var bottomNumber = Number.NEGATIVE_INFINITY;
-
-// output/Data.Show/foreign.js
-var showIntImpl = function(n) {
-  return n.toString();
-};
-
-// output/Data.Show/index.js
-var showInt = {
-  show: showIntImpl
-};
-var show = function(dict) {
-  return dict.show;
-};
 
 // output/Data.Maybe/index.js
 var Nothing = /* @__PURE__ */ function() {
@@ -462,19 +434,6 @@ var functorST = {
 };
 
 // output/Data.Array/foreign.js
-var range2 = function(start) {
-  return function(end) {
-    var step = start > end ? -1 : 1;
-    var result = new Array(step * (end - start) + 1);
-    var i = start, n = 0;
-    while (i !== end) {
-      result[n++] = i;
-      i += step;
-    }
-    result[n] = i;
-    return result;
-  };
-};
 var replicateFill = function(count) {
   return function(value) {
     if (count < 1) {
@@ -677,23 +636,6 @@ var optional = function(option) {
   });
 };
 
-// output/Data.Foreign.EasyFFI/foreign.js
-function unsafeForeignProcedure(args) {
-  return function(stmt) {
-    return Function(wrap(args.slice()))();
-    function wrap() {
-      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
-    }
-  };
-}
-
-// output/Data.Foreign.EasyFFI/index.js
-var unsafeForeignFunction = function(args) {
-  return function(expr) {
-    return unsafeForeignProcedure(args)("return " + (expr + ";"));
-  };
-};
-
 // output/Graphics.Phaser.GameConfig/index.js
 var physics = function(a) {
   return assoc(optional(opt("physics")))(new Just(options(a)));
@@ -754,7 +696,12 @@ var _gameConfig = {
 };
 
 // output/Utils.FFI/foreign.js
+var phaser = () => Phaser;
 var __getProp = (path, obj) => obj[path];
+var __setProp = (path, val, obj) => {
+  obj[path] = val;
+};
+var __new1 = (config2, fn) => new fn(config2);
 var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
 var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
@@ -810,46 +757,11 @@ var runEffectFn5 = function runEffectFn52(fn) {
 };
 
 // output/Utils.FFI/index.js
-var argsN = function(n) {
-  var values = function() {
-    var $0 = n < 1;
-    if ($0) {
-      return [];
-    }
-    ;
-    return map(functorArray)(function(i) {
-      return "v" + show(showInt)(i);
-    })(range2(1)(n));
-  }();
-  return append(semigroupArray)(values)(["obj", ""]);
-};
-var return3 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(obj) {
-          return unsafeForeignFunction(argsN(3))("obj." + expr)(v1)(v2)(v3)(obj);
-        };
-      };
-    };
-  };
-};
-var return4 = function(expr) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(v4) {
-          return function(obj) {
-            return unsafeForeignFunction(argsN(4))("obj." + expr)(v1)(v2)(v3)(v4)(obj);
-          };
-        };
-      };
-    };
-  };
-};
+var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
+var _new1 = /* @__PURE__ */ runEffectFn2(__new1);
 var _method2 = function(prop) {
   return function(v1) {
     return function(v2) {
@@ -875,7 +787,9 @@ var _method1 = function(prop) {
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
-var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
+var createWithUnsafeConfig = function(cfg) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+};
 var createWithConfig = function(opts) {
   return createWithUnsafeConfig(options(opts));
 };
@@ -901,16 +815,18 @@ var loadSpritesheet = function(v) {
 var preload = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.preload = () => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("preload")(callback(scene))(scene))();
       return scene;
     };
   };
 };
-var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
+var newScene = function(key) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+};
 var create = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
       return scene;
     };
   };
@@ -923,8 +839,30 @@ var playAnimation = function() {
     return composeKleisli(bindEffect)(_getProp("anims"))(_method2("play")(v.key)(v.ignoreIfPlaying));
   };
 };
-var generateFrameNumbers = /* @__PURE__ */ return3("anims.generateFrameNumbers(v1, {start: v2, end: v3})");
-var createAnimation = /* @__PURE__ */ return4("anims.create({ key: v1, frames: v2, frameRate: v3, repeat: v4, })");
+var generateFrameNumbers = function(v1) {
+  return function(start) {
+    return function(end) {
+      return composeKleisli(bindEffect)(_getProp("anims"))(_return2("generateFrameNumbers")(v1)({
+        start,
+        end
+      }));
+    };
+  };
+};
+var createAnimation = function(key) {
+  return function(frames) {
+    return function(frameRate) {
+      return function(repeat) {
+        return composeKleisli(bindEffect)(_getProp("anims"))(_return1("create")({
+          key,
+          frames,
+          frameRate,
+          repeat
+        }));
+      };
+    };
+  };
+};
 var add2 = function(v1) {
   return function(v) {
     return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v1)(v.x)(v.y));
@@ -934,24 +872,21 @@ var add2 = function(v1) {
 // output/Main/index.js
 var ghRoot = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/assets/sprites/";
 var onpreload = function(scene) {
-  return function __do2() {
-    for_(applicativeEffect)(foldableArray)([loadSpritesheet({
-      key: "explosion",
-      path: ghRoot + "explosion.png"
-    })({
-      frameWidth: 64,
-      frameHeight: 64
-    }), loadSpritesheet({
-      key: "balls",
-      path: ghRoot + "balls.png"
-    })({
-      frameWidth: 17,
-      frameHeight: 17
-    })])(function(fn) {
-      return fn(scene);
-    })();
-    return scene;
-  };
+  return $$void(functorEffect)(for_(applicativeEffect)(foldableArray)([loadSpritesheet({
+    key: "explosion",
+    path: ghRoot + "explosion.png"
+  })({
+    frameWidth: 64,
+    frameHeight: 64
+  }), loadSpritesheet({
+    key: "balls",
+    path: ghRoot + "balls.png"
+  })({
+    frameWidth: 17,
+    frameHeight: 17
+  })])(function(fn) {
+    return fn(scene);
+  }));
 };
 var explodeSpriteKey = "explosion";
 var explodeAnimationKey = "explodeAnimation";
@@ -960,7 +895,7 @@ var oncreate = function(scene) {
     x: 3,
     y: 3
   });
-  return function __do2() {
+  return $$void(functorEffect)(function __do2() {
     var explosionFrames = generateFrameNumbers(explodeSpriteKey)(0)(23)(scene)();
     $$void(functorEffect)(createAnimation(explodeAnimationKey)(explosionFrames)(20)(-1 | 0)(scene))();
     $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2(explodeSpriteKey)({
@@ -970,12 +905,11 @@ var oncreate = function(scene) {
       key: explodeAnimationKey,
       ignoreIfPlaying: true
     })))(scale))();
-    $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2("balls")({
+    return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2("balls")({
       x: 100,
       y: 100
     })(scene))(setFrame(3)))(scale))();
-    return scene;
-  };
+  });
 };
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(oncreate)))(/* @__PURE__ */ preload(onpreload));
 var main = function __do() {

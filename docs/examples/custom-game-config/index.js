@@ -581,16 +581,6 @@ var optional = function(option) {
   });
 };
 
-// output/Data.Foreign.EasyFFI/foreign.js
-function unsafeForeignProcedure(args) {
-  return function(stmt) {
-    return Function(wrap(args.slice()))();
-    function wrap() {
-      return !args.length ? stmt : "return function (" + args.shift() + ") { " + wrap() + " };";
-    }
-  };
-}
-
 // output/Graphics.Phaser.GameConfig/index.js
 var physics = function(a) {
   return assoc(optional(opt("physics")))(new Just(options(a)));
@@ -651,7 +641,12 @@ var _gameConfig = {
 };
 
 // output/Utils.FFI/foreign.js
+var phaser = () => Phaser;
 var __getProp = (path, obj) => obj[path];
+var __setProp = (path, val, obj) => {
+  obj[path] = val;
+};
+var __new1 = (config2, fn) => new fn(config2);
 var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
 
 // output/Effect.Uncurried/foreign.js
@@ -660,6 +655,17 @@ var runEffectFn2 = function runEffectFn22(fn) {
     return function(b) {
       return function() {
         return fn(a, b);
+      };
+    };
+  };
+};
+var runEffectFn3 = function runEffectFn32(fn) {
+  return function(a) {
+    return function(b) {
+      return function(c) {
+        return function() {
+          return fn(a, b, c);
+        };
       };
     };
   };
@@ -681,22 +687,28 @@ var runEffectFn5 = function runEffectFn52(fn) {
 };
 
 // output/Utils.FFI/index.js
+var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
+var _new1 = /* @__PURE__ */ runEffectFn2(__new1);
 var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
 // output/Graphics.Phaser/index.js
-var createWithUnsafeConfig = /* @__PURE__ */ unsafeForeignProcedure(["config", ""])("return new Phaser.Game(config)");
+var createWithUnsafeConfig = function(cfg) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+};
 var createWithConfig = function(opts) {
   return createWithUnsafeConfig(options(opts));
 };
 var config = _gameConfig;
 
 // output/Graphics.Phaser.Scene/index.js
-var newScene = /* @__PURE__ */ unsafeForeignProcedure(["key", ""])("return new Phaser.Scene(key)");
+var newScene = function(key) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+};
 var create = function(callback) {
   return function(scene) {
     return function __do2() {
-      $$void(functorEffect)(unsafeForeignProcedure(["callback", "scene", ""])("scene.create = (data) => callback(scene)()")(callback)(scene))();
+      $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
       return scene;
     };
   };
@@ -709,10 +721,7 @@ var create2 = function(v1) {
 
 // output/Main/index.js
 var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(function(scene) {
-  return function __do2() {
-    $$void(functorEffect)(create2("The game was created with a custom display size")(scene))();
-    return scene;
-  };
+  return $$void(functorEffect)(create2("The game was created with a custom display size")(scene));
 }));
 var main = function __do() {
   var main$prime = mainScene();

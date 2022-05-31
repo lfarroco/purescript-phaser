@@ -5,6 +5,7 @@ import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, EffectFn5, EffectFn6, EffectFn7, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4, runEffectFn5, runEffectFn6, runEffectFn7)
+import Graphics.Phaser.CoreTypes (EventListener)
 import Graphics.Phaser.ForeignTypes (PhaserMainNamespace)
 
 foreign import phaser :: Effect PhaserMainNamespace
@@ -96,3 +97,15 @@ safeGet :: forall obj a. String -> obj -> Effect (Maybe a)
 safeGet k obj =
   _getProp "children" obj >>= getNullable "getByName" k
     >>= (toMaybe >>> pure)
+
+foreign import _listener0 :: Effect Unit -> EventListener
+
+foreign import _listener1 :: forall a. (a -> Effect Unit) -> EventListener
+
+foreign import _listener2 :: forall a b. (a -> b -> Effect Unit) -> EventListener
+
+foreign import _listener3 :: forall a b c. (a -> b -> c -> Effect Unit) -> EventListener
+
+foreign import _listener4 :: forall a b c d. (a -> b -> c -> d -> Effect Unit) -> EventListener
+
+foreign import _listener5 :: forall a b c d e. (a -> b -> c -> d -> e -> Effect Unit) -> EventListener

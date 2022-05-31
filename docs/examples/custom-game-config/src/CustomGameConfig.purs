@@ -24,7 +24,7 @@ mainScene :: Effect PhaserScene
 mainScene =
   Scene.newScene "main"
     >>= Scene.create
-        ( \scene -> do
-            void $ Text.create "The game was created with a custom display size" scene
-            pure scene
+        ( \scene ->
+            void do
+              Text.create "The game was created with a custom display size" scene
         )

@@ -36,31 +36,31 @@ mainScene =
     >>= Scene.create oncreate
     >>= Scene.preload onpreload
 
-oncreate :: PhaserScene -> Effect PhaserScene
-oncreate scene = do
-  explosionFrames <- Sprite.generateFrameNumbers explodeSpriteKey 0 23 scene
-  void $ Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
-  void $ Sprite.add explodeSpriteKey { x: 100.0, y: 100.0 } scene
-    >>= Sprite.playAnimation { key: explodeAnimationKey, ignoreIfPlaying: true }
-    >>= scale
-  void $ Sprite.add "balls" { x: 100.0, y: 100.0 } scene
-    >>= Sprite.setFrame 3
-    >>= scale
-  pure scene
+oncreate :: PhaserScene -> Effect Unit
+oncreate scene =
+  void do
+    explosionFrames <- Sprite.generateFrameNumbers explodeSpriteKey 0 23 scene
+    void $ Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
+    void $ Sprite.add explodeSpriteKey { x: 100.0, y: 100.0 } scene
+      >>= Sprite.playAnimation { key: explodeAnimationKey, ignoreIfPlaying: true }
+      >>= scale
+    void $ Sprite.add "balls" { x: 100.0, y: 100.0 } scene
+      >>= Sprite.setFrame 3
+      >>= scale
   where
   scale = GO.setScale ({ x: 3.0, y: 3.0 })
 
-onpreload :: PhaserScene -> Effect PhaserScene
-onpreload scene = do
-  for_
-    [ loadSpritesheet { key: "explosion", path: ghRoot <> "explosion.png" }
-        { frameWidth: 64.0
-        , frameHeight: 64.0
-        }
-    , loadSpritesheet { key: "balls", path: ghRoot <> "balls.png" }
-        { frameWidth: 17.0
-        , frameHeight: 17.0
-        }
-    ]
-    (\fn -> fn scene)
-  pure scene
+onpreload :: PhaserScene -> Effect Unit
+onpreload scene =
+  void do
+    for_
+      [ loadSpritesheet { key: "explosion", path: ghRoot <> "explosion.png" }
+          { frameWidth: 64.0
+          , frameHeight: 64.0
+          }
+      , loadSpritesheet { key: "balls", path: ghRoot <> "balls.png" }
+          { frameWidth: 17.0
+          , frameHeight: 17.0
+          }
+      ]
+      (\fn -> fn scene)

@@ -6,7 +6,6 @@ You can edit this file as you like.
 , dependencies =
   [ "canvas"
   , "console"
-  , "easy-ffi"
   , "effect"
   , "maybe"
   , "nullable"

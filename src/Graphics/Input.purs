@@ -27,7 +27,7 @@ createCursorKeys =
     >=> _getProp "keyboard"
     >=> _return0 "createCursorKeys"
 
-addKey :: KeyCode -> PhaserScene -> Effect CursorKeys
+addKey :: Effect KeyCode -> PhaserScene -> Effect CursorKeys
 addKey v1 =
   _getProp "input"
     >=> _getProp "keyboard"

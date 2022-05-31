@@ -16,3 +16,11 @@ export const __return4 = (prop, v1, v2, v3, v4, obj) =>
   obj[prop](v_1, v2, v3, v4);
 export const __return5 = (prop, v1, v2, v3, v4, v5, obj) =>
   obj[prop](v1, v2, v3, v4, v5);
+
+export const _listener0 = (fn) => () => fn();
+export const _listener1 = (fn) => (v1) => fn(v1)();
+export const _listener2 = (fn) => (v1, v2) => fn(v1)(v2)();
+export const _listener3 = (fn) => (v1, v2, v3) => fn(v1)(v2)(v3)();
+export const _listener4 = (fn) => (v1, v2, v3, v4) => fn(v1)(v2)(v3)(v4)();
+export const _listener5 = (fn) => (v1, v2, v3, v4, v5) =>
+  fn(v1)(v2)(v3)(v4)(v5)();
