@@ -13,7 +13,7 @@ Feel free to open a PR or ask for a new binding!
 Some bindings allow a more FP-friendly way of handling operations,
 like returning a scene or game object to allow function chaining.
 
-This library is intended to be non-optioned, so that you can build your own abstractions upon
+This library is intended to be non-optioned so that you can build your own abstractions upon
 the bindings offered here.
 
 ### Installing
