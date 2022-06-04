@@ -11,7 +11,7 @@ import Graphics.Phaser as Phaser
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
 import Graphics.Phaser.Loader (loadImage)
 import Graphics.Phaser.Scene as Scene
-import Graphics.Phaser.TileMap (addTilesetImage, createLayer, makeTileMap, tilesets)
+import Graphics.Phaser.TileMap (addTilesetImage, createLayer, makeTileMap, tilemapConfig, tilesets)
 
 tileName :: String
 tileName = "mario-tiles"
@@ -55,14 +55,14 @@ create scene =
     -- tileWidth and tileHeight
     tileMap <-
       makeTileMap
-        { key: tileMapKey
-        , data: level
-        , tileHeight: 16
-        , tileWidth: 16
-        , width: 16 * 11
-        , height: 16 * 11
-        , insertNull: false
-        }
+        ( (tilemapConfig.key tileMapKey)
+            <> (tilemapConfig.data level)
+            <> (tilemapConfig.tileWidth 16)
+            <> (tilemapConfig.tileHeight 16)
+            <> (tilemapConfig.width 16)
+            <> (tilemapConfig.height 16)
+            <> (tilemapConfig.insertNull false)
+        )
         scene
     tileset <- addTilesetImage tileName "mario-tiles" tileMap
     tilesetsList <- tilesets tileMap

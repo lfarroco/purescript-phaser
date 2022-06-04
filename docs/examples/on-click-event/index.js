@@ -718,62 +718,64 @@ var log3 = function(dictMonadEffect) {
   };
 };
 
-// output/Graphics.Phaser.GameConfig/index.js
-var physics = function(a) {
-  return assoc(optional(opt("physics")))(new Just(options(a)));
-};
-var opt_ = function(attr) {
+// output/Internal.Utils/index.js
+var _opt = function(attr) {
   return function(val) {
     return assoc(optional(opt(attr)))(new Just(val));
   };
 };
+
+// output/Graphics.Phaser.GameConfig/index.js
+var physics = function(a) {
+  return assoc(optional(opt("physics")))(new Just(options(a)));
+};
 var defaultConfig = /* @__PURE__ */ mempty(monoidOptions);
 var _gameConfig = {
-  width: /* @__PURE__ */ opt_("width"),
-  height: /* @__PURE__ */ opt_("height"),
-  type_: /* @__PURE__ */ opt_("type_"),
-  zoom: /* @__PURE__ */ opt_("zoom"),
-  parent: /* @__PURE__ */ opt_("parent"),
-  canvas: /* @__PURE__ */ opt_("canvas"),
-  canvasStyle: /* @__PURE__ */ opt_("canvasStyle"),
-  customEnvironment: /* @__PURE__ */ opt_("customEnvironment"),
-  context: /* @__PURE__ */ opt_("context"),
-  scene: /* @__PURE__ */ opt_("scene"),
-  seed: /* @__PURE__ */ opt_("seed"),
-  title: /* @__PURE__ */ opt_("title"),
-  url: /* @__PURE__ */ opt_("url"),
-  version: /* @__PURE__ */ opt_("version"),
-  autofocus: /* @__PURE__ */ opt_("autofocus"),
-  input: /* @__PURE__ */ opt_("input"),
-  disableContextMenu: /* @__PURE__ */ opt_("disableContextMenu"),
-  banner: /* @__PURE__ */ opt_("banner"),
-  dom: /* @__PURE__ */ opt_("dom"),
-  fps: /* @__PURE__ */ opt_("fps"),
-  render: /* @__PURE__ */ opt_("render"),
-  callbacks: /* @__PURE__ */ opt_("callbacks"),
-  loader: /* @__PURE__ */ opt_("loader"),
-  images: /* @__PURE__ */ opt_("images"),
+  width: /* @__PURE__ */ _opt("width"),
+  height: /* @__PURE__ */ _opt("height"),
+  type_: /* @__PURE__ */ _opt("type_"),
+  zoom: /* @__PURE__ */ _opt("zoom"),
+  parent: /* @__PURE__ */ _opt("parent"),
+  canvas: /* @__PURE__ */ _opt("canvas"),
+  canvasStyle: /* @__PURE__ */ _opt("canvasStyle"),
+  customEnvironment: /* @__PURE__ */ _opt("customEnvironment"),
+  context: /* @__PURE__ */ _opt("context"),
+  scene: /* @__PURE__ */ _opt("scene"),
+  seed: /* @__PURE__ */ _opt("seed"),
+  title: /* @__PURE__ */ _opt("title"),
+  url: /* @__PURE__ */ _opt("url"),
+  version: /* @__PURE__ */ _opt("version"),
+  autofocus: /* @__PURE__ */ _opt("autofocus"),
+  input: /* @__PURE__ */ _opt("input"),
+  disableContextMenu: /* @__PURE__ */ _opt("disableContextMenu"),
+  banner: /* @__PURE__ */ _opt("banner"),
+  dom: /* @__PURE__ */ _opt("dom"),
+  fps: /* @__PURE__ */ _opt("fps"),
+  render: /* @__PURE__ */ _opt("render"),
+  callbacks: /* @__PURE__ */ _opt("callbacks"),
+  loader: /* @__PURE__ */ _opt("loader"),
+  images: /* @__PURE__ */ _opt("images"),
   physics,
-  plugins: /* @__PURE__ */ opt_("plugins"),
-  scale: /* @__PURE__ */ opt_("scale"),
-  audio: /* @__PURE__ */ opt_("audio"),
-  pipeline: /* @__PURE__ */ opt_("pipeline"),
-  backgroundColor: /* @__PURE__ */ opt_("backgroundColor"),
-  antialias: /* @__PURE__ */ opt_("antialias"),
-  antialiasGL: /* @__PURE__ */ opt_("antialiasGL"),
-  desynchronized: /* @__PURE__ */ opt_("desynchronized"),
-  pixelArt: /* @__PURE__ */ opt_("pixelArt"),
-  roundPixels: /* @__PURE__ */ opt_("roundPixels"),
-  transparent: /* @__PURE__ */ opt_("transparent"),
-  clearBeforeRender: /* @__PURE__ */ opt_("clearBeforeRender"),
-  preserveDrawingBuffer: /* @__PURE__ */ opt_("preserveDrawingBuffer"),
-  premultipliedAlpha: /* @__PURE__ */ opt_("premultipliedAlpha"),
-  failIfMajorPerformanceCaveat: /* @__PURE__ */ opt_("failIfMajorPerformanceCaveat"),
-  powerPreference: /* @__PURE__ */ opt_("powerPreference"),
-  batchSize: /* @__PURE__ */ opt_("batchSize"),
-  maxLights: /* @__PURE__ */ opt_("maxLights"),
-  maxTextures: /* @__PURE__ */ opt_("maxTextures"),
-  mipmapFilter: /* @__PURE__ */ opt_("mipmapFilter"),
+  plugins: /* @__PURE__ */ _opt("plugins"),
+  scale: /* @__PURE__ */ _opt("scale"),
+  audio: /* @__PURE__ */ _opt("audio"),
+  pipeline: /* @__PURE__ */ _opt("pipeline"),
+  backgroundColor: /* @__PURE__ */ _opt("backgroundColor"),
+  antialias: /* @__PURE__ */ _opt("antialias"),
+  antialiasGL: /* @__PURE__ */ _opt("antialiasGL"),
+  desynchronized: /* @__PURE__ */ _opt("desynchronized"),
+  pixelArt: /* @__PURE__ */ _opt("pixelArt"),
+  roundPixels: /* @__PURE__ */ _opt("roundPixels"),
+  transparent: /* @__PURE__ */ _opt("transparent"),
+  clearBeforeRender: /* @__PURE__ */ _opt("clearBeforeRender"),
+  preserveDrawingBuffer: /* @__PURE__ */ _opt("preserveDrawingBuffer"),
+  premultipliedAlpha: /* @__PURE__ */ _opt("premultipliedAlpha"),
+  failIfMajorPerformanceCaveat: /* @__PURE__ */ _opt("failIfMajorPerformanceCaveat"),
+  powerPreference: /* @__PURE__ */ _opt("powerPreference"),
+  batchSize: /* @__PURE__ */ _opt("batchSize"),
+  maxLights: /* @__PURE__ */ _opt("maxLights"),
+  maxTextures: /* @__PURE__ */ _opt("maxTextures"),
+  mipmapFilter: /* @__PURE__ */ _opt("mipmapFilter"),
   "default": defaultConfig
 };
 

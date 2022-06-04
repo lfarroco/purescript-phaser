@@ -1,12 +1,15 @@
 module Graphics.Phaser.GameConfig (_gameConfig, GameConfig, GameConfigIndex, _physicsConfig, PhysicsConfig, PhysicsConfigIndex) where
 
 import Prelude
+
 import Data.Maybe (Maybe(..))
 import Data.Options (Options, opt, optional, options, (:=))
 import Graphics.Canvas (CanvasElement, Context2D)
 import Graphics.Phaser.CoreTypes (ArcadeWorldConfig)
 import Graphics.Phaser.ForeignTypes (AudioContext, BootCallback, PhaserScene, PluginObjectItem, WebGLPipeline)
+import Internal.Utils (_opt)
 import Web.HTML (HTMLElement)
+
 
 data GameConfig
 
@@ -153,56 +156,53 @@ type GameConfigIndex
 
 _gameConfig :: GameConfigIndex
 _gameConfig =
-  { width: opt_ "width"
-  , height: opt_ "height"
-  , type_: opt_ "type_"
-  , zoom: opt_ "zoom"
-  , parent: opt_ "parent"
-  , canvas: opt_ "canvas"
-  , canvasStyle: opt_ "canvasStyle"
-  , customEnvironment: opt_ "customEnvironment"
-  , context: opt_ "context"
-  , scene: opt_ "scene"
-  , seed: opt_ "seed"
-  , title: opt_ "title"
-  , url: opt_ "url"
-  , version: opt_ "version"
-  , autofocus: opt_ "autofocus"
-  , input: opt_ "input"
-  , disableContextMenu: opt_ "disableContextMenu"
-  , banner: opt_ "banner"
-  , dom: opt_ "dom"
-  , fps: opt_ "fps"
-  , render: opt_ "render"
-  , callbacks: opt_ "callbacks"
-  , loader: opt_ "loader"
-  , images: opt_ "images"
+  { width: _opt "width"
+  , height: _opt "height"
+  , type_: _opt "type_"
+  , zoom: _opt "zoom"
+  , parent: _opt "parent"
+  , canvas: _opt "canvas"
+  , canvasStyle: _opt "canvasStyle"
+  , customEnvironment: _opt "customEnvironment"
+  , context: _opt "context"
+  , scene: _opt "scene"
+  , seed: _opt "seed"
+  , title: _opt "title"
+  , url: _opt "url"
+  , version: _opt "version"
+  , autofocus: _opt "autofocus"
+  , input: _opt "input"
+  , disableContextMenu: _opt "disableContextMenu"
+  , banner: _opt "banner"
+  , dom: _opt "dom"
+  , fps: _opt "fps"
+  , render: _opt "render"
+  , callbacks: _opt "callbacks"
+  , loader: _opt "loader"
+  , images: _opt "images"
   , physics: physics
-  , plugins: opt_ "plugins"
-  , scale: opt_ "scale"
-  , audio: opt_ "audio"
-  , pipeline: opt_ "pipeline"
-  , backgroundColor: opt_ "backgroundColor"
-  , antialias: opt_ "antialias"
-  , antialiasGL: opt_ "antialiasGL"
-  , desynchronized: opt_ "desynchronized"
-  , pixelArt: opt_ "pixelArt"
-  , roundPixels: opt_ "roundPixels"
-  , transparent: opt_ "transparent"
-  , clearBeforeRender: opt_ "clearBeforeRender"
-  , preserveDrawingBuffer: opt_ "preserveDrawingBuffer"
-  , premultipliedAlpha: opt_ "premultipliedAlpha"
-  , failIfMajorPerformanceCaveat: opt_ "failIfMajorPerformanceCaveat"
-  , powerPreference: opt_ "powerPreference"
-  , batchSize: opt_ "batchSize"
-  , maxLights: opt_ "maxLights"
-  , maxTextures: opt_ "maxTextures"
-  , mipmapFilter: opt_ "mipmapFilter"
+  , plugins: _opt "plugins"
+  , scale: _opt "scale"
+  , audio: _opt "audio"
+  , pipeline: _opt "pipeline"
+  , backgroundColor: _opt "backgroundColor"
+  , antialias: _opt "antialias"
+  , antialiasGL: _opt "antialiasGL"
+  , desynchronized: _opt "desynchronized"
+  , pixelArt: _opt "pixelArt"
+  , roundPixels: _opt "roundPixels"
+  , transparent: _opt "transparent"
+  , clearBeforeRender: _opt "clearBeforeRender"
+  , preserveDrawingBuffer: _opt "preserveDrawingBuffer"
+  , premultipliedAlpha: _opt "premultipliedAlpha"
+  , failIfMajorPerformanceCaveat: _opt "failIfMajorPerformanceCaveat"
+  , powerPreference: _opt "powerPreference"
+  , batchSize: _opt "batchSize"
+  , maxLights: _opt "maxLights"
+  , maxTextures: _opt "maxTextures"
+  , mipmapFilter: _opt "mipmapFilter"
   , default: defaultConfig
   }
-
-opt_ :: forall a b. String -> a -> Options b
-opt_ attr val = optional (opt attr) := Just val
 
 type InputConfig
   = { keyboard :: Boolean
@@ -252,7 +252,7 @@ _physicsConfig =
   }
 
 defaultPhysicsConfig :: String -> Options PhysicsConfig
-defaultPhysicsConfig = opt_ "default"
+defaultPhysicsConfig = _opt "default"
 
 arcade :: ArcadeWorldConfig -> Options PhysicsConfig
-arcade = opt_ "arcade"
+arcade = _opt "arcade"

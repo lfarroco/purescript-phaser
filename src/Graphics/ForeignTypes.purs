@@ -113,3 +113,5 @@ foreign import data PhaserCache :: Type
 foreign import data PhaserScenePlugin :: Type
 
 foreign import data PhaserPhysicsPlugin :: Type
+
+foreign import data PhaserClock :: Type
