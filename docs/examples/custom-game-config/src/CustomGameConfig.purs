@@ -10,6 +10,8 @@ import Graphics.Phaser.Text as Text
 main :: Effect PhaserGame
 main = do
   main' <- mainScene
+  -- if using multiple scenes:
+  -- scenes <- sequence [mainScene, anotherScene]
   let
     -- | This is how you can pass optional parameters when creating a new
     -- | game instance
