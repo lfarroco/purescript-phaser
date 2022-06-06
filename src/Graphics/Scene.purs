@@ -55,7 +55,7 @@ preload callback scene = do
   pure scene
 
 children :: forall a. GameObject a => PhaserScene -> Effect (Array a)
-children = _getProp "children.list"
+children = _getProp "children" >=> _getProp "list"
 
 getChildByName :: forall a. GameObject a => String -> PhaserScene -> Effect (Maybe a)
 getChildByName = safeGet
