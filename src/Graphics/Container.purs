@@ -27,5 +27,5 @@ list = _getProp "list"
 
 getByName :: forall a. GameObject a => String -> PhaserContainer -> Effect (Maybe a)
 getByName k obj = do
-  v <- getNullable "getByName(v1)" k obj
+  v <- getNullable "getByName" k obj
   pure $ toMaybe v
