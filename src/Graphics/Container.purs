@@ -10,7 +10,7 @@ import Utils.FFI (_getProp, _method1, _return0, getNullable)
 
 -- | Creates a new container that belongs to the given scene
 create :: PhaserScene -> Effect PhaserContainer
-create = _return0 "add.container"
+create = _getProp "add" >=> _return0 "container"
 
 -- | Inserts a game object as a child of the given container
 addChild :: forall a. GameObject a => a -> PhaserContainer -> Effect PhaserContainer
