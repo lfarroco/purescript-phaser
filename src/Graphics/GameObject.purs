@@ -100,7 +100,9 @@ getOrigin = _getProp "origin"
 setOrigin :: forall a. GameObject a => Vector -> a -> Effect a
 setOrigin { x, y } = _method2 "setOrigin" x y
 
-setTint :: forall a. Tint a => Number -> a -> Effect a
+-- The color should be a string with an "octal" content
+-- setTint "0xFF0000" (0x + rr + gg + bb)
+setTint :: forall a. Tint a => String -> a -> Effect a
 setTint = _method1 "setTint"
 
 getSize :: forall a. GameObject a => a -> Effect Dimensions
