@@ -410,10 +410,10 @@ var fromFoldableImpl = function() {
       return new Cons2(head, tail);
     };
   }
-  function listToArray(list) {
+  function listToArray(list2) {
     var result = [];
     var count = 0;
-    var xs = list;
+    var xs = list2;
     while (xs !== emptyList) {
       result[count++] = xs.head;
       xs = xs.tail;
@@ -742,43 +742,6 @@ var createWithConfig = function(opts) {
 };
 var config = _gameConfig;
 
-// output/Graphics.Phaser.GameObject/index.js
-var setScale = function() {
-  return function(v) {
-    return _method2("setScale")(v.x)(v.y);
-  };
-};
-
-// output/Graphics.Phaser.Loader/index.js
-var loadSpritesheet = function(v) {
-  return function(v2) {
-    return function(scn) {
-      return bind(bindEffect)(bind(bindEffect)(_getProp("load")(scn))(_return3("spritesheet")(v.key)(v.path)(v2)))($$const(pure(applicativeEffect)(scn)));
-    };
-  };
-};
-
-// output/Graphics.Phaser.Scene/index.js
-var preload = function(callback) {
-  return function(scene) {
-    return function __do2() {
-      $$void(functorEffect)(_setProp("preload")(callback(scene))(scene))();
-      return scene;
-    };
-  };
-};
-var newScene = function(key) {
-  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
-};
-var create = function(callback) {
-  return function(scene) {
-    return function __do2() {
-      $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
-      return scene;
-    };
-  };
-};
-
 // output/Graphics.Phaser.Sprite/index.js
 var setFrame = /* @__PURE__ */ _method1("setFrame");
 var playAnimation = function() {
@@ -812,9 +775,46 @@ var createAnimation = function(key) {
     };
   };
 };
-var add2 = function(v) {
+var create = function(v) {
   return function(v2) {
     return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v.x)(v.y)(v2));
+  };
+};
+
+// output/Graphics.Phaser.GameObject/index.js
+var setScale = function() {
+  return function(v) {
+    return _method2("setScale")(v.x)(v.y);
+  };
+};
+
+// output/Graphics.Phaser.Loader/index.js
+var loadSpritesheet = function(v) {
+  return function(v2) {
+    return function(scn) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("load")(scn))(_return3("spritesheet")(v.key)(v.path)(v2)))($$const(pure(applicativeEffect)(scn)));
+    };
+  };
+};
+
+// output/Graphics.Phaser.Scene/index.js
+var preload = function(callback) {
+  return function(scene) {
+    return function __do2() {
+      $$void(functorEffect)(_setProp("preload")(callback(scene))(scene))();
+      return scene;
+    };
+  };
+};
+var newScene = function(key) {
+  return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+};
+var create6 = function(callback) {
+  return function(scene) {
+    return function __do2() {
+      $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
+      return scene;
+    };
   };
 };
 
@@ -845,20 +845,20 @@ var oncreate = function(scene) {
   return $$void(functorEffect)(function __do2() {
     var explosionFrames = generateFrameNumbers(explodeSpriteKey)(0)(23)(scene)();
     $$void(functorEffect)(createAnimation(explodeAnimationKey)(explosionFrames)(20)(-1 | 0)(scene))();
-    $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2({
+    $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(create({
       x: 200,
       y: 200
     })(explodeSpriteKey)(scene))(playAnimation()({
       key: explodeAnimationKey,
       ignoreIfPlaying: true
     })))(scale))();
-    return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(add2({
+    return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(create({
       x: 200,
       y: 200
     })("balls")(scene))(setFrame(3)))(scale))();
   });
 };
-var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(oncreate)))(/* @__PURE__ */ preload(onpreload));
+var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create6(oncreate)))(/* @__PURE__ */ preload(onpreload));
 var main = function __do() {
   var scene = mainScene();
   return createWithConfig(append(semigroupOptions)(config.width(500))(append(semigroupOptions)(config.height(500))(config.scene([scene]))))();

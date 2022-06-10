@@ -39,10 +39,10 @@ oncreate scene =
   void do
     explosionFrames <- Sprite.generateFrameNumbers explodeSpriteKey 0 23 scene
     void $ Sprite.createAnimation explodeAnimationKey explosionFrames 20.0 (-1) scene
-    void $ Sprite.add { x: 200.0, y: 200.0 } explodeSpriteKey scene
+    void $ Sprite.create { x: 200.0, y: 200.0 } explodeSpriteKey scene
       >>= Sprite.playAnimation { key: explodeAnimationKey, ignoreIfPlaying: true }
       >>= scale
-    void $ Sprite.add { x: 200.0, y: 200.0 } "balls" scene
+    void $ Sprite.create { x: 200.0, y: 200.0 } "balls" scene
       >>= Sprite.setFrame 3
       >>= scale
   where

@@ -6,11 +6,9 @@ import Effect.Class.Console (log)
 import Graphics.Phaser as Phaser
 import Graphics.Phaser.Events (createEventListener0, on)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
-import Graphics.Phaser.GameObject (setAngle, setDisplaySize, setInteractive, setPosition)
-import Graphics.Phaser.Image as Image
+import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Loader (loadImage)
 import Graphics.Phaser.Scene as Scene
-import Graphics.Phaser.Text as Text
 
 main :: Effect PhaserGame
 main = do
@@ -26,7 +24,7 @@ mainScene =
   Scene.newScene "main"
     >>= Scene.create
         ( \scene -> do
-            void $ Text.create "Click the logo to create a new scene" scene
+            void $ GO.text.create "Click the logo to create a new scene" scene
             void $ startButton scene
         )
     >>= Scene.preload
@@ -38,10 +36,10 @@ mainScene =
         )
   where
   startButton scene =
-    Image.create "logo" scene
-      >>= setPosition { x: 100.0, y: 100.0 }
-      >>= setDisplaySize { width: 50.0, height: 50.0 }
-      >>= setInteractive
+    GO.image.create "logo" scene
+      >>= GO.setPosition { x: 100.0, y: 100.0 }
+      >>= GO.setDisplaySize { width: 50.0, height: 50.0 }
+      >>= GO.setInteractive
       >>= on "pointerdown" listener
     where
     callback :: Effect Unit
@@ -59,7 +57,7 @@ secondScene = do
     >>= Scene.create (createLogo >=> const (pure unit))
   where
   createLogo =
-    Image.create "logo"
-      >=> setPosition { x: 200.0, y: 200.0 }
-      >=> setAngle 30.0
-      >=> setDisplaySize { width: 50.0, height: 50.0 }
+    GO.image.create "logo"
+      >=> GO.setPosition { x: 200.0, y: 200.0 }
+      >=> GO.setAngle 30.0
+      >=> GO.setDisplaySize { width: 50.0, height: 50.0 }

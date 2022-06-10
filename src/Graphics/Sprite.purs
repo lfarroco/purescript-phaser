@@ -11,8 +11,8 @@ type FrameNumber
 
 -- | https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Sprite.html
 -- | A PhaserSprite also implements the PhaserGameObject typeclass
-add :: { x :: Number, y :: Number } -> String -> PhaserScene -> Effect PhaserSprite
-add {x,y} v2 = _getProp "add"  >=> _return3 "sprite" x y v2 
+create :: { x :: Number, y :: Number } -> String -> PhaserScene -> Effect PhaserSprite
+create {x,y} v2 = _getProp "add"  >=> _return3 "sprite" x y v2 
 
 -- | Besides having a `PhaserScene` parameter, animations created with `createAnimation`
 -- | are in fact global and can be accessed from other scenes. Because of that you
@@ -27,7 +27,7 @@ class Sprite a
 instance Sprite ArcadeSprite
 instance Sprite PhaserSprite
 
-playAnimation :: forall a. Sprite a=> {key:: String, ignoreIfPlaying:: Boolean} -> a -> Effect a
+playAnimation :: forall a. Sprite a => {key:: String, ignoreIfPlaying:: Boolean} -> a -> Effect a
 playAnimation {key, ignoreIfPlaying} obj =
    _getProp "anims" obj 
      >>= _return2 "play" key ignoreIfPlaying 
