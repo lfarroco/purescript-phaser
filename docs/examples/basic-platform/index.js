@@ -145,10 +145,10 @@ var fromFoldableImpl = function() {
       return new Cons2(head, tail);
     };
   }
-  function listToArray(list2) {
+  function listToArray(list) {
     var result = [];
     var count = 0;
-    var xs = list2;
+    var xs = list;
     while (xs !== emptyList) {
       result[count++] = xs.head;
       xs = xs.tail;
@@ -1021,68 +1021,7 @@ var addCollider = function() {
   };
 };
 
-// output/Graphics.Phaser.Image/index.js
-var create = function(v1) {
-  return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
-};
-
-// output/Graphics.Phaser.Sprite/index.js
-var stopAnimation = /* @__PURE__ */ _method0("stop");
-var stopAfterDelay = /* @__PURE__ */ _method1("stopAfterDelay");
-var setFrame = /* @__PURE__ */ _method1("setFrame");
-var removeAnimation = /* @__PURE__ */ _method1("anims");
-var playAnimation = function() {
-  return function(v) {
-    return function(obj) {
-      return bind(bindEffect)(bind(bindEffect)(_getProp("anims")(obj))(_return2("play")(v.key)(v.ignoreIfPlaying)))($$const(pure(applicativeEffect)(obj)));
-    };
-  };
-};
-var generateFrameNumbers = function(v1) {
-  return function(start) {
-    return function(end) {
-      return composeKleisli(bindEffect)(_getProp("anims"))(_return2("generateFrameNumbers")(v1)({
-        start,
-        end
-      }));
-    };
-  };
-};
-var generateFrameNames = function(v1) {
-  return composeKleisli(bindEffect)(_getProp("anims"))(_return2("generateFrameNames")(v1.key)(v1));
-};
-var createAnimation = function(key) {
-  return function(frames) {
-    return function(frameRate) {
-      return function(repeat) {
-        return composeKleisli(bindEffect)(_getProp("anims"))(_return1("create")({
-          key,
-          frames,
-          frameRate,
-          repeat
-        }));
-      };
-    };
-  };
-};
-var create2 = function(v) {
-  return function(v2) {
-    return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v.x)(v.y)(v2));
-  };
-};
-
 // output/Graphics.Phaser.GameObject/index.js
-var sprite = {
-  create: create2,
-  createAnimation,
-  playAnimation,
-  removeAnimation,
-  stopAnimation,
-  stopAfterDelay,
-  generateFrameNumbers,
-  generateFrameNames,
-  setFrame
-};
 var setScale = function() {
   return function(v) {
     return _method2("setScale")(v.x)(v.y);
@@ -1096,11 +1035,13 @@ var setPosition = function() {
 var setName = function() {
   return _method1("setName");
 };
-var image = {
-  create
-};
 var getX = function() {
   return _getProp("x");
+};
+
+// output/Graphics.Phaser.Image/index.js
+var create = function(v1) {
+  return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
 };
 
 // output/Graphics.Phaser.Input/index.js
@@ -1148,11 +1089,44 @@ var getPhysicsPlugin = /* @__PURE__ */ _getProp("physics");
 var getChildByName = function() {
   return safeGet;
 };
-var create6 = function(callback) {
+var create2 = function(callback) {
   return function(scene) {
     return function __do() {
       $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
       return scene;
+    };
+  };
+};
+
+// output/Graphics.Phaser.Sprite/index.js
+var playAnimation = function() {
+  return function(v) {
+    return function(obj) {
+      return bind(bindEffect)(bind(bindEffect)(_getProp("anims")(obj))(_return2("play")(v.key)(v.ignoreIfPlaying)))($$const(pure(applicativeEffect)(obj)));
+    };
+  };
+};
+var generateFrameNumbers = function(v1) {
+  return function(start) {
+    return function(end) {
+      return composeKleisli(bindEffect)(_getProp("anims"))(_return2("generateFrameNumbers")(v1)({
+        start,
+        end
+      }));
+    };
+  };
+};
+var createAnimation = function(key) {
+  return function(frames) {
+    return function(frameRate) {
+      return function(repeat) {
+        return composeKleisli(bindEffect)(_getProp("anims"))(_return1("create")({
+          key,
+          frames,
+          frameRate,
+          repeat
+        }));
+      };
     };
   };
 };
@@ -1175,16 +1149,16 @@ var onpreload = function(scene) {
 var move = function() {
   return function() {
     return function(cursors) {
-      return function(sprite2) {
-        var stop = bind(bindEffect)(setVelocityX()(0)(sprite2))(sprite.playAnimation()({
+      return function(sprite) {
+        var stop = bind(bindEffect)(setVelocityX()(0)(sprite))(playAnimation()({
           key: "turn",
           ignoreIfPlaying: false
         }));
-        var moveRight = bind(bindEffect)(setVelocityX()(150)(sprite2))(sprite.playAnimation()({
+        var moveRight = bind(bindEffect)(setVelocityX()(150)(sprite))(playAnimation()({
           key: "right",
           ignoreIfPlaying: true
         }));
-        var moveLeft = bind(bindEffect)(setVelocityX()(-150)(sprite2))(sprite.playAnimation()({
+        var moveLeft = bind(bindEffect)(setVelocityX()(-150)(sprite))(playAnimation()({
           key: "left",
           ignoreIfPlaying: true
         }));
@@ -1235,7 +1209,7 @@ var update2 = function(cursors) {
           return log3(monadEffectEffect)("Sprite not found!")();
         }
         ;
-        throw new Error("Failed pattern match at Main (line 141, column 5 - line 151, column 41): " + [player.constructor.name]);
+        throw new Error("Failed pattern match at Main (line 142, column 5 - line 152, column 41): " + [player.constructor.name]);
       };
     }();
     var movePlatform = function __do() {
@@ -1262,7 +1236,7 @@ var update2 = function(cursors) {
         return log3(monadEffectEffect)("Platform image not found!")();
       }
       ;
-      throw new Error("Failed pattern match at Main (line 157, column 5 - line 168, column 49): " + [platform.constructor.name]);
+      throw new Error("Failed pattern match at Main (line 158, column 5 - line 169, column 49): " + [platform.constructor.name]);
     };
     return function __do() {
       movePlayer();
@@ -1317,19 +1291,19 @@ var oncreate = function(scene) {
       y: 2
     })))(refreshBody()));
   };
-  var createBg = $$void(functorEffect)(bind(bindEffect)(image.create("sky")(scene))(setPosition()({
+  var createBg = $$void(functorEffect)(bind(bindEffect)(create("sky")(scene))(setPosition()({
     x: 400,
     y: 300
   })));
   var createAnimations = $$void(functorEffect)(function __do() {
-    var leftWalkFrames = sprite.generateFrameNumbers("dude")(0)(3)(scene)();
-    var rightWalkFrames = sprite.generateFrameNumbers("dude")(5)(8)(scene)();
-    $$void(functorEffect)(sprite.createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene))();
-    $$void(functorEffect)(sprite.createAnimation("turn")([{
+    var leftWalkFrames = generateFrameNumbers("dude")(0)(3)(scene)();
+    var rightWalkFrames = generateFrameNumbers("dude")(5)(8)(scene)();
+    $$void(functorEffect)(createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene))();
+    $$void(functorEffect)(createAnimation("turn")([{
       key: "dude",
       frame: 4
     }])(10)(-1 | 0)(scene))();
-    return $$void(functorEffect)(sprite.createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene))();
+    return $$void(functorEffect)(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene))();
   });
   return $$void(functorEffect)(function __do() {
     var phy = getPhysicsPlugin(scene)();
@@ -1342,12 +1316,10 @@ var oncreate = function(scene) {
     var cursors = createCursorKeys(scene)();
     createAnimations();
     $$void(functorEffect)(setupCollisions(player)(stars)(platformsGroup)(movingPlatform)(phy))();
-    return update(function(scn) {
-      return update2(cursors)(scn);
-    })(scene)();
+    return update(update2(cursors))(scene)();
   });
 };
-var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create6(oncreate)))(/* @__PURE__ */ preload(onpreload));
+var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create2(oncreate)))(/* @__PURE__ */ preload(onpreload));
 var main = /* @__PURE__ */ function() {
   var physicsConfig$prime = append(semigroupOptions)(physicsConfig["default"]("arcade"))(physicsConfig.arcade({
     debug: false,

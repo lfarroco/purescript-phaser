@@ -11,6 +11,8 @@ import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserImage, PhaserScene)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Loader (loadImage)
 import Graphics.Phaser.Scene as Scene
+import Graphics.Phaser.Text as Text
+import Graphics.Phaser.Text as Image
 
 main :: Effect PhaserGame
 main = do
@@ -40,13 +42,13 @@ mainScene =
       )
 
   title scene =
-    GO.text.create "Click the logo to trigger an event." scene
+    Text.create "Click the logo to trigger an event." scene
       >>= const (pure scene)
 
   startButton :: PhaserScene -> Effect PhaserScene
   startButton scene = do
     image <-
-      GO.image.create "logo" scene
+      Image.create "logo" scene
         >>= GO.setPosition { x: 100.0, y: 100.0 }
         >>= GO.setDisplaySize { width: 50.0, height: 50.0 }
         >>= GO.setInteractive
@@ -63,7 +65,7 @@ mainScene =
       log localX
       log localY
       _ <-
-        GO.image.create "logo" scene
+        Image.create "logo" scene
           >>= GO.setPosition { x: 200.0, y: 200.0 }
           >>= GO.setDisplaySize { width: 150.0, height: 150.0 }
       clickable <- getImageByName "clickable_image" scene

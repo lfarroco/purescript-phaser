@@ -445,10 +445,10 @@ var fromFoldableImpl = function() {
       return new Cons2(head, tail);
     };
   }
-  function listToArray(list2) {
+  function listToArray(list) {
     var result = [];
     var count = 0;
-    var xs = list2;
+    var xs = list;
     while (xs !== emptyList) {
       result[count++] = xs.head;
       xs = xs.tail;
@@ -703,7 +703,6 @@ var __return0 = (prop, obj) => obj[prop]();
 var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
 var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
-var __return4 = (prop, v1, v2, v3, v4, obj) => obj[prop](v1, v2, v3, v4);
 var _listener0 = (fn) => () => fn();
 
 // output/Effect.Uncurried/foreign.js
@@ -755,48 +754,14 @@ var runEffectFn5 = function runEffectFn52(fn) {
     };
   };
 };
-var runEffectFn6 = function runEffectFn62(fn) {
-  return function(a) {
-    return function(b) {
-      return function(c) {
-        return function(d) {
-          return function(e) {
-            return function(f) {
-              return function() {
-                return fn(a, b, c, d, e, f);
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-};
 
 // output/Utils.FFI/index.js
 var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
-var _return4 = /* @__PURE__ */ runEffectFn6(__return4);
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
 var _new1 = /* @__PURE__ */ runEffectFn2(__new1);
-var _method4 = function(prop) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(v4) {
-          return function(obj) {
-            return function __do2() {
-              $$void(functorEffect)(_return4(prop)(v1)(v2)(v3)(v4)(obj))();
-              return obj;
-            };
-          };
-        };
-      };
-    };
-  };
-};
 var _method2 = function(prop) {
   return function(v1) {
     return function(v2) {
@@ -844,64 +809,7 @@ var on2 = function() {
 };
 var createEventListener0 = _listener0;
 
-// output/Graphics.Phaser.Image/index.js
-var create = function(v1) {
-  return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
-};
-
-// output/Graphics.Phaser.Text/index.js
-var updateText = /* @__PURE__ */ _method0("updateText");
-var setText = /* @__PURE__ */ _method1("setText");
-var setStyle = /* @__PURE__ */ _method1("setStyle");
-var setStroke = /* @__PURE__ */ _method2("setStroke");
-var setShadowStroke = /* @__PURE__ */ _method1("setShadowStroke");
-var setShadowOffset = /* @__PURE__ */ _method1("setShadowOffset");
-var setShadowFill = /* @__PURE__ */ _method1("setShadowFill");
-var setShadowColor = /* @__PURE__ */ _method1("setShadowColor");
-var setShadowBlur = /* @__PURE__ */ _method1("setShadowBlur");
-var setShadow = /* @__PURE__ */ _method0("setShadow");
-var setPadding = function(v) {
-  return _method4("setPadding")(v.left)(v.top)(v.right)(v.bottom);
-};
-var setMaxLines = /* @__PURE__ */ _method1("setMaxLines");
-var setLineSpacing = /* @__PURE__ */ _method1("setLineSpacing");
-var setFontStyle = /* @__PURE__ */ _method1("setFontStyle");
-var setFontSize = /* @__PURE__ */ _method1("setFontSize");
-var setFontFamily = /* @__PURE__ */ _method1("setFontFamily");
-var setFont = /* @__PURE__ */ _method1("setFont");
-var setColor = /* @__PURE__ */ _method1("setColor");
-var getTextMetrics = /* @__PURE__ */ _return0("getTextMetrics");
-var createFromArray = function(v1) {
-  return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
-};
-var create2 = function(v1) {
-  return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
-};
-
 // output/Graphics.Phaser.GameObject/index.js
-var text = {
-  create: create2,
-  createFromArray,
-  setText,
-  getTextMetrics,
-  setColor,
-  setFontFamily,
-  setFont,
-  setFontSize,
-  setFontStyle,
-  setLineSpacing,
-  setMaxLines,
-  setPadding,
-  setShadowBlur,
-  setShadowColor,
-  setShadowFill,
-  setShadow,
-  setShadowOffset,
-  setShadowStroke,
-  setStroke,
-  setStyle,
-  updateText
-};
 var setPosition = function() {
   return function(v) {
     return _method2("setPosition")(v.x)(v.y);
@@ -918,8 +826,10 @@ var setDisplaySize = function() {
 var setAngle = function() {
   return _method1("setAngle");
 };
-var image = {
-  create
+
+// output/Graphics.Phaser.Image/index.js
+var create = function(v1) {
+  return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
 };
 
 // output/Graphics.Phaser.Loader/index.js
@@ -948,7 +858,7 @@ var launch = /* @__PURE__ */ _method2("launch");
 var getScenePlugin = function() {
   return _getProp("scene");
 };
-var create6 = function(callback) {
+var create2 = function(callback) {
   return function(scene) {
     return function __do2() {
       $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
@@ -957,16 +867,21 @@ var create6 = function(callback) {
   };
 };
 
+// output/Graphics.Phaser.Text/index.js
+var create3 = function(v1) {
+  return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
+};
+
 // output/Main/index.js
 var secondScene = /* @__PURE__ */ function() {
-  var createLogo = composeKleisli(bindEffect)(image.create("logo"))(composeKleisli(bindEffect)(setPosition()({
+  var createLogo = composeKleisli(bindEffect)(create("logo"))(composeKleisli(bindEffect)(setPosition()({
     x: 200,
     y: 200
   }))(composeKleisli(bindEffect)(setAngle()(30))(setDisplaySize()({
     width: 50,
     height: 50
   }))));
-  return bind(bindEffect)(newScene("snd"))(create6(composeKleisli(bindEffect)(createLogo)($$const(pure(applicativeEffect)(unit)))));
+  return bind(bindEffect)(newScene("snd"))(create2(composeKleisli(bindEffect)(createLogo)($$const(pure(applicativeEffect)(unit)))));
 }();
 var mainScene = /* @__PURE__ */ function() {
   var startButton = function(scene) {
@@ -975,7 +890,7 @@ var mainScene = /* @__PURE__ */ function() {
       return bind(bindEffect)(getScenePlugin()(scene))(launch("snd")({}))();
     });
     var listener = createEventListener0(callback);
-    return bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(image.create("logo")(scene))(setPosition()({
+    return bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(create("logo")(scene))(setPosition()({
       x: 100,
       y: 100
     })))(setDisplaySize()({
@@ -983,9 +898,9 @@ var mainScene = /* @__PURE__ */ function() {
       height: 50
     })))(setInteractive()))(on2()("pointerdown")(listener));
   };
-  return bind(bindEffect)(bind(bindEffect)(newScene("main"))(create6(function(scene) {
+  return bind(bindEffect)(bind(bindEffect)(newScene("main"))(create2(function(scene) {
     return function __do2() {
-      $$void(functorEffect)(text.create("Click the logo to create a new scene")(scene))();
+      $$void(functorEffect)(create3("Click the logo to create a new scene")(scene))();
       return $$void(functorEffect)(startButton(scene))();
     };
   })))(preload(composeKleisli(bindEffect)(loadImage({

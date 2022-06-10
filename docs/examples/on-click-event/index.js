@@ -532,10 +532,10 @@ var fromFoldableImpl = function() {
       return new Cons2(head, tail);
     };
   }
-  function listToArray(list2) {
+  function listToArray(list) {
     var result = [];
     var count = 0;
-    var xs = list2;
+    var xs = list;
     while (xs !== emptyList) {
       result[count++] = xs.head;
       xs = xs.tail;
@@ -790,7 +790,6 @@ var __return0 = (prop, obj) => obj[prop]();
 var __return1 = (prop, v1, obj) => obj[prop](v1);
 var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
 var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
-var __return4 = (prop, v1, v2, v3, v4, obj) => obj[prop](v1, v2, v3, v4);
 var _listener3 = (fn) => (v1, v2, v3) => fn(v1)(v2)(v3)();
 
 // output/Data.Nullable/foreign.js
@@ -852,27 +851,9 @@ var runEffectFn5 = function runEffectFn52(fn) {
     };
   };
 };
-var runEffectFn6 = function runEffectFn62(fn) {
-  return function(a) {
-    return function(b) {
-      return function(c) {
-        return function(d) {
-          return function(e) {
-            return function(f) {
-              return function() {
-                return fn(a, b, c, d, e, f);
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-};
 
 // output/Utils.FFI/index.js
 var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
-var _return4 = /* @__PURE__ */ runEffectFn6(__return4);
 var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
 var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
 var _return1 = /* @__PURE__ */ runEffectFn3(__return1);
@@ -883,22 +864,6 @@ var getNullable = function(expr) {
 };
 var _return0 = /* @__PURE__ */ runEffectFn2(__return0);
 var _new1 = /* @__PURE__ */ runEffectFn2(__new1);
-var _method4 = function(prop) {
-  return function(v1) {
-    return function(v2) {
-      return function(v3) {
-        return function(v4) {
-          return function(obj) {
-            return function __do2() {
-              $$void(functorEffect)(_return4(prop)(v1)(v2)(v3)(v4)(obj))();
-              return obj;
-            };
-          };
-        };
-      };
-    };
-  };
-};
 var _method2 = function(prop) {
   return function(v1) {
     return function(v2) {
@@ -957,64 +922,7 @@ var on2 = function() {
 var off = /* @__PURE__ */ _method1("off");
 var createEventListener3 = _listener3;
 
-// output/Graphics.Phaser.Image/index.js
-var create = function(v1) {
-  return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
-};
-
-// output/Graphics.Phaser.Text/index.js
-var updateText = /* @__PURE__ */ _method0("updateText");
-var setText = /* @__PURE__ */ _method1("setText");
-var setStyle = /* @__PURE__ */ _method1("setStyle");
-var setStroke = /* @__PURE__ */ _method2("setStroke");
-var setShadowStroke = /* @__PURE__ */ _method1("setShadowStroke");
-var setShadowOffset = /* @__PURE__ */ _method1("setShadowOffset");
-var setShadowFill = /* @__PURE__ */ _method1("setShadowFill");
-var setShadowColor = /* @__PURE__ */ _method1("setShadowColor");
-var setShadowBlur = /* @__PURE__ */ _method1("setShadowBlur");
-var setShadow = /* @__PURE__ */ _method0("setShadow");
-var setPadding = function(v) {
-  return _method4("setPadding")(v.left)(v.top)(v.right)(v.bottom);
-};
-var setMaxLines = /* @__PURE__ */ _method1("setMaxLines");
-var setLineSpacing = /* @__PURE__ */ _method1("setLineSpacing");
-var setFontStyle = /* @__PURE__ */ _method1("setFontStyle");
-var setFontSize = /* @__PURE__ */ _method1("setFontSize");
-var setFontFamily = /* @__PURE__ */ _method1("setFontFamily");
-var setFont = /* @__PURE__ */ _method1("setFont");
-var setColor = /* @__PURE__ */ _method1("setColor");
-var getTextMetrics = /* @__PURE__ */ _return0("getTextMetrics");
-var createFromArray = function(v1) {
-  return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
-};
-var create2 = function(v1) {
-  return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
-};
-
 // output/Graphics.Phaser.GameObject/index.js
-var text = {
-  create: create2,
-  createFromArray,
-  setText,
-  getTextMetrics,
-  setColor,
-  setFontFamily,
-  setFont,
-  setFontSize,
-  setFontStyle,
-  setLineSpacing,
-  setMaxLines,
-  setPadding,
-  setShadowBlur,
-  setShadowColor,
-  setShadowFill,
-  setShadow,
-  setShadowOffset,
-  setShadowStroke,
-  setStroke,
-  setStyle,
-  updateText
-};
 var setPosition = function() {
   return function(v) {
     return _method2("setPosition")(v.x)(v.y);
@@ -1030,9 +938,6 @@ var setDisplaySize = function() {
   return function(v) {
     return _method2("setDisplaySize")(v.width)(v.height);
   };
-};
-var image = {
-  create
 };
 
 // output/Graphics.Phaser.Loader/index.js
@@ -1060,7 +965,7 @@ var newScene = function(key) {
 var getChildByName = function() {
   return safeGet;
 };
-var create6 = function(callback) {
+var create = function(callback) {
   return function(scene) {
     return function __do2() {
       $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
@@ -1069,11 +974,16 @@ var create6 = function(callback) {
   };
 };
 
+// output/Graphics.Phaser.Text/index.js
+var create2 = function(v1) {
+  return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
+};
+
 // output/Main/index.js
 var getImageByName = /* @__PURE__ */ getChildByName();
 var mainScene = /* @__PURE__ */ function() {
   var title = function(scene) {
-    return bind(bindEffect)(text.create("Click the logo to trigger an event.")(scene))($$const(pure(applicativeEffect)(scene)));
+    return bind(bindEffect)(create2("Click the logo to trigger an event.")(scene))($$const(pure(applicativeEffect)(scene)));
   };
   var startButton = function(scene) {
     var callback = function(pointer) {
@@ -1091,7 +1001,7 @@ var mainScene = /* @__PURE__ */ function() {
             })(showRecordFieldsNil)(showNumber))(showNumber)))(pointer))();
             log3(monadEffectEffect)(localX)();
             log3(monadEffectEffect)(localY)();
-            bind(bindEffect)(bind(bindEffect)(image.create("logo")(scene))(setPosition()({
+            bind(bindEffect)(bind(bindEffect)(create2("logo")(scene))(setPosition()({
               x: 200,
               y: 200
             })))(setDisplaySize()({
@@ -1108,7 +1018,7 @@ var mainScene = /* @__PURE__ */ function() {
                 return log3(monadEffectEffect)("Clickable image not found")();
               }
               ;
-              throw new Error("Failed pattern match at Main (line 70, column 7 - line 72, column 51): " + [clickable.constructor.name]);
+              throw new Error("Failed pattern match at Main (line 72, column 7 - line 74, column 51): " + [clickable.constructor.name]);
             })();
             return unit;
           };
@@ -1117,14 +1027,14 @@ var mainScene = /* @__PURE__ */ function() {
     };
     var listener = createEventListener3(callback);
     return function __do2() {
-      var image2 = bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(image.create("logo")(scene))(setPosition()({
+      var image = bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(create2("logo")(scene))(setPosition()({
         x: 100,
         y: 100
       })))(setDisplaySize()({
         width: 50,
         height: 50
       })))(setInteractive()))(setName()("clickable_image"))();
-      $$void(functorEffect)(on2()("pointerdown")(listener)(image2))();
+      $$void(functorEffect)(on2()("pointerdown")(listener)(image))();
       return scene;
     };
   };
@@ -1134,7 +1044,7 @@ var mainScene = /* @__PURE__ */ function() {
       path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
     })(scene));
   });
-  var oncreate = create6(composeKleisli(bindEffect)(title)(composeKleisli(bindEffect)(startButton)($$const(pure(applicativeEffect)(unit)))));
+  var oncreate = create(composeKleisli(bindEffect)(title)(composeKleisli(bindEffect)(startButton)($$const(pure(applicativeEffect)(unit)))));
   return bind(bindEffect)(bind(bindEffect)(newScene("main"))(onpreload))(oncreate);
 }();
 var main = function __do() {

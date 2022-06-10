@@ -22,10 +22,11 @@ import Graphics.Phaser.ArcadePhysics as P
 import Graphics.Phaser.CoreTypes (class PhysicsEnabled)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, PhaserGame, PhaserScene)
 import Graphics.Phaser.GameObject as GO
+import Graphics.Phaser.Image (create)
 import Graphics.Phaser.Input (CursorKeys, createCursorKeys, isDown)
 import Graphics.Phaser.Loader as Loader
 import Graphics.Phaser.Scene as Scene
-import Graphics.Phaser.Sprite (class Sprite)
+import Graphics.Phaser.Sprite (class Sprite, createAnimation, generateFrameNumbers, playAnimation)
 
 -- Adapted from http://labs.phaser.io/edit.html?src=src/physics/arcade/basic%20platform.js
 main :: Effect PhaserGame
@@ -77,7 +78,7 @@ oncreate scene =
     cursors <- createCursorKeys scene
     createAnimations
     void $ setupCollisions player stars platformsGroup movingPlatform phy
-    Scene.update (\scn -> update cursors scn) scene
+    Scene.update (update cursors) scene
   where
   setupCollisions player stars platformsGroup movingPlatform =
     P.addCollider player platformsGroup
@@ -88,15 +89,15 @@ oncreate scene =
 
   createAnimations =
     void do
-      leftWalkFrames <- GO.sprite.generateFrameNumbers "dude" 0 3 scene
-      rightWalkFrames <- GO.sprite.generateFrameNumbers "dude" 5 8 scene
-      void $ GO.sprite.createAnimation "left" leftWalkFrames 10.0 (-1) scene
-      void $ GO.sprite.createAnimation "turn" [ { key: "dude", frame: 4 } ] 10.0 (-1) scene
-      void $ GO.sprite.createAnimation "right" rightWalkFrames 10.0 (-1) scene
+      leftWalkFrames <- generateFrameNumbers "dude" 0 3 scene
+      rightWalkFrames <- generateFrameNumbers "dude" 5 8 scene
+      void $ createAnimation "left" leftWalkFrames 10.0 (-1) scene
+      void $ createAnimation "turn" [ { key: "dude", frame: 4 } ] 10.0 (-1) scene
+      void $ createAnimation "right" rightWalkFrames 10.0 (-1) scene
 
   createBg =
     void do
-      GO.image.create "sky" scene
+      create "sky" scene
         >>= GO.setPosition { x: 400.0, y: 300.0 }
 
   createFloor group =
@@ -181,15 +182,15 @@ move cursors sprite =
   where
   moveRight =
     P.setVelocityX (150.0) sprite
-      >>= GO.sprite.playAnimation { key: "right", ignoreIfPlaying: true }
+      >>= playAnimation { key: "right", ignoreIfPlaying: true }
 
   moveLeft =
     P.setVelocityX (-150.0) sprite
-      >>= GO.sprite.playAnimation { key: "left", ignoreIfPlaying: true }
+      >>= playAnimation { key: "left", ignoreIfPlaying: true }
 
   stop =
     P.setVelocityX 0.0 sprite
-      >>= GO.sprite.playAnimation { key: "turn", ignoreIfPlaying: false }
+      >>= playAnimation { key: "turn", ignoreIfPlaying: false }
 
 getPlayer :: PhaserScene -> Effect (Maybe ArcadeSprite)
 getPlayer scene = Scene.getChildByName "player" scene
