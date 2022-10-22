@@ -1,14 +1,4 @@
-module Graphics.Phaser.Loader
-  ( setBaseUrl
-  , setPath
-  , loadImage
-  , loadAtlas
-  , loadSpritesheet
-  , loadPlugin
-  , loadScene
-  -- , loadTilemapTileJSON
-  , loadTilemapTiledJSON
-  ) where
+module Graphics.Phaser.Loader where
 
 import Prelude
 import Effect (Effect)
@@ -16,7 +6,7 @@ import Graphics.Phaser.ForeignTypes (PhaserScene)
 import Utils.FFI (_getProp, _method1, _method2, _method3, _return1, _return2, _return3)
 
 setBaseUrl :: String -> PhaserScene -> Effect PhaserScene
-setBaseUrl v1 = _getProp "load" >=> _method1 "setBaseUrl" v1
+setBaseUrl v1 = _getProp "load" >=> _method1 "setBaseURL" v1
 
 setPath :: String -> PhaserScene -> Effect PhaserScene
 setPath v1 = _getProp "load" >=> _method1 "setPath" v1
