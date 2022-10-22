@@ -1,5 +1,7 @@
 module Graphics.Phaser.ForeignTypes where
 
+import Prelude
+
 -- https://photonstorm.github.io/phaser3-docs/Phaser.html
 foreign import data PhaserMainNamespace :: Type
 
@@ -115,3 +117,179 @@ foreign import data PhaserScenePlugin :: Type
 foreign import data PhaserPhysicsPlugin :: Type
 
 foreign import data PhaserClock :: Type
+
+---------------------
+-- Show Instances
+---------------------
+instance Show PhaserMainNamespace where
+  show _ = "PhaserMainNamespace"
+
+instance Show PhaserGame where
+  show _ = "PhaserMainNamespace"
+
+instance Show PhaserGameObject where
+  show _ = "PhaserGameObject"
+
+instance Show PhaserContainer where
+  show _ = "PhaserContainer"
+
+instance Show PhaserImage where
+  show _ = "PhaserImage"
+
+instance Show PhaserText where
+  show _ = "PhaserText"
+
+instance Show PhaserGraphic where
+  show _ = "PhaserGraphic"
+
+instance Show PhaserTween where
+  show _ = "PhaserTween"
+
+instance Show PhaserEmitter where
+  show _ = "PhaserEmitter"
+
+instance Show Event where
+  show _ = "Event"
+
+instance Show PhaserTileMap where
+  show _ = "PhaserTileMap"
+
+instance Show PhaserTile where
+  show _ = "PhaserTile"
+
+instance Show EventEmitter where
+  show _ = "EventEmitter"
+
+instance Show PhaserTileSet where
+  show _ = "PhaserTileSet"
+
+instance Show PhaserLayer where
+  show _ = "PhaserLayer"
+
+instance Show PhaserLayerData where
+  show _ = "PhaserLayerData"
+
+instance Show PhaserMapData where
+  show _ = "PhaserMapData"
+
+instance Show PhaserScene where
+  show _ = "PhaserScene"
+
+instance Show PhaserPointer where
+  show _ = "PhaserPointer"
+
+instance Show SceneManager where
+  show _ = "SceneManager"
+
+instance Show NodeEventEmitter where
+  show _ = "NodeEventEmitter"
+
+instance Show PhaserRegistry where
+  show _ = "PhaserRegistry"
+
+instance Show PhaserCamera where
+  show _ = "PhaserCamera"
+
+instance Show PhaserCameraController where
+  show _ = "PhaserCameraController"
+
+instance Show PhaserSprite where
+  show _ = "PhaserSprite"
+
+instance Show PhaserAnimation where
+  show _ = "PhaserAnimation"
+
+instance Show PhaserRectangle where
+  show _ = "PhaserRectangle"
+
+instance Show PhaserEllipse where
+  show _ = "PhaserEllipse"
+
+instance Show AudioContext where
+  show _ = "AudioContext"
+
+instance Show PluginObjectItem where
+  show _ = "PluginObjectItem"
+
+instance Show BootCallback where
+  show _ = "BootCallback"
+
+instance Show WebGLPipeline where
+  show _ = "WebGLPipeline"
+
+instance Show JSONCamera where
+  show _ = "JSONCamera"
+
+instance Show PackFileSection where
+  show _ = "PackFileSection"
+
+instance Show PhysicsImage where
+  show _ = "PhysicsImage"
+
+instance Show KeyboardPlugin where
+  show _ = "KeyboardPlugin"
+
+instance Show KeyCode where
+  show _ = "KeyCode"
+
+instance Show Key where
+  show _ = "Key"
+
+instance Show KeyBoardEvent where
+  show _ = "KeyBoardEvent"
+
+instance Show KeyBoardPlugin where
+  show _ = "KeyBoardPlugin"
+
+instance Show PhaserEvents where
+  show _ = "PhaserEvents"
+
+instance Show PhaserDataManager where
+  show _ = "PhaserDataManager"
+
+instance Show Group where
+  show _ = "Group"
+
+instance Show StaticGroup where
+  show _ = "StaticGroup"
+
+instance Show ArcadeImage where
+  show _ = "ArcadeImage"
+
+instance Show ArcadeSprite where
+  show _ = "ArcadeSprite"
+
+instance Show PhaserArcadeWorld where
+  show _ = "PhaserArcadeWorld"
+
+instance Show PhaserGameObjectCreator where
+  show _ = "PhaserGameObjectCreator"
+
+instance Show PhaserGameObjectFactory where
+  show _ = "PhaserGameObjectFactory"
+
+instance Show PhaserGamePad where
+  show _ = "PhaserGamePad"
+
+instance Show PhaserGamePadButton where
+  show _ = "PhaserGamePadButton"
+
+instance Show PhaserDisplayList where
+  show _ = "PhaserDisplayList"
+
+instance Show PhaserSystems where
+  show _ = "PhaserSystems"
+
+instance Show PhaserCache where
+  show _ = "PhaserCache"
+
+instance Show PhaserScenePlugin where
+  show _ = "PhaserScenePlugin"
+
+instance Show PhaserPhysicsPlugin where
+  show _ = "PhaserPhysicsPlugin"
+
+instance Show PhaserClock where
+  show _ = "PhaserClock"
+
+
