@@ -1,7 +1,8 @@
 module Graphics.Phaser.CoreTypes where
 
+import Prelude
+
 import Graphics.Phaser.ForeignTypes as FT
---import Data.Options (Options, opt, options)
 import Web.HTML.HTMLElement (HTMLElement)
 
 -- Current time in milliseconds
@@ -169,6 +170,7 @@ type SettingsConfig
 class GameObject :: forall k. k -> Constraint
 class (EventEmitter a, Transform a, Tint a) <= GameObject a
 
+instance GameObject FT.PhaserGameObject
 instance GameObject FT.PhaserImage
 instance GameObject FT.PhaserContainer
 instance GameObject FT.PhaserGraphic
@@ -177,12 +179,14 @@ instance GameObject FT.PhaserText
 instance GameObject FT.ArcadeImage
 instance GameObject FT.ArcadeSprite
 instance GameObject FT.PhaserLayer
+instance GameObject FT.PhaserLine
 
 -- Transform
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Transform.html
 class Transform :: forall k. k -> Constraint
 class Transform a
 
+instance Transform  FT.PhaserGameObject
 instance Transform FT.PhaserImage
 instance Transform FT.PhaserContainer
 instance Transform FT.PhaserGraphic
@@ -191,12 +195,14 @@ instance Transform FT.PhaserText
 instance Transform FT.ArcadeImage
 instance Transform FT.ArcadeSprite
 instance Transform FT.PhaserLayer
+instance Transform FT.PhaserLine
 
 -- Tint
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Tint.html
 class Tint :: forall k. k -> Constraint
 class Tint a
 
+instance Tint   FT.PhaserGameObject
 instance Tint FT.PhaserImage
 instance Tint FT.PhaserContainer
 instance Tint FT.PhaserGraphic
@@ -205,6 +211,7 @@ instance Tint FT.PhaserText
 instance Tint FT.ArcadeImage
 instance Tint FT.ArcadeSprite
 instance Tint FT.PhaserLayer
+instance Tint FT.PhaserLine
 
 class EventEmitter :: forall k. k -> Constraint
 class EventEmitter a
@@ -212,6 +219,7 @@ class EventEmitter a
 class PhysicsEnabled :: forall k. k -> Constraint
 class PhysicsEnabled a
 
+instance EventEmitter FT.PhaserGameObject
 instance EventEmitter FT.NodeEventEmitter
 instance EventEmitter FT.PhaserImage
 instance EventEmitter FT.PhaserContainer
@@ -223,6 +231,9 @@ instance EventEmitter FT.ArcadeSprite
 instance EventEmitter FT.KeyboardPlugin
 instance EventEmitter FT.Key
 instance EventEmitter FT.PhaserLayer
+instance EventEmitter FT.PhaserInputPlugin
+instance EventEmitter FT.PhaserLoaderPlugin
+instance EventEmitter FT.PhaserLine
 
 -- | This is somewhat confusing.
 -- | Some phaser objects inherit direct from Event Emitter
@@ -277,6 +288,9 @@ instance ArcadeGroup FT.StaticGroup
   TODO: maybe replace this with the DOM type, for more portability
 -}
 foreign import data EventListener :: Type
+
+instance Show EventListener  where
+  show _ = "EventListener"
 
 class Collidable :: forall k. k -> Constraint
 class Collidable a
