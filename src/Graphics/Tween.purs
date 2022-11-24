@@ -14,7 +14,6 @@ data TweenProperty
 
 addTween ::
   forall target.
-  GameObject target =>
   { scene :: PhaserScene
   , targets :: Array target
   , prop :: TweenProperty
