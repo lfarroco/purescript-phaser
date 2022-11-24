@@ -1,27 +1,28 @@
-module Graphics.Phaser.GameConfig (_gameConfig, GameConfig, GameConfigIndex, _physicsConfig, PhysicsConfig, PhysicsConfigIndex) where
+module Graphics.Phaser.GameConfig
+  ( GameConfig(..)
+  , GameConfigIndex
+  , PhysicsConfig
+  , PhysicsConfigIndex
+  , _gameConfig
+  , _physicsConfig
+  )
+  where
 
 import Prelude
-
 import Data.Maybe (Maybe(..))
 import Data.Options (Options, opt, optional, options, (:=))
 import Graphics.Canvas (CanvasElement, Context2D)
 import Graphics.Phaser.CoreTypes (ArcadeWorldConfig)
-import Graphics.Phaser.ForeignTypes (AudioContext, BootCallback, PhaserScene, PluginObjectItem, WebGLPipeline)
+import Graphics.Phaser.ForeignTypes (BootCallback, PhaserScene, PluginObjectItem, WebGLPipeline)
 import Internal.Utils (_opt)
 import Web.HTML (HTMLElement)
-
 
 data GameConfig
 
 type GameConfigIndex
   = { antialias :: Boolean -> Options GameConfig
     , antialiasGL :: Boolean -> Options GameConfig
-    , audio ::
-        { context :: AudioContext
-        , disableWebAudio :: Boolean
-        , noAudio :: Boolean
-        } ->
-        Options GameConfig
+    , audio :: Boolean -> Options GameConfig
     , autofocus :: Boolean -> Options GameConfig
     , backgroundColor :: Int -> Options GameConfig
     , banner ::
@@ -158,7 +159,8 @@ _gameConfig :: GameConfigIndex
 _gameConfig =
   { width: _opt "width"
   , height: _opt "height"
-  , type_: _opt "type_"
+  -- Type codes: https://github.com/photonstorm/phaser/blob/0301922bdc2b505305278659f8b8707317f243de/src/const.js
+  , type_: _opt "type"
   , zoom: _opt "zoom"
   , parent: _opt "parent"
   , canvas: _opt "canvas"
