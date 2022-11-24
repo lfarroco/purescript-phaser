@@ -2,9 +2,13 @@ module Graphics.Phaser.Loader where
 
 import Prelude
 import Effect (Effect)
-import Graphics.Phaser.ForeignTypes (PhaserScene)
+import Graphics.Phaser.ForeignTypes (PhaserLoaderPlugin, PhaserScene)
 import Utils.FFI (_getProp, _method1, _method2, _method3, _return1, _return2, _return3)
 
+getLoaderPlugin :: PhaserScene -> Effect PhaserLoaderPlugin
+getLoaderPlugin = _getProp "load"
+
+-- TODO: refactor to accept loader plugin instead of scene
 setBaseUrl :: String -> PhaserScene -> Effect PhaserScene
 setBaseUrl v1 = _getProp "load" >=> _method1 "setBaseURL" v1
 
