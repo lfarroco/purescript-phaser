@@ -5,10 +5,22 @@ module Graphics.Phaser.Input where
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Input.Keyboard.Key.html
 import Prelude
 import Effect (Effect)
-import Graphics.Phaser.CoreTypes (EventListener)
+import Graphics.Phaser.CoreTypes (class GameObject, EventListener)
 import Graphics.Phaser.Events (createEventListener2, on)
-import Graphics.Phaser.ForeignTypes (Key, KeyBoardEvent, KeyBoardPlugin, KeyCode, PhaserScene)
-import Utils.FFI (_getProp, _method0, _method1, _return0, _return1)
+import Graphics.Phaser.ForeignTypes (Key, KeyBoardEvent, KeyBoardPlugin, KeyCode, PhaserInputPlugin, PhaserScene)
+import Utils.FFI (_getProp, _method0, _method1, _return0, _return1, _setProp)
+
+getInputPlugin :: PhaserScene -> Effect PhaserInputPlugin
+getInputPlugin = _getProp "input"
+
+setDraggable :: forall a. GameObject a => a -> PhaserInputPlugin -> Effect PhaserInputPlugin
+setDraggable = _method1 "setDraggable"
+
+setDropZone :: forall a. GameObject a => Boolean -> a -> Effect a
+setDropZone bool go = do
+  input <- _getProp "input" go
+  _setProp "dropZone" bool input
+  pure go
 
 type CursorKeys
   = { up :: Key
