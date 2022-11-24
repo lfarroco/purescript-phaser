@@ -1,7 +1,9 @@
 module Graphics.Phaser
-  ( create
+  ( addScene
+  , create
   , createWithConfig
   , createWithUnsafeConfig
+  , destroy
   , setDimentions
   , config
   , physicsConfig
@@ -11,12 +13,15 @@ import Prelude
 import Data.Options (Options, options)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Dimensions)
-import Graphics.Phaser.ForeignTypes (PhaserGame)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
 import Graphics.Phaser.GameConfig (GameConfig, GameConfigIndex, PhysicsConfigIndex, _gameConfig, _physicsConfig)
-import Utils.FFI (_getProp, _new0, _new1, _setProp, phaser)
+import Utils.FFI (_getProp, _method4, _new0, _new1, _return0, _setProp, phaser)
 
 create :: Effect PhaserGame
 create = phaser >>= _getProp "Game" >>= _new0
+
+destroy :: PhaserGame -> Effect Unit
+destroy = _return0 "destroy"
 
 createWithConfig :: Options GameConfig -> Effect PhaserGame
 createWithConfig opts = createWithUnsafeConfig (options opts)
@@ -39,3 +44,10 @@ config = _gameConfig
 
 physicsConfig :: PhysicsConfigIndex
 physicsConfig = _physicsConfig
+
+-- Allows adding a scene _after_ a game has started
+addScene :: forall sceneData. String -> PhaserGame -> PhaserScene -> Boolean -> sceneData -> Effect PhaserGame
+addScene key game scene autoStart sceneData = do
+  sceneMngr <- _getProp "scene" game
+  void $ _method4 "add" key scene autoStart sceneData sceneMngr
+  pure game
