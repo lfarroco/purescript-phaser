@@ -8,6 +8,7 @@ foreign import data PhaserMainNamespace :: Type
 foreign import data PhaserGame :: Type
 
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.GameObject.html
+-- Generic game object class
 foreign import data PhaserGameObject :: Type
 
 foreign import data PhaserContainer :: Type
@@ -118,9 +119,26 @@ foreign import data PhaserPhysicsPlugin :: Type
 
 foreign import data PhaserClock :: Type
 
----------------------
--- Show Instances
----------------------
+foreign import data PhaserInputPlugin :: Type
+
+foreign import data PhaserTilemapObjectLayer :: Type
+
+foreign import data PhaserTiledObject :: Type
+
+foreign import data PhaserTiledObjectProperty :: Type
+
+foreign import data PhaserLoaderPlugin :: Type
+instance Show PhaserLoaderPlugin  where
+  show _ = "PhaserLoaderPlugin"
+
+foreign import data PhaserLine :: Type
+instance Show PhaserLine  where
+  show _ = "PhaserLine"
+
+foreign import data PhaserCurveSpline :: Type
+instance Show PhaserCurveSpline   where
+  show _ = "PhaserCurveSpline"
+
 instance Show PhaserMainNamespace where
   show _ = "PhaserMainNamespace"
 
@@ -292,4 +310,5 @@ instance Show PhaserPhysicsPlugin where
 instance Show PhaserClock where
   show _ = "PhaserClock"
 
-
+instance Show PhaserTilemapObjectLayer where
+  show _ = "PhaserTilemapObjectLayer"
