@@ -7,10 +7,11 @@ module Graphics.Phaser.Scene where
 -- for it are still available for it if you really want to use them
 import Prelude
 import Data.Maybe (Maybe)
+import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class HasScenePlugin)
 import Graphics.Phaser.Events (createEventListener1, createEventListener2)
-import Graphics.Phaser.ForeignTypes (PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
+import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
 import Utils.FFI (_getProp, _method1, _method2, _method4, _new1, _return1, _return2, _setProp, phaser, safeGet)
 
 -- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
@@ -60,8 +61,11 @@ children = _getProp "children" >=> _getProp "list"
 getChildByName :: forall a. GameObject a => String -> PhaserScene -> Effect (Maybe a)
 getChildByName = safeGet
 
-getData :: forall a. String -> PhaserScene -> Effect a
-getData = _return1 "getData"
+getData :: forall a. String -> PhaserScene -> Effect (Maybe a)
+getData key scn = do
+  prop <- _getProp "data" scn
+  (val :: Nullable a) <- _return1 "get" key prop
+  pure $ toMaybe val
 
 setData :: forall k v. k -> v -> PhaserScene -> Effect PhaserScene
 setData v1 v2 scn =
@@ -74,6 +78,9 @@ getPluginInstance = _getProp
 
 getKey :: PhaserScene -> Effect String
 getKey = _getProp "key"
+
+getGame :: PhaserScene -> Effect PhaserGame
+getGame = _getProp "game"
 
 -- ScenePlugin bindings
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Scenes.ScenePlugin.html
