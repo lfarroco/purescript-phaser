@@ -1,10 +1,13 @@
 module Graphics.Phaser.GameObject where
 
 import Prelude
+import Data.Maybe (Maybe)
+import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class Tint, class Transform, Dimensions, Vector)
-import Graphics.Phaser.ForeignTypes (PhaserScene)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _return0)
+import Graphics.Phaser.ForeignTypes (PhaserContainer, PhaserGameObject, PhaserImage, PhaserRectangle, PhaserScene, PhaserSprite, PhaserText)
+import Unsafe.Coerce (unsafeCoerce)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _return0, _return1)
 
 getScene :: forall a. GameObject a => a -> Effect PhaserScene
 getScene = _getProp "scene"
@@ -146,3 +149,28 @@ setName = _method1 "setName"
 
 getName :: forall a. GameObject a => a -> Effect String
 getName = _getProp "name"
+
+-- Convertions
+-- TODO: check properties of object before converting, retuning an error if type doesn't match
+asImage :: PhaserGameObject -> Effect PhaserImage
+asImage = unsafeCoerce
+
+asContainer :: PhaserGameObject -> Effect PhaserContainer
+asContainer = unsafeCoerce
+
+asText :: PhaserGameObject -> Effect PhaserText
+asText = unsafeCoerce
+
+asRect :: PhaserGameObject -> Effect PhaserRectangle
+asRect = unsafeCoerce
+
+asSprite :: PhaserGameObject -> Effect PhaserSprite
+asSprite = unsafeCoerce
+
+-- TODO: use the data registry as parameter
+getData :: forall obj a. GameObject obj => String -> obj -> Effect (Maybe a)
+getData k obj = do
+  _return1 "getData" k obj >>= (toMaybe >>> pure)
+
+setData :: forall obj a. GameObject obj => String -> a -> obj -> Effect obj
+setData = _method2 "setData"
