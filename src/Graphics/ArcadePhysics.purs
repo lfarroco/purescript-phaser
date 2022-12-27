@@ -54,7 +54,13 @@ setAllowGravity v1 obj =
 acceleration :: forall a. PhysicsEnabled a => a -> Effect Vector
 acceleration = _getProp "body.acceleration"
 
-facing :: forall a. PhysicsEnabled a => a -> Effect Number
+-- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.Body.html#facing__anchor
+-- NONE: 10
+-- UP: 11
+-- DOWN: 12
+-- LEFT: 13
+-- RIGHT: 14
+facing :: forall a. PhysicsEnabled a => a -> Effect Int
 facing = _getProp "body.facing"
 
 velocity :: forall a. PhysicsEnabled a => a -> Effect Vector
