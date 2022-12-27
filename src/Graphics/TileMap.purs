@@ -9,7 +9,7 @@ import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (Vector)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserImage, PhaserLayer, PhaserLayerData, PhaserMapData, PhaserScene, PhaserTile, PhaserTileMap, PhaserTileSet, PhaserTiledObject, PhaserTilemapObjectLayer, PhaserTiledObjectProperty)
 import Internal.Utils (_opt)
-import Utils.FFI (_getProp, _method0, _method2, _return0, _return1, _return2, _return4, _return5)
+import Utils.FFI (_getProp, _method0, _method2, _method4, _return0, _return1, _return2, _return4, _return5)
 
 data TilemapConfig
 
@@ -162,6 +162,18 @@ getTileAtWorldXYWithCamera :: { x :: Number, y :: Number } -> Boolean -> String 
 getTileAtWorldXYWithCamera { x, y } notNull layerKey camera tilemap = do
   (nullableTile :: Nullable PhaserTile) <- _return5 "getTileAtWorldXY" x y notNull camera layerKey tilemap
   pure $ toMaybe nullableTile
+
+setCollisionByProperty :: Boolean -> Boolean -> String -> PhaserTileMap -> Effect PhaserTileMap
+setCollisionByProperty collides recalculateFaces layer =
+  _method4 "setCollisionByProperty"
+    { collides: true }
+    collides
+    recalculateFaces
+    layer
+
+-- TODO: use separated modules, as tilemaps and tilelayers have methods with the same names
+setLayerCollisionBetween :: Int -> Int -> PhaserLayer -> Effect PhaserLayer
+setLayerCollisionBetween = _method2 "setCollisionBetween"
 
 getTileX :: PhaserTile -> Effect Int
 getTileX = _getProp "x"

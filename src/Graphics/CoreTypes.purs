@@ -299,6 +299,7 @@ instance Collidable FT.Group
 instance Collidable FT.StaticGroup 
 instance Collidable FT.ArcadeImage 
 instance Collidable FT.ArcadeSprite 
+instance Collidable FT.PhaserLayer 
 
 instance Collidable (Array FT.Group)
 instance Collidable (Array FT.StaticGroup)
