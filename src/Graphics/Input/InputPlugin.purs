@@ -1,4 +1,4 @@
-module Graphics.Phaser.InputPlugin where
+module Graphics.Phaser.Input.InputPlugin where
 
 --
 -- https://newdocs.phaser.io/docs/3.55.2/Phaser.Input.InputPlugin
