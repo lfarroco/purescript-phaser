@@ -1,6 +1,8 @@
 module Graphics.Phaser.Display.RGB where
 
--- Port of https://newdocs.phaser.io/docs/3.55.1/Phaser.Display.RGB
+--
+-- https://newdocs.phaser.io/docs/3.55.1/Phaser.Display.RGB
+-- Status: Complete
 --
 import Prelude
 import Data.Foreign.SmallFFI (unsafeForeignFunction)

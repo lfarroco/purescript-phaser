@@ -1,8 +1,9 @@
-module Graphics.Phaser.Input where
+module Graphics.Phaser.InputPlugin where
 
--- Related docs:
--- https://photonstorm.github.io/phaser3-docs/Phaser.Input.Keyboard.KeyboardPlugin.html
--- https://photonstorm.github.io/phaser3-docs/Phaser.Input.Keyboard.Key.html
+--
+-- https://newdocs.phaser.io/docs/3.55.2/Phaser.Input.InputPlugin
+-- Status: Incomplete
+--
 import Prelude
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, EventListener)
@@ -21,6 +22,12 @@ setDropZone bool go = do
   input <- _getProp "input" go
   _setProp "dropZone" bool input
   pure go
+
+dragTimeThreshold :: Number -> PhaserInputPlugin -> Effect PhaserInputPlugin
+dragTimeThreshold = _method1 "dragTimeThreshold"
+
+dragDistanceThreshold :: Number -> PhaserInputPlugin -> Effect PhaserInputPlugin
+dragDistanceThreshold = _method1 "dragDistanceThreshold  "
 
 type CursorKeys
   = { up :: Key

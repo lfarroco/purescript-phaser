@@ -164,12 +164,12 @@ getTileAtWorldXYWithCamera { x, y } notNull layerKey camera tilemap = do
   pure $ toMaybe nullableTile
 
 setCollisionByProperty :: Boolean -> Boolean -> String -> PhaserTileMap -> Effect PhaserTileMap
-setCollisionByProperty collides recalculateFaces layer =
+setCollisionByProperty collides recalculateFaces tilemap =
   _method4 "setCollisionByProperty"
     { collides: true }
     collides
     recalculateFaces
-    layer
+    tilemap
 
 -- TODO: use separated modules, as tilemaps and tilelayers have methods with the same names
 setLayerCollisionBetween :: Int -> Int -> PhaserLayer -> Effect PhaserLayer
