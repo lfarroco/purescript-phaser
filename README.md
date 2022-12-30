@@ -31,3 +31,11 @@ The code for the examples is available at `/docs/examples`.
 
 You can play with each example and compile it with `spago bundle-app`. You can also
 run `make compile-examples` in the root directory to compile all examples.
+
+
+### Namespaces
+
+The library is being refactored to use the same namespaces as Phaser. For example, 
+the input plugin should be located on `Phaser.Input.InputPlugin`, as this is the
+same location that the uses it. Recent work for that being placed in the 
+`next` branch.
