@@ -6,7 +6,7 @@ export const __setProp = (path, val, obj) => {
 };
 
 export const __new0 = (fn) => new fn();
-export const __new1 = (config, fn) => new fn(config);
+export const __new1 = (v1, fn) => new fn(v1);
 
 export const __return0 = (prop, obj) => obj[prop]();
 export const __return1 = (prop, v1, obj) => obj[prop](v1);
