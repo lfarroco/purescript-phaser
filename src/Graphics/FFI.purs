@@ -4,7 +4,7 @@ import Prelude
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
-import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, EffectFn5, EffectFn6, EffectFn7, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4, runEffectFn5, runEffectFn6, runEffectFn7)
+import Effect.Uncurried (EffectFn1, EffectFn2, EffectFn3, EffectFn4, EffectFn5, EffectFn6, EffectFn7, EffectFn8, runEffectFn1, runEffectFn2, runEffectFn3, runEffectFn4, runEffectFn5, runEffectFn6, runEffectFn7, runEffectFn8)
 import Graphics.Phaser.CoreTypes (EventListener)
 import Graphics.Phaser.ForeignTypes (PhaserMainNamespace)
 
@@ -54,6 +54,11 @@ foreign import __return5 :: forall a b c d e f g h. EffectFn7 a b c d e f g h
 
 _return5 :: forall prop obj v1 v2 v3 v4 v5 returnValue. prop -> v1 -> v2 -> v3 -> v4 -> v5 -> obj -> Effect returnValue
 _return5 = runEffectFn7 __return5
+
+foreign import __return6 :: forall a b c d e f g h i. EffectFn8 a b c d e f g h i
+
+_return6 :: forall prop obj v1 v2 v3 v4 v5 v6 returnValue. prop -> v1 -> v2 -> v3 -> v4 -> v5 -> v6 -> obj -> Effect returnValue
+_return6 = runEffectFn8 __return6
 
 _method0 :: forall obj. String -> obj -> Effect obj
 _method0 prop obj = do

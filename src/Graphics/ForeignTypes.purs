@@ -128,6 +128,13 @@ foreign import data PhaserTiledObject :: Type
 foreign import data PhaserTiledObjectProperty :: Type
 
 foreign import data PhaserLoaderPlugin :: Type
+
+foreign import data PhaserLightsManager :: Type
+
+foreign import data PhaserLight:: Type
+
+foreign import data PhaserRGB :: Type
+
 instance Show PhaserLoaderPlugin  where
   show _ = "PhaserLoaderPlugin"
 
@@ -312,3 +319,12 @@ instance Show PhaserClock where
 
 instance Show PhaserTilemapObjectLayer where
   show _ = "PhaserTilemapObjectLayer"
+
+instance Show PhaserLightsManager  where
+  show _ = "PhaserLightsManager"
+
+instance Show PhaserLight  where
+  show _ = "PhaserLight"
+
+instance Show PhaserRGB  where
+  show _ = "PhaserRGB"

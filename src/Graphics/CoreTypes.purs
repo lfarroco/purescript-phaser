@@ -180,6 +180,7 @@ instance GameObject FT.ArcadeImage
 instance GameObject FT.ArcadeSprite
 instance GameObject FT.PhaserLayer
 instance GameObject FT.PhaserLine
+instance GameObject FT.PhaserLight
 
 -- Transform
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Transform.html
@@ -196,13 +197,14 @@ instance Transform FT.ArcadeImage
 instance Transform FT.ArcadeSprite
 instance Transform FT.PhaserLayer
 instance Transform FT.PhaserLine
+instance Transform FT.PhaserLight
 
 -- Tint
 -- https://photonstorm.github.io/phaser3-docs/Phaser.GameObjects.Components.Tint.html
 class Tint :: forall k. k -> Constraint
 class Tint a
 
-instance Tint   FT.PhaserGameObject
+instance Tint FT.PhaserGameObject
 instance Tint FT.PhaserImage
 instance Tint FT.PhaserContainer
 instance Tint FT.PhaserGraphic
@@ -212,6 +214,7 @@ instance Tint FT.ArcadeImage
 instance Tint FT.ArcadeSprite
 instance Tint FT.PhaserLayer
 instance Tint FT.PhaserLine
+instance Tint FT.PhaserLight
 
 class EventEmitter :: forall k. k -> Constraint
 class EventEmitter a
@@ -234,6 +237,7 @@ instance EventEmitter FT.PhaserLayer
 instance EventEmitter FT.PhaserInputPlugin
 instance EventEmitter FT.PhaserLoaderPlugin
 instance EventEmitter FT.PhaserLine
+instance EventEmitter FT.PhaserLight
 
 -- | This is somewhat confusing.
 -- | Some phaser objects inherit direct from Event Emitter

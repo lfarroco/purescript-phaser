@@ -16,6 +16,8 @@ export const __return4 = (prop, v1, v2, v3, v4, obj) =>
   obj[prop](v1, v2, v3, v4);
 export const __return5 = (prop, v1, v2, v3, v4, v5, obj) =>
   obj[prop](v1, v2, v3, v4, v5);
+export const __return6 = (prop, v1, v2, v3, v4, v5, v6, obj) =>
+  obj[prop](v1, v2, v3, v4, v5, v6);
 
 export const _listener0 = (fn) => () => fn();
 export const _listener1 = (fn) => (v1) => fn(v1)();
