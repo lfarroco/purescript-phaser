@@ -1,8 +1,9 @@
-module Graphics.Phaser.Tween (addTween, TweenProperty(..)) where
+module Graphics.Phaser.Tween where
 
 import Prelude
 import Effect (Effect)
 import Graphics.Phaser.ForeignTypes (PhaserScene, PhaserTween)
+import Utils.FFI (_method0)
 
 data TweenProperty
   = TweenVector { x :: Number, y :: Number }
@@ -44,3 +45,12 @@ foreign import addTweenImpl ::
   , callback :: PhaserScene -> Effect Unit
   } ->
   Effect PhaserTween
+
+stop :: PhaserTween -> Effect PhaserTween
+stop tween = _method0 "stop" tween
+
+remove :: PhaserTween -> Effect PhaserTween
+remove tween = _method0 "remove" tween
+
+pause :: PhaserTween -> Effect PhaserTween
+pause tween = _method0 "pause" tween

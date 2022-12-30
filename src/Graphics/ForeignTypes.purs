@@ -135,6 +135,11 @@ foreign import data PhaserLight:: Type
 
 foreign import data PhaserRGB :: Type
 
+foreign import data PhaserTweenManager :: Type
+
+instance Show PhaserTweenManager where
+  show _ = "PhaserTweenManager"
+
 instance Show PhaserLoaderPlugin  where
   show _ = "PhaserLoaderPlugin"
 

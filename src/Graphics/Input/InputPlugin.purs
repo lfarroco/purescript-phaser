@@ -23,11 +23,11 @@ setDropZone bool go = do
   _setProp "dropZone" bool input
   pure go
 
-dragTimeThreshold :: Number -> PhaserInputPlugin -> Effect PhaserInputPlugin
-dragTimeThreshold = _method1 "dragTimeThreshold"
+setDragTimeThreshold :: Number -> PhaserInputPlugin -> Effect Unit
+setDragTimeThreshold = _setProp "dragTimeThreshold"
 
-dragDistanceThreshold :: Number -> PhaserInputPlugin -> Effect PhaserInputPlugin
-dragDistanceThreshold = _method1 "dragDistanceThreshold  "
+setDragDistanceThreshold :: Number -> PhaserInputPlugin -> Effect Unit
+setDragDistanceThreshold = _setProp "dragDistanceThreshold"
 
 type CursorKeys
   = { up :: Key
