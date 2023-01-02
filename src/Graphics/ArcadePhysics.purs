@@ -61,7 +61,7 @@ acceleration = _getProp "body.acceleration"
 -- LEFT: 13
 -- RIGHT: 14
 facing :: forall a. PhysicsEnabled a => a -> Effect Int
-facing = _getProp "body.facing"
+facing = _getProp "body" >=> _getProp "facing"
 
 velocity :: forall a. PhysicsEnabled a => a -> Effect Vector
 velocity obj = _getProp "body" obj >>= _getProp "velocity"
