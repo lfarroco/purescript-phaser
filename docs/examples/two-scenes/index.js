@@ -51,9 +51,11 @@
     return dict.pure;
   };
   var liftA1 = function(dictApplicative) {
+    var apply2 = apply(dictApplicative.Apply0());
+    var pure1 = pure(dictApplicative);
     return function(f) {
       return function(a) {
-        return apply(dictApplicative.Apply0())(pure(dictApplicative)(f))(a);
+        return apply2(pure1(f))(a);
       };
     };
   };
@@ -63,10 +65,11 @@
     return dict.bind;
   };
   var composeKleisli = function(dictBind) {
+    var bind1 = bind(dictBind);
     return function(f) {
       return function(g) {
         return function(a) {
-          return bind(dictBind)(f(a))(g);
+          return bind1(f(a))(g);
         };
       };
     };
@@ -194,20 +197,26 @@
   };
 
   // output/Data.Newtype/index.js
-  var unwrap = coerce;
+  var coerce2 = /* @__PURE__ */ coerce();
+  var unwrap = function() {
+    return coerce2;
+  };
 
   // output/Data.Foldable/index.js
   var foldr = function(dict) {
     return dict.foldr;
   };
   var foldMapDefaultR = function(dictFoldable) {
+    var foldr2 = foldr(dictFoldable);
     return function(dictMonoid) {
+      var append3 = append(dictMonoid.Semigroup0());
+      var mempty3 = mempty(dictMonoid);
       return function(f) {
-        return foldr(dictFoldable)(function(x) {
+        return foldr2(function(x) {
           return function(acc) {
-            return append(dictMonoid.Semigroup0())(f(x))(acc);
+            return append3(f(x))(acc);
           };
-        })(mempty(dictMonoid));
+        })(mempty3);
       };
     };
   };
@@ -245,11 +254,13 @@
 
   // output/Control.Monad/index.js
   var ap = function(dictMonad) {
+    var bind6 = bind(dictMonad.Bind1());
+    var pure3 = pure(dictMonad.Applicative0());
     return function(f) {
       return function(a) {
-        return bind(dictMonad.Bind1())(f)(function(f$prime) {
-          return bind(dictMonad.Bind1())(a)(function(a$prime) {
-            return pure(dictMonad.Applicative0())(f$prime(a$prime));
+        return bind6(f)(function(f$prime) {
+          return bind6(a)(function(a$prime) {
+            return pure3(f$prime(a$prime));
           });
         });
       };
@@ -341,13 +352,13 @@
     }
     return function(apply2) {
       return function(map2) {
-        return function(pure2) {
+        return function(pure3) {
           return function(f) {
             return function(array) {
               function go(bot, top2) {
                 switch (top2 - bot) {
                   case 0:
-                    return pure2([]);
+                    return pure3([]);
                   case 1:
                     return map2(array1)(f(array[bot]));
                   case 2:
@@ -584,12 +595,14 @@
   }
 
   // output/Foreign.Object/index.js
+  var $$void2 = /* @__PURE__ */ $$void(functorST);
   var fromFoldable3 = function(dictFoldable) {
+    var fromFoldable1 = fromFoldable2(dictFoldable);
     return function(l) {
       return runST(function __do2() {
         var s = newImpl();
-        foreach(fromFoldable2(dictFoldable)(l))(function(v) {
-          return $$void(functorST)(poke2(v.value0)(v.value1)(s));
+        foreach(fromFoldable1(l))(function(v) {
+          return $$void2(poke2(v.value0)(v.value1)(s));
         })();
         return s;
       });
@@ -597,22 +610,24 @@
   };
 
   // output/Data.Options/index.js
+  var fromFoldable4 = /* @__PURE__ */ fromFoldable3(foldableArray);
   var semigroupOptions = semigroupArray;
   var options = function(v) {
-    return unsafeToForeign(fromFoldable3(foldableArray)(v));
+    return unsafeToForeign(fromFoldable4(v));
   };
   var monoidOptions = monoidArray;
+  var mempty2 = /* @__PURE__ */ mempty(monoidOptions);
   var defaultToOptions = function(k) {
     return function(v) {
       return [new Tuple(k, unsafeToForeign(v))];
     };
   };
-  var opt = function($4) {
-    return Op(defaultToOptions($4));
+  var opt = function($8) {
+    return Op(defaultToOptions($8));
   };
   var assoc = /* @__PURE__ */ unwrap();
   var optional = function(option) {
-    return maybe(mempty(monoidOptions))(function(v) {
+    return maybe(mempty2)(function(v) {
       return assoc(option)(v);
     });
   };
@@ -626,9 +641,9 @@
 
   // output/Effect.Class.Console/index.js
   var log3 = function(dictMonadEffect) {
-    var $33 = liftEffect(dictMonadEffect);
-    return function($34) {
-      return $33(log2($34));
+    var $51 = liftEffect(dictMonadEffect);
+    return function($52) {
+      return $51(log2($52));
     };
   };
 
@@ -647,7 +662,7 @@
   var _gameConfig = {
     width: /* @__PURE__ */ _opt("width"),
     height: /* @__PURE__ */ _opt("height"),
-    type_: /* @__PURE__ */ _opt("type_"),
+    type_: /* @__PURE__ */ _opt("type"),
     zoom: /* @__PURE__ */ _opt("zoom"),
     parent: /* @__PURE__ */ _opt("parent"),
     canvas: /* @__PURE__ */ _opt("canvas"),
@@ -699,7 +714,7 @@
   var __setProp = (path, val, obj) => {
     obj[path] = val;
   };
-  var __new1 = (config2, fn) => new fn(config2);
+  var __new1 = (v1, fn) => new fn(v1);
   var __return0 = (prop, obj) => obj[prop]();
   var __return1 = (prop, v1, obj) => obj[prop](v1);
   var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
@@ -757,6 +772,7 @@
   };
 
   // output/Utils.FFI/index.js
+  var $$void3 = /* @__PURE__ */ $$void(functorEffect);
   var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
   var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
   var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
@@ -768,7 +784,7 @@
       return function(v2) {
         return function(obj) {
           return function __do2() {
-            $$void(functorEffect)(_return2(prop)(v1)(v2)(obj))();
+            $$void3(_return2(prop)(v1)(v2)(obj))();
             return obj;
           };
         };
@@ -779,7 +795,7 @@
     return function(v1) {
       return function(obj) {
         return function __do2() {
-          $$void(functorEffect)(_return1(prop)(v1)(obj))();
+          $$void3(_return1(prop)(v1)(obj))();
           return obj;
         };
       };
@@ -788,7 +804,7 @@
   var _method0 = function(prop) {
     return function(obj) {
       return function __do2() {
-        $$void(functorEffect)(_return0(prop)(obj))();
+        $$void3(_return0(prop)(obj))();
         return obj;
       };
     };
@@ -796,8 +812,9 @@
   var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
   // output/Graphics.Phaser/index.js
+  var bind2 = /* @__PURE__ */ bind(bindEffect);
   var createWithUnsafeConfig = function(cfg) {
-    return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+    return bind2(bind2(phaser)(_getProp("Game")))(_new1(cfg));
   };
   var createWithConfig = function(opts) {
     return createWithUnsafeConfig(options(opts));
@@ -829,31 +846,36 @@
   };
 
   // output/Graphics.Phaser.Image/index.js
+  var composeKleisli2 = /* @__PURE__ */ composeKleisli(bindEffect);
   var create = function(v1) {
-    return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
+    return composeKleisli2(_getProp("add"))(_return3("image")(0)(0)(v1));
   };
 
   // output/Graphics.Phaser.Loader/index.js
+  var bind3 = /* @__PURE__ */ bind(bindEffect);
+  var $$void4 = /* @__PURE__ */ $$void(functorEffect);
   var loadImage = function(v) {
     return function(scn) {
       return function __do2() {
-        $$void(functorEffect)(bind(bindEffect)(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
+        $$void4(bind3(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
         return scn;
       };
     };
   };
 
   // output/Graphics.Phaser.Scene/index.js
+  var $$void5 = /* @__PURE__ */ $$void(functorEffect);
+  var bind4 = /* @__PURE__ */ bind(bindEffect);
   var preload = function(callback) {
     return function(scene) {
       return function __do2() {
-        $$void(functorEffect)(_setProp("preload")(callback(scene))(scene))();
+        $$void5(_setProp("preload")(callback(scene))(scene))();
         return scene;
       };
     };
   };
   var newScene = function(key) {
-    return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+    return bind4(bind4(phaser)(_getProp("Scene")))(_new1(key));
   };
   var launch = /* @__PURE__ */ _method2("launch");
   var getScenePlugin = function() {
@@ -862,57 +884,69 @@
   var create2 = function(callback) {
     return function(scene) {
       return function __do2() {
-        $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
+        $$void5(_setProp("create")(callback(scene))(scene))();
         return scene;
       };
     };
   };
 
   // output/Graphics.Phaser.Text/index.js
+  var composeKleisli3 = /* @__PURE__ */ composeKleisli(bindEffect);
   var create3 = function(v1) {
-    return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
+    return composeKleisli3(_getProp("add"))(_return3("text")(0)(0)(v1));
   };
 
   // output/Main/index.js
+  var composeKleisli4 = /* @__PURE__ */ composeKleisli(bindEffect);
+  var setPosition2 = /* @__PURE__ */ setPosition();
+  var setDisplaySize2 = /* @__PURE__ */ setDisplaySize();
+  var bind5 = /* @__PURE__ */ bind(bindEffect);
+  var pure2 = /* @__PURE__ */ pure(applicativeEffect);
+  var $$void6 = /* @__PURE__ */ $$void(functorEffect);
+  var log4 = /* @__PURE__ */ log3(monadEffectEffect);
+  var getScenePlugin2 = /* @__PURE__ */ getScenePlugin();
+  var setInteractive2 = /* @__PURE__ */ setInteractive();
+  var on3 = /* @__PURE__ */ on2();
+  var append2 = /* @__PURE__ */ append(semigroupOptions);
   var secondScene = /* @__PURE__ */ function() {
-    var createLogo = composeKleisli(bindEffect)(create("logo"))(composeKleisli(bindEffect)(setPosition()({
+    var createLogo = composeKleisli4(create("logo"))(composeKleisli4(setPosition2({
       x: 200,
       y: 200
-    }))(composeKleisli(bindEffect)(setAngle()(30))(setDisplaySize()({
+    }))(composeKleisli4(setAngle()(30))(setDisplaySize2({
       width: 50,
       height: 50
     }))));
-    return bind(bindEffect)(newScene("snd"))(create2(composeKleisli(bindEffect)(createLogo)($$const(pure(applicativeEffect)(unit)))));
+    return bind5(newScene("snd"))(create2(composeKleisli4(createLogo)($$const(pure2(unit)))));
   }();
   var mainScene = /* @__PURE__ */ function() {
     var startButton = function(scene) {
-      var callback = $$void(functorEffect)(function __do2() {
-        log3(monadEffectEffect)("clicked!")();
-        return bind(bindEffect)(getScenePlugin()(scene))(launch("snd")({}))();
+      var callback = $$void6(function __do2() {
+        log4("clicked!")();
+        return bind5(getScenePlugin2(scene))(launch("snd")({}))();
       });
       var listener = createEventListener0(callback);
-      return bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(create("logo")(scene))(setPosition()({
+      return bind5(bind5(bind5(bind5(create("logo")(scene))(setPosition2({
         x: 100,
         y: 100
-      })))(setDisplaySize()({
+      })))(setDisplaySize2({
         width: 50,
         height: 50
-      })))(setInteractive()))(on2()("pointerdown")(listener));
+      })))(setInteractive2))(on3("pointerdown")(listener));
     };
-    return bind(bindEffect)(bind(bindEffect)(newScene("main"))(create2(function(scene) {
+    return bind5(bind5(newScene("main"))(create2(function(scene) {
       return function __do2() {
-        $$void(functorEffect)(create3("Click the logo to create a new scene")(scene))();
-        return $$void(functorEffect)(startButton(scene))();
+        $$void6(create3("Click the logo to create a new scene")(scene))();
+        return $$void6(startButton(scene))();
       };
-    })))(preload(composeKleisli(bindEffect)(loadImage({
+    })))(preload(composeKleisli4(loadImage({
       key: "logo",
       path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
-    }))($$const(pure(applicativeEffect)(unit)))));
+    }))($$const(pure2(unit)))));
   }();
   var main = function __do() {
     var mainScene$prime = mainScene();
     var snd$prime = secondScene();
-    return createWithConfig(append(semigroupOptions)(config.width(400))(append(semigroupOptions)(config.height(400))(config.scene([mainScene$prime, snd$prime]))))();
+    return createWithConfig(append2(config.width(400))(append2(config.height(400))(config.scene([mainScene$prime, snd$prime]))))();
   };
 
   // <stdin>

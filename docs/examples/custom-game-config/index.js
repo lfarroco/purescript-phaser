@@ -27,9 +27,11 @@
     return dict.pure;
   };
   var liftA1 = function(dictApplicative) {
+    var apply2 = apply(dictApplicative.Apply0());
+    var pure1 = pure(dictApplicative);
     return function(f) {
       return function(a) {
-        return apply(dictApplicative.Apply0())(pure(dictApplicative)(f))(a);
+        return apply2(pure1(f))(a);
       };
     };
   };
@@ -39,10 +41,11 @@
     return dict.bind;
   };
   var composeKleisli = function(dictBind) {
+    var bind1 = bind(dictBind);
     return function(f) {
       return function(g) {
         return function(a) {
-          return bind(dictBind)(f(a))(g);
+          return bind1(f(a))(g);
         };
       };
     };
@@ -170,20 +173,26 @@
   };
 
   // output/Data.Newtype/index.js
-  var unwrap = coerce;
+  var coerce2 = /* @__PURE__ */ coerce();
+  var unwrap = function() {
+    return coerce2;
+  };
 
   // output/Data.Foldable/index.js
   var foldr = function(dict) {
     return dict.foldr;
   };
   var foldMapDefaultR = function(dictFoldable) {
+    var foldr2 = foldr(dictFoldable);
     return function(dictMonoid) {
+      var append3 = append(dictMonoid.Semigroup0());
+      var mempty3 = mempty(dictMonoid);
       return function(f) {
-        return foldr(dictFoldable)(function(x) {
+        return foldr2(function(x) {
           return function(acc) {
-            return append(dictMonoid.Semigroup0())(f(x))(acc);
+            return append3(f(x))(acc);
           };
-        })(mempty(dictMonoid));
+        })(mempty3);
       };
     };
   };
@@ -221,11 +230,13 @@
 
   // output/Control.Monad/index.js
   var ap = function(dictMonad) {
+    var bind5 = bind(dictMonad.Bind1());
+    var pure2 = pure(dictMonad.Applicative0());
     return function(f) {
       return function(a) {
-        return bind(dictMonad.Bind1())(f)(function(f$prime) {
-          return bind(dictMonad.Bind1())(a)(function(a$prime) {
-            return pure(dictMonad.Applicative0())(f$prime(a$prime));
+        return bind5(f)(function(f$prime) {
+          return bind5(a)(function(a$prime) {
+            return pure2(f$prime(a$prime));
           });
         });
       };
@@ -549,12 +560,14 @@
   }
 
   // output/Foreign.Object/index.js
+  var $$void2 = /* @__PURE__ */ $$void(functorST);
   var fromFoldable3 = function(dictFoldable) {
+    var fromFoldable1 = fromFoldable2(dictFoldable);
     return function(l) {
       return runST(function __do2() {
         var s = newImpl();
-        foreach(fromFoldable2(dictFoldable)(l))(function(v) {
-          return $$void(functorST)(poke2(v.value0)(v.value1)(s));
+        foreach(fromFoldable1(l))(function(v) {
+          return $$void2(poke2(v.value0)(v.value1)(s));
         })();
         return s;
       });
@@ -562,22 +575,24 @@
   };
 
   // output/Data.Options/index.js
+  var fromFoldable4 = /* @__PURE__ */ fromFoldable3(foldableArray);
   var semigroupOptions = semigroupArray;
   var options = function(v) {
-    return unsafeToForeign(fromFoldable3(foldableArray)(v));
+    return unsafeToForeign(fromFoldable4(v));
   };
   var monoidOptions = monoidArray;
+  var mempty2 = /* @__PURE__ */ mempty(monoidOptions);
   var defaultToOptions = function(k) {
     return function(v) {
       return [new Tuple(k, unsafeToForeign(v))];
     };
   };
-  var opt = function($4) {
-    return Op(defaultToOptions($4));
+  var opt = function($8) {
+    return Op(defaultToOptions($8));
   };
   var assoc = /* @__PURE__ */ unwrap();
   var optional = function(option) {
-    return maybe(mempty(monoidOptions))(function(v) {
+    return maybe(mempty2)(function(v) {
       return assoc(option)(v);
     });
   };
@@ -597,7 +612,7 @@
   var _gameConfig = {
     width: /* @__PURE__ */ _opt("width"),
     height: /* @__PURE__ */ _opt("height"),
-    type_: /* @__PURE__ */ _opt("type_"),
+    type_: /* @__PURE__ */ _opt("type"),
     zoom: /* @__PURE__ */ _opt("zoom"),
     parent: /* @__PURE__ */ _opt("parent"),
     canvas: /* @__PURE__ */ _opt("canvas"),
@@ -649,7 +664,7 @@
   var __setProp = (path, val, obj) => {
     obj[path] = val;
   };
-  var __new1 = (config2, fn) => new fn(config2);
+  var __new1 = (v1, fn) => new fn(v1);
   var __return3 = (prop, v1, v2, v3, obj) => obj[prop](v1, v2, v3);
 
   // output/Effect.Uncurried/foreign.js
@@ -696,8 +711,9 @@
   var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
 
   // output/Graphics.Phaser/index.js
+  var bind2 = /* @__PURE__ */ bind(bindEffect);
   var createWithUnsafeConfig = function(cfg) {
-    return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+    return bind2(bind2(phaser)(_getProp("Game")))(_new1(cfg));
   };
   var createWithConfig = function(opts) {
     return createWithUnsafeConfig(options(opts));
@@ -705,30 +721,36 @@
   var config = _gameConfig;
 
   // output/Graphics.Phaser.Scene/index.js
+  var $$void3 = /* @__PURE__ */ $$void(functorEffect);
+  var bind3 = /* @__PURE__ */ bind(bindEffect);
   var newScene = function(key) {
-    return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+    return bind3(bind3(phaser)(_getProp("Scene")))(_new1(key));
   };
   var create = function(callback) {
     return function(scene) {
       return function __do2() {
-        $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
+        $$void3(_setProp("create")(callback(scene))(scene))();
         return scene;
       };
     };
   };
 
   // output/Graphics.Phaser.Text/index.js
+  var composeKleisli2 = /* @__PURE__ */ composeKleisli(bindEffect);
   var create2 = function(v1) {
-    return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
+    return composeKleisli2(_getProp("add"))(_return3("text")(0)(0)(v1));
   };
 
   // output/Main/index.js
-  var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(function(scene) {
-    return $$void(functorEffect)(create2("The game was created with a custom display size")(scene));
+  var bind4 = /* @__PURE__ */ bind(bindEffect);
+  var $$void4 = /* @__PURE__ */ $$void(functorEffect);
+  var append2 = /* @__PURE__ */ append(semigroupOptions);
+  var mainScene = /* @__PURE__ */ bind4(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create(function(scene) {
+    return $$void4(create2("The game was created with a custom display size")(scene));
   }));
   var main = function __do() {
     var main$prime = mainScene();
-    var config2 = append(semigroupOptions)(config.title("My example game"))(append(semigroupOptions)(config.width(500))(append(semigroupOptions)(config.height(200))(config.scene([main$prime]))));
+    var config2 = append2(config.title("My example game"))(append2(config.width(500))(append2(config.height(200))(config.scene([main$prime]))));
     return createWithConfig(config2)();
   };
 

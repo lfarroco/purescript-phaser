@@ -60,9 +60,11 @@
     return dict.pure;
   };
   var liftA1 = function(dictApplicative) {
+    var apply2 = apply(dictApplicative.Apply0());
+    var pure1 = pure(dictApplicative);
     return function(f) {
       return function(a) {
-        return apply(dictApplicative.Apply0())(pure(dictApplicative)(f))(a);
+        return apply2(pure1(f))(a);
       };
     };
   };
@@ -72,10 +74,11 @@
     return dict.bind;
   };
   var composeKleisli = function(dictBind) {
+    var bind1 = bind(dictBind);
     return function(f) {
       return function(g) {
         return function(a) {
-          return bind(dictBind)(f(a))(g);
+          return bind1(f(a))(g);
         };
       };
     };
@@ -123,39 +126,18 @@
     var str = n.toString();
     return isNaN(str + ".0") ? str : str + ".0";
   };
-  var cons = function(head) {
-    return function(tail) {
-      return [head].concat(tail);
-    };
-  };
-  var intercalate = function(separator) {
-    return function(xs) {
-      return xs.join(separator);
-    };
-  };
 
   // output/Data.Show/index.js
-  var showRecordFieldsNil = {
-    showRecordFields: function(v) {
-      return function(v1) {
-        return [];
-      };
-    }
-  };
   var showRecordFields = function(dict) {
     return dict.showRecordFields;
   };
   var showRecord = function() {
     return function() {
       return function(dictShowRecordFields) {
+        var showRecordFields1 = showRecordFields(dictShowRecordFields);
         return {
           show: function(record) {
-            var v = showRecordFields(dictShowRecordFields)($$Proxy.value)(record);
-            if (v.length === 0) {
-              return "{}";
-            }
-            ;
-            return intercalate(" ")(["{", intercalate(", ")(v), "}"]);
+            return "{" + (showRecordFields1($$Proxy.value)(record) + "}");
           }
         };
       };
@@ -168,18 +150,36 @@
     return dict.show;
   };
   var showRecordFieldsCons = function(dictIsSymbol) {
+    var reflectSymbol2 = reflectSymbol(dictIsSymbol);
     return function(dictShowRecordFields) {
+      var showRecordFields1 = showRecordFields(dictShowRecordFields);
       return function(dictShow) {
+        var show1 = show(dictShow);
         return {
           showRecordFields: function(v) {
             return function(record) {
-              var tail = showRecordFields(dictShowRecordFields)($$Proxy.value)(record);
-              var key = reflectSymbol(dictIsSymbol)($$Proxy.value);
+              var tail = showRecordFields1($$Proxy.value)(record);
+              var key = reflectSymbol2($$Proxy.value);
               var focus = unsafeGet(key)(record);
-              return cons(intercalate(": ")([key, show(dictShow)(focus)]))(tail);
+              return " " + (key + (": " + (show1(focus) + ("," + tail))));
             };
           }
         };
+      };
+    };
+  };
+  var showRecordFieldsConsNil = function(dictIsSymbol) {
+    var reflectSymbol2 = reflectSymbol(dictIsSymbol);
+    return function(dictShow) {
+      var show1 = show(dictShow);
+      return {
+        showRecordFields: function(v) {
+          return function(record) {
+            var key = reflectSymbol2($$Proxy.value);
+            var focus = unsafeGet(key)(record);
+            return " " + (key + (": " + (show1(focus) + " ")));
+          };
+        }
       };
     };
   };
@@ -281,20 +281,26 @@
   };
 
   // output/Data.Newtype/index.js
-  var unwrap = coerce;
+  var coerce2 = /* @__PURE__ */ coerce();
+  var unwrap = function() {
+    return coerce2;
+  };
 
   // output/Data.Foldable/index.js
   var foldr = function(dict) {
     return dict.foldr;
   };
   var foldMapDefaultR = function(dictFoldable) {
+    var foldr2 = foldr(dictFoldable);
     return function(dictMonoid) {
+      var append3 = append(dictMonoid.Semigroup0());
+      var mempty3 = mempty(dictMonoid);
       return function(f) {
-        return foldr(dictFoldable)(function(x) {
+        return foldr2(function(x) {
           return function(acc) {
-            return append(dictMonoid.Semigroup0())(f(x))(acc);
+            return append3(f(x))(acc);
           };
-        })(mempty(dictMonoid));
+        })(mempty3);
       };
     };
   };
@@ -332,11 +338,13 @@
 
   // output/Control.Monad/index.js
   var ap = function(dictMonad) {
+    var bind7 = bind(dictMonad.Bind1());
+    var pure3 = pure(dictMonad.Applicative0());
     return function(f) {
       return function(a) {
-        return bind(dictMonad.Bind1())(f)(function(f$prime) {
-          return bind(dictMonad.Bind1())(a)(function(a$prime) {
-            return pure(dictMonad.Applicative0())(f$prime(a$prime));
+        return bind7(f)(function(f$prime) {
+          return bind7(a)(function(a$prime) {
+            return pure3(f$prime(a$prime));
           });
         });
       };
@@ -428,13 +436,13 @@
     }
     return function(apply2) {
       return function(map2) {
-        return function(pure2) {
+        return function(pure3) {
           return function(f) {
             return function(array) {
               function go(bot, top2) {
                 switch (top2 - bot) {
                   case 0:
-                    return pure2([]);
+                    return pure3([]);
                   case 1:
                     return map2(array1)(f(array[bot]));
                   case 2:
@@ -671,12 +679,14 @@
   }
 
   // output/Foreign.Object/index.js
+  var $$void2 = /* @__PURE__ */ $$void(functorST);
   var fromFoldable3 = function(dictFoldable) {
+    var fromFoldable1 = fromFoldable2(dictFoldable);
     return function(l) {
       return runST(function __do2() {
         var s = newImpl();
-        foreach(fromFoldable2(dictFoldable)(l))(function(v) {
-          return $$void(functorST)(poke2(v.value0)(v.value1)(s));
+        foreach(fromFoldable1(l))(function(v) {
+          return $$void2(poke2(v.value0)(v.value1)(s));
         })();
         return s;
       });
@@ -684,22 +694,24 @@
   };
 
   // output/Data.Options/index.js
+  var fromFoldable4 = /* @__PURE__ */ fromFoldable3(foldableArray);
   var semigroupOptions = semigroupArray;
   var options = function(v) {
-    return unsafeToForeign(fromFoldable3(foldableArray)(v));
+    return unsafeToForeign(fromFoldable4(v));
   };
   var monoidOptions = monoidArray;
+  var mempty2 = /* @__PURE__ */ mempty(monoidOptions);
   var defaultToOptions = function(k) {
     return function(v) {
       return [new Tuple(k, unsafeToForeign(v))];
     };
   };
-  var opt = function($4) {
-    return Op(defaultToOptions($4));
+  var opt = function($8) {
+    return Op(defaultToOptions($8));
   };
   var assoc = /* @__PURE__ */ unwrap();
   var optional = function(option) {
-    return maybe(mempty(monoidOptions))(function(v) {
+    return maybe(mempty2)(function(v) {
       return assoc(option)(v);
     });
   };
@@ -713,9 +725,9 @@
 
   // output/Effect.Class.Console/index.js
   var log3 = function(dictMonadEffect) {
-    var $33 = liftEffect(dictMonadEffect);
-    return function($34) {
-      return $33(log2($34));
+    var $51 = liftEffect(dictMonadEffect);
+    return function($52) {
+      return $51(log2($52));
     };
   };
 
@@ -734,7 +746,7 @@
   var _gameConfig = {
     width: /* @__PURE__ */ _opt("width"),
     height: /* @__PURE__ */ _opt("height"),
-    type_: /* @__PURE__ */ _opt("type_"),
+    type_: /* @__PURE__ */ _opt("type"),
     zoom: /* @__PURE__ */ _opt("zoom"),
     parent: /* @__PURE__ */ _opt("parent"),
     canvas: /* @__PURE__ */ _opt("canvas"),
@@ -786,7 +798,7 @@
   var __setProp = (path, val, obj) => {
     obj[path] = val;
   };
-  var __new1 = (config2, fn) => new fn(config2);
+  var __new1 = (v1, fn) => new fn(v1);
   var __return0 = (prop, obj) => obj[prop]();
   var __return1 = (prop, v1, obj) => obj[prop](v1);
   var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
@@ -854,6 +866,8 @@
   };
 
   // output/Utils.FFI/index.js
+  var $$void3 = /* @__PURE__ */ $$void(functorEffect);
+  var bind2 = /* @__PURE__ */ bind(bindEffect);
   var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
   var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
   var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
@@ -870,7 +884,7 @@
       return function(v2) {
         return function(obj) {
           return function __do2() {
-            $$void(functorEffect)(_return2(prop)(v1)(v2)(obj))();
+            $$void3(_return2(prop)(v1)(v2)(obj))();
             return obj;
           };
         };
@@ -881,7 +895,7 @@
     return function(v1) {
       return function(obj) {
         return function __do2() {
-          $$void(functorEffect)(_return1(prop)(v1)(obj))();
+          $$void3(_return1(prop)(v1)(obj))();
           return obj;
         };
       };
@@ -890,7 +904,7 @@
   var _method0 = function(prop) {
     return function(obj) {
       return function __do2() {
-        $$void(functorEffect)(_return0(prop)(obj))();
+        $$void3(_return0(prop)(obj))();
         return obj;
       };
     };
@@ -898,18 +912,17 @@
   var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
   var safeGet = function(k) {
     return function(obj) {
-      return bind(bindEffect)(bind(bindEffect)(_getProp("children")(obj))(getNullable("getByName")(k)))(function() {
-        var $0 = pure(applicativeEffect);
-        return function($1) {
-          return $0(toMaybe($1));
-        };
-      }());
+      return function __do2() {
+        var $6 = bind2(_getProp("children")(obj))(getNullable("getByName")(k))();
+        return toMaybe($6);
+      };
     };
   };
 
   // output/Graphics.Phaser/index.js
+  var bind3 = /* @__PURE__ */ bind(bindEffect);
   var createWithUnsafeConfig = function(cfg) {
-    return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+    return bind3(bind3(phaser)(_getProp("Game")))(_new1(cfg));
   };
   var createWithConfig = function(opts) {
     return createWithUnsafeConfig(options(opts));
@@ -942,26 +955,30 @@
   };
 
   // output/Graphics.Phaser.Loader/index.js
+  var bind4 = /* @__PURE__ */ bind(bindEffect);
+  var $$void4 = /* @__PURE__ */ $$void(functorEffect);
   var loadImage = function(v) {
     return function(scn) {
       return function __do2() {
-        $$void(functorEffect)(bind(bindEffect)(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
+        $$void4(bind4(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
         return scn;
       };
     };
   };
 
   // output/Graphics.Phaser.Scene/index.js
+  var $$void5 = /* @__PURE__ */ $$void(functorEffect);
+  var bind5 = /* @__PURE__ */ bind(bindEffect);
   var preload = function(callback) {
     return function(scene) {
       return function __do2() {
-        $$void(functorEffect)(_setProp("preload")(callback(scene))(scene))();
+        $$void5(_setProp("preload")(callback(scene))(scene))();
         return scene;
       };
     };
   };
   var newScene = function(key) {
-    return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+    return bind5(bind5(phaser)(_getProp("Scene")))(_new1(key));
   };
   var getChildByName = function() {
     return safeGet;
@@ -969,54 +986,67 @@
   var create = function(callback) {
     return function(scene) {
       return function __do2() {
-        $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
+        $$void5(_setProp("create")(callback(scene))(scene))();
         return scene;
       };
     };
   };
 
   // output/Graphics.Phaser.Text/index.js
+  var composeKleisli2 = /* @__PURE__ */ composeKleisli(bindEffect);
   var create2 = function(v1) {
-    return composeKleisli(bindEffect)(_getProp("add"))(_return3("text")(0)(0)(v1));
+    return composeKleisli2(_getProp("add"))(_return3("text")(0)(0)(v1));
   };
 
   // output/Main/index.js
+  var bind6 = /* @__PURE__ */ bind(bindEffect);
+  var pure2 = /* @__PURE__ */ pure(applicativeEffect);
+  var log4 = /* @__PURE__ */ log3(monadEffectEffect);
+  var show2 = /* @__PURE__ */ show(/* @__PURE__ */ showRecord()()(/* @__PURE__ */ showRecordFieldsCons({
+    reflectSymbol: function() {
+      return "x";
+    }
+  })(/* @__PURE__ */ showRecordFieldsConsNil({
+    reflectSymbol: function() {
+      return "y";
+    }
+  })(showNumber))(showNumber)));
+  var setPosition2 = /* @__PURE__ */ setPosition();
+  var setDisplaySize2 = /* @__PURE__ */ setDisplaySize();
+  var $$void6 = /* @__PURE__ */ $$void(functorEffect);
+  var setInteractive2 = /* @__PURE__ */ setInteractive();
+  var setName2 = /* @__PURE__ */ setName();
+  var on3 = /* @__PURE__ */ on2();
+  var composeKleisli3 = /* @__PURE__ */ composeKleisli(bindEffect);
+  var append2 = /* @__PURE__ */ append(semigroupOptions);
   var getImageByName = /* @__PURE__ */ getChildByName();
   var mainScene = /* @__PURE__ */ function() {
     var title = function(scene) {
-      return bind(bindEffect)(create2("Click the logo to trigger an event.")(scene))($$const(pure(applicativeEffect)(scene)));
+      return bind6(create2("Click the logo to trigger an event.")(scene))($$const(pure2(scene)));
     };
     var startButton = function(scene) {
       var callback = function(pointer) {
         return function(localX) {
           return function(localY) {
             return function __do2() {
-              log3(monadEffectEffect)(show(showRecord()()(showRecordFieldsCons({
-                reflectSymbol: function() {
-                  return "x";
-                }
-              })(showRecordFieldsCons({
-                reflectSymbol: function() {
-                  return "y";
-                }
-              })(showRecordFieldsNil)(showNumber))(showNumber)))(pointer))();
-              log3(monadEffectEffect)(localX)();
-              log3(monadEffectEffect)(localY)();
-              bind(bindEffect)(bind(bindEffect)(create2("logo")(scene))(setPosition()({
+              log4(show2(pointer))();
+              log4(localX)();
+              log4(localY)();
+              bind6(bind6(create2("logo")(scene))(setPosition2({
                 x: 200,
                 y: 200
-              })))(setDisplaySize()({
+              })))(setDisplaySize2({
                 width: 150,
                 height: 150
               }))();
               var clickable = getImageByName("clickable_image")(scene)();
               (function() {
                 if (clickable instanceof Just) {
-                  return $$void(functorEffect)(off("pointerdown")(clickable.value0))();
+                  return $$void6(off("pointerdown")(clickable.value0))();
                 }
                 ;
                 if (clickable instanceof Nothing) {
-                  return log3(monadEffectEffect)("Clickable image not found")();
+                  return log4("Clickable image not found")();
                 }
                 ;
                 throw new Error("Failed pattern match at Main (line 72, column 7 - line 74, column 51): " + [clickable.constructor.name]);
@@ -1028,29 +1058,29 @@
       };
       var listener = createEventListener3(callback);
       return function __do2() {
-        var image = bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(create2("logo")(scene))(setPosition()({
+        var image = bind6(bind6(bind6(bind6(create2("logo")(scene))(setPosition2({
           x: 100,
           y: 100
-        })))(setDisplaySize()({
+        })))(setDisplaySize2({
           width: 50,
           height: 50
-        })))(setInteractive()))(setName()("clickable_image"))();
-        $$void(functorEffect)(on2()("pointerdown")(listener)(image))();
+        })))(setInteractive2))(setName2("clickable_image"))();
+        $$void6(on3("pointerdown")(listener)(image))();
         return scene;
       };
     };
     var onpreload = preload(function(scene) {
-      return $$void(functorEffect)(loadImage({
+      return $$void6(loadImage({
         key: "logo",
         path: "https://upload.wikimedia.org/wikipedia/commons/6/64/PureScript_Logo.png"
       })(scene));
     });
-    var oncreate = create(composeKleisli(bindEffect)(title)(composeKleisli(bindEffect)(startButton)($$const(pure(applicativeEffect)(unit)))));
-    return bind(bindEffect)(bind(bindEffect)(newScene("main"))(onpreload))(oncreate);
+    var oncreate = create(composeKleisli3(title)(composeKleisli3(startButton)($$const(pure2(unit)))));
+    return bind6(bind6(newScene("main"))(onpreload))(oncreate);
   }();
   var main = function __do() {
     var mainScene$prime = mainScene();
-    return createWithConfig(append(semigroupOptions)(config.width(400))(append(semigroupOptions)(config.height(300))(config.scene([mainScene$prime]))))();
+    return createWithConfig(append2(config.width(400))(append2(config.height(300))(config.scene([mainScene$prime]))))();
   };
 
   // <stdin>
