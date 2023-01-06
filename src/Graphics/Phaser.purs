@@ -4,7 +4,7 @@ module Graphics.Phaser
   , createWithConfig
   , createWithUnsafeConfig
   , destroy
-  , setDimentions
+  , setDimensions
   , config
   , physicsConfig
   ) where
@@ -32,8 +32,8 @@ createWithConfig opts = createWithUnsafeConfig (options opts)
 createWithUnsafeConfig :: forall a. a -> Effect PhaserGame
 createWithUnsafeConfig cfg = phaser >>= _getProp "Game" >>= _new1 cfg
 
-setDimentions :: Dimensions -> PhaserGame -> Effect PhaserGame
-setDimentions { width, height } game = do
+setDimensions :: Dimensions -> PhaserGame -> Effect PhaserGame
+setDimensions { width, height } game = do
   conf <- _getProp "config" game
   _setProp "width" width conf
   _setProp "height" height conf
