@@ -64,13 +64,16 @@
   };
 
   // output/Control.Apply/index.js
+  var identity2 = /* @__PURE__ */ identity(categoryFn);
   var apply = function(dict) {
     return dict.apply;
   };
   var applySecond = function(dictApply) {
+    var apply1 = apply(dictApply);
+    var map3 = map(dictApply.Functor0());
     return function(a) {
       return function(b) {
-        return apply(dictApply)(map(dictApply.Functor0())($$const(identity(categoryFn)))(a))(b);
+        return apply1(map3($$const(identity2))(a))(b);
       };
     };
   };
@@ -80,9 +83,11 @@
     return dict.pure;
   };
   var liftA1 = function(dictApplicative) {
+    var apply2 = apply(dictApplicative.Apply0());
+    var pure1 = pure(dictApplicative);
     return function(f) {
       return function(a) {
-        return apply(dictApplicative.Apply0())(pure(dictApplicative)(f))(a);
+        return apply2(pure1(f))(a);
       };
     };
   };
@@ -92,10 +97,11 @@
     return dict.bind;
   };
   var composeKleisli = function(dictBind) {
+    var bind1 = bind(dictBind);
     return function(f) {
       return function(g) {
         return function(a) {
-          return bind(dictBind)(f(a))(g);
+          return bind1(f(a))(g);
         };
       };
     };
@@ -233,11 +239,13 @@
 
   // output/Control.Monad/index.js
   var ap = function(dictMonad) {
+    var bind9 = bind(dictMonad.Bind1());
+    var pure6 = pure(dictMonad.Applicative0());
     return function(f) {
       return function(a) {
-        return bind(dictMonad.Bind1())(f)(function(f$prime) {
-          return bind(dictMonad.Bind1())(a)(function(a$prime) {
-            return pure(dictMonad.Applicative0())(f$prime(a$prime));
+        return bind9(f)(function(f$prime) {
+          return bind9(a)(function(a$prime) {
+            return pure6(f$prime(a$prime));
           });
         });
       };
@@ -485,37 +493,44 @@
   };
 
   // output/Data.Newtype/index.js
-  var unwrap = coerce;
+  var coerce2 = /* @__PURE__ */ coerce();
+  var unwrap = function() {
+    return coerce2;
+  };
 
   // output/Data.Foldable/index.js
   var foldr = function(dict) {
     return dict.foldr;
   };
   var traverse_ = function(dictApplicative) {
+    var applySecond2 = applySecond(dictApplicative.Apply0());
+    var pure6 = pure(dictApplicative);
     return function(dictFoldable) {
+      var foldr2 = foldr(dictFoldable);
       return function(f) {
-        return foldr(dictFoldable)(function() {
-          var $316 = applySecond(dictApplicative.Apply0());
-          return function($317) {
-            return $316(f($317));
-          };
-        }())(pure(dictApplicative)(unit));
+        return foldr2(function($454) {
+          return applySecond2(f($454));
+        })(pure6(unit));
       };
     };
   };
   var for_ = function(dictApplicative) {
+    var traverse_1 = traverse_(dictApplicative);
     return function(dictFoldable) {
-      return flip(traverse_(dictApplicative)(dictFoldable));
+      return flip(traverse_1(dictFoldable));
     };
   };
   var foldMapDefaultR = function(dictFoldable) {
+    var foldr2 = foldr(dictFoldable);
     return function(dictMonoid) {
+      var append2 = append(dictMonoid.Semigroup0());
+      var mempty3 = mempty(dictMonoid);
       return function(f) {
-        return foldr(dictFoldable)(function(x) {
+        return foldr2(function(x) {
           return function(acc) {
-            return append(dictMonoid.Semigroup0())(f(x))(acc);
+            return append2(f(x))(acc);
           };
-        })(mempty(dictMonoid));
+        })(mempty3);
       };
     };
   };
@@ -550,23 +565,23 @@
       };
     }
     return function(apply2) {
-      return function(map2) {
-        return function(pure2) {
+      return function(map3) {
+        return function(pure6) {
           return function(f) {
             return function(array) {
               function go(bot, top2) {
                 switch (top2 - bot) {
                   case 0:
-                    return pure2([]);
+                    return pure6([]);
                   case 1:
-                    return map2(array1)(f(array[bot]));
+                    return map3(array1)(f(array[bot]));
                   case 2:
-                    return apply2(map2(array2)(f(array[bot])))(f(array[bot + 1]));
+                    return apply2(map3(array2)(f(array[bot])))(f(array[bot + 1]));
                   case 3:
-                    return apply2(apply2(map2(array3)(f(array[bot])))(f(array[bot + 1])))(f(array[bot + 2]));
+                    return apply2(apply2(map3(array3)(f(array[bot])))(f(array[bot + 1])))(f(array[bot + 2]));
                   default:
                     var pivot = bot + Math.floor((top2 - bot) / 4) * 2;
-                    return apply2(map2(concat2)(go(bot, pivot)))(go(pivot, top2));
+                    return apply2(map3(concat2)(go(bot, pivot)))(go(pivot, top2));
                 }
               }
               return go(0, array.length);
@@ -578,17 +593,20 @@
   }();
 
   // output/Data.Traversable/index.js
+  var identity3 = /* @__PURE__ */ identity(categoryFn);
   var traverse = function(dict) {
     return dict.traverse;
   };
   var sequenceDefault = function(dictTraversable) {
+    var traverse2 = traverse(dictTraversable);
     return function(dictApplicative) {
-      return traverse(dictTraversable)(dictApplicative)(identity(categoryFn));
+      return traverse2(dictApplicative)(identity3);
     };
   };
   var traversableArray = {
     traverse: function(dictApplicative) {
-      return traverseArrayImpl(apply(dictApplicative.Apply0()))(map(dictApplicative.Apply0().Functor0()))(pure(dictApplicative));
+      var Apply0 = dictApplicative.Apply0();
+      return traverseArrayImpl(apply(Apply0))(map(Apply0.Functor0()))(pure(dictApplicative));
     },
     sequence: function(dictApplicative) {
       return sequenceDefault(traversableArray)(dictApplicative);
@@ -675,12 +693,14 @@
   }
 
   // output/Foreign.Object/index.js
+  var $$void2 = /* @__PURE__ */ $$void(functorST);
   var fromFoldable3 = function(dictFoldable) {
+    var fromFoldable1 = fromFoldable(dictFoldable);
     return function(l) {
       return runST(function __do() {
         var s = newImpl();
-        foreach(fromFoldable(dictFoldable)(l))(function(v) {
-          return $$void(functorST)(poke2(v.value0)(v.value1)(s));
+        foreach(fromFoldable1(l))(function(v) {
+          return $$void2(poke2(v.value0)(v.value1)(s));
         })();
         return s;
       });
@@ -688,22 +708,24 @@
   };
 
   // output/Data.Options/index.js
+  var fromFoldable4 = /* @__PURE__ */ fromFoldable3(foldableArray);
   var semigroupOptions = semigroupArray;
   var options = function(v) {
-    return unsafeToForeign(fromFoldable3(foldableArray)(v));
+    return unsafeToForeign(fromFoldable4(v));
   };
   var monoidOptions = monoidArray;
+  var mempty2 = /* @__PURE__ */ mempty(monoidOptions);
   var defaultToOptions = function(k) {
     return function(v) {
       return [new Tuple(k, unsafeToForeign(v))];
     };
   };
-  var opt = function($4) {
-    return Op(defaultToOptions($4));
+  var opt = function($8) {
+    return Op(defaultToOptions($8));
   };
   var assoc = /* @__PURE__ */ unwrap();
   var optional = function(option) {
-    return maybe(mempty(monoidOptions))(function(v) {
+    return maybe(mempty2)(function(v) {
       return assoc(option)(v);
     });
   };
@@ -717,9 +739,9 @@
 
   // output/Effect.Class.Console/index.js
   var log3 = function(dictMonadEffect) {
-    var $33 = liftEffect(dictMonadEffect);
-    return function($34) {
-      return $33(log2($34));
+    var $51 = liftEffect(dictMonadEffect);
+    return function($52) {
+      return $51(log2($52));
     };
   };
 
@@ -744,7 +766,7 @@
   var _gameConfig = {
     width: /* @__PURE__ */ _opt("width"),
     height: /* @__PURE__ */ _opt("height"),
-    type_: /* @__PURE__ */ _opt("type_"),
+    type_: /* @__PURE__ */ _opt("type"),
     zoom: /* @__PURE__ */ _opt("zoom"),
     parent: /* @__PURE__ */ _opt("parent"),
     canvas: /* @__PURE__ */ _opt("canvas"),
@@ -796,7 +818,7 @@
   var __setProp = (path, val, obj) => {
     obj[path] = val;
   };
-  var __new1 = (config2, fn) => new fn(config2);
+  var __new1 = (v1, fn) => new fn(v1);
   var __return0 = (prop, obj) => obj[prop]();
   var __return1 = (prop, v1, obj) => obj[prop](v1);
   var __return2 = (prop, v1, v2, obj) => obj[prop](v1, v2);
@@ -864,6 +886,8 @@
   };
 
   // output/Utils.FFI/index.js
+  var $$void3 = /* @__PURE__ */ $$void(functorEffect);
+  var bind2 = /* @__PURE__ */ bind(bindEffect);
   var _setProp = /* @__PURE__ */ runEffectFn3(__setProp);
   var _return3 = /* @__PURE__ */ runEffectFn5(__return3);
   var _return2 = /* @__PURE__ */ runEffectFn4(__return2);
@@ -880,7 +904,7 @@
       return function(v2) {
         return function(obj) {
           return function __do() {
-            $$void(functorEffect)(_return2(prop)(v1)(v2)(obj))();
+            $$void3(_return2(prop)(v1)(v2)(obj))();
             return obj;
           };
         };
@@ -891,7 +915,7 @@
     return function(v1) {
       return function(obj) {
         return function __do() {
-          $$void(functorEffect)(_return1(prop)(v1)(obj))();
+          $$void3(_return1(prop)(v1)(obj))();
           return obj;
         };
       };
@@ -900,7 +924,7 @@
   var _method0 = function(prop) {
     return function(obj) {
       return function __do() {
-        $$void(functorEffect)(_return0(prop)(obj))();
+        $$void3(_return0(prop)(obj))();
         return obj;
       };
     };
@@ -908,19 +932,18 @@
   var _getProp = /* @__PURE__ */ runEffectFn2(__getProp);
   var safeGet = function(k) {
     return function(obj) {
-      return bind(bindEffect)(bind(bindEffect)(_getProp("children")(obj))(getNullable("getByName")(k)))(function() {
-        var $0 = pure(applicativeEffect);
-        return function($1) {
-          return $0(toMaybe($1));
-        };
-      }());
+      return function __do() {
+        var $6 = bind2(_getProp("children")(obj))(getNullable("getByName")(k))();
+        return toMaybe($6);
+      };
     };
   };
 
   // output/Graphics.Phaser/index.js
+  var bind3 = /* @__PURE__ */ bind(bindEffect);
   var physicsConfig = _physicsConfig;
   var createWithUnsafeConfig = function(cfg) {
-    return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Game")))(_new1(cfg));
+    return bind3(bind3(phaser)(_getProp("Game")))(_new1(cfg));
   };
   var createWithConfig = function(opts) {
     return createWithUnsafeConfig(options(opts));
@@ -931,17 +954,20 @@
   var createEventListener2 = _listener2;
 
   // output/Graphics.Phaser.ArcadePhysics/index.js
+  var bind4 = /* @__PURE__ */ bind(bindEffect);
+  var pure2 = /* @__PURE__ */ pure(applicativeEffect);
+  var composeKleisli2 = /* @__PURE__ */ composeKleisli(bindEffect);
   var setVelocityY = function() {
     return function(v1) {
       return function(obj) {
-        return bind(bindEffect)(bind(bindEffect)(_getProp("body")(obj))(_method1("setVelocityY")(v1)))($$const(pure(applicativeEffect)(obj)));
+        return bind4(bind4(_getProp("body")(obj))(_method1("setVelocityY")(v1)))($$const(pure2(obj)));
       };
     };
   };
   var setVelocityX = function() {
     return function(v1) {
       return function(obj) {
-        return bind(bindEffect)(bind(bindEffect)(_getProp("body")(obj))(_method1("setVelocityX")(v1)))($$const(pure(applicativeEffect)(obj)));
+        return bind4(bind4(_getProp("body")(obj))(_method1("setVelocityX")(v1)))($$const(pure2(obj)));
       };
     };
   };
@@ -954,14 +980,14 @@
   var setBounce = function() {
     return function(v1) {
       return function(obj) {
-        return bind(bindEffect)(bind(bindEffect)(_getProp("body")(obj))(_method1("setBounce")(v1)))($$const(pure(applicativeEffect)(obj)));
+        return bind4(bind4(_getProp("body")(obj))(_method1("setBounce")(v1)))($$const(pure2(obj)));
       };
     };
   };
   var setAllowGravity = function() {
     return function(v1) {
       return function(obj) {
-        return bind(bindEffect)(bind(bindEffect)(_getProp("body")(obj))(_return1("setAllowGravity")(v1)))($$const(pure(applicativeEffect)(obj)));
+        return bind4(bind4(_getProp("body")(obj))(_return1("setAllowGravity")(v1)))($$const(pure2(obj)));
       };
     };
   };
@@ -969,12 +995,12 @@
     return _method0("refreshBody");
   };
   var getTouching = function() {
-    return composeKleisli(bindEffect)(_getProp("body"))(_getProp("touching"));
+    return composeKleisli2(_getProp("body"))(_getProp("touching"));
   };
   var disableBody = function() {
     return _method2("disableBody")(true)(true);
   };
-  var createStaticGroup = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("add"))(/* @__PURE__ */ _return0("staticGroup"));
+  var createStaticGroup = /* @__PURE__ */ composeKleisli2(/* @__PURE__ */ _getProp("add"))(/* @__PURE__ */ _return0("staticGroup"));
   var createChild = function() {
     return function(v) {
       return function(v2) {
@@ -984,12 +1010,12 @@
   };
   var createArcadeSprite = function(v) {
     return function(v2) {
-      return composeKleisli(bindEffect)(_getProp("add"))(_return3("sprite")(v.x)(v.y)(v2));
+      return composeKleisli2(_getProp("add"))(_return3("sprite")(v.x)(v.y)(v2));
     };
   };
   var createArcadeImage = function(v) {
     return function(v2) {
-      return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(v.x)(v.y)(v2));
+      return composeKleisli2(_getProp("add"))(_return3("image")(v.x)(v.y)(v2));
     };
   };
   var addOverlap = function() {
@@ -1001,7 +1027,7 @@
               return function(v3) {
                 return function(plugin) {
                   var listener = createEventListener2(v3);
-                  return bind(bindEffect)(bind(bindEffect)(_getProp("add")(plugin))(_return3("overlap")(v1)(v2)(listener)))($$const(pure(applicativeEffect)(plugin)));
+                  return bind4(bind4(_getProp("add")(plugin))(_return3("overlap")(v1)(v2)(listener)))($$const(pure2(plugin)));
                 };
               };
             };
@@ -1015,7 +1041,7 @@
       return function(v1) {
         return function(v2) {
           return function(plugin) {
-            return bind(bindEffect)(bind(bindEffect)(_getProp("add")(plugin))(_return2("collider")(v1)(v2)))($$const(pure(applicativeEffect)(plugin)));
+            return bind4(bind4(_getProp("add")(plugin))(_return2("collider")(v1)(v2)))($$const(pure2(plugin)));
           };
         };
       };
@@ -1041,36 +1067,43 @@
   };
 
   // output/Graphics.Phaser.Image/index.js
+  var composeKleisli3 = /* @__PURE__ */ composeKleisli(bindEffect);
   var create = function(v1) {
-    return composeKleisli(bindEffect)(_getProp("add"))(_return3("image")(0)(0)(v1));
+    return composeKleisli3(_getProp("add"))(_return3("image")(0)(0)(v1));
   };
 
-  // output/Graphics.Phaser.Input/index.js
+  // output/Graphics.Phaser.Input.InputPlugin/index.js
+  var composeKleisli4 = /* @__PURE__ */ composeKleisli(bindEffect);
   var isDown = /* @__PURE__ */ _getProp("isDown");
-  var createCursorKeys = /* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("input"))(/* @__PURE__ */ composeKleisli(bindEffect)(/* @__PURE__ */ _getProp("keyboard"))(/* @__PURE__ */ _return0("createCursorKeys")));
+  var createCursorKeys = /* @__PURE__ */ composeKleisli4(/* @__PURE__ */ _getProp("input"))(/* @__PURE__ */ composeKleisli4(/* @__PURE__ */ _getProp("keyboard"))(/* @__PURE__ */ _return0("createCursorKeys")));
 
   // output/Graphics.Phaser.Loader/index.js
+  var bind5 = /* @__PURE__ */ bind(bindEffect);
+  var pure3 = /* @__PURE__ */ pure(applicativeEffect);
+  var $$void4 = /* @__PURE__ */ $$void(functorEffect);
   var loadSpritesheet = function(v) {
     return function(v2) {
       return function(scn) {
-        return bind(bindEffect)(bind(bindEffect)(_getProp("load")(scn))(_return3("spritesheet")(v.key)(v.path)(v2)))($$const(pure(applicativeEffect)(scn)));
+        return bind5(bind5(_getProp("load")(scn))(_return3("spritesheet")(v.key)(v.path)(v2)))($$const(pure3(scn)));
       };
     };
   };
   var loadImage = function(v) {
     return function(scn) {
       return function __do() {
-        $$void(functorEffect)(bind(bindEffect)(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
+        $$void4(bind5(_getProp("load")(scn))(_return2("image")(v.key)(v.path)))();
         return scn;
       };
     };
   };
 
   // output/Graphics.Phaser.Scene/index.js
+  var $$void5 = /* @__PURE__ */ $$void(functorEffect);
+  var bind6 = /* @__PURE__ */ bind(bindEffect);
   var update = function(callback) {
     return function(scene) {
       return function __do() {
-        $$void(functorEffect)(_setProp("update")(callback(scene))(scene))();
+        $$void5(_setProp("update")(callback(scene))(scene))();
         return scene;
       };
     };
@@ -1078,13 +1111,13 @@
   var preload = function(callback) {
     return function(scene) {
       return function __do() {
-        $$void(functorEffect)(_setProp("preload")(callback(scene))(scene))();
+        $$void5(_setProp("preload")(callback(scene))(scene))();
         return scene;
       };
     };
   };
   var newScene = function(key) {
-    return bind(bindEffect)(bind(bindEffect)(phaser)(_getProp("Scene")))(_new1(key));
+    return bind6(bind6(phaser)(_getProp("Scene")))(_new1(key));
   };
   var getPhysicsPlugin = /* @__PURE__ */ _getProp("physics");
   var getChildByName = function() {
@@ -1093,24 +1126,27 @@
   var create2 = function(callback) {
     return function(scene) {
       return function __do() {
-        $$void(functorEffect)(_setProp("create")(callback(scene))(scene))();
+        $$void5(_setProp("create")(callback(scene))(scene))();
         return scene;
       };
     };
   };
 
   // output/Graphics.Phaser.Sprite/index.js
+  var bind7 = /* @__PURE__ */ bind(bindEffect);
+  var pure4 = /* @__PURE__ */ pure(applicativeEffect);
+  var composeKleisli5 = /* @__PURE__ */ composeKleisli(bindEffect);
   var playAnimation = function() {
     return function(v) {
       return function(obj) {
-        return bind(bindEffect)(bind(bindEffect)(_getProp("anims")(obj))(_return2("play")(v.key)(v.ignoreIfPlaying)))($$const(pure(applicativeEffect)(obj)));
+        return bind7(bind7(_getProp("anims")(obj))(_return2("play")(v.key)(v.ignoreIfPlaying)))($$const(pure4(obj)));
       };
     };
   };
   var generateFrameNumbers = function(v1) {
     return function(start) {
       return function(end) {
-        return composeKleisli(bindEffect)(_getProp("anims"))(_return2("generateFrameNumbers")(v1)({
+        return composeKleisli5(_getProp("anims"))(_return2("generateFrameNumbers")(v1)({
           start,
           end
         }));
@@ -1121,7 +1157,7 @@
     return function(frames) {
       return function(frameRate) {
         return function(repeat) {
-          return composeKleisli(bindEffect)(_getProp("anims"))(_return1("create")({
+          return composeKleisli5(_getProp("anims"))(_return1("create")({
             key,
             frames,
             frameRate,
@@ -1133,9 +1169,36 @@
   };
 
   // output/Main/index.js
+  var $$void6 = /* @__PURE__ */ $$void(functorEffect);
+  var for_2 = /* @__PURE__ */ for_(applicativeEffect)(foldableArray);
+  var bind8 = /* @__PURE__ */ bind(bindEffect);
+  var setVelocityX2 = /* @__PURE__ */ setVelocityX();
+  var playAnimation2 = /* @__PURE__ */ playAnimation();
+  var getChildByName2 = /* @__PURE__ */ getChildByName();
+  var setVelocityY2 = /* @__PURE__ */ setVelocityY();
+  var getTouching2 = /* @__PURE__ */ getTouching();
+  var pure5 = /* @__PURE__ */ pure(applicativeEffect);
+  var log4 = /* @__PURE__ */ log3(monadEffectEffect);
+  var getX2 = /* @__PURE__ */ getX();
+  var disableBody2 = /* @__PURE__ */ disableBody();
+  var composeKleisli6 = /* @__PURE__ */ composeKleisli(bindEffect);
+  var addCollider2 = /* @__PURE__ */ addCollider()();
+  var addOverlap2 = /* @__PURE__ */ addOverlap()()()();
+  var sequence2 = /* @__PURE__ */ sequence(traversableArray)(applicativeEffect);
+  var map2 = /* @__PURE__ */ map(functorArray);
+  var setBounce2 = /* @__PURE__ */ setBounce();
+  var setCollideWorldBounds2 = /* @__PURE__ */ setCollideWorldBounds();
+  var setName2 = /* @__PURE__ */ setName();
+  var setImmovable2 = /* @__PURE__ */ setImmovable();
+  var setAllowGravity2 = /* @__PURE__ */ setAllowGravity();
+  var createChild2 = /* @__PURE__ */ createChild();
+  var setScale2 = /* @__PURE__ */ setScale();
+  var refreshBody2 = /* @__PURE__ */ refreshBody();
+  var setPosition2 = /* @__PURE__ */ setPosition();
+  var append1 = /* @__PURE__ */ append(semigroupOptions);
   var onpreload = function(scene) {
-    return $$void(functorEffect)(for_(applicativeEffect)(foldableArray)(["sky", "platform", "star"])(function(key) {
-      return bind(bindEffect)(loadImage({
+    return $$void6(for_2(["sky", "platform", "star"])(function(key) {
+      return bind8(loadImage({
         key,
         path: "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/" + (key + ".png")
       })(scene))(loadSpritesheet({
@@ -1151,19 +1214,19 @@
     return function() {
       return function(cursors) {
         return function(sprite) {
-          var stop = bind(bindEffect)(setVelocityX()(0)(sprite))(playAnimation()({
+          var stop = bind8(setVelocityX2(0)(sprite))(playAnimation2({
             key: "turn",
             ignoreIfPlaying: false
           }));
-          var moveRight = bind(bindEffect)(setVelocityX()(150)(sprite))(playAnimation()({
+          var moveRight = bind8(setVelocityX2(150)(sprite))(playAnimation2({
             key: "right",
             ignoreIfPlaying: true
           }));
-          var moveLeft = bind(bindEffect)(setVelocityX()(-150)(sprite))(playAnimation()({
+          var moveLeft = bind8(setVelocityX2(-150)(sprite))(playAnimation2({
             key: "left",
             ignoreIfPlaying: true
           }));
-          return $$void(functorEffect)(function __do() {
+          return $$void6(function __do() {
             var isRight = isDown(cursors.right)();
             var isLeft = isDown(cursors.left)();
             if (isRight) {
@@ -1180,25 +1243,26 @@
       };
     };
   };
+  var move1 = /* @__PURE__ */ move()();
   var getPlayer = function(scene) {
-    return getChildByName()("player")(scene);
+    return getChildByName2("player")(scene);
   };
   var getPlatform = function(scene) {
-    return getChildByName()("moving_platform")(scene);
+    return getChildByName2("moving_platform")(scene);
   };
   var update2 = function(cursors) {
     return function(scene) {
       var movePlayer = function() {
-        var jump = setVelocityY()(-350);
+        var jump = setVelocityY2(-350);
         return function __do() {
           var player = getPlayer(scene)();
           if (player instanceof Just) {
-            return $$void(functorEffect)(function __do2() {
-              var touching = getTouching()(player.value0)();
+            return $$void6(function __do2() {
+              var touching = getTouching2(player.value0)();
               var isUp = isDown(cursors.up)();
-              move()()(cursors)(player.value0)();
-              var $3 = isUp && touching.down;
-              if ($3) {
+              move1(cursors)(player.value0)();
+              var $48 = isUp && touching.down;
+              if ($48) {
                 return jump(player.value0)();
               }
               ;
@@ -1207,7 +1271,7 @@
           }
           ;
           if (player instanceof Nothing) {
-            return log3(monadEffectEffect)("Sprite not found!")();
+            return log4("Sprite not found!")();
           }
           ;
           throw new Error("Failed pattern match at Main (line 142, column 5 - line 152, column 41): " + [player.constructor.name]);
@@ -1216,25 +1280,25 @@
       var movePlatform = function __do() {
         var platform = getPlatform(scene)();
         if (platform instanceof Just) {
-          var x = getX()(platform.value0)();
+          var x = getX2(platform.value0)();
           (function() {
-            var $6 = x >= 500;
-            if ($6) {
-              return $$void(functorEffect)(setVelocityX()(-50)(platform.value0))();
+            var $51 = x >= 500;
+            if ($51) {
+              return $$void6(setVelocityX2(-50)(platform.value0))();
             }
             ;
             return unit;
           })();
-          var $7 = x <= 300;
-          if ($7) {
-            return $$void(functorEffect)(setVelocityX()(50)(platform.value0))();
+          var $52 = x <= 300;
+          if ($52) {
+            return $$void6(setVelocityX2(50)(platform.value0))();
           }
           ;
           return unit;
         }
         ;
         if (platform instanceof Nothing) {
-          return log3(monadEffectEffect)("Platform image not found!")();
+          return log4("Platform image not found!")();
         }
         ;
         throw new Error("Failed pattern match at Main (line 158, column 5 - line 169, column 49): " + [platform.constructor.name]);
@@ -1247,7 +1311,7 @@
   };
   var collectStar = function(_a) {
     return function(b) {
-      return bind(bindEffect)(disableBody()(b))($$const(pure(applicativeEffect)(unit)));
+      return bind8(disableBody2(b))($$const(pure5(unit)));
     };
   };
   var oncreate = function(scene) {
@@ -1255,58 +1319,58 @@
       return function(stars) {
         return function(platformsGroup) {
           return function(movingPlatform) {
-            return composeKleisli(bindEffect)(addCollider()()(player)(platformsGroup))(composeKleisli(bindEffect)(addCollider()()(player)(movingPlatform))(composeKleisli(bindEffect)(addCollider()()(stars)(movingPlatform))(composeKleisli(bindEffect)(addCollider()()(stars)(platformsGroup))(addOverlap()()()()(player)(stars)(collectStar)))));
+            return composeKleisli6(addCollider2(player)(platformsGroup))(composeKleisli6(addCollider2(player)(movingPlatform))(composeKleisli6(addCollider2(stars)(movingPlatform))(composeKleisli6(addCollider2(stars)(platformsGroup))(addOverlap2(player)(stars)(collectStar)))));
           };
         };
       };
     };
     var createStars = function(phy) {
       return function __do() {
-        var starsEff = sequence(traversableArray)(applicativeEffect)(map(functorArray)(function(n) {
-          return bind(bindEffect)(bind(bindEffect)(createArcadeImage({
+        var starsEff = sequence2(map2(function(n) {
+          return bind8(bind8(createArcadeImage({
             x: 50 + toNumber(n) * 40,
             y: 100
-          })("star")(phy))(setBounce()(0.4)))(setCollideWorldBounds()(true));
+          })("star")(phy))(setBounce2(0.4)))(setCollideWorldBounds2(true));
         })(range(1)(15)))();
         return starsEff;
       };
     };
     var createPlayer = function(phy) {
-      return bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(createArcadeSprite({
+      return bind8(bind8(bind8(createArcadeSprite({
         x: 50,
         y: 500
-      })("dude")(phy))(setBounce()(0.4)))(setCollideWorldBounds()(true)))(setName()("player"));
+      })("dude")(phy))(setBounce2(0.4)))(setCollideWorldBounds2(true)))(setName2("player"));
     };
     var createPlatform = function(phy) {
-      return bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(bind(bindEffect)(createArcadeImage({
+      return bind8(bind8(bind8(bind8(createArcadeImage({
         x: 400,
         y: 400
-      })("platform")(phy))(setImmovable()(true)))(setAllowGravity()(false)))(setVelocityX()(50)))(setName()("moving_platform"));
+      })("platform")(phy))(setImmovable2(true)))(setAllowGravity2(false)))(setVelocityX2(50)))(setName2("moving_platform"));
     };
     var createFloor = function(group2) {
-      return $$void(functorEffect)(bind(bindEffect)(bind(bindEffect)(createChild()({
+      return $$void6(bind8(bind8(createChild2({
         x: 400,
         y: 568
-      })("platform")(group2))(setScale()({
+      })("platform")(group2))(setScale2({
         x: 2,
         y: 2
-      })))(refreshBody()));
+      })))(refreshBody2));
     };
-    var createBg = $$void(functorEffect)(bind(bindEffect)(create("sky")(scene))(setPosition()({
+    var createBg = $$void6(bind8(create("sky")(scene))(setPosition2({
       x: 400,
       y: 300
     })));
-    var createAnimations = $$void(functorEffect)(function __do() {
+    var createAnimations = $$void6(function __do() {
       var leftWalkFrames = generateFrameNumbers("dude")(0)(3)(scene)();
       var rightWalkFrames = generateFrameNumbers("dude")(5)(8)(scene)();
-      $$void(functorEffect)(createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene))();
-      $$void(functorEffect)(createAnimation("turn")([{
+      $$void6(createAnimation("left")(leftWalkFrames)(10)(-1 | 0)(scene))();
+      $$void6(createAnimation("turn")([{
         key: "dude",
         frame: 4
       }])(10)(-1 | 0)(scene))();
-      return $$void(functorEffect)(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene))();
+      return $$void6(createAnimation("right")(rightWalkFrames)(10)(-1 | 0)(scene))();
     });
-    return $$void(functorEffect)(function __do() {
+    return $$void6(function __do() {
       var phy = getPhysicsPlugin(scene)();
       createBg();
       var platformsGroup = createStaticGroup(phy)();
@@ -1316,13 +1380,13 @@
       var stars = createStars(phy)();
       var cursors = createCursorKeys(scene)();
       createAnimations();
-      $$void(functorEffect)(setupCollisions(player)(stars)(platformsGroup)(movingPlatform)(phy))();
+      $$void6(setupCollisions(player)(stars)(platformsGroup)(movingPlatform)(phy))();
       return update(update2(cursors))(scene)();
     });
   };
-  var mainScene = /* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ bind(bindEffect)(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create2(oncreate)))(/* @__PURE__ */ preload(onpreload));
+  var mainScene = /* @__PURE__ */ bind8(/* @__PURE__ */ bind8(/* @__PURE__ */ newScene("main"))(/* @__PURE__ */ create2(oncreate)))(/* @__PURE__ */ preload(onpreload));
   var main = /* @__PURE__ */ function() {
-    var physicsConfig$prime = append(semigroupOptions)(physicsConfig["default"]("arcade"))(physicsConfig.arcade({
+    var physicsConfig$prime = append1(physicsConfig["default"]("arcade"))(physicsConfig.arcade({
       debug: false,
       gravity: {
         x: 0,
@@ -1331,7 +1395,7 @@
     }));
     return function __do() {
       var scene = mainScene();
-      return createWithConfig(append(semigroupOptions)(config.width(800))(append(semigroupOptions)(config.height(600))(append(semigroupOptions)(config.scene([scene]))(config.physics(physicsConfig$prime)))))();
+      return createWithConfig(append1(config.width(800))(append1(config.height(600))(append1(config.scene([scene]))(config.physics(physicsConfig$prime)))))();
     };
   }();
 

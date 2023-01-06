@@ -23,7 +23,7 @@ import Graphics.Phaser.CoreTypes (class PhysicsEnabled)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, PhaserGame, PhaserScene)
 import Graphics.Phaser.GameObject as GO
 import Graphics.Phaser.Image (create)
-import Graphics.Phaser.Input (CursorKeys, createCursorKeys, isDown)
+import Graphics.Phaser.Input.InputPlugin (CursorKeys, createCursorKeys, isDown)
 import Graphics.Phaser.Loader as Loader
 import Graphics.Phaser.Scene as Scene
 import Graphics.Phaser.Sprite (class Sprite, createAnimation, generateFrameNumbers, playAnimation)
