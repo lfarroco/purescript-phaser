@@ -1,13 +1,4 @@
-module Main
-  ( collectStar
-  , getPlatform
-  , getPlayer
-  , main
-  , move
-  , oncreate
-  , onpreload
-  , update
-  ) where
+module Main where
 
 import Prelude
 import Data.Array ((..))
@@ -17,13 +8,14 @@ import Data.Maybe (Maybe(..))
 import Data.Traversable (sequence)
 import Effect (Effect)
 import Effect.Class.Console (log)
+import Effect.Console as Console
 import Graphics.Phaser (config, createWithConfig, physicsConfig)
-import Graphics.Phaser.ArcadePhysics as P
+import Graphics.Phaser.ArcadePhysics as ArcadePhysics
 import Graphics.Phaser.CoreTypes (class PhysicsEnabled)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, PhaserGame, PhaserScene)
 import Graphics.Phaser.GameObject as GO
-import Graphics.Phaser.Image (create)
-import Graphics.Phaser.Input.InputPlugin (CursorKeys, createCursorKeys, isDown)
+import Graphics.Phaser.Image as Image
+import Graphics.Phaser.Input.InputPlugin as Input
 import Graphics.Phaser.Loader as Loader
 import Graphics.Phaser.Scene as Scene
 import Graphics.Phaser.Sprite (class Sprite, createAnimation, generateFrameNumbers, playAnimation)
@@ -45,47 +37,43 @@ main = do
 
 mainScene :: Effect PhaserScene
 mainScene =
-  do
-    Scene.newScene "main"
+  Scene.newScene "main"
     >>= Scene.create oncreate
     >>= Scene.preload onpreload
 
 onpreload :: PhaserScene -> Effect Unit
 onpreload scene =
-  void do
-    for_ [ "sky", "platform", "star" ]
-      ( \key ->
-          do
-            Loader.loadImage { key, path: basePath <> key <> ".png" } scene
-            >>= Loader.loadSpritesheet { key: "dude", path: basePath <> "dude.png" }
-                { frameWidth: 32.0
-                , frameHeight: 48.0
-                }
-      )
+  for_ [ "sky", "platform", "star" ] \key ->
+    do
+      Loader.loadImage { key, path: basePath <> key <> ".png" } scene
+      >>= Loader.loadSpritesheet { key: "dude", path: basePath <> "dude.png" }
+          { frameWidth: 32.0
+          , frameHeight: 48.0
+          }
   where
   basePath = "https://raw.githubusercontent.com/photonstorm/phaser3-examples/master/public/src/games/firstgame/assets/"
 
 oncreate :: PhaserScene -> Effect Unit
 oncreate scene =
   void do
-    phy <- Scene.getPhysicsPlugin scene
+    physics <- Scene.getPhysicsPlugin scene
     createBg
-    platformsGroup <- P.createStaticGroup phy
+    platformsGroup <- ArcadePhysics.createStaticGroup physics
     createFloor platformsGroup
-    movingPlatform <- createPlatform phy
-    player <- createPlayer phy
-    stars <- createStars phy
-    cursors <- createCursorKeys scene
+    movingPlatform <- createPlatform physics
+    player <- createPlayer physics
+    stars <- createStars physics
+    cursors <- Input.createCursorKeys scene
     createAnimations
-    void $ setupCollisions player stars platformsGroup movingPlatform phy
+    void $ setupCollisions player stars platformsGroup movingPlatform physics
     Scene.update (update cursors) scene
   where
   setupCollisions player stars platformsGroup movingPlatform =
-    P.addCollider player platformsGroup
-      >=> P.addCollider player movingPlatform
-      >=> P.addCollider stars movingPlatform
-      >=> P.addCollider stars platformsGroup
-      >=> P.addOverlap player stars collectStar
+    ArcadePhysics.addCollider player platformsGroup
+      >=> ArcadePhysics.addCollider player movingPlatform
+      >=> ArcadePhysics.addCollider stars movingPlatform
+      >=> ArcadePhysics.addCollider stars platformsGroup
+      >=> ArcadePhysics.addOverlap player stars collectStar
 
   createAnimations =
     void do
@@ -97,42 +85,39 @@ oncreate scene =
 
   createBg =
     void do
-      create "sky" scene
+      Image.create "sky" scene
         >>= GO.setPosition { x: 400.0, y: 300.0 }
 
   createFloor group =
     void do
-      P.createChild { x: 400.0, y: 568.0 } "platform" group
+      ArcadePhysics.createChild { x: 400.0, y: 568.0 } "platform" group
         >>= GO.setScale { x: 2.0, y: 2.0 }
-        >>= P.refreshBody
+        >>= ArcadePhysics.refreshBody
 
-  createPlatform phy =
-    P.createArcadeImage { x: 400.0, y: 400.0 } "platform" phy
-      >>= P.setImmovable true
-      >>= P.setAllowGravity false
-      >>= P.setVelocityX 50.0
+  createPlatform physics =
+    ArcadePhysics.createArcadeImage { x: 400.0, y: 400.0 } "platform" physics
+      >>= ArcadePhysics.setImmovable true
+      >>= ArcadePhysics.setAllowGravity false
+      >>= ArcadePhysics.setVelocityX 50.0
       >>= GO.setName "moving_platform"
 
-  createPlayer phy =
-    P.createArcadeSprite { x: 50.0, y: 500.0 } "dude" phy
-      >>= P.setBounce 0.4
-      >>= P.setCollideWorldBounds true
+  createPlayer physics =
+    ArcadePhysics.createArcadeSprite { x: 50.0, y: 500.0 } "dude" physics
+      >>= ArcadePhysics.setBounce 0.4
+      >>= ArcadePhysics.setCollideWorldBounds true
       >>= GO.setName "player"
 
-  createStars phy = do
-    starsEff <-
-      map
-        ( \n ->
-            do
-              P.createArcadeImage { x: 50.0 + (toNumber n * 40.0), y: 100.0 } "star" phy
-              >>= P.setBounce 0.4
-              >>= P.setCollideWorldBounds true
-        )
-        (1 .. 15)
-        # sequence
-    pure starsEff
+  createStars physics =
+    map
+      ( \n ->
+          ArcadePhysics.createArcadeImage { x: 50.0 + (toNumber n * 40.0), y: 100.0 } "star" physics
+            >>= ArcadePhysics.setBounce 0.4
+            >>= ArcadePhysics.setCollideWorldBounds true
+      )
+      (1 .. 15)
+      # sequence
 
-update :: CursorKeys -> PhaserScene -> Effect Unit
+update :: Input.CursorKeys -> PhaserScene -> Effect Unit
 update cursors scene = do
   movePlayer
   movePlatform
@@ -142,8 +127,8 @@ update cursors scene = do
     case player of
       Just sprite ->
         void do
-          touching <- P.getTouching sprite
-          isUp <- isDown cursors.up
+          touching <- ArcadePhysics.getTouching sprite
+          isUp <- Input.isDown cursors.up
           move cursors sprite
           if isUp && touching.down then
             jump sprite
@@ -151,28 +136,22 @@ update cursors scene = do
             pure sprite
       Nothing -> log "Sprite not found!"
     where
-    jump = P.setVelocityY (-350.0)
+    jump = ArcadePhysics.setVelocityY (-350.0)
 
   movePlatform = do
     platform <- getPlatform scene
     case platform of
       Just img -> do
         x <- GO.getX img
-        if x >= 500.0 then
-          void $ P.setVelocityX (-50.0) img
-        else
-          pure unit
-        if x <= 300.0 then
-          void $ P.setVelocityX (50.0) img
-        else
-          pure unit
-      Nothing -> log "Platform image not found!"
+        when (x >= 500.0) (void $ ArcadePhysics.setVelocityX (-50.0) img)
+        when (x <= 300.0) (void $ ArcadePhysics.setVelocityX (50.0) img)
+      Nothing -> Console.error "Platform image not found!"
 
-move :: forall a. PhysicsEnabled a => Sprite a => CursorKeys -> a -> Effect Unit
+move :: forall a. PhysicsEnabled a => Sprite a => Input.CursorKeys -> a -> Effect Unit
 move cursors sprite =
   void do
-    isRight <- isDown cursors.right
-    isLeft <- isDown cursors.left
+    isRight <- Input.isDown cursors.right
+    isLeft <- Input.isDown cursors.left
     if isRight then
       moveRight
     else if isLeft then
@@ -181,15 +160,15 @@ move cursors sprite =
       stop
   where
   moveRight =
-    P.setVelocityX (150.0) sprite
+    ArcadePhysics.setVelocityX (150.0) sprite
       >>= playAnimation { key: "right", ignoreIfPlaying: true }
 
   moveLeft =
-    P.setVelocityX (-150.0) sprite
+    ArcadePhysics.setVelocityX (-150.0) sprite
       >>= playAnimation { key: "left", ignoreIfPlaying: true }
 
   stop =
-    P.setVelocityX 0.0 sprite
+    ArcadePhysics.setVelocityX 0.0 sprite
       >>= playAnimation { key: "turn", ignoreIfPlaying: false }
 
 getPlayer :: PhaserScene -> Effect (Maybe ArcadeSprite)
@@ -199,4 +178,4 @@ getPlatform :: PhaserScene -> Effect (Maybe ArcadeImage)
 getPlatform scene = Scene.getChildByName "moving_platform" scene
 
 collectStar :: ArcadeSprite -> ArcadeImage -> Effect Unit
-collectStar _a b = P.disableBody b >>= const (pure unit)
+collectStar _a b = ArcadePhysics.disableBody b >>= const (pure unit)
