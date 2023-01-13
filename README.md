@@ -43,6 +43,7 @@ same location that the uses it. Recent work for that being placed in the
 ### Classes
 
 | Class                                  | Support Level   |
+| ---                                    | ---             |
 | Animations.*                           | Partial         |
 | Cache.*                                | Not Implemented |
 | Cameras.*                              | Partial         |
