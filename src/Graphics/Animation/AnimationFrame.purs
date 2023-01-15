@@ -5,8 +5,8 @@ module Graphics.Phaser.AnimationFrame where
 import Prelude
 
 import Effect (Effect)
-import Graphics.Phaser.Animation (animations)
-import Graphics.Phaser.ForeignTypes (Frame, JSONAnimationFrame)
+import Graphics.Phaser.Animation (animationsNamsepace)
+import Graphics.Phaser.Animation.Types (Frame, JSONAnimationFrame)
 import Utils.FFI (_getProp, _new4, _return0)
 
 foreign import data AnimationFrame :: Type
@@ -19,7 +19,7 @@ foreign import data AnimationFrame :: Type
 -- | AnimationFrames are generated automatically by the Animation class.
 new :: String -> String -> Number -> Frame -> Effect AnimationFrame
 new textureKey' textureFrame' index' frame' = do
-  fn <- animations >>= _getProp "AnimationFrame" 
+  fn <- animationsNamsepace >>= _getProp "AnimationFrame" 
   _new4 fn textureKey' textureFrame' index' frame'
 
 -- | The key of the Texture this AnimationFrame uses.

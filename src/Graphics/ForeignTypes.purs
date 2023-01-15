@@ -140,21 +140,5 @@ foreign import data PhaserLine :: Type
 
 foreign import data PhaserCurveSpline :: Type
 
-foreign import data TextureManager :: Type
 
-foreign import data AnimationManager  :: Type
-
-foreign import data Animations :: Type
-
-foreign import data Animation :: Type
-
-foreign import data JSONAnimation :: Type
-
-foreign import data AnimationState :: Type
-
-foreign import data AnimationFrame :: Type
-
-foreign import data JSONAnimationFrame :: Type
-
-foreign import data Frame :: Type
 

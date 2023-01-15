@@ -24,10 +24,15 @@ const filesToConvert = [
   //   destination: "./src/Graphics/Animation/AnimationManager.purs",
   //   moduleName: "AnimationManager",
   // },
+  // {
+  //   path: "animations/AnimationFrame.js",
+  //   destination: "./src/Graphics/Animation/AnimationFrame.purs",
+  //   moduleName: "AnimationFrame",
+  // },
   {
-    path: "animations/AnimationFrame.js",
-    destination: "./src/Graphics/Animation/AnimationFrame.purs",
-    moduleName: "AnimationFrame",
+    path: "animations/AnimationState.js",
+    destination: "./src/Graphics/Animation/AnimationState.purs",
+    moduleName: "AnimationState",
   },
 
 ];
