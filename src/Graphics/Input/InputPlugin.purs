@@ -19,14 +19,13 @@ setDraggable = _method1 "setDraggable"
 
 setDropZone :: forall a. GameObject a => Boolean -> a -> Effect a
 setDropZone bool go = do
-  input <- _getProp "input" go
-  _setProp "dropZone" bool input
+  void $ _getProp "input" go >>= _setProp "dropZone" bool 
   pure go
 
-setDragTimeThreshold :: Number -> PhaserInputPlugin -> Effect Unit
+setDragTimeThreshold :: Number -> PhaserInputPlugin -> Effect PhaserInputPlugin 
 setDragTimeThreshold = _setProp "dragTimeThreshold"
 
-setDragDistanceThreshold :: Number -> PhaserInputPlugin -> Effect Unit
+setDragDistanceThreshold :: Number -> PhaserInputPlugin -> Effect PhaserInputPlugin 
 setDragDistanceThreshold = _setProp "dragDistanceThreshold"
 
 type CursorKeys

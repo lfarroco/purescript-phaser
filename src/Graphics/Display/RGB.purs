@@ -23,19 +23,19 @@ g = _getProp "g"
 b :: PhaserRGB -> Effect Number
 b = _getProp "b"
 
-setR :: Number -> PhaserRGB -> Effect Unit
+setR :: Number -> PhaserRGB -> Effect PhaserRGB
 setR = _setProp "r"
 
-setG :: Number -> PhaserRGB -> Effect Unit
+setG :: Number -> PhaserRGB -> Effect PhaserRGB
 setG = _setProp "g"
 
-setB :: Number -> PhaserRGB -> Effect Unit
+setB :: Number -> PhaserRGB -> Effect PhaserRGB
 setB = _setProp "b"
 
 dirty :: PhaserRGB -> Effect Boolean
 dirty = _getProp "dirty"
 
-onChangeCallback :: EventListener -> PhaserRGB -> Effect Unit
+onChangeCallback :: EventListener -> PhaserRGB -> Effect PhaserRGB
 onChangeCallback = _setProp "onChangeCallback"
 
 destroy :: PhaserRGB -> Effect Unit

@@ -1,6 +1,7 @@
 module Utils.FFI where
 
 import Prelude
+
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
@@ -19,6 +20,16 @@ foreign import __new1 :: forall fn v1 returnValue. EffectFn2 fn v1 returnValue
 
 _new1 :: forall fn v1 returnValue. fn -> v1 -> Effect returnValue
 _new1 = runEffectFn2 __new1
+
+foreign import __new2 :: forall fn v1 v2 returnValue. EffectFn3 fn v1 v2 returnValue
+ 
+_new2 :: forall fn v1 v2 returnValue. fn -> v1 -> v2 -> Effect returnValue
+_new2 = runEffectFn3 __new2
+
+foreign import __new3 :: forall fn v1 v2 v3 returnValue. EffectFn4 fn v1 v2 v3 returnValue
+
+_new3 :: forall fn v1 v2 v3 returnValue. fn -> v1 -> v2 -> v3 -> Effect returnValue
+_new3 = runEffectFn4 __new3
 
 foreign import __getProp :: forall a b. EffectFn2 String a b
 
@@ -90,9 +101,9 @@ _method5 prop v1 v2 v3 v4 v5 obj = do
   void $ _return5 prop v1 v2 v3 v4 v5 obj
   pure obj
 
-foreign import __setProp :: forall val obj. EffectFn3 String val obj Unit
+foreign import __setProp :: forall val obj. EffectFn3 String val obj obj
 
-_setProp :: forall val obj. String -> val -> obj -> Effect Unit
+_setProp :: forall val obj. String -> val -> obj -> Effect obj
 _setProp = runEffectFn3 __setProp
 
 getNullable :: forall a obj. String -> String -> obj -> Effect (Nullable a)

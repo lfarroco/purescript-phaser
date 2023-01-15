@@ -34,9 +34,9 @@ createWithUnsafeConfig cfg = phaser >>= _getProp "Game" >>= _new1 cfg
 
 setDimensions :: Dimensions -> PhaserGame -> Effect PhaserGame
 setDimensions { width, height } game = do
-  conf <- _getProp "config" game
-  _setProp "width" width conf
-  _setProp "height" height conf
+  void $ _getProp "config" game 
+    >>= _setProp "width" width 
+    >>= _setProp "height" height 
   pure game
 
 config :: GameConfigIndex

@@ -27,11 +27,27 @@ You can check our example library at https://lfarroco.github.io/purescript-phase
 
 The code for the examples is available at `/docs/examples`.
 
+## Reasoning
+
+Some bindings were created using a scripts that reads Phaser's docs JsDoc and converts the definitions
+to FFI bindings. Because of that, some compromises are made:
+
+- Optinal parameters are dropped
+Methods and constructors that have optinal parameters allow you to set the remaining properties after the object is created.
+If we included all possible parameters, some objects like `Animation` would require 8 parameters to be created.
+For cases where it is not possible to change the information after the creation, we provide an API using the `Option` type.
+- Reversed keywords receive an `'` suffix
+If a property, method or class have the work `type`, it will be provided as `type'`
+- Parameters that receive multiple arguments will use to the first one
+If a function acceps `string|string[]`, we will provide `string`.
+
 ### Compiling the examples
 
 You can play with each example and compile it with `spago bundle-app`. You can also
 run `make compile-examples` in the root directory to compile all examples.
 
+### Octals
+Use `toStringAs` to produce octal numbers (`0xffaaee`)
 
 ### Namespaces
 
@@ -44,7 +60,7 @@ same location that the uses it. Recent work for that being placed in the
 
 | Class                                  | Support Level   |
 | ---                                    | ---             |
-| Animations.*                           | Partial         |
+| Animations.*                           | Implemented     |
 | Cache.*                                | Not Implemented |
 | Cameras.*                              | Partial         |
 | Core.*                                 | Partial         |

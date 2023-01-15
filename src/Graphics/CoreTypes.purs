@@ -309,3 +309,6 @@ instance Collidable (Array FT.Group)
 instance Collidable (Array FT.StaticGroup)
 instance Collidable (Array FT.ArcadeImage)
 instance Collidable (Array FT.ArcadeSprite)
+
+data PhaserMap k v = PhaserMap k v
+
