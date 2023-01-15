@@ -31,6 +31,11 @@ foreign import __new3 :: forall fn v1 v2 v3 returnValue. EffectFn4 fn v1 v2 v3 r
 _new3 :: forall fn v1 v2 v3 returnValue. fn -> v1 -> v2 -> v3 -> Effect returnValue
 _new3 = runEffectFn4 __new3
 
+foreign import __new4 :: forall fn v1 v2 v3 v4 returnValue. EffectFn5 fn v1 v2 v3 v4 returnValue
+
+_new4 :: forall fn v1 v2 v3 v4 returnValue. fn -> v1 -> v2 -> v3 -> v4 -> Effect returnValue
+_new4 = runEffectFn5 __new4
+
 foreign import __getProp :: forall a b. EffectFn2 String a b
 
 _getProp :: forall obj returnValue. String -> obj -> Effect returnValue

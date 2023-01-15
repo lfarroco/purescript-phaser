@@ -154,3 +154,7 @@ foreign import data AnimationState :: Type
 
 foreign import data AnimationFrame :: Type
 
+foreign import data JSONAnimationFrame :: Type
+
+foreign import data Frame :: Type
+

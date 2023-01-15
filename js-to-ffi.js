@@ -9,20 +9,25 @@ const basePath =
   "https://raw.githubusercontent.com/photonstorm/phaser/master/src/";
 
 const filesToConvert = [
+  // {
+  //   path: "gameobjects/shape/isobox/IsoBox.js",
+  //   destination: "./src/Graphics/GameObjects/IsoBox.purs",
+  //   moduleName: "GameObjects.IsoBox",
+  // },
+  // {
+  //   path: "animations/Animation.js",
+  //   destination: "./src/Graphics/Animation/Animation.purs",
+  //   moduleName: "Animation",
+  // },
+  // {
+  //   path: "animations/AnimationManager.js",
+  //   destination: "./src/Graphics/Animation/AnimationManager.purs",
+  //   moduleName: "AnimationManager",
+  // },
   {
-    path: "gameobjects/shape/isobox/IsoBox.js",
-    destination: "./src/Graphics/GameObjects/IsoBox.purs",
-    moduleName: "GameObjects.IsoBox",
-  },
-  {
-    path: "animations/Animation.js",
-    destination: "./src/Graphics/Animation/Animation.purs",
-    moduleName: "Animation",
-  },
-  {
-    path: "animations/AnimationManager.js",
-    destination: "./src/Graphics/Animation/AnimationManager.purs",
-    moduleName: "AnimationManager",
+    path: "animations/AnimationFrame.js",
+    destination: "./src/Graphics/Animation/AnimationFrame.purs",
+    moduleName: "AnimationFrame",
   },
 
 ];
@@ -113,9 +118,11 @@ filesToConvert.forEach(({ path, destination, moduleName }) => {
               if (t.title == "class") {
                 classInfo.name = t.name;
               } else if (t.title == "param") {
-                const type = t.type?.expression?.name
-                  ? t.type.expression.name
-                  : t.type.name;
+                  const type = t.type?.expression?.name
+                    ? t.type.expression.name
+                    : t.type.type == "UnionType"
+                    ? t.type.elements[0].name
+                    : t.type.name;
 
                 const required = t.type.type != "OptionalType";
 
@@ -297,6 +304,3 @@ import Utils.FFI (_getProp, ${fns})
     });
   });
 });
-// create _method _set map
-
-// TOOD: check for private (Animation has private)
