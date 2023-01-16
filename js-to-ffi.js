@@ -34,7 +34,6 @@ const filesToConvert = [
     destination: "./src/Graphics/Animation/AnimationState.purs",
     moduleName: "AnimationState",
   },
-
 ];
 
 const extractName = (name) => {
@@ -123,11 +122,11 @@ filesToConvert.forEach(({ path, destination, moduleName }) => {
               if (t.title == "class") {
                 classInfo.name = t.name;
               } else if (t.title == "param") {
-                  const type = t.type?.expression?.name
-                    ? t.type.expression.name
-                    : t.type.type == "UnionType"
-                    ? t.type.elements[0].name
-                    : t.type.name;
+                const type = t.type?.expression?.name
+                  ? t.type.expression.name
+                  : t.type.type == "UnionType"
+                  ? t.type.elements[0].name
+                  : t.type.name;
 
                 const required = t.type.type != "OptionalType";
 
@@ -236,30 +235,29 @@ ${validatedName} = _getProp "${prop.name}"
         //   prop.name.slice(1, prop.name.length);
         // // set prop
         // output += `
-// -- | ${prop.desc.split("\n").join("\n-- | ")}
-// set${nameInCamelCase}' :: ${prop.type} -> ${classInfo.name} -> Effect ${
+        // -- | ${prop.desc.split("\n").join("\n-- | ")}
+        // set${nameInCamelCase}' :: ${prop.type} -> ${classInfo.name} -> Effect ${
         //   classInfo.name
         // }
-// set${nameInCamelCase}' = _setProp "${prop.name}"
-// `;
+        // set${nameInCamelCase}' = _setProp "${prop.name}"
+        // `;
       });
 
       classInfo.methods.forEach((method) => {
-        
         const argTypes = [
           ...method.args.map((a) => {
+            const [name] = a.type.split(".").reverse();
 
-            const [name]= a.type.split(".").reverse()
-
-            return name
-
+            return name;
           }),
           classInfo.name,
         ].map(convertType);
         const argNames = method.args.map((a) => a.name);
 
         const [returns] =
-          method.returns == "this" ? [classInfo.name] : method.returns.split(".").reverse();
+          method.returns == "this"
+            ? [classInfo.name]
+            : method.returns.split(".").reverse();
 
         const methodDesc = "-- | " + method.desc.split("\n").join("\n-- | ");
         const argsDesc = method.args
@@ -277,9 +275,9 @@ ${validatedName} = _getProp "${prop.name}"
             ? `
 -- | Parameters:
 ${argsDesc}`
-          : "";
+            : "";
 
-        const fnType = returns === classInfo.name ? "_method" : "_return"
+        const fnType = returns === classInfo.name ? "_method" : "_return";
 
         const methodFn = `${fnType}${argNames.length}`;
         libs[methodFn] = 1;
