@@ -58,87 +58,87 @@ same location that the uses it. Recent work for that being placed in the
 
 ### Classes
 
-| Class                                  | Support Level   |
-| ---                                    | ---             |
-| Animations.*                           | Implemented     |
-| Cache.*                                | Not Implemented |
-| Cameras.*                              | Partial         |
-| Core.*                                 | Partial         |
-| Curves.*                               | Partial         |
-| Data.*                                 | Partial         |
-| Display.*                              | Partial         |
-| DOM.*                                  | Partial         |
-| Events.*                               | Partial         |
-| FacebookInstantGamesLeaderboard        | Partial         |
-| FacebookInstantGamePlugin              | Partial         |
-| Game                                   | Partial         |
-| GameObjects.Arc                        | Partial         |
-| GameObjects.BitmapText                 | Partial         |
-| GameObjects.Blitter                    | Partial         |
-| GameObjects.Components.TransformMatrix | Partial         |
-| GameObjects.Container                  | Partial         |
-| GameObjects.Curve                      | Partial         |
-| GameObjects.DisplayList                | Partial         |
-| GameObjects.DOMElement                 | Partial         |
-| GameObjects.DynamicBitmapText          | Partial         |
-| GameObjects.Ellipse                    | Partial         |
-| GameObjects.Extern                     | Partial         |
-| GameObjects.GameObject                 | Partial         |
-| GameObjects.GameObjectCreator          | Partial         |
-| GameObjects.GameObjectFactory          | Partial         |
-| GameObjects.Graphics                   | Partial         |
-| GameObjects.Grid                       | Partial         |
-| GameObjects.Group                      | Partial         |
-| GameObjects.Image                      | Complete        |
-| GameObjects.IsoBox                     | Partial         |
-| GameObjects.IsoTriangle                | Partial         |
-| GameObjects.Layer                      | Partial         |
-| GameObjects.Light                      | Partial         |
-| GameObjects.LightsManager              | Partial         |
-| GameObjects.LightsPlugin               | Partial         |
-| GameObjects.Line                       | Partial         |
-| GameObjects.Mesh                       | Partial         |
-| GameObjects.Particles.*                | Partial         |
-| GameObjects.PathFollower               | Partial         |
-| GameObjects.PointLight                 | Partial         |
-| GameObjects.Polygon                    | Partial         |
-| GameObjects.Rectangle                  | Partial         |
-| GameObjects.RenderTexture              | Partial         |
-| GameObjects.Rope                       | Partial         |
-| GameObjects.Shader                     | Partial         |
-| GameObjects.Shape                      | Partial         |
-| GameObjects.Sprite                     | Partial         |
-| GameObjects.Sprite3D                   | Partial         |
-| GameObjects.Star                       | Partial         |
-| GameObjects.Text                       | Partial         |
-| GameObjects.TextStyle                  | Partial         |
-| GameObjects.TileSprite                 | Partial         |
-| GameObjects.Triangle                   | Partial         |
-| GameObjects.UpdateList                 | Partial         |
-| GameObjects.Video                      | Partial         |
-| GameObjects.Zone                       | Partial         |
-| Geom.Circle                            | Partial         |
-| Geom.Ellipse                           | Partial         |
-| Geom.Line                              | Partial         |
-| Geom.Mesh.Face                         | Partial         |
-| Geom.Mesh.Vertex                       | Partial         |
-| Geom.Point                             | Partial         |
-| Geom.Polygon                           | Partial         |
-| Geom.Rectangle                         | Partial         |
-| Geom.Triangle                          | Partial         |
-| Input.*                                | Partial         |
-| Loader.*                               | Partial         |
-| Math.*                                 | Partial         |
-| Physics.*                              | Partial         |
-| Plugins.*                              | Partial         |
-| Renderer.*                             | Partial         |
-| Scale.*                                | Partial         |
-| Scene                                  | Partial         |
-| Scenes.*                               | Partial         |
-| Sound.*                                | Partial         |
-| Structs.*                              | Partial         |
-| Textures.*                             | Partial         |
-| Tilemaps.*                             | Partial         |
-| Time.*                                 | Partial         |
-| Tweens.*                               | Partial         |
-| SpineContainer                         | Partial         |
+| Class                                  | Support Level   | Implementation Type |
+| ---                                    | ---             | ---                 |
+| Animations.*                           | Implemented     | Automated           |
+| Cache.*                                | 0               |                     |
+| Cameras.*                              | 0               |                     |
+| Core.*                                 | 0               |                     |
+| Curves.*                               | 0               |                     |
+| Data.*                                 | 0               |                     |
+| Display.*                              | 0               |                     |
+| DOM.*                                  | 0               |                     |
+| Events.*                               | Partial         | Manual              |
+| FacebookInstantGamesLeaderboard        | 0               |                     |
+| FacebookInstantGamePlugin              | 0               |                     |
+| Game                                   | Partial         | Manual              |
+| GameObjects.Arc                        | 0               |                     |
+| GameObjects.BitmapText                 | 0               |                     |
+| GameObjects.Blitter                    | 0               |                     |
+| GameObjects.Components.TransformMatrix | 0               |                     |
+| GameObjects.Container                  | Partial         | Manual              |
+| GameObjects.Curve                      | Partial         | Manual              |
+| GameObjects.DisplayList                | 0               |                     |
+| GameObjects.DOMElement                 | 0               |                     |
+| GameObjects.DynamicBitmapText          | 0               |                     |
+| GameObjects.Ellipse                    | 0               |                     |
+| GameObjects.Extern                     | 0               |                     |
+| GameObjects.GameObject                 | Partial         | Manual              |
+| GameObjects.GameObjectCreator          | 0               |                     |
+| GameObjects.GameObjectFactory          | 0               |                     |
+| GameObjects.Graphics                   | Partial         | Manual              |
+| GameObjects.Grid                       | 0               |                     |
+| GameObjects.Group                      | 0               |                     |
+| GameObjects.Image                      | Complete        | Manual              |
+| GameObjects.IsoBox                     | Complete        | Automated           |
+| GameObjects.IsoTriangle                | 0               |                     |
+| GameObjects.Layer                      | 0               |                     |
+| GameObjects.Light                      | Partial         | Manual              |
+| GameObjects.LightsManager              | Partial         | Manual              |
+| GameObjects.LightsPlugin               | Partial         |                     |
+| GameObjects.Line                       | 0               |                     |
+| GameObjects.Mesh                       | 0               |                     |
+| GameObjects.Particles.*                | 0               |                     |
+| GameObjects.PathFollower               | 0               |                     |
+| GameObjects.PointLight                 | 0               |                     |
+| GameObjects.Polygon                    | 0               |                     |
+| GameObjects.Rectangle                  | Partial         | Manual              |
+| GameObjects.RenderTexture              | 0               |                     |
+| GameObjects.Rope                       | 0               |                     |
+| GameObjects.Shader                     | 0               |                     |
+| GameObjects.Shape                      | 0               |                     |
+| GameObjects.Sprite                     | Partial         | Manual              |
+| GameObjects.Sprite3D                   | 0               |                     |
+| GameObjects.Star                       | 0               |                     |
+| GameObjects.Text                       | Partial         | Manual              |
+| GameObjects.TextStyle                  | 0               |                     |
+| GameObjects.TileSprite                 | 0               |                     |
+| GameObjects.Triangle                   | 0               |                     |
+| GameObjects.UpdateList                 | 0               |                     |
+| GameObjects.Video                      | 0               |                     |
+| GameObjects.Zone                       | 0               |                     |
+| Geom.Circle                            | Partial         | Manual              |
+| Geom.Ellipse                           | 0               |                     |
+| Geom.Line                              | 0               |                     |
+| Geom.Mesh.Face                         | 0               |                     |
+| Geom.Mesh.Vertex                       | 0               |                     |
+| Geom.Point                             | 0               |                     |
+| Geom.Polygon                           | 0               |                     |
+| Geom.Rectangle                         | Partial         | Manual              |
+| Geom.Triangle                          | 0               |                     |
+| Input.*                                | Partial         | Manual              |
+| Loader.*                               | 0               |                     |
+| Math.*                                 | 0               |                     |
+| Physics.*                              | Partial         | Manual              |
+| Plugins.*                              | Partial         | Manual              |
+| Renderer.*                             | 0               |                     |
+| Scale.*                                | 0               |                     |
+| Scene                                  | Partial         | Manual              |
+| Scenes.*                               | Partial         | Manual              |
+| Sound.*                                | 0               |                     |
+| Structs.*                              | 0               |                     |
+| Textures.*                             | 0               |                     |
+| Tilemaps.*                             | Partial         | Manual              |
+| Time.*                                 | 0               |                     |
+| Tweens.*                               | Partial         | Manual              |
+| SpineContainer                         | 0               |                     |
