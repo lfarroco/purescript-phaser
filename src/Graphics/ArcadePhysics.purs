@@ -113,11 +113,11 @@ getTouching :: forall a. PhysicsEnabled a => a -> Effect ArcadeBodyCollision
 getTouching = _getProp "body" >=> _getProp "touching"
 
 addOverlap :: forall a b c d. Collidable a => Collidable b => Collidable c => Collidable d => a -> b -> (c -> d -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-addOverlap v1 v2 v3 plugin = do
+addOverlap co1 co2 callback plugin = do
   let
-    listener = createEventListener2 v3
+    listener = createEventListener2 callback
   _getProp "add" plugin
-    >>= _return3 "overlap" v1 v2 listener
+    >>= _return3 "overlap" co1 co2 listener
     >>= const (pure plugin)
 
 disableBody :: forall a. PhysicsEnabled a => a -> Effect a
