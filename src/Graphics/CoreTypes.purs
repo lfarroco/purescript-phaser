@@ -187,7 +187,7 @@ instance GameObject FT.PhaserLight
 class Transform :: forall k. k -> Constraint
 class Transform a
 
-instance Transform  FT.PhaserGameObject
+instance Transform FT.PhaserGameObject
 instance Transform FT.PhaserImage
 instance Transform FT.PhaserContainer
 instance Transform FT.PhaserGraphic

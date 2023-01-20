@@ -41,18 +41,18 @@ import Utils.FFI (_getProp, _method0, _method3, getNullable)
 add :: String ->  PhaserScene  -> Boolean -> SceneManager -> Effect SceneManager
 add = _method3 "add"
  
-class HasSceneManager :: forall k. k -> Constraint
-class HasSceneManager a 
+class HasSceneManager a  where
+  getSceneManager :: a -> Effect SceneManager
 
-getSceneManager :: forall a. HasSceneManager a => a -> Effect SceneManager
-getSceneManager = _getProp "scene"
-
-instance HasSceneManager PhaserScene 
-instance HasSceneManager PhaserGame 
+instance HasSceneManager PhaserScene  where
+  getSceneManager = _getProp "scene" >=> _getProp "manager"
+ 
+instance HasSceneManager PhaserGame  where
+  getSceneManager = _getProp "scene"
 
 getByKey :: String -> SceneManager -> Effect (Maybe PhaserScene)
 getByKey key mngr = 
-  getNullable "get(v1)" key mngr >>= (toMaybe >>> pure)
+  getNullable "getScene" key mngr >>= (toMaybe >>> pure)
 
 sendToBack :: PhaserScene -> Effect PhaserScene
 sendToBack = _method0 "sendToBack"
