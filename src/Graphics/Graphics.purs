@@ -2,6 +2,7 @@ module Graphics.Phaser.Graphics where
 
 import Prelude
 import Effect (Effect)
+import Graphics.Canvas (Composite(..))
 import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Graphics.Phaser.ForeignTypes as Types
 import Utils.FFI (_getProp, _method0, _method2, _method3, _method4, _method5, _return0)
@@ -12,7 +13,7 @@ create = _getProp "add" >=> _return0 "graphics"
 rectangle :: Types.PhaserScene -> Effect Types.PhaserRectangle
 rectangle = _getProp "add" >=> _return0 "rectangle"
 
-fillStyle :: String -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
+fillStyle :: Int -> Number -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
 fillStyle = _method2 "fillStyle"
 
 fillRect :: Vector -> Dimensions -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
@@ -25,7 +26,7 @@ strokeRoundedRect :: Vector -> Dimensions -> Number -> Types.PhaserGraphic -> Ef
 strokeRoundedRect { x, y } { width, height } v3 = _method5 "strokeRoundedRect" x y width height v3
 
 type LineStyleConfig
-  = { width :: Number, color :: String, alpha :: Number }
+  = { width :: Number, color :: Int, alpha :: Number }
 
 lineStyle :: LineStyleConfig -> Types.PhaserGraphic -> Effect Types.PhaserGraphic
 lineStyle { width, color, alpha } = _method3 "lineStyle" width color alpha

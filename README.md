@@ -46,9 +46,6 @@ If a function acceps `string|string[]`, we will provide `string`.
 You can play with each example and compile it with `spago bundle-app`. You can also
 run `make compile-examples` in the root directory to compile all examples.
 
-### Octals
-Use `toStringAs` to produce octal numbers (`0xffaaee`)
-
 ### Namespaces
 
 The library is being refactored to use the same namespaces as Phaser. For example, 
