@@ -1,5 +1,6 @@
 module Graphics.Phaser.ArcadePhysics where
 
+-- TODO: rename to module Graphics.Phaser.Arcade.ArcadePhysics where
 -- A port of
 -- https://photonstorm.github.io/phaser3-docs/Phaser.Physics.Arcade.StaticGroup.html
 -- TODO: create Groups as parent of static and dynamic groups
@@ -135,8 +136,8 @@ closest = _method1 "closest"
 furthest :: forall a. GameObject a => a -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 furthest = _method1 "furthest"
 
-collide :: forall a b. GameObject a => GameObject b => Array a -> Array b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-collide = _method2 "collide"
+collide :: forall a b. GameObject a => GameObject b => Array a -> Array b -> PhaserPhysicsPlugin -> Effect Boolean
+collide = _return2 "collide"
 
 collideWithCallback :: forall a b. GameObject a => GameObject b => Array a -> Array b -> (a -> b -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 collideWithCallback v1 v2 v3 = _method3 "collide" v1 v2 (createEventListener2 v3)
@@ -147,8 +148,8 @@ moveTo v1 { x, y } v3 = _method4 "moveTo" v1 x y v3
 moveToObject :: forall a b. GameObject a => GameObject b => a -> b -> Number -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 moveToObject = _method3 "moveTo"
 
-overlap :: forall a b. GameObject a => GameObject b => Array a -> Array b -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
-overlap = _method2 "overlap"
+overlap :: forall a b. GameObject a => GameObject b => Array a -> Array b -> PhaserPhysicsPlugin -> Effect Boolean
+overlap = _return2 "overlap"
 
 overlapWithCallback :: forall a b. GameObject a => GameObject b => Array a -> Array b -> (a -> b -> Effect Unit) -> PhaserPhysicsPlugin -> Effect PhaserPhysicsPlugin
 overlapWithCallback v1 v2 v3 = _method3 "overlap" v1 v2 (createEventListener2 v3)
