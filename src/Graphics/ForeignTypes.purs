@@ -140,5 +140,7 @@ foreign import data PhaserLine :: Type
 
 foreign import data PhaserCurveSpline :: Type
 
+foreign import data PhaserSpineGameObject :: Type
+
 
 

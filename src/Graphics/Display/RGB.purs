@@ -12,7 +12,7 @@ import Graphics.Phaser.ForeignTypes (PhaserRGB)
 import Utils.FFI (_getProp, _method0, _method3, _return3, _setProp)
 
 new :: Number -> Number -> Number -> Effect PhaserRGB
-new = unsafeForeignFunction [ "r", "g", "b", "" ] "new RGB(r,g,b)" r g b
+new = unsafeForeignFunction [ "r", "g", "b", "" ] "new RGB(r,g,b)"
 
 r :: PhaserRGB -> Effect Number
 r = _getProp "r"

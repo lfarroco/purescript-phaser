@@ -14,11 +14,17 @@ import Graphics.Phaser.Events (createEventListener1, createEventListener2)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserPhysicsPlugin, PhaserScene, PhaserScenePlugin)
 import Utils.FFI (_getProp, _method1, _method2, _method4, _new1, _return1, _return2, _setProp, phaser, safeGet)
 
+type PackConfig = {
+    files :: Array {key :: String, type :: String, url :: String, sceneKey :: String}
+}
 -- | The lifecycle functions (init, update, create, etc.) require returning PhaserGame to allow
 -- | composing multiple functions that operate at that time.
 -- | eg. oncreate = drawBackground >=> drawRetangle
 newScene :: String -> Effect PhaserScene
 newScene key = phaser >>= _getProp "Scene" >>= _new1 key
+
+newSceneWithPack :: String -> PackConfig -> Effect PhaserScene
+newSceneWithPack key pack = phaser >>= _getProp "Scene" >>= _new1 {key, pack}
 
 init :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 init callback scene = do

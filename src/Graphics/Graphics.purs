@@ -2,7 +2,6 @@ module Graphics.Phaser.Graphics where
 
 import Prelude
 import Effect (Effect)
-import Graphics.Canvas (Composite(..))
 import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Graphics.Phaser.ForeignTypes as Types
 import Utils.FFI (_getProp, _method0, _method2, _method3, _method4, _method5, _return0)
