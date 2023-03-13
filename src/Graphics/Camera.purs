@@ -1,25 +1,16 @@
-module Graphics.Phaser.Camera
-  ( setMainCameraBounds
-  , getMainCamera
-  , createSmoothedKeyControl
-  , updateCameraControlDelta
-  ) where
+module Graphics.Phaser.Camera where
 
 import Prelude
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Vector, Dimensions)
 import Graphics.Phaser.ForeignTypes (PhaserCamera, PhaserCameraController, PhaserScene)
-import Utils.FFI (_getProp, _method1, _new1, _return0, _return4, phaser)
+import Utils.FFI (_getProp, _method1, _new1, _return4, _setProp, phaser)
 
-setMainCameraBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
-setMainCameraBounds { x, y } { width, height } scn =
-  _getProp "cameras" scn
-    >>= _getProp "main"
-    >>= _return4 "setBounds" x y width height
-    >>= const (pure scn)
+setBounds :: Vector -> Dimensions -> PhaserCamera -> Effect PhaserCamera
+setBounds { x, y } { width, height } = _return4 "setBounds" x y width height
 
 getMainCamera :: PhaserScene -> Effect PhaserCamera
-getMainCamera = _return0 "cameras.main"
+getMainCamera = _getProp "cameras" >=> _getProp "main"
 
 type KeyControlConfig
   = { camera :: PhaserCamera
@@ -42,3 +33,15 @@ createSmoothedKeyControl cfg =
 
 updateCameraControlDelta :: Number -> PhaserCameraController -> Effect PhaserCameraController
 updateCameraControlDelta = _method1 "update"
+
+scrollX :: PhaserCamera -> Effect Number
+scrollX = _getProp "scrollX"
+
+setScrollX :: Number -> PhaserCamera -> Effect PhaserCamera
+setScrollX = _setProp "scrollX"
+
+scrollY :: PhaserCamera -> Effect Number
+scrollY = _getProp "scrollY"
+
+setScrollY :: Number -> PhaserCamera -> Effect PhaserCamera
+setScrollY = _setProp "scrollY"
