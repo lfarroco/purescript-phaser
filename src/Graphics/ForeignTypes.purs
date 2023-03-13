@@ -1,6 +1,5 @@
 module Graphics.Phaser.ForeignTypes where
 
-
 -- https://photonstorm.github.io/phaser3-docs/Phaser.html
 foreign import data PhaserMainNamespace :: Type
 
@@ -61,8 +60,6 @@ foreign import data PhaserRectangle :: Type
 foreign import data PhaserEllipse :: Type
 
 foreign import data AudioContext :: Type
-
-foreign import data PluginObjectItem :: Type
 
 foreign import data BootCallback :: Type
 
@@ -130,7 +127,7 @@ foreign import data PhaserLoaderPlugin :: Type
 
 foreign import data PhaserLightsManager :: Type
 
-foreign import data PhaserLight:: Type
+foreign import data PhaserLight :: Type
 
 foreign import data PhaserRGB :: Type
 
@@ -142,5 +139,6 @@ foreign import data PhaserCurveSpline :: Type
 
 foreign import data PhaserSpineGameObject :: Type
 
+foreign import data BaseSoundManager :: Type
 
-
+foreign import data BaseSound :: Type

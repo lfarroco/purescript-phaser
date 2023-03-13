@@ -130,9 +130,6 @@ getDisplayWidth = _getProp "displayWidth"
 getDisplayHeight :: forall a. GameObject a => a -> Effect Number
 getDisplayHeight = _getProp "displayHeight"
 
--- TODO: getDisplaySize  doesn't exist, replace with:
--- var displayWidth = gameObject.displayWidth;
--- var displayHeight = gameObject.displayHeight;
 getDisplaySize :: forall a. GameObject a => a -> Effect Dimensions
 getDisplaySize el = do 
   width <- getDisplayHeight el

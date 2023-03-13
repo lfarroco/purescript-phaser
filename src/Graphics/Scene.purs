@@ -48,8 +48,7 @@ updateWithTimes callback scene = do
 
 create :: (PhaserScene -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 create callback scene = do
-  void $ _setProp "create" (callback scene) scene
-  pure scene
+  _setProp "create" (callback scene) scene
 
 createWithData :: forall a. (PhaserScene -> a -> Effect Unit) -> PhaserScene -> Effect PhaserScene
 createWithData callback scene = do

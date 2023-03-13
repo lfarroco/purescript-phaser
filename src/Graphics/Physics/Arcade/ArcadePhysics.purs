@@ -10,7 +10,7 @@ import Graphics.Canvas (Dimensions)
 import Graphics.Phaser.CoreTypes (class ArcadeGroup, class Collidable, class GameObject, class PhysicsEnabled, Vector)
 import Graphics.Phaser.Events (createEventListener2)
 import Graphics.Phaser.ForeignTypes (ArcadeImage, ArcadeSprite, Group, PhaserArcadeWorld, PhaserPhysicsPlugin, PhaserScene, StaticGroup)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _method3, _method4, _return0, _return1, _return2, _return3, _return4)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _method3, _method4, _return0, _return1, _return2, _return3, _return4, _setProp)
 
 -- All Game Objects created by or added to this Group will automatically be given static Arcade Physics bodies, if they have no body.
 createStaticGroup :: PhaserPhysicsPlugin -> Effect StaticGroup
@@ -30,6 +30,11 @@ createArcadeImage { x, y } v2 = _getProp "add" >=> _return3 "image" x y v2
 
 createArcadeSprite :: Vector -> String -> PhaserPhysicsPlugin -> Effect ArcadeSprite
 createArcadeSprite { x, y } v2 = _getProp "add" >=> _return3 "sprite" x y v2
+
+existing :: forall a. GameObject a => a -> PhaserPhysicsPlugin -> Effect a
+existing go ph = do
+  pp <- _getProp "add" ph
+  _return1 "existing" go pp
 
 setWorldBounds :: Vector -> Dimensions -> PhaserScene -> Effect PhaserScene
 setWorldBounds { x, y } { width, height } scn =
@@ -51,6 +56,11 @@ setAllowGravity v1 obj =
   _getProp "body" obj
     >>= _return1 "setAllowGravity" v1
     >>= const (pure obj)
+
+setBodyOffset :: forall a. GameObject a => Vector -> a -> Effect a
+setBodyOffset vec obj = do
+  void $ _getProp "body" obj >>= _setProp "offset" vec
+  pure obj
 
 acceleration :: forall a. PhysicsEnabled a => a -> Effect Vector
 acceleration = _getProp "body.acceleration"

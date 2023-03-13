@@ -122,13 +122,6 @@ type PhysicsConfig
     -- , matter :: MatterWorldConfig 
     }
 
-type PluginObject
-  = { global :: Array FT.PluginObjectItem
-    , scene :: Array FT.PluginObjectItem
-    , default :: Array String
-    , defaultMerge :: Array String
-    }
-
 type AudioConfig
   = { disableWebAudio :: Boolean
     , context :: FT.AudioContext
@@ -279,6 +272,7 @@ instance HasScenePlugin  FT.PhaserScene
 
 instance PhysicsEnabled FT.ArcadeImage
 instance PhysicsEnabled FT.ArcadeSprite
+instance PhysicsEnabled FT.PhaserSpineGameObject
 
 class ArcadeGroup :: forall k. k -> Constraint
 class ArcadeGroup a
@@ -316,3 +310,12 @@ instance Collidable (Array FT.ArcadeSprite)
 
 data PhaserMap k v = PhaserMap k v
 
+type PluginObjectItem a data_ = {
+    key :: String,
+    plugin :: a,
+    start :: Boolean,
+    systemKey :: String,
+    sceneKey :: String,
+    mapping:: String,
+    data :: data_
+  }

@@ -8,6 +8,7 @@ import Graphics.Phaser as Phaser
 import Graphics.Phaser.Events (createEventListener0, getEventEmitter, on)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
 import Graphics.Phaser.Scene as Scene
+import Graphics.Phaser.GameConfig as Config
 
 foreign import phaserJS :: Effect Unit
 
@@ -37,13 +38,12 @@ runTestScene game scn = do
 testGame :: Effect PhaserGame
 testGame =
   let
-    config =
-      Phaser.config.width 800.0
-        <> Phaser.config.height 600.0
-        <> Phaser.config.physics physicsConfig'
-        <> Phaser.config.type_ 3 -- HEADLESS
-        <> Phaser.config.audio false
-        <> Phaser.config.banner
+    config = Config.width 800.0
+        <> Config.height 600.0
+        <> Config.physics physicsConfig'
+        <> Config.type_ 3 -- HEADLESS
+        <> Config.audio false
+        <> Config.banner
             { background: []
             , hidePhaser: true
             , text: ""
@@ -53,5 +53,5 @@ testGame =
       Phaser.createWithConfig config
   where
   physicsConfig' =
-    Phaser.physicsConfig.default "arcade"
-      <> (Phaser.physicsConfig.arcade { debug: false, gravity: { x: 0.0, y: 0.0 } })
+    Config.defaultPhysicsConfig "arcade"
+      <> (Config.arcade { debug: false, gravity: { x: 0.0, y: 0.0 } })

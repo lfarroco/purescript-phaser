@@ -68,3 +68,12 @@ loadTilemapTiledJSON { key, path } scn =
   _getProp "load" scn
     >>= _method2 "tilemapTiledJSON" key path
     >>= const (pure scn)
+
+type AudioLoadConfig
+  = { key :: String, paths :: Array String }
+
+-- | When loading an audio file you can provide an array of audio files with different extensions for the the same key.
+-- | This allows you to support multiple browsers and platforms.
+-- | Example : https://labs.phaser.io/edit.html?src=src\audio\Web%20Audio\basic%20playback%20and%20events.js
+loadAudio :: AudioLoadConfig -> PhaserScene -> Effect PhaserScene
+loadAudio { key, paths } = _getProp "load" >=> _return2 "audio" key paths

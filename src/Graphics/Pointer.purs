@@ -108,7 +108,7 @@ worldY :: PhaserPointer -> Effect Number
 worldY = _getProp "worldY"
 
 x :: PhaserPointer -> Effect Number
-x = _getProp "y"
+x = _getProp "x"
 
 y :: PhaserPointer -> Effect Number
 y = _getProp "y"

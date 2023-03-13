@@ -6,7 +6,7 @@ import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject)
 import Graphics.Phaser.ForeignTypes (PhaserContainer, PhaserScene)
-import Utils.FFI (_getProp, _method1, _return0, getNullable)
+import Utils.FFI (_getProp, _method1, _method2, _return0, _return1, getNullable)
 
 -- | Creates a new container that belongs to the given scene
 create :: PhaserScene -> Effect PhaserContainer
@@ -29,3 +29,15 @@ getByName :: forall a. GameObject a => String -> PhaserContainer -> Effect (Mayb
 getByName k obj = do
   v <- getNullable "getByName" k obj
   pure $ toMaybe v
+
+moveBelow :: forall a b. GameObject a=>  GameObject b => a -> b -> PhaserContainer -> Effect PhaserContainer
+moveBelow = _method2 "moveBelow"
+
+moveAbove :: forall a b. GameObject a=>  GameObject b => a -> b -> PhaserContainer -> Effect PhaserContainer
+moveAbove = _method2 "moveAbove"
+
+getIndex  :: forall a. GameObject a => a -> PhaserContainer -> Effect Int
+getIndex = _return1 "getIndex"
+
+moveTo :: forall a. GameObject a => a -> Int -> PhaserContainer -> Effect PhaserContainer
+moveTo = _method2 "moveTo"

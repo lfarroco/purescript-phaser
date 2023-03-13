@@ -29,17 +29,42 @@ The code for the examples is available at `/docs/examples`.
 
 ## Reasoning
 
-Some bindings were created using a scripts that reads Phaser's docs JsDoc and converts the definitions
-to FFI bindings. Because of that, some compromises are made:
+Phaser's API allow doing the same thing in multiple ways, and its functions allow multiple optional
+parameters.
+In scenarios where you are creating an object and its optional parameters can be set after creation,
+we drop the requirements.
+Example:
+When creating an image, we have the following parameters:
+- scene
+- x
+- y
+- texture
+- frame (optional)
 
-- Optinal parameters are dropped
-Methods and constructors that have optinal parameters allow you to set the remaining properties after the object is created.
-If we included all possible parameters, some objects like `Animation` would require 8 parameters to be created.
-For cases where it is not possible to change the information after the creation, we provide an API using the `Option` type.
-- Reversed keywords receive an `'` suffix
-If a property, method or class have the work `type`, it will be provided as `type'`
-- Parameters that receive multiple arguments will use to the first one
-If a function acceps `string|string[]`, we will provide `string`.
+As it is possible using `setFrame` after creating the image, we drop the frame argument for convenience.
+
+Sometimes this is not possible: the `Phaser.Game` class has 30 optional parameters, and depending on 
+what you are trying to do (like loading a plugin or setting a specific render mode), those parameters
+can only be provided during the object creation.
+In these cases we use the `purescript-option` library to allow using these APIs (with the cost of verbosity).
+
+```
+import Graphics.Phaser.GameConfig as Config
+...
+
+config =  Config.width 800.0 --
+       <> Config.height 600.0
+...
+Phaser.createWithConfig config
+```
+
+Some bindings were created using a script that reads Phaser's docs JsDoc and converts the definitions
+to FFI bindings. Those bindings have a disclaimer in their header. In those cases, the following logic is used:
+
+- tailing optional parameters are dropped
+- Reserved keywords receive a `'` suffix (eg. `type` becomes `type'`)
+- Parameters that receive multiple arguments types will use to the first one
+If a function accepts `string|string[]`, we will provide `string`.
 
 ### Compiling the examples
 
@@ -48,10 +73,9 @@ run `make compile-examples` in the root directory to compile all examples.
 
 ### Namespaces
 
-The library is being refactored to use the same namespaces as Phaser. For example, 
-the input plugin should be located on `Phaser.Input.InputPlugin`, as this is the
-same location that the uses it. Recent work for that being placed in the 
-`next` branch.
+The library is being refactored to use the same namespaces as Phaser.
+The intention is to make it easier to refer to the source docs. 
+Because of this, some existing namespaces may change to follow the original structure.
 
 ### Classes
 
