@@ -5,8 +5,6 @@ module Graphics.Phaser
   , createWithUnsafeConfig
   , destroy
   , setDimensions
-  , config
-  , physicsConfig
   ) where
 
 import Prelude
@@ -14,7 +12,7 @@ import Data.Options (Options, options)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (Dimensions)
 import Graphics.Phaser.ForeignTypes (PhaserGame, PhaserScene)
-import Graphics.Phaser.GameConfig (GameConfig, GameConfigIndex, PhysicsConfigIndex, _gameConfig, _physicsConfig)
+import Graphics.Phaser.GameConfig (GameConfig)
 import Utils.FFI (_getProp, _method4, _new0, _new1, _return0, _setProp, phaser)
 
 create :: Effect PhaserGame
@@ -38,12 +36,6 @@ setDimensions { width, height } game = do
     >>= _setProp "width" width 
     >>= _setProp "height" height 
   pure game
-
-config :: GameConfigIndex
-config = _gameConfig
-
-physicsConfig :: PhysicsConfigIndex
-physicsConfig = _physicsConfig
 
 -- Allows adding a scene _after_ a game has started
 addScene :: forall sceneData. String -> PhaserGame -> PhaserScene -> Boolean -> sceneData -> Effect PhaserGame
