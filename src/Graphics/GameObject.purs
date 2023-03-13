@@ -1,13 +1,14 @@
 module Graphics.Phaser.GameObject where
 
 import Prelude
+
 import Data.Maybe (Maybe)
 import Data.Nullable (toMaybe)
 import Effect (Effect)
 import Graphics.Phaser.CoreTypes (class GameObject, class Tint, class Transform, Dimensions, Vector)
 import Graphics.Phaser.ForeignTypes (PhaserContainer, PhaserGameObject, PhaserImage, PhaserRectangle, PhaserScene, PhaserSprite, PhaserText)
 import Unsafe.Coerce (unsafeCoerce)
-import Utils.FFI (_getProp, _method0, _method1, _method2, _return0, _return1)
+import Utils.FFI (_getProp, _method0, _method1, _method2, _return0, _return1, _setProp)
 
 getScene :: forall a. GameObject a => a -> Effect PhaserScene
 getScene = _getProp "scene"
@@ -123,11 +124,20 @@ getWidth = _getProp "width"
 getHeight :: forall a. GameObject a => a -> Effect Number
 getHeight = _getProp "height"
 
+getDisplayWidth :: forall a. GameObject a => a -> Effect Number
+getDisplayWidth = _getProp "displayWidth"
+
+getDisplayHeight :: forall a. GameObject a => a -> Effect Number
+getDisplayHeight = _getProp "displayHeight"
+
 -- TODO: getDisplaySize  doesn't exist, replace with:
 -- var displayWidth = gameObject.displayWidth;
 -- var displayHeight = gameObject.displayHeight;
 getDisplaySize :: forall a. GameObject a => a -> Effect Dimensions
-getDisplaySize = _return0 "getDisplaySize"
+getDisplaySize el = do 
+  width <- getDisplayHeight el
+  height <- getDisplayHeight el
+  pure {width, height}
 
 setDisplaySize :: forall a. GameObject a => Dimensions -> a -> Effect a
 setDisplaySize { width, height } = _method2 "setDisplaySize" width height
@@ -150,7 +160,16 @@ setName = _method1 "setName"
 getName :: forall a. GameObject a => a -> Effect String
 getName = _getProp "name"
 
+flipX :: forall a. GameObject a => Boolean -> a -> Effect a
+flipX  = _setProp "flipX"
+
+flipY :: forall a. GameObject a => Boolean -> a -> Effect a
+flipY  = _setProp "flipY"
+
 -- Convertions
+asGameObject :: forall a. GameObject a => a -> PhaserGameObject
+asGameObject = unsafeCoerce
+
 -- TODO: check properties of object before converting, retuning an error if type doesn't match
 asImage :: PhaserGameObject -> Effect PhaserImage
 asImage = unsafeCoerce
@@ -174,3 +193,5 @@ getData k obj = do
 
 setData :: forall obj a. GameObject obj => String -> a -> obj -> Effect obj
 setData = _method2 "setData"
+
+
