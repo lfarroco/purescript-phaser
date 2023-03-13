@@ -1,7 +1,6 @@
 module Utils.FFI where
 
 import Prelude
-
 import Data.Maybe (Maybe)
 import Data.Nullable (Nullable, toMaybe)
 import Effect (Effect)
@@ -22,7 +21,7 @@ _new1 :: forall fn v1 returnValue. fn -> v1 -> Effect returnValue
 _new1 = runEffectFn2 __new1
 
 foreign import __new2 :: forall fn v1 v2 returnValue. EffectFn3 fn v1 v2 returnValue
- 
+
 _new2 :: forall fn v1 v2 returnValue. fn -> v1 -> v2 -> Effect returnValue
 _new2 = runEffectFn3 __new2
 
@@ -118,6 +117,11 @@ safeGet :: forall obj a. String -> obj -> Effect (Maybe a)
 safeGet k obj =
   _getProp "children" obj >>= getNullable "getByName" k
     >>= (toMaybe >>> pure)
+
+maybeProp :: forall obj a. String -> obj -> Effect (Maybe a)
+maybeProp k obj = do
+  (v :: Nullable a) <- _getProp k obj
+  pure $ toMaybe v
 
 foreign import _listener0 :: Effect Unit -> EventListener
 
