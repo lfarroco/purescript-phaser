@@ -1,0 +1,90 @@
+{
+	"name": "EventEmitter",
+	"namespace": "Phaser.Events.EventEmitter",
+	"extends": [],
+	"constructor": [
+		"String"
+	],
+	"members": [],
+	"methods": [
+		{
+			"name": "addListener",
+			"args": [
+				"String",
+				"Function"
+			],
+			"returns": "EventEmitter"
+		},
+		{
+			"name": "destroy",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "emit",
+			"args": [
+				"String"
+			],
+			"returns": "Boolean"
+		},
+		{
+			"name": "eventNames",
+			"args": [],
+			"returns": "Array String"
+		},
+		{
+			"name": "listenerCount",
+			"args": [
+				"String"
+			],
+			"returns": "Int"
+		},
+		{
+			"name": "listeners",
+			"args": [
+				"String"
+			],
+			"returns": "Array Function"
+		},
+		{
+			"name": "off",
+			"args": [
+				"String"
+			],
+			"returns": "EventEmitter"
+		},
+		{
+			"name": "on",
+			"args": [
+				"String",
+				"Function"
+			],
+			"returns": "EventEmitter"
+		},
+		{
+			"name": "once",
+			"args": [
+				"String",
+				"Function"
+			],
+			"returns": "EventEmitter"
+		},
+		{
+			"name": "removeAllListeners",
+			"args": [],
+			"returns": "EventEmitter"
+		},
+		{
+			"name": "removeListener",
+			"args": [
+				"String"
+			],
+			"returns": "EventEmitter"
+		},
+		{
+			"name": "shutdown",
+			"args": [],
+			"returns": "Unit"
+		}
+	]
+}

@@ -1,0 +1,136 @@
+{
+	"name": "Scene",
+	"namespace": "Phaser.Scene",
+	"extends": [],
+	"constructor": [
+		"String"
+	],
+	"members": [
+		{
+			"name": "add",
+			"required": true,
+			"returns": "GameObjectFactoryInstance"
+		},
+		{
+			"name": "anims",
+			"required": true,
+			"returns": "AnimationManagerInstance"
+		},
+		{
+			"name": "cache",
+			"required": true,
+			"returns": "CacheManagerInstance"
+		},
+		{
+			"name": "cameras",
+			"required": true,
+			"returns": "CameraManagerInstance"
+		},
+		{
+			"name": "children",
+			"required": true,
+			"returns": "DisplayListInstance"
+		},
+		{
+			"name": "data",
+			"required": true,
+			"returns": "DataManagerInstance"
+		},
+		{
+			"name": "events",
+			"required": true,
+			"returns": "EventEmitterInstance"
+		},
+		{
+			"name": "facebook",
+			"required": true,
+			"returns": "FacebookInstantGamesPluginInstance"
+		},
+		{
+			"name": "game",
+			"required": true,
+			"returns": "GameInstance"
+		},
+		{
+			"name": "input",
+			"required": true,
+			"returns": "InputPluginInstance"
+		},
+		{
+			"name": "lights",
+			"required": true,
+			"returns": "LightsManagerInstance"
+		},
+		{
+			"name": "load",
+			"required": true,
+			"returns": "LoaderPluginInstance"
+		},
+		{
+			"name": "make",
+			"required": true,
+			"returns": "GameObjectCreatorInstance"
+		},
+		{
+			"name": "matter",
+			"required": true,
+			"returns": "MatterPhysicsInstance"
+		},
+		{
+			"name": "physics",
+			"required": true,
+			"returns": "ArcadePhysicsInstance"
+		},
+		{
+			"name": "plugins",
+			"required": true,
+			"returns": "PluginManagerInstance"
+		},
+		{
+			"name": "registry",
+			"required": true,
+			"returns": "DataManagerInstance"
+		},
+		{
+			"name": "renderer",
+			"required": true,
+			"returns": "RendererInstance"
+		},
+		{
+			"name": "scale",
+			"required": true,
+			"returns": "ScaleManagerInstance"
+		},
+		{
+			"name": "scene",
+			"required": true,
+			"returns": "ScenePluginInstance"
+		},
+		{
+			"name": "sound",
+			"required": true,
+			"returns": "SoundManagerInstance"
+		},
+		{
+			"name": "sys",
+			"required": true,
+			"returns": "SystemsInstance"
+		},
+		{
+			"name": "textures",
+			"required": true,
+			"returns": "TextureManagerInstance"
+		},
+		{
+			"name": "time",
+			"required": true,
+			"returns": "ClockInstance"
+		},
+		{
+			"name": "tweens",
+			"required": true,
+			"returns": "TweenManagerInstance"
+		}
+	],
+	"methods": []
+}
