@@ -1,80 +1,74 @@
-// port of https://newdocs.phaser.io/docs/3.55.1/Phaser.GameObjects.GameObject
+export const newGameObjectImpl = (a, b) =>
+  new Phaser.GameObjects.GameObject(a, b);
 
-export const newGameObjectImpl = (scene, type) => new Phaser.GameObject.GameObject(scene, type);
+export const activeImpl = obj => obj.active;
 
-// Members
+export const bodyImpl = obj => obj.body;
 
-export const activeImpl = (go) => go.active;
+export const cameraFilterImpl = obj => obj.cameraFilter;
 
-// export const bodyImpl = (go) => go.body;
+export const dataImpl = obj => obj.data;
 
-// export const cameraFilterImpl = (go) => go.cameraFilter;
+export const displayListImpl = obj => obj.displayList;
 
-// export const dataImpl = (go) => go.data;
+export const ignoreDestroyImpl = obj => obj.ignoreDestroy;
 
-// export const displayListImpl = (go) => go.displayList;
+export const inputImpl = obj => obj.input;
 
-// export const ignoreDestroyImpl = (go) => go.ignoreDestroy;
+export const nameImpl = obj => obj.name;
 
-// export const inputImpl = (go) => go.input;
+export const parentContainerImpl = obj => obj.parentContainer;
 
-// export const nameImpl = (go) => go.name;
+export const renderFlagsImpl = obj => obj.renderFlags;
 
-// export const parentContainerImpl = (go) => go.parentContainer;
+export const sceneImpl = obj => obj.scene;
 
-// export const renderFlagsImpl = (go) => go.renderFlags;
+export const stateImpl = obj => obj.state;
 
-// export const sceneImpl = (go) => go.scene;
+export const tabIndexImpl = obj => obj.tabIndex;
 
-// export const stateImpl = (go) => go.state;
+export const typeImpl = obj => obj.type;
 
-// export const tabIndexImpl = (go) => go.tabIndex;
+export const addToDisplayListImpl = (obj) => obj.addToDisplayList();
 
-// export const typeImpl = (go) => go.type;
+export const addtoUpdateListImpl = (obj) => obj.addtoUpdateList();
 
-// // Member Constants
-// export const renderMaskImpl = (go) => go.RENDER_MASK
+export const addToSceneImpl = (obj) => obj.addToScene();
 
-// // Methods
+export const destroyImpl = (obj) => obj.destroy();
 
-// export const addToDisplayListImpl = (go, list) => go.addToDisplayList(list);
+export const disableInteractiveImpl = (obj) => obj.disableInteractive();
 
-// export const addToUpdateListImpl = (go) => go.addToUpdateList();
+export const getDataImpl = (a, obj) => obj.getData(a);
 
-// export const addedToSceneImpl = (go) => go.addedToScene();
+export const getIndexListImpl = (obj) => obj.getIndexList();
 
-// export const destroyImpl = (go) => go.destroy()
+export const incDataImpl = (a, obj) => obj.incData(a);
 
-// export const disableInteractiveImpl = (go) => go.disableInteractive();
+export const removeFromDisplayListImpl = (obj) => obj.removeFromDisplayList();
 
-// export const getDataImpl = (go, key) => go.getData(key);
+export const removeFromUpdateListImpl = (obj) => obj.removeFromUpdateList();
 
-// export const getIndexListImpl = (go) => go.getIndexList();
+export const removeInteractiveImpl = (obj) => obj.removeInteractive();
 
-// export const incDataImpl = (go, key, value) => go.incData(key, value);
+export const removedFromSceneImpl = (obj) => obj.removedFromScene();
 
-// export const removeFromDisplayListImpl = (go) => go.removeFromDisplayList();
+export const setActiveImpl = (a, obj) => obj.setActive(a);
 
-// export const removeFromUpdateListImpl = (go) => go.removeFromUpdateList();
+export const setDataImpl = (a, obj) => obj.setData(a);
 
-// export const removeInteractiveImpl = (go) => go.removeInteractive();
+export const setDataEnabledImpl = (obj) => obj.setDataEnabled();
 
-// export const setActiveImpl = (go, value) => go.setActive(value);
+export const setInteractiveImpl = (obj) => obj.setInteractive();
 
-// export const setDataImpl = (go, key, value) => go.setData(key, value);
+export const setNameImpl = (a, obj) => obj.setName(a);
 
-// export const setDataEnabledImpl = (go) => go.setDataEnabled();
+export const setStateImpl = (a, obj) => obj.setState(a);
 
-// export const setInteractiveImpl = (go, hitArea, hitAreaCallback, dropZone) => go.setInteractive(hitArea, hitAreaCallback, dropZone);
+export const toJSONImpl = (obj) => obj.toJSON();
 
-// export const setNameImpl = (go, value) => go.setName(value);
+export const toggleDataImpl = (a, obj) => obj.toggleData(a);
 
-// export const setStateImpl = (go, value) => go.setState(value);
+export const updateImpl = (obj) => obj.update();
 
-// export const toJSONImpl = (go) => go.toJSON();
-
-// export const toggleDataImpl = (go, key) => go.toggleData(key);
-
-// export const updateImpl = (go, args) => go.update(args);
-
-// export const willRenderImpl = (go, camera) => go.willRender(camera);
+export const willRenderImpl = (a, obj) => obj.willRender(a);

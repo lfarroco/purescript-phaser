@@ -1,0 +1,211 @@
+{
+	"name": "GameObject",
+	"namespace": "Phaser.GameObjects.GameObject",
+	"constructor": [
+		"SceneInstance",
+		"String"
+	],
+	"extends": [
+		"EventEmitter"
+	],
+	"members": [
+		{
+			"name": "active",
+			"required": true,
+			"returns": "Boolean"
+		},
+		{
+			"name": "body",
+			"required": false,
+			"returns": "PhysicsBody"
+		},
+		{
+			"name": "cameraFilter",
+			"required": true,
+			"returns": "Number"
+		},
+		{
+			"name": "data",
+			"required": true,
+			"returns": "DataManager"
+		},
+		{
+			"name": "displayList",
+			"required": true,
+			"returns": "DisplayList"
+		},
+		{
+			"name": "ignoreDestroy",
+			"required": true,
+			"returns": "Boolean"
+		},
+		{
+			"name": "input",
+			"required": false,
+			"returns": "InteractiveObject"
+		},
+		{
+			"name": "name",
+			"required": true,
+			"returns": "String"
+		},
+		{
+			"name": "parentContainer",
+			"required": true,
+			"returns": "Container"
+		},
+		{
+			"name": "renderFlags",
+			"required": true,
+			"returns": "Number"
+		},
+		{
+			"name": "scene",
+			"required": true,
+			"returns": "SceneInstance"
+		},
+		{
+			"name": "state",
+			"required": true,
+			"returns": "String"
+		},
+		{
+			"name": "tabIndex",
+			"required": true,
+			"returns": "Number"
+		},
+		{
+			"name": "type",
+			"required": true,
+			"returns": "String"
+		}
+	],
+	"methods": [
+		{
+			"name": "addToDisplayList",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "addtoUpdateList",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "addToScene",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "destroy",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "disableInteractive",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "getData",
+			"args": [
+				"String"
+			],
+			"returns": "Any"
+		},
+		{
+			"name": "getIndexList",
+			"args": [],
+			"returns": "Array Number"
+		},
+		{
+			"name": "incData",
+			"args": [
+				"Number"
+			],
+			"returns": "GameObject"
+		},
+		{
+			"name": "removeFromDisplayList",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "removeFromUpdateList",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "removeInteractive",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "removedFromScene",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "setActive",
+			"args": [
+				"Boolean"
+			],
+			"returns": "GameObject"
+		},
+		{
+			"name": "setData",
+			"args": [
+				"String"
+			],
+			"returns": "GameObject"
+		},
+		{
+			"name": "setDataEnabled",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "setInteractive",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "setName",
+			"args": [
+				"String"
+			],
+			"returns": "GameObject"
+		},
+		{
+			"name": "setState",
+			"args": [
+				"String"
+			],
+			"returns": "GameObject"
+		},
+		{
+			"name": "toJSON",
+			"args": [],
+			"returns": "String"
+		},
+		{
+			"name": "toggleData",
+			"args": [
+				"String"
+			],
+			"returns": "GameObject"
+		},
+		{
+			"name": "update",
+			"args": [],
+			"returns": "GameObject"
+		},
+		{
+			"name": "willRender",
+			"args": [
+				"Camera"
+			],
+			"returns": "Boolean"
+		}
+	]
+}

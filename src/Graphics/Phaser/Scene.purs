@@ -1,7 +1,5 @@
 module Graphics.Phaser.SceneGen
-  ( class Scene
-  , SceneInstance
-  , newScene
+  ( newScene
   -- , add
   -- , anims
   -- , cache
@@ -31,14 +29,7 @@ module Graphics.Phaser.SceneGen
 
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, runEffectFn1)
-import Graphics.Phaser.Events.EventEmitter (EventEmitterInstance)
-
-foreign import data SceneInstance :: Type
-
-class Scene :: forall k. k -> Constraint
-class Scene a
-
-instance Scene SceneInstance
+import Graphics.Phaser.Types (EventEmitterInstance, class Scene, SceneInstance)
 
 foreign import newSceneImpl :: EffectFn1 String SceneInstance
 

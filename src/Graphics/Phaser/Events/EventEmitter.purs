@@ -1,7 +1,5 @@
 module Graphics.Phaser.Events.EventEmitter
-  ( class EventEmitter
-  , EventEmitterInstance
-  , newEventEmitter
+  ( newEventEmitter
   , addListener
   , destroy
   , emit
@@ -21,13 +19,7 @@ import Prelude
 import Effect (Effect)
 import Effect.Uncurried (EffectFn1, runEffectFn1, EffectFn2, runEffectFn2, EffectFn3, runEffectFn3)
 import Graphics.Phaser.CoreTypes (EventListener)
-
-foreign import data EventEmitterInstance :: Type
-
-class EventEmitter :: forall k. k -> Constraint
-class EventEmitter a
-
-instance EventEmitter EventEmitterInstance
+import Graphics.Phaser.Types (EventEmitterInstance, class EventEmitter)
 
 foreign import newEventEmitterImpl :: EffectFn1 String EventEmitterInstance
 
