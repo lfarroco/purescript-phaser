@@ -1,5 +1,15 @@
 module Graphics.Phaser.Types where
 
+-- | Game
+foreign import data GameInstance :: Type
+
+foreign import data GameConfig :: Type
+
+class Game :: forall k. k -> Constraint
+class Game a
+
+instance Game GameInstance
+
 -- | Scene
 foreign import data SceneInstance :: Type
 

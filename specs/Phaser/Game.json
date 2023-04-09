@@ -1,0 +1,195 @@
+{
+	"name": "Game",
+	"namespace": "Phaser.Game",
+	"extends": [],
+	"constructor": [
+		"GameConfig"
+	],
+	"members": [
+		{
+			"name": "anims",
+			"required": true,
+			"returns": "AnimationManager"
+		},
+		{
+			"name": "cache",
+			"required": true,
+			"returns": "CacheManager"
+		},
+		{
+			"name": "canvas",
+			"required": true,
+			"returns": "HTMLCanvasElement"
+		},
+		{
+			"name": "config",
+			"required": true,
+			"returns": "GameConfig"
+		},
+		{
+			"name": "context",
+			"required": true,
+			"returns": "RenderingContext"
+		},
+		{
+			"name": "device",
+			"required": true,
+			"returns": "DeviceConf"
+		},
+		{
+			"name": "domContainer",
+			"required": true,
+			"returns": "HTMLDivElement"
+		},
+		{
+			"name": "events",
+			"required": true,
+			"returns": "EventEmitterInstance"
+		},
+		{
+			"name": "facebook",
+			"required": true,
+			"returns": "FacebookInstantGamesPlugin"
+		},
+		{
+			"name": "hasFocus",
+			"required": true,
+			"returns": "Boolean"
+		},
+		{
+			"name": "input",
+			"required": true,
+			"returns": "InputManager"
+		},
+		{
+			"name": "isBooted",
+			"required": true,
+			"returns": "Boolean"
+		},
+		{
+			"name": "isPaused",
+			"required": true,
+			"returns": "Boolean"
+		},
+		{
+			"name": "isRunning",
+			"required": true,
+			"returns": "Boolean"
+		},
+		{
+			"name": "loop",
+			"required": true,
+			"returns": "TimeStep"
+		},
+		{
+			"name": "plugins",
+			"required": true,
+			"returns": "PluginManager"
+		},
+		{
+			"name": "registry",
+			"required": true,
+			"returns": "DataManager"
+		},
+		{
+			"name": "renderer",
+			"required": true,
+			"returns": "Renderer"
+		},
+		{
+			"name": "scale",
+			"required": true,
+			"returns": "ScaleManager"
+		},
+		{
+			"name": "scene",
+			"required": true,
+			"returns": "SceneManager"
+		},
+		{
+			"name": "sound",
+			"required": true,
+			"returns": "SoundManager"
+		},
+		{
+			"name": "textures",
+			"required": true,
+			"returns": "TextureManager"
+		}
+	],
+	"methods": [
+		{
+			"name": "boot",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "destroy",
+			"args": [
+				"Boolean"
+			],
+			"returns": "Unit"
+		},
+		{
+			"name": "getFrame",
+			"args": [],
+			"returns": "Number"
+		},
+		{
+			"name": "getTime",
+			"args": [],
+			"returns": "Number"
+		},
+		{
+			"name": "headlessStep",
+			"args": [
+				"Number",
+				"Number"
+			],
+			"returns": "Unit"
+		},
+		{
+			"name": "onBlur",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "onFocus",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "onHidden",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "onVisible",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "pause",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "resume",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "start",
+			"args": [],
+			"returns": "Unit"
+		},
+		{
+			"name": "step",
+			"args": [
+				"Number",
+				"Number"
+			],
+			"returns": "Unit"
+		}
+	]
+}

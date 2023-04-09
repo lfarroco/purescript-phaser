@@ -8,4 +8,5 @@ compile-examples: $(MYDIR)/*
 compile-ffi-bindings:
 	# npx lfarroco/oop-ffi --path ./specs/Phaser/Scene.json --output ./specs/generated/Phaser/
 	# npx lfarroco/oop-ffi --path ./specs/Phaser/Events/EventEmitter.json --output ./specs/generated/Phaser/Events/
-	npx lfarroco/oop-ffi --path ./specs/Phaser/GameObjects/GameObject.json --output ./specs/generated/Phaser/GameObjects/
+	# npx lfarroco/oop-ffi --path ./specs/Phaser/GameObjects/GameObject.json --output ./specs/generated/Phaser/GameObjects/
+	npx lfarroco/oop-ffi --path ./specs/Phaser/Game.json --output ./specs/generated/Phaser/
