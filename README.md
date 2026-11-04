@@ -29,7 +29,7 @@ The code for the examples is available at `/docs/examples`.
 
 ### Compiling the examples
 
-You can play with each example and compile it with `spago bundle-app`. You can also
+You can play with each example and compile it with `spago bundle`. You can also
 run `make compile-examples` in the root directory to compile all examples.
 
 

@@ -1,0 +1,16 @@
+package:
+  name: two-scenes
+  bundle:
+    module: Main
+    outfile: index.js
+    platform: browser
+    type: app
+  dependencies:
+    - console: ">=6.0.0 <7.0.0"
+    - effect: ">=4.0.0 <5.0.0"
+    - phaser: "*"
+    - prelude: ">=6.0.0 <7.0.0"
+workspace:
+  extraPackages:
+    phaser:
+      path: ../../..

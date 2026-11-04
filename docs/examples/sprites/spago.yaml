@@ -1,0 +1,15 @@
+package:
+  name: sprites
+  bundle:
+    module: Main
+    outfile: index.js
+    platform: browser
+    type: app
+  dependencies:
+    - effect: ">=4.0.0 <5.0.0"
+    - phaser: "*"
+    - prelude: ">=6.0.0 <7.0.0"
+workspace:
+  extraPackages:
+    phaser:
+      path: ../../..
