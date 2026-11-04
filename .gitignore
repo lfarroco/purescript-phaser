@@ -12,3 +12,4 @@ output
 .DS_Store
 .psci_modules
 .vscode
+spago.lock

@@ -1,0 +1,23 @@
+package:
+  name: basic-platform
+  bundle:
+    module: Main
+    outfile: index.js
+    platform: browser
+    type: app
+  dependencies:
+    - arrays: ">=7.0.0 <8.0.0"
+    - console: ">=6.0.0 <7.0.0"
+    - effect: ">=4.0.0 <5.0.0"
+    - foldable-traversable: ">=6.0.0 <7.0.0"
+    - integers: ">=6.0.0 <7.0.0"
+    - maybe: ">=6.0.0 <7.0.0"
+    - phaser: "*"
+    - prelude: ">=6.0.0 <7.0.0"
+  test:
+    main: Test.Main
+    dependencies: []
+workspace:
+  extraPackages:
+    phaser:
+      path: ../../..

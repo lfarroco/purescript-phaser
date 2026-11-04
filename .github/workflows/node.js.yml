@@ -16,8 +16,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-node@v4
+      with:
+        node-version: "22"
     - run: npm install purescript -g
-    - run: npm install spago -g
+    - run: npm install spago@1.0.5 -g
     - run: npm install esbuild -g
     - run: spago build
     - run: spago test
